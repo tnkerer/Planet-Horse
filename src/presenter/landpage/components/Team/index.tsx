@@ -31,6 +31,7 @@ const Team: React.FC = () => {
 
       <span>The team does not disclose their identities as the majority of the team is from Latin America and we need to be cautious for our own safety.</span>
       <span>We will be in the community discord voice room every day from 18 utc to 20 utc to ask questions and chat with the community.</span>
+      <i className={styles.diviser} />
     </div>
   )
 }
