@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
+import Router from 'next/router'
 
 const WhitePaper: React.FC = () => {
   const [activeBtnState, setActiveBtnState] = useState(false)
@@ -14,9 +15,12 @@ const WhitePaper: React.FC = () => {
           onMouseEnter={() => {
             setActiveBtnState(true)
           }}
-        />
+          />
         <button
           className={styles.active}
+          onClick={() => {
+            Router.push('https://whitepaper.planethorse.me/portuguese-version-1.0/home')
+          }}
           onMouseLeave={() => {
             setActiveBtnState(false)
           }}
