@@ -3,6 +3,7 @@ import Pattern from '../utils/factories/pattern'
 import Banner from './components/Banner'
 import Gameplay from './components/Gameplay'
 import NFTHorses from './components/NFTHorses'
+import WhitePaper from './components/WhitePaper'
 
 const Landpage: React.FC = () => {
   return (
@@ -11,6 +12,9 @@ const Landpage: React.FC = () => {
       <Pattern type='light'>
         <Gameplay />
         <NFTHorses />
+      </Pattern>
+      <Pattern type='dark'>
+        <WhitePaper />
       </Pattern>
     </>
   )

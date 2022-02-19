@@ -1,0 +1,37 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  background-image: url('../../../../assets/landing-page/bg-and-itens/table-bar.png');
+
+  .slot {
+    position: relative;
+    height: 211px;
+    width: 100%;
+    bottom: 50px;
+    
+    button {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: transparent;
+      outline: 0;
+      border: 0;
+      height: 218px;
+      width: 518px;
+    }
+    
+    .inactive {
+      background-image: url('../../../../assets/landing-page/bg-and-itens/book.png');
+    }
+    
+    .active {
+      background-image: url('../../../../assets/landing-page/bg-and-itens/book-hover.png');
+      cursor: pointer;
+    }
+  }
+}
