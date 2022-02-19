@@ -7,6 +7,7 @@ import WhitePaper from './components/WhitePaper'
 import Token from './components/Token'
 import Team from './components/Team'
 import Blackboard from './components/Blackboard'
+import SocialMedia from '../utils/components/socialMidia'
 
 const Landpage: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const Landpage: React.FC = () => {
         <Team />
       </Pattern>
       <Blackboard />
+      <SocialMedia />
     </>
   )
 }
