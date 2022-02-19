@@ -1,5 +1,5 @@
 import React from 'react'
-import Landpage from './landpage'
+import Landpage from '../presenter/landpage'
 
 function App () {
   return (
