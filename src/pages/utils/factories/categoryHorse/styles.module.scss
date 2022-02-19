@@ -1,0 +1,19 @@
+.container {
+  position: relative;
+  top: 40px;
+  margin-bottom: 10px;
+  width: 300px;
+  height: 400px;
+
+  .tapeContainer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    z-index: 1;
+  }
+
+  img {
+    width: 300px;
+  }
+}
