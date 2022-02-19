@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import TeamCard from '@/presenter/utils/factories/teamCard'
+import TeamCard from '@/presenter/utils/landpage/factories/teamCard'
 import t from '@/assets/team-cryptplanet/t.png'
 import bizzo from '@/assets/team-cryptplanet/bizzo.png'
 import ko from '@/assets/team-cryptplanet/ko.png'

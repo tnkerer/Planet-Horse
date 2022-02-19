@@ -6,7 +6,7 @@ import threerHorse from '@/assets/landing-page/nft-horse/3.gif'
 import fourHorse from '@/assets/landing-page/nft-horse/4.gif'
 import fiveHorse from '@/assets/landing-page/nft-horse/5.gif'
 import sixHorse from '@/assets/landing-page/nft-horse/6.gif'
-import CategoryHorse from '@/presenter/utils/factories/categoryHorse'
+import CategoryHorse from '@/presenter/utils/landpage/factories/categoryHorse'
 
 const NFTHorses: React.FC = () => {
   return (

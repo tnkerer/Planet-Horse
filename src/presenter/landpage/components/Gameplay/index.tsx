@@ -1,5 +1,5 @@
 import React from 'react'
-import Card from '@/presenter/utils/factories/card'
+import Card from '@/presenter/utils/landpage/factories/card'
 import styles from './styles.module.scss'
 import racingDemoGameplay from '@/assets/landing-page/game-demo/racing.gif'
 import barnDemoGameplay from '@/assets/landing-page/game-demo/barn.gif'

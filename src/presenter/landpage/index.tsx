@@ -1,5 +1,5 @@
 import React from 'react'
-import Pattern from '../utils/factories/pattern'
+import Pattern from '../utils/landpage/factories/pattern'
 import Banner from './components/Banner'
 import Gameplay from './components/Gameplay'
 import NFTHorses from './components/NFTHorses'
@@ -7,7 +7,7 @@ import WhitePaper from './components/WhitePaper'
 import Token from './components/Token'
 import Team from './components/Team'
 import Blackboard from './components/Blackboard'
-import SocialMedia from '../utils/components/socialMidia'
+import SocialMedia from '../utils/landpage/components/socialMidia'
 
 const Landpage: React.FC = () => {
   return (
