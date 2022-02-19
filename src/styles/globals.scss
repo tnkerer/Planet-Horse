@@ -46,3 +46,14 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+@font-face {
+  font-family: 'SpaceHorse';
+  src: local('SpaceHorse'),
+    url('../assets/fonts/SpaceHorse.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'UpheavalPro';
+  src: local('UpheavalPro'),
+    url('../assets/fonts/UpheavalPro.ttf') format('truetype');
+}
