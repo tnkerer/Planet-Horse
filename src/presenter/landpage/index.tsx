@@ -5,6 +5,7 @@ import Gameplay from './components/Gameplay'
 import NFTHorses from './components/NFTHorses'
 import WhitePaper from './components/WhitePaper'
 import Token from './components/Token'
+import Team from './components/Team'
 
 const Landpage: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const Landpage: React.FC = () => {
       <Pattern type='dark'>
         <WhitePaper />
         <Token />
+        <Team />
       </Pattern>
     </>
   )

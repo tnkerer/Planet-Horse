@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    color: #fff;
+    text-align: center;
+    font-family: 'UpheavalPro';
+    font-size: 30px;
+    margin-bottom: 70px;
+  }
+
+  .team {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1150px;
+    margin-bottom: 30px;
+
+    @media screen and (max-width: 1200px) {
+      width: 80%;
+    }
+
+    @media screen and (max-width: 500px) {
+      width: 50%;
+    }
+
+    @media screen and (max-width: 600px) {
+      width: 100%;
+    }
+  }
+
+  & > span {
+    font-family: 'SpaceHorse';
+    font-size: 16px;
+    text-align: center;
+    line-height: 24px;
+    color: #fff;
+    width: 560px;
+    margin-top: 20px;
+
+    @media screen and (max-width: 600px) {
+      width: 100%;
+    }
+  }
+}
