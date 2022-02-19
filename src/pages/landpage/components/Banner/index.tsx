@@ -20,7 +20,6 @@ const Banner: React.FC = () => {
       </div>
       <div className={styles.logo}>
         <Image
-          width={650}
           src={logoImg}
           alt='logo'
         />
