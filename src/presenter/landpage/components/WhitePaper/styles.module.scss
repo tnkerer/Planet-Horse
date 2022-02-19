@@ -24,6 +24,11 @@
       border: 0;
       height: 218px;
       width: 518px;
+
+      @media screen and (max-width: 540px) {
+        width: 100%;
+        background-size: contain;
+      }
     }
     
     .inactive {

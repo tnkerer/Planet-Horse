@@ -11,7 +11,7 @@
     font-family: 'SpaceHorse';
     flex-direction: column;
     color: #fff;
-    max-width: 680px;
+    max-width: 650px;
     
     .title {
       font-family: 'UpheavalPro';
@@ -35,11 +35,11 @@
       }
 
       .info {
-        width: 45%;
+        margin-left: 1%;
+        width: 50%;
         font-size: 16px;
         line-height: 25px;
         align-self: center;
-        background-color: red;
       }
 
       .coinImage {
@@ -56,9 +56,10 @@
     }
 
     .description {
-      width: 60%;
+      width: 100%;
       align-self: center;
       text-align: center;
+      line-height: 20px;
       font-size: 18px;
     }
   }
