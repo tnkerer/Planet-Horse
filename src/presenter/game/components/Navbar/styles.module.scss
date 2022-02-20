@@ -1,0 +1,114 @@
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  background-color: #7d4d45;
+
+  .shadow {
+    position: absolute;
+    bottom: 0;
+    background-color: #582c25;
+    height: 10px;
+    width: 100%;
+  }
+
+  .shadowBorder {
+    position: absolute;
+    bottom: 14px;
+    background-color: #582c25;
+    height: 4px;
+    width: 100%;
+  }
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    height: 85%;
+
+    @media screen and (max-width: 1510px) {
+      width: 90%;
+    }
+
+    @media screen and (max-width: 1273px) {
+      width: 100%;
+    }
+    
+    .burgerIcon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0 25px;
+      width: 30px;
+      height: 50px;
+      outline: 0;
+      border: 0;
+      background-color: transparent;
+      display: none;
+      cursor: pointer;
+
+      @media screen and (max-width: 1160px) {
+        display: flex;
+      }
+
+      .line {
+        margin: 4px 0;
+        background-color: #fff;
+        height: 3px;
+        width: 30px;
+      }
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 20px;
+      width: 140px;
+      height: 100%;
+    }
+  }
+  
+  .options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 700px;
+    height: 100%;
+
+    @media screen and (max-width: 1160px) {
+      display: none;
+    }
+
+    a {
+      color: #fff;
+      font-family: 'UpheavalPro';
+      font-size: 24px;
+      text-decoration: none;
+    }
+  }
+
+  .account {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 250px;
+
+    button {
+      background-color: transparent;
+      color: #fff;
+      font-family: 'SpaceHorse';
+      height: 40px;
+      font-size: 18px;
+      outline: 0;
+      border: 0;
+      margin-bottom: 10px;
+    }
+  }
+}
