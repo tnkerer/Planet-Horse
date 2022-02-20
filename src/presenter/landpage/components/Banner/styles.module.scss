@@ -6,26 +6,28 @@
 
   background-image: url('../../../../assets/landing-page/bg-and-itens/banner.png');
   background-attachment: fixed;
-
-  a.play {
+  
+  #playButton {
     position: fixed;
     top: 0;
     right: 10%;
-    height: 100px;
     width: 224px;
     height: 73px;
     border: 0;
     outline: 0;
-    background-image: url('../../../../assets/landing-page/icon-and-button/play-animation.gif');
     border-radius: 0 0 15px 15px;
     z-index: 1;
     cursor: pointer;
-
-    &:hover {
-      background-image: url('../../../../assets/landing-page/icon-and-button/play.png');
-      border-radius: 0 0 15px 15px;
-    }
   }
+  
+  .playActive {
+    background-image: url('../../../../assets/landing-page/icon-and-button/play.png');
+  }
+
+  .playInactive {
+    background-image: url('../../../../assets/landing-page/icon-and-button/play-animation.gif');
+  }
+
 
   .logoMarket {
     position: absolute;
