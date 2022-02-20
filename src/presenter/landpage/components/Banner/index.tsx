@@ -14,6 +14,7 @@ const Banner: React.FC = () => {
         id={styles.playButton}
         inactive={styles.playInactive}
         active={styles.playActive}
+        click={styles.playClick}
       />
       <div className={styles.logoMarket}>
         <Image
