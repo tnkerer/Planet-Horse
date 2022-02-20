@@ -37,6 +37,11 @@ const AnimatedButton: React.FC<Props> = ({
           onClick={() => {
             Router.push(to)
           }}
+          style={{
+            display: onMouseLeaveOver
+              ? 'none'
+              : 'block'
+          }}
         />
         : <button
           id={id}
@@ -46,6 +51,11 @@ const AnimatedButton: React.FC<Props> = ({
           }}
           onClick={() => {
             Router.push(to)
+          }}
+          style={{
+            display: onMouseLeaveOver
+              ? 'none'
+              : 'block'
           }}
       />}
       <button
