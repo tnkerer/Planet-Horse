@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Board from '@/presenter/utils/landpage/components/board'
-import logo from '@/assets/logo/logo.svg'
+import logo from '@/assets/logo/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
 
