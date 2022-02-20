@@ -1,32 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styles from './styles.module.scss'
-import Router from 'next/router'
+import AnimatedButton from '@/presenter/utils/globals/factories/animatedButton'
 
 const WhitePaper: React.FC = () => {
-  const [activeBtnState, setActiveBtnState] = useState(false)
-
   return (
     <div className={styles.container}>
       <div
         className={styles.slot}
       >
-        <button
-          className={styles.inactive}
-          onMouseEnter={() => {
-            setActiveBtnState(true)
-          }}
-          />
-        <button
-          className={styles.active}
-          onClick={() => {
-            Router.push('https://whitepaper.planethorse.me/portuguese-version-1.0/home')
-          }}
-          onMouseLeave={() => {
-            setActiveBtnState(false)
-          }}
-          style={activeBtnState
-            ? { display: 'flex' }
-            : { display: 'none' }}
+        <AnimatedButton
+          to='https://whitepaper.planethorse.me/portuguese-version-1.0/home'
+          id={styles.whitepaper}
+          inactive={styles.inactive}
+          active={styles.active}
         />
       </div>
     </div>
