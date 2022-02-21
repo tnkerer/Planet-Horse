@@ -1,0 +1,96 @@
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 600px;
+  background-color: #222;
+  background-image: url('../../../../assets/game/home-tab/ilustrasao.png');
+  background-size: auto;
+  background-position: 50% 40%;
+
+  @media screen and (max-width: 1082px) {
+    height: auto;
+  }
+
+  .options {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 1200px;
+
+    @media screen and (max-width: 1082px) {
+      position: relative;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .slot {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 500px;
+      height: 500px;
+      
+      @media screen and (max-width: 1082px) {
+        margin-bottom: 40px;;
+      }
+
+      @media screen and (max-width: 500px) {
+        height: 400px;
+      }
+
+      #optionButton {
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        outline: 0;
+        border: 0;
+        width: 500px;
+        height: 500px;
+        
+        @media screen and (max-width: 500px) {
+          width: 100vw;
+        }
+      }
+      
+      .inactivePreSale {
+        margin-top: 100px;
+        background-image: url('../../../../assets/game/home-tab/botao-prevenda.png');
+
+        @media screen and (max-width: 1082px) {
+          margin: 0;
+        }
+      }
+      
+      .activeBauPreSale {
+        margin-top: 100px;
+        background-image: url('../../../../assets/game/home-tab/botao-prevenda-mouse.png');
+        cursor: pointer;
+
+        @media screen and (max-width: 1082px) {
+          margin: 0;
+        }
+      }
+
+      .inactiveLottery {
+        background-image: url('../../../../assets/game/home-tab/lottery.gif');
+      
+        @media screen and (max-width: 1082px) {
+          margin: 0;
+        }
+      }
+
+      .activeLottery {
+        background-image: url('../../../../assets/game/home-tab/lottery-mouse.png');
+        cursor: pointer;
+
+        @media screen and (max-width: 1082px) {
+          margin: 0;
+        }
+      }
+    }
+  }
+}

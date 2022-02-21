@@ -3,7 +3,7 @@ import styles from './styles.module.scss'
 import logo from '@/assets/logo/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
-import Burger from '../Burger'
+import Burger from './components/Burger'
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
