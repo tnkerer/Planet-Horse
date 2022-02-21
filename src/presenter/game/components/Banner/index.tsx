@@ -19,7 +19,7 @@ const Banner: React.FC = () => {
             to='/animated'
             id={styles.optionButton}
             inactive={styles.inactiveLottery}
-            active={styles.activeBauPreSale}
+            active={styles.activeLottery}
           />
         </div>
       </div>

@@ -20,7 +20,7 @@
     width: 1200px;
 
     @media screen and (max-width: 1082px) {
-      flex-direction: column;
+      flex-direction: column-reverse;
       align-items: center;
     }
 
