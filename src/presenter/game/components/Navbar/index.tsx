@@ -32,16 +32,16 @@ const Navbar: React.FC = () => {
             <Link href='/home'>
               <a>HOME</a>
             </Link>
-            <Link href='/home'>
+            <Link href='/marketplace'>
               <a>MARKETPLACE</a>
             </Link>
-            <Link href='/home'>
+            <Link href='/game'>
               <a>GAME</a>
             </Link>
-            <Link href='/home'>
+            <Link href='/staking'>
               <a>STAKING</a>
             </Link>
-            <Link href='/home'>
+            <Link href='/barn'>
               <a>BARN</a>
             </Link>
           </div>
