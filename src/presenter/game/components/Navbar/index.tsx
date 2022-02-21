@@ -46,9 +46,7 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
           <div className={styles.account}>
-            <button>
-              Connect to wallet
-            </button>
+            <button />
           </div>
         </div>
       </div>
