@@ -1,0 +1,45 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  background-color: #7d4d45;
+
+  .clarity {
+    position: relative;
+    background-color: #c49086;
+    height: 5px;
+    width: 100%;
+    border-bottom: 14px solid #a26b61;
+  }
+
+  .clarityBorder {
+    position: relative;
+    top: 5px;
+    border-bottom: 5px solid #a26b61;
+  }
+
+  .line {
+    position: absolute;
+    border-top: 5px solid #7d4d45;
+    background-color: #582c24;
+    width: 100%;
+    height: 4px;
+    bottom: 16px;
+  }
+
+  .shadowBorder {
+    position: absolute;
+    background-color: #582c24;
+    width: 100%;
+    height: 8px;
+    bottom: 5px;
+  }
+
+  .shadow {
+    position: absolute;
+    background-color: #401c16;
+    width: 100%;
+    height: 5px;
+    bottom: 0;
+  }
+}
