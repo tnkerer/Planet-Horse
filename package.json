@@ -15,6 +15,8 @@
     "@types/react": "^17.0.39",
     "eslint-plugin-react": "^7.28.0",
     "git-commit-msg-linter": "^4.0.7",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   },
