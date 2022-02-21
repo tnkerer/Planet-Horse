@@ -26,7 +26,7 @@ const About: React.FC = () => {
             <Image
               src={whiteHorse}
               width={320}
-              height={320}
+              height={325}
             />
           </div>
         </div>

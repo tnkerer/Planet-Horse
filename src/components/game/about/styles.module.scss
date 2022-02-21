@@ -5,7 +5,7 @@
 
   .card {
     background-color: #f2e3c4;
-    margin: 70px 0;
+    margin: 70px 0 20px 0;
     width: 1185px;
     height: 395px;
 
@@ -29,7 +29,7 @@
       
       @media screen and (max-width: 1218px) {
         background-image: url('../../../assets/game/home-tab/borda-papel1-lying.webp');
-        background-size: contain;
+        background-size: cover;
         flex-direction: column;
         height: auto;
         width: auto;
@@ -40,6 +40,10 @@
         justify-content: center;
         align-items: center;
         width: 340px;
+
+        @media screen and (max-width: 354px) {
+          width: 100%;
+        }
       }
   
       .description {
@@ -47,6 +51,10 @@
         height: 340px;
         padding: 20px 0;
         
+        @media screen and (max-width: 354px) {
+          width: 100%;
+        }
+
         @media screen and (max-width: 1218px) {
           transform: scale(.8);
         }
