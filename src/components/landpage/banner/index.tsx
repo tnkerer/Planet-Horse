@@ -10,7 +10,7 @@ const Banner: React.FC = () => {
   return (
     <div className={styles.container}>
       <GraphicalButton
-        to='/game'
+        to='/tabs/game'
         id={styles.playButton}
         inactive={styles.playInactive}
         active={styles.playActive}
