@@ -1,0 +1,40 @@
+.container {
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 230px;
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .socials {
+      display: flex;
+      flex-direction: row;
+
+      .slot {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+      }
+    }
+
+    span {
+      font-family: 'UpheavalPro';
+      margin: 20px 0;
+      margin-bottom: 40px;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+  }
+}
