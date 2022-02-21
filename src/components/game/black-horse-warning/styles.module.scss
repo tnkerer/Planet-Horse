@@ -1,0 +1,90 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .content {
+    display: flex;
+    justify-content: center;
+    width: 1185px;
+    height: 450px;
+    margin-top: 40px;
+
+    @media screen and (max-width: 831px) {
+      margin: 0;
+      width: 450px;
+      height: 700px;
+    }
+    
+    @media screen and (max-width: 400px) {
+      width: 100%;
+    }
+
+    .card {
+      display: flex;
+      height: 100%;
+      width: 900px;
+
+      @media screen and (max-width: 831px) {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @media screen and (max-width: 400px) {
+        width: 100%;
+      }
+
+      .dialog {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-image: url('../../../assets/game/home-tab/balao-de-fala.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        height: 250px;
+        width: 450px;
+
+        @media screen and (max-width: 831px) {
+          height: 350px;
+        }
+
+        @media screen and (max-width: 400px) {
+          width: 300px;
+          background-size: 130%;
+          height: 320px;
+        }
+        
+        span {
+          margin: 15px 0;
+          font-size: 18px;
+          text-align: center;
+          font-family: 'SpaceHorse';
+          line-height: 25px;
+          color: #4c3e3d;
+        }
+
+        a {
+          font-family: 'SpaceHorse';
+          text-decoration: none;
+          font-size: 22px;
+          color: #4c3e3d;
+
+          &:hover {
+            color: #bada55;
+          }
+        }
+      }
+
+      .sticker {
+        margin-top: 100px;
+        margin-left: 20px;
+
+        @media screen and (max-width: 831px) {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
