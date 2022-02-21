@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "name": "Common",
+        "src": "common",
+        "value": "5"
+    },
+    {
+        "id": 2,
+        "name": "Rare",
+        "src": "rare",
+        "value": "7,5"
+    },
+    {
+        "id": 3,
+        "name": "Super Rare",
+        "src": "super-rare",
+        "value": "11,5"
+    },
+    {
+        "id": 4,
+        "name": "Epic",
+        "src": "epic",
+        "value": "14,5"
+    },
+    {
+        "id": 5,
+        "name": "Legandery",
+        "src": "legendery",
+        "value": "20"
+    },
+    {
+        "id": 6,
+        "name": "Super Legendery",
+        "src": "super-legendery",
+        "value": "50"
+    }
+]
