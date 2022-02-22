@@ -1,3 +1,3 @@
-import chests from './chests.json'
+import chests from './data.json'
 
 export default chests

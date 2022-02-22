@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
-import chestImage from '@/utils/hooks/hooks/chest-image'
+import chestImage from '@/utils/hooks/chest-image'
 
 type Chest = {
   id: number
