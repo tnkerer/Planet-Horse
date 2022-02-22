@@ -7,7 +7,7 @@ import twitter from '@/assets/icons/twitter.png'
 import telegram from '@/assets/icons/telegram.png'
 import Link from 'next/link'
 
-const SocialMedia: React.FC = () => {
+const SocialMidia: React.FC = () => {
   return (
     <>
       <div className={styles.container}>
@@ -38,4 +38,4 @@ const SocialMedia: React.FC = () => {
   )
 }
 
-export default SocialMedia
+export default SocialMidia

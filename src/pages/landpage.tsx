@@ -7,7 +7,7 @@ import WhitePaper from '@/components/landpage/white-paper'
 import Token from '@/components/landpage/token'
 import Team from '@/components/landpage/team'
 import Blackboard from '@/components/landpage/blackboard'
-import SocialMedia from '@/components/landpage/social-midia'
+import SocialMidia from '@/components/landpage/social-midia'
 
 function App () {
   return (
@@ -23,7 +23,7 @@ function App () {
         <Team />
       </Pattern>
       <Blackboard />
-      <SocialMedia />
+      <SocialMidia />
     </>
   )
 }
