@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import logo from '@/assets/logo/logo.png'
+import logo from '@/assets/utils/logos/planet-horse.webp'
 import Image from 'next/image'
 import Link from 'next/link'
 import Board from '../board'

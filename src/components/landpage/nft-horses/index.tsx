@@ -1,12 +1,12 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import oneHorse from '@/assets/landing-page/nft-horse/1.gif'
-import twoHorse from '@/assets/landing-page/nft-horse/2.gif'
-import threerHorse from '@/assets/landing-page/nft-horse/3.gif'
-import fourHorse from '@/assets/landing-page/nft-horse/4.gif'
-import fiveHorse from '@/assets/landing-page/nft-horse/5.gif'
-import sixHorse from '@/assets/landing-page/nft-horse/6.gif'
 import CategoryHorse from '../category-horse'
+import commonHorse from '@/assets/landing-page/gameplay/cards/common-horse.gif'
+import raroHorse from '@/assets/landing-page/gameplay/cards/raro-horse.gif'
+import superRareHorse from '@/assets/landing-page/gameplay/cards/super-rare-horse.gif'
+import epicHorse from '@/assets/landing-page/gameplay/cards/epic-horse.gif'
+import legenderyHorse from '@/assets/landing-page/gameplay/cards/legendery-horse.gif'
+import superLegenderyHorse from '@/assets/landing-page/gameplay/cards/super-legendery-horse.gif'
 
 const NFTHorses: React.FC = () => {
   return (
@@ -14,28 +14,28 @@ const NFTHorses: React.FC = () => {
       <span>NFT HORSES</span>
       <div className={styles.horseGrid}>
         <CategoryHorse
-          sticker={oneHorse}
-          alt={'one'}
+          sticker={commonHorse}
+          alt={'Common horse'}
         />
         <CategoryHorse
-          sticker={twoHorse}
-          alt={'one'}
+          sticker={raroHorse}
+          alt={'Raro horse'}
         />
         <CategoryHorse
-          sticker={threerHorse}
-          alt={'one'}
+          sticker={superRareHorse}
+          alt={'Super rate horse'}
         />
         <CategoryHorse
-          sticker={fourHorse}
-          alt={'one'}
+          sticker={epicHorse}
+          alt={'Epic horse'}
         />
         <CategoryHorse
-          sticker={fiveHorse}
-          alt={'one'}
+          sticker={legenderyHorse}
+          alt={'Legendery horse'}
         />
         <CategoryHorse
-          sticker={sixHorse}
-          alt={'one'}
+          sticker={superLegenderyHorse}
+          alt={'Super legendery horse'}
         />
       </div>
     </div>

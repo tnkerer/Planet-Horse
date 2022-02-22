@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
-import tape from '@/assets/landing-page/nft-horse/tape.png'
+import tape from '@/assets/utils/tape.webp'
 
 interface Props {
   sticker: StaticImageData

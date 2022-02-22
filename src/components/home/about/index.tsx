@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
-import brownHorse from '@/assets/game/home-tab/brown-horse.gif'
-import whiteHorse from '@/assets/game/home-tab/white-horse.gif'
+import brownHorse from '@/assets/home/brown-horse.gif'
+import whiteHorse from '@/assets/home/white-horse.gif'
 
 const About: React.FC = () => {
   return (

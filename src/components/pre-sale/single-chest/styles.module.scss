@@ -28,14 +28,14 @@
       
       &.buyButton {
         width: 56%;
-        background-image: url('../../../assets/pre-sale/openchest.png');
+        background-image: url('../../../assets/pre-sale/openchest.webp');
         
         &:hover {
-          background-color: url('../../../assets/pre-sale/openchest-mouse.png');
+          background-image: url('../../../assets/pre-sale/openchest-over.webp');
         }
         
         &:active {
-          background-image: url('../../../assets/pre-sale/openchest-clicado.png');
+          background-image: url('../../../assets/pre-sale/openchest-click.webp');
         }
       }
     }

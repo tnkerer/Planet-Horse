@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import blackHorse from '../../../assets/game/home-tab/cavalo.gif'
-import metaMask from '../../../assets/game/home-tab/metamask.png'
+import blackHorse from '@/assets/home/black-horse.gif'
+import metaMask from '@/assets/home/metamask.webp'
 import Image from 'next/image'
 import Link from 'next/link'
 

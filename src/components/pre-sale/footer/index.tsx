@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import logo from '@/assets/logo/logo.png'
+import logo from '@/assets/utils/logos/planet-horse.webp'
 
-import discordIco from '@/assets/icons/discord.png'
-import twitterIco from '@/assets/icons/twitter.png'
-import telegramIco from '@/assets/icons/telegram.png'
-import instagramIco from '@/assets/icons/instagram.png'
+import discordIco from '@/assets/icons/socials/discord.webp'
+import twitterIco from '@/assets/icons/socials/twitter.webp'
+import telegramIco from '@/assets/icons/socials/telegram.webp'
+import instagramIco from '@/assets/icons/socials/instagram.webp'
 
 import Image from 'next/image'
 

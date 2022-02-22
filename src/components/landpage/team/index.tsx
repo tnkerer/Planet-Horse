@@ -1,15 +1,15 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import t from '@/assets/team-cryptplanet/t.png'
-import bizzo from '@/assets/team-cryptplanet/bizzo.png'
-import ko from '@/assets/team-cryptplanet/ko.png'
-import musk from '@/assets/team-cryptplanet/musk.png'
-import naomi from '@/assets/team-cryptplanet/naomi.png'
-import gusta from '@/assets/team-cryptplanet/gusta.png'
-import jaum from '@/assets/team-cryptplanet/jaum.png'
-import rays from '@/assets/team-cryptplanet/rayz.png'
-import ano from '@/assets/team-cryptplanet/ano.png'
-import davi from '@/assets/team-cryptplanet/davi.png'
+import t from '@/assets/landing-page/team/t.webp'
+import bizzo from '@/assets/landing-page/team/bizzo.webp'
+import ko from '@/assets/landing-page/team/ko.webp'
+import musk from '@/assets/landing-page/team/musk.webp'
+import naomi from '@/assets/landing-page/team/naomi.webp'
+import gusta from '@/assets/landing-page/team/gusta.webp'
+import jaum from '@/assets/landing-page/team/jaum.webp'
+import rayz from '@/assets/landing-page/team/rayz.webp'
+import ano from '@/assets/landing-page/team/ano.webp'
+import davi from '@/assets/landing-page/team/davi.webp'
 import TeamCard from '../team-card'
 
 const Team: React.FC = () => {
@@ -24,7 +24,7 @@ const Team: React.FC = () => {
         <TeamCard image={naomi} name='naomi' position='blockchain - dev' />
         <TeamCard image={gusta} name='gusta' position='dev' />
         <TeamCard image={jaum} name='jaum' position='dev' />
-        <TeamCard image={rays} name='rays' position='dev' />
+        <TeamCard image={rayz} name='rayz' position='dev' />
         <TeamCard image={ano} name='ano' position='dev' />
         <TeamCard image={davi} name='davi' position='dev' />
       </div>

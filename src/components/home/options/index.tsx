@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import carteiraStatus from '@/assets/game/home-tab/carteira-status.png'
-import volumeStatus from '@/assets/game/home-tab/volume-status.png'
-import cavaloStatus from '@/assets/game/home-tab/cavalos-status.png'
+import walletStatus from '@/assets/home/wallet-status.webp'
+import horseStatus from '@/assets/home/horse-status.webp'
+import volumeStatus from '@/assets/home/volume-status.webp'
 import Image from 'next/image'
 
 const Options: React.FC = () => {
@@ -13,7 +13,7 @@ const Options: React.FC = () => {
           <div className={styles.slot}>
             <div className={styles.sticker}>
               <Image
-                src={carteiraStatus}
+                src={walletStatus}
                 width={180}
                 height={170}
               />
@@ -24,7 +24,7 @@ const Options: React.FC = () => {
           <div className={styles.slot}>
             <div className={styles.sticker}>
               <Image
-                src={cavaloStatus}
+                src={horseStatus}
                 width={180}
                 height={170}
               />

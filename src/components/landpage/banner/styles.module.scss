@@ -4,7 +4,7 @@
   width: 100%;
   overflow: hidden;
 
-  background-image: url('../../../assets/landing-page/bg-and-itens/banner.png');
+  background-image: url('../../../assets/landing-page/banner/background.webp');
   background-attachment: fixed;
   
   #playButton {
@@ -21,15 +21,15 @@
   }
   
   .playActive {
-    background-image: url('../../../assets/landing-page/icon-and-button/play.png');
+    background-image: url('../../../assets/landing-page/banner/buttons/play/play.webp')
   }
 
   .playInactive {
-    background-image: url('../../../assets/landing-page/icon-and-button/play-animation.gif');
+    background-image: url('../../../assets/landing-page/banner/buttons/play/play-animation.gif')
   }
 
   .playClick {
-    background-image: url('../../../assets/landing-page/icon-and-button/play-click.png');
+    background-image: url('../../../assets/landing-page/banner/buttons/play/play-click.webp')
   }
 
   .logoMarket {
@@ -68,7 +68,7 @@
     bottom: 0;
     height: 85px;
     width: 100%;
-    background-image: url('../../../assets/landing-page/bg-and-itens/first-bar.png');
+    background-image: url('../../../assets/landing-page/banner/bar.webp');
     background-position: center;
 
     a {

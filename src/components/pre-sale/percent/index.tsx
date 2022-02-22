@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import percent from '@/assets/pre-sale/porcetagem-blind-chest.png'
+import percent from '@/assets/pre-sale/percentage-blind-chest.webp'
 import Image from 'next/image'
 
 const Percent: React.FC = () => {

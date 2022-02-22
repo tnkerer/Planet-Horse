@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import logo from '@/assets/logo/logo.png'
+import logo from '@/assets/utils/logos/planet-horse.webp'
 import Image from 'next/image'
-import discord from '@/assets/icons/discord.png'
-import instagram from '@/assets/icons/instagram.png'
-import telegram from '@/assets/icons/telegram.png'
-import twitter from '@/assets/icons/twitter.png'
+import discord from '@/assets/icons/socials/discord.webp'
+import instagram from '@/assets/icons/socials/instagram.webp'
+import telegram from '@/assets/icons/socials/telegram.webp'
+import twitter from '@/assets/icons/socials/twitter.webp'
 
 const Footer: React.FC = () => {
   return (

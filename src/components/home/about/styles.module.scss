@@ -17,7 +17,7 @@
     }
 
     .content {
-      background-image: url('../../../assets/game/home-tab/borda-papel1.webp');
+      background-image: url('../../../assets/home/card-edge-about-landscape.webp');
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
@@ -28,7 +28,7 @@
       height: 410px;
       
       @media screen and (max-width: 1218px) {
-        background-image: url('../../../assets/game/home-tab/borda-papel1-lying.webp');
+        background-image: url('../../../assets/home/card-edge-about-portrait.webp');
         background-size: cover;
         flex-direction: column;
         height: auto;

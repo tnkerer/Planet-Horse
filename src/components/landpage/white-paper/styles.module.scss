@@ -4,7 +4,7 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  background-image: url('../../../assets/landing-page/bg-and-itens/table-bar.png');
+  background-image: url('../../../assets/landing-page/white-paper/table.webp');
   height: 254px;
 
   .slot {
@@ -32,11 +32,11 @@
     }
     
     .inactive {
-      background-image: url('../../../assets/landing-page/bg-and-itens/book.png');
+      background-image: url('../../../assets/landing-page/white-paper/book.webp');
     }
     
     .active {
-      background-image: url('../../../assets/landing-page/bg-and-itens/book-hover.png');
+      background-image: url('../../../assets/landing-page/white-paper/book-over.webp');
       cursor: pointer;
     }
   }

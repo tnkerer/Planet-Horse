@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import racingDemoGameplay from '@/assets/landing-page/game-demo/racing.gif'
-import barnDemoGameplay from '@/assets/landing-page/game-demo/barn.gif'
-import upgradeDemoGameplay from '@/assets/landing-page/game-demo/upgrade.gif'
+import racingDemoGameplay from '@/assets/landing-page/gameplay/racing.gif'
+import barnDemoGameplay from '@/assets/landing-page/gameplay/barn.gif'
+import upgradeDemoGameplay from '@/assets/landing-page/gameplay/upgrade.gif'
 import Card from '../card'
 
 const Gameplay: React.FC = () => {

@@ -18,13 +18,13 @@
     }
 
     .card {
-      background-image: url('../../../assets/game/home-tab/borda-papel2.webp');
+      background-image: url('../../../assets/home/card-edge-options-landscape.webp');
       background-size: contain;
       display: flex;
       width: 100%;
 
       @media screen and (max-width: 1160px) {
-        background-image: url('../../../assets/game/home-tab/borda-papel2-lying.webp');
+        background-image: url('../../../assets/home/card-edge-options-portrait.webp');
         flex-direction: column;
         width: 340px;
         height: 990px;
