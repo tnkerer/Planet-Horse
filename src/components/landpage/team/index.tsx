@@ -17,7 +17,7 @@ const Team: React.FC = () => {
     <div className={styles.container}>
       <h1>TEAM</h1>
       <div className={styles.team}>
-        <TeamCard image={t} name='T' position='marketing' />
+        <TeamCard image={t} name='T' position='content manager' />
         <TeamCard image={bizzo} name='bizzo' position='marketing manager' />
         <TeamCard image={ko} name='k.d' position='design' />
         <TeamCard image={musk} name='musk' position='tech lead' />
