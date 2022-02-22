@@ -1,14 +1,14 @@
 import React from 'react'
 import Navbar from '@/utils/components/navbar'
-import Banner from '@/components/game/banner'
-import Board from '@/components/game/board'
-import About from '@/components/game/about'
+import Banner from '@/components/home/banner'
+import Board from '@/components/home/board'
+import About from '@/components/home/about'
 import Pattern from '@/utils/components/pattern'
-import BlackHorseWarning from '@/components/game/black-horse-warning'
-import Options from '@/components/game/options'
-import Footer from '@/components/game/footer'
+import BlackHorseWarning from '@/components/home/black-horse-warning'
+import Options from '@/components/home/options'
+import Footer from '@/components/home/footer'
 
-function Game () {
+function Home () {
   return (
     <>
       <Navbar />
@@ -24,4 +24,4 @@ function Game () {
   )
 }
 
-export default Game
+export default Home

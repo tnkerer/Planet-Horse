@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import Burger from '@/components/game/burger'
+import Burger from '@/components/home/burger'
 import logo from '@/assets/logo/logo.png'
 import Image from 'next/image'
 import Link from 'next/link'
