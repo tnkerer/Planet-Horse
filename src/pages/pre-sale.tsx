@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '@/utils/components/navbar'
 import Pattern from '@/utils/components/pattern'
-import Lousa from '@/components/pre-sale/lousa'
+// import Lousa from '@/components/pre-sale/lousa'
 import Footer from '@/components/pre-sale/footer'
 
 function PreSale () {
@@ -9,7 +9,7 @@ function PreSale () {
     <>
       <Navbar />
       <Pattern type='azul-quadrado'>
-        <Lousa />
+        {/* <Lousa /> */}
         <Footer colorLetter='white' />
       </Pattern>
     </>
