@@ -6,7 +6,7 @@ import About from '@/components/home/about'
 import Pattern from '@/utils/components/pattern'
 import BlackHorseWarning from '@/components/home/black-horse-warning'
 import Options from '@/components/home/options'
-import Footer from '@/components/home/footer'
+import Footer from '@/utils/components/footer'
 
 function Home () {
   return (
@@ -18,7 +18,7 @@ function Home () {
         <About />
         <BlackHorseWarning />
         <Options />
-        <Footer />
+        <Footer copyrightTextColor='#000' />
       </Pattern>
     </>
   )
