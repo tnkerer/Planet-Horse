@@ -40,10 +40,15 @@ const Navbar: React.FC = () => {
             <div className={styles.line} />
           </button>
           <div className={styles.logo}>
-            <Image
-              layout='intrinsic'
-              src={logo}
-            />
+            <Link href='/'>
+              <a>
+                <Image
+                  layout='intrinsic'
+                  src={logo}
+                  alt='PlanetHorse'
+                />
+              </a>
+            </Link>
           </div>
           <div className={styles.options}>
             <Link href='/home'>
