@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import Burger from '@/components/home/burger'
 import logo from '@/assets/utils/logos/planet-horse.webp'
 import Image from 'next/image'
 import Link from 'next/link'
+import exampleUserPic from '@/assets/user-profiles/example-user.gif'
+import wallet from '@/utils/mocks/wallet'
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
+  const [walletAddress, setWalletAddress] = useState('')
+  const [connected, setConnected] = useState(false)
+
+  function walletAdapter (): string {
+    const { result } = wallet
+    const [firstResult] = result
+    const { address } = firstResult
+    const shorten = address.slice(0, 9)
+    return shorten
+  }
+
+  useEffect(() => {
+    const walletWithEllipsis = `${walletAdapter()}...`
+    setWalletAddress(walletWithEllipsis)
+  }, [])
 
   return (
     <>
@@ -45,8 +62,24 @@ const Navbar: React.FC = () => {
               <a>BARN</a>
             </Link>
           </div>
-          <div className={styles.account}>
-            <button />
+          <div
+            className={styles.account}
+            onClick={() => {
+              setConnected(!connected)
+            }}
+          >
+            <Link href={'#'}>
+              {connected
+                ? <div id={styles.userProfileButton}>
+                    <span className={styles.address}>{walletAddress}</span>
+                    <div className={styles.userPicture}>
+                      <Image
+                        src={exampleUserPic}
+                      />
+                    </div>
+                  </div>
+                : <button />}
+            </Link>
           </div>
         </div>
       </div>
