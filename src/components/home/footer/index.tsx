@@ -7,7 +7,11 @@ import instagram from '@/assets/icons/socials/instagram.webp'
 import telegram from '@/assets/icons/socials/telegram.webp'
 import twitter from '@/assets/icons/socials/twitter.webp'
 
-const Footer: React.FC = () => {
+interface Props {
+  copyrightTextColor: 'white' | 'black'
+}
+
+const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -48,7 +52,15 @@ const Footer: React.FC = () => {
             />
           </div>
         </div>
-        <span>Copyright © 2022 planethorse</span>
+        <span
+          style={{
+            color: copyrightTextColor === 'white'
+              ? '#fff'
+              : '#000'
+          }}
+        >
+          Copyright © 2022 planethorse
+        </span>
       </div>
     </div>
   )
