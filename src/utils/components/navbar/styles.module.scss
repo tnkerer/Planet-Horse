@@ -83,7 +83,8 @@
       }
 
       @media screen and (max-width: 350px) {
-        width: 35%;
+        left: 50%;
+        width: 120px;
       }
     }
   }
@@ -113,6 +114,45 @@
     flex-direction: column;
     justify-content: center;
     width: 250px;
+    cursor: pointer;
+
+    #userProfileButton {
+      position: absolute;
+      right: 10px;
+      bottom: 15px;
+      display: flex;
+      align-items: center;
+      
+      .address {
+        font-family: 'SpaceHorse';
+        font-size: 18px;
+        color: #fff;
+        margin: 0 30px;
+        transition: transform .3s;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        @media screen and (max-width: 900px) {
+          margin: 0 15px;
+        }
+
+        @media screen and (max-width: 500px) {
+          display: none;
+        }
+      }
+
+      .userPicture {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+        object-position: center center;
+      }
+    }
 
     button {
       position: absolute;
@@ -125,6 +165,7 @@
       border: 0;
       margin-bottom: 3px;
       margin-right: 7%;
+      cursor: pointer;
 
       &::before {
         content: 'Connect to wallet';
