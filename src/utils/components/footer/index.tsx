@@ -8,7 +8,7 @@ import telegram from '@/assets/icons/socials/telegram.webp'
 import twitter from '@/assets/icons/socials/twitter.webp'
 
 interface Props {
-  copyrightTextColor: 'white' | 'black'
+  copyrightTextColor: string
 }
 
 const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
@@ -54,9 +54,7 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
         </div>
         <span
           style={{
-            color: copyrightTextColor === 'white'
-              ? '#fff'
-              : '#000'
+            color: copyrightTextColor
           }}
         >
           Copyright © 2022 planethorse

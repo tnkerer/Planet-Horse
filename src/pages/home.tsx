@@ -18,7 +18,7 @@ function Home () {
         <About />
         <BlackHorseWarning />
         <Options />
-        <Footer copyrightTextColor='black' />
+        <Footer copyrightTextColor='#000' />
       </Pattern>
     </>
   )
