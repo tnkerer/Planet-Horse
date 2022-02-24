@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './styles.module.scss'
 import HorseLegendary from '@/assets/game/horses/horse.png'
 
@@ -23,16 +23,12 @@ interface Horse {
 }
 
 interface Props {
-  horse: Horse,
-  openModal: any
-  /* Help, qual tipo handleOpenModal deveria ser? */
+  horse: Horse
+  openModal: (modalType: string, horseId?: number) => void
 }
 
 const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
-    
-    
-
-    return (
+  return (
         <>
         <div className={styles.singleHorse}>
             <div className={styles.maskCard}>
@@ -114,7 +110,7 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
             </div>
         </div>
         </>
-    )
+  )
 }
 
 export default SingleHorse

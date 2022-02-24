@@ -5,14 +5,12 @@ import close from '@/assets/game/pop-up/fechar.png'
 import { rewards } from '@/utils/mocks/game'
 
 interface Props {
-  closeModal: any,
-  /* Help, qual tipo closeModal deveria ser? */
-  status: boolean,
-  horseId: number,
+  closeModal: (modalType: string, horseId?: number) => void
+  status: boolean
+  horseId: number
 }
 
 const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
-
   // const [horseId, setHorseId] = useState(horse)
   // const [horseData, setHorseData] = useState(null)
 
@@ -36,7 +34,7 @@ const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
                     </div>
                     <div className={styles.tableInfo}>
                         <div className={styles.tableInfoRewards}>
-                            
+
                             <div>Total Rewards: 2 PHORSE</div>
                             <div>Jan 02, 2022 (UTC+0)</div>
                         </div>
@@ -48,12 +46,12 @@ const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
                         <table>
 
                             {!horseMock
-                            ? (
+                              ? (
                                 <div>
                                     Getting horse data...
                                 </div>
                                 )
-                            : (
+                              : (
                                 <tbody>
 
                                     {horseMock.map((reward) => (
