@@ -1,0 +1,54 @@
+[
+    {
+        "id": 1,
+        "profile": {
+            "name": "Fire Horse",
+            "sex": "Male",
+            "type_horse": "SUPER LEGENDERY",
+            "type_jockey": "NORMAL",
+            "time": "120 DAY"
+        },
+        "staty": {
+            "level": "1",
+            "exp": "5/99",
+            "power": "10",
+            "sprint": "15",
+            "speed": "50",
+            "energy": "2/9"
+        },
+        "items": [
+            {
+                "id": 1
+            },
+            {
+                "id": 2
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "profile": {
+            "name": "Fire Horse",
+            "sex": "Male",
+            "type_horse": "SUPER LEGENDERY",
+            "type_jockey": "NORMAL",
+            "time": "120 DAY"
+        },
+        "staty": {
+            "level": "1",
+            "exp": "5/99",
+            "power": "10",
+            "sprint": "15",
+            "speed": "50",
+            "energy": "2/9"
+        },
+        "items": [
+            {
+                "id": 1
+            },
+            {
+                "id": 2
+            }
+        ]
+    }
+]
