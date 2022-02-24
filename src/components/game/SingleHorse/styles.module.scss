@@ -1,0 +1,174 @@
+.singleHorse {
+    
+    padding: 1vw;
+    .maskCard{
+        background-image: url('../../../assets/game/horses/pasta-horses.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 46vw;
+        height: 29vw;
+        display: flex;
+        z-index: 1;
+        @media screen and (max-width: 920px) {
+            width: 97vw;
+            height: 60vw;
+        }
+        
+        .horseGif{
+            padding: 3.5vw 1.8vw;
+            img{
+                width: 19.2vw;
+            }
+            @media screen and (max-width: 920px) {
+                padding: 7.3vw 3.8vw;
+                img{
+                    width: 40.2vw;
+                }
+            }
+        }
+        .horseInfo{
+            .horseWrapper{
+                padding: 5.25vw 3.93vw 1.5vw 3.93vw;
+                font-family: 'SpaceHorse';
+                @media screen and (max-width: 920px) {
+                    width: 100%;
+                    padding: 11.7vw 8.5vw 2.2vw 8.5vw;
+                }
+                .horseItems{
+                    display: flex;
+                    margin-top: 3vw;
+                    padding: 0 1.3vw;
+                    .singleItem{  
+                        min-width: 3vw;
+                        margin-left: 1.2vw;
+                        text-align: center;
+                        font-size: 1.3vw;
+                        &:first-child{
+                            margin-left: 0vw;
+                        }
+                        @media screen and (max-width: 920px) {
+                            min-width: 5.9vw;
+                            margin-left: 2.7vw;
+                            font-size: 2vw;
+                        }
+                    }
+                    @media screen and (max-width: 920px) {
+                        margin-top: 7vw;
+                        padding: 0 3vw;
+                    }
+                }
+                .horseStaty{
+                    margin-top: 1vw;
+                    @media screen and (max-width: 920px) {
+                        margin-top: 2vw;
+                    }
+                }
+                .horseItemDescriptionBox{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .horseItemDescription{
+                    font-size: 0.8vw;
+                    color: #b79b74;
+                    line-height: 1.4;
+                    @media screen and (max-width: 920px) {
+                        font-size: 1.7vw;
+                    }
+                    span{
+                        color: #7d6b55;
+                        font-weight: bold;
+                        font-size: 0.8vw;
+                        @media screen and (max-width: 920px) {
+                            font-size: 1.7vw;
+                        }
+                        &.horseItemDescriptionGray{
+                            color: #919191;
+                        }
+                        &.horseItemDescriptionBlue{
+                            color: #2F35A8;
+                        }
+                        &.horseItemDescriptionRed{
+                            color: #E21C21;
+                        }
+                    }
+                
+                }
+
+                
+            }
+            .horseButtons{
+                display: flex;
+                gap: 0.5vw;
+                .singleButton{
+
+                    button{
+                        background-color: transparent;
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        border: none;
+                        cursor: pointer;
+                        height: 2.5vw;
+                        @media screen and (max-width: 920px) {
+                            height: 5.5vw;
+                        }
+
+                        &.buyButton {
+                            width: 5.7vw;
+                            background-image: url('../../../assets/game/horses/rewards.png');
+                            @media screen and (max-width: 920px) {
+                                width: 13vw;
+                            }
+                            &:hover {
+                                background-image: url('../../../assets/game/horses/rewards-mouse.png');
+                            }
+                            &:active {
+                                background-image: url('../../../assets/game/horses/rewards-clicado.png');
+                            }
+                        }
+                        &.itemsButton {
+                            width: 4.4vw;
+                            background-image: url('../../../assets/game/horses/items.png');
+                            @media screen and (max-width: 920px) {
+                                width: 10vw;
+                            }
+                            &:hover {
+                                background-image: url('../../../assets/game/horses/items.png');
+                            }
+                            &:active {
+                                background-image: url('../../../assets/game/horses/items.png');
+                            }
+                        }
+                        &.quickraceButton {
+                            width: 5.8vw;
+                            background-image: url('../../../assets/game/horses/quickrace.png');
+                            @media screen and (max-width: 920px) {
+                                width: 13vw;
+                            }
+                            &:hover {
+                                background-image: url('../../../assets/game/horses/quickrace-mouse.png');
+                            }
+                            &:active {
+                                background-image: url('../../../assets/game/horses/quickrace-clicado.png');
+                            }
+                        }
+                        &.startButton {
+                            width: 3.6vw;
+                            background-image: url('../../../assets/game/horses/start.png');
+                            @media screen and (max-width: 920px) {
+                                width: 8vw;
+                            }
+                            &:hover {
+                                background-image: url('../../../assets/game/horses/start-mouse.png');
+                            }
+                            &:active {
+                                background-image: url('../../../assets/game/horses/start-clicado.png');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+}
+  
