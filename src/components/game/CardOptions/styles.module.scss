@@ -1,12 +1,10 @@
 .container {
   width: 100%;
-
   display: flex;
 
   .cards {
     width: 1400px;
     margin: auto;
-
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -21,7 +19,6 @@
     margin: 15px;
     width: 404px;
     height: 400px;
-
     position: relative;
 
     img {
@@ -31,15 +28,12 @@
 
     .button {
       background-size: cover;
-
       width: 180px;
       height: 40px;
-
       position: absolute;
       z-index: 1;
       left: 110px;
       top: 335px;
-
       cursor: pointer;
     }
 
@@ -49,12 +43,10 @@
       border: none;
       width: 195px;
       height: 40px;
-
       position: absolute;
       z-index: 1;
       left: 105px;
       top: 335px;
-
       cursor: pointer;
 
       &.buyButton {
