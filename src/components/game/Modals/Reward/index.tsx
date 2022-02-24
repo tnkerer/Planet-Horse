@@ -3,6 +3,7 @@ import styles from './styles.module.scss'
 import close from '@/assets/game/pop-up/fechar.png'
 
 import { rewards } from '@/utils/mocks/game'
+import Image from 'next/image'
 
 interface Props {
   closeModal: (modalType: string, horseId?: number) => void
@@ -30,7 +31,7 @@ const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
             <div className={styles.modalFull}>
                 <div className={styles.modalContent}>
                     <div className={styles.modalClose} onClick={() => closeModal('reward')}>
-                        <img src={close.src} />
+                        <Image width={'30px'} height={'30px'} src={close} />
                     </div>
                     <div className={styles.tableInfo}>
                         <div className={styles.tableInfoRewards}>
