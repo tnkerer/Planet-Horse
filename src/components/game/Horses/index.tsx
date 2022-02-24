@@ -4,6 +4,7 @@ import phorseCoin from '@/assets/icons/coin.webp'
 import ModalReward from '../Modals/Reward'
 import SingleHorse from '../SingleHorse'
 import { horses } from '@/utils/mocks/game'
+import Image from 'next/image'
 
 const Horses: React.FC = () => {
   const [modalReward, setToogleModalReward] = useState(false)
@@ -32,7 +33,7 @@ const Horses: React.FC = () => {
           <span>REWARDS OF SOLD HORSES</span>
         </div>
         <div className={styles.countCurrency}>
-          <img src={phorseCoin} alt="phorse coin" />
+          <Image width={50} height={50} src={phorseCoin} alt="phorse coin" />
           <span>100000.00</span>
         </div>
       </div>

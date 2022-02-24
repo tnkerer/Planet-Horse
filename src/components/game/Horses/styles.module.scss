@@ -5,7 +5,6 @@
   background-size: cover;
 
   .containerBar {
-    
     padding: 30px 20px 0px 20px;
     max-width: 1400px;
     margin: 0 auto;
@@ -20,7 +19,6 @@
       text-shadow: 0 3px 2px rgba(0, 0, 0, 0.2);
       color: #fff;
       font-size: 22px;
-
       cursor: pointer;
       margin-right: 30px;
 
@@ -36,21 +34,17 @@
     img {
       width: 50px;
       height: 50px;
-
       margin-right: 5px;
     }
 
     span {
       align-self: center;
       max-width: 180px;
-
       background: #582c25;
       padding: 4px 8px;
       border-radius: 5px;
-
       font-family: 'SpaceHorse';
       font-size: 20px;
-
       color: #fff;
     }
   }
@@ -64,10 +58,8 @@
 
   .countHorses {
     margin-top: 50px;
-
     font-family: 'SpaceHorse';
     font-size: 30px;
-
     color: #fff;
   }
 
@@ -93,20 +85,17 @@
 
       width: 46vw;
       height: 29vw;
-
       padding: 1vw;
-  
       background-image: url('../../../assets/game/horses/horse-card.png');
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
-
       cursor: pointer;
-
       text-align: center;
       color: white;
       font-size: 2.5vw;
       line-height: 0.8;
+
       .addHorseWrapper{
 
         display: flex;
