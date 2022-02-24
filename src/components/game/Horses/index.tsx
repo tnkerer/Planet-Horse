@@ -6,24 +6,20 @@ import SingleHorse from '../SingleHorse'
 import { horses } from '@/utils/mocks/game'
 
 const Horses: React.FC = () => {
-
-  const [modalReward, setToogleModalReward] = useState(false);
-  const [horseId, sethorseId] = useState(0);
-  
+  const [modalReward, setToogleModalReward] = useState(false)
+  const [horseId, sethorseId] = useState(0)
 
   const toogleModal = (modalType: string, horseId?: number) => {
-
-    if(horseId){
+    if (horseId) {
       sethorseId(horseId)
-    }else{
+    } else {
       sethorseId(0)
     }
-    
-    if(modalType === 'reward'){
+
+    if (modalType === 'reward') {
       setToogleModalReward(!modalReward)
     }
   }
-
 
   return (
     <>
@@ -46,7 +42,7 @@ const Horses: React.FC = () => {
       <span className={styles.countHorses}>{horses.length}/15</span>
 
       <div className={styles.cardHorses}>
-        
+
         {horses.map((horse) => (
           <SingleHorse openModal={toogleModal} key={horse.id} horse={horse} />
         ))}
