@@ -5,6 +5,7 @@ import horseFusionGif from '@/assets/game/actions-cards/fusion.gif'
 import upgradeStableGif from '@/assets/game/actions-cards/upgrade.gif'
 import Image from 'next/image'
 
+
 const CardOptions: React.FC = () => {
   return (
     <div className={styles.container}>
