@@ -29,13 +29,20 @@ const Banner: React.FC = () => {
           alt='logo'
         />
       </div>
-      <div className={styles.molduraFooter}>
-        <Link href='/'>
-          <a>
-            Contract Address: <b>Comming soon</b>
-          </a>
-        </Link>
-      </div>
+      <div className={styles.frameFooter}>
+        <div className={styles.clarity} />
+        <div className={styles.clarityLine} />
+        <div className={styles.address}>
+          <input
+            value='Contract Address: Coming soon'
+            type='text'
+            disabled
+          />
+        </div>
+        <div className={styles.shadowLine} />
+        <div className={styles.shadow} />
+        <div className={styles.darkLine} />
+      </div>   
     </div>
   )
 }

@@ -59,28 +59,65 @@
     }
   }
 
-  .molduraFooter {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+  .frameFooter {
     position: absolute;
-    bottom: 0;
-    height: 85px;
+    background-color: #7d4d45;
     width: 100%;
-    background-image: url('../../../assets/landing-page/banner/bar.webp');
-    background-position: center;
+    bottom: 0;
+    border-top: 1px solid #401c16;
 
-    a {
-      font-size: 12px;
-      font-family: 'SpaceHorse';
+    .clarity {
       position: relative;
-      text-decoration: none;
-      color: #fff;
+      border-top: 3px solid #c49086;
+      height: 8px;
+      background-color: #a26b61;
+    }
 
-      b {
-        text-decoration: none;
+    .clarityLine {
+      position: relative;
+      height: 3px;
+      top: 3px;
+      background-color: #a26b61;
+    }
+
+    .address {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      height: 54px;
+
+      & > input {
+        background-color: #a26b61;
+        text-align: center;
+        user-select: none;
+        letter-spacing: 1.1px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+        border: 0;
+        outline: 0;
+        font-family: 'SpaceHorse';
+        font-size: 12px;
+        height: 18px;
+        color: #fff;
+        border-radius: 5px;
+        border-top: 2px solid #582c25;
+        border-bottom: 2px solid #c49086;
+        padding-bottom: 4px;
+        width: 520px;
       }
     }
-  }
+
+    .shadowLine {
+      position: relative;
+      height: 3px;
+      bottom: 3px;
+      background-color: #582c25;
+    }
+
+    .shadow {
+      position: relative;
+      height: 8px;
+      background-color: #582c25;
+    }
+  } 
 }
