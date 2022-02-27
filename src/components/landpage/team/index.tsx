@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styles from './styles.module.scss'
 import t from '@/assets/landing-page/team/t.webp'
 import bizzo from '@/assets/landing-page/team/bizzo.webp'
@@ -13,10 +13,15 @@ import davi from '@/assets/landing-page/team/davi.webp'
 import TeamCard from '../team-card'
 
 const Team: React.FC = () => {
+  useEffect(() => {
+    const team = document.getElementById('team')
+    team.addEventListener('contextmenu', e => e.preventDefault())
+  }, [])
+
   return (
     <div className={styles.container}>
       <h1>TEAM</h1>
-      <div className={styles.team}>
+      <div className={styles.team} id='team'>
         <TeamCard image={t} name='T' position='content manager' />
         <TeamCard image={bizzo} name='bizzo' position='marketing manager' />
         <TeamCard image={ko} name='k.d' position='design' />
