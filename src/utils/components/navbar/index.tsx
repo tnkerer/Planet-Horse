@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
-import Burger from '@/components/home/burger'
+import Burger from '@/utils/components/burger'
 import logo from '@/assets/utils/logos/planet-horse.webp'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -28,16 +28,19 @@ const Navbar: React.FC = () => {
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.shadow} />
-        <div className={styles.shadowBorder} />
-
+        <svg width='100%' height='90px'>
+          <rect y='75' fill='#582c25' width='100%' height='4' />
+          <rect y='83' fill='#582c25' width='100%' height='7' />
+        </svg>
         <div className={styles.content}>
           <button className={styles.burgerIcon} onClick={() => {
             setBurger(!burger)
           }}>
-            <div className={styles.line} />
-            <div className={styles.line} />
-            <div className={styles.line} />
+            <svg width='100%' height='100%'>
+              <rect y='10' fill='#fff' width='30' height='3' />
+              <rect y='21' fill='#fff' width='30' height='3' />
+              <rect y='32' fill='#fff' width='30' height='3' />
+            </svg> 
           </button>
           <div className={styles.logo}>
             <Image

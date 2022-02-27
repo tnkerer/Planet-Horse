@@ -62,49 +62,37 @@
   .frameFooter {
     position: absolute;
     background-color: #7d4d45;
+    display: flex;
     width: 100%;
+    justify-content:  center;
+    align-items: center;
+    height: 82px;
     bottom: 0;
     border-top: 1px solid #401c16;
 
-    .clarity {
-      position: relative;
-      border-top: 3px solid #c49086;
-      height: 8px;
-      background-color: #a26b61;
+    svg {
+      position: absolute;
+      background-color: red;
     }
 
-    .clarityLine {
-      position: relative;
-      height: 3px;
-      top: 3px;
+    & > input {
+      position:  relative;
       background-color: #a26b61;
-    }
-
-    .address {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      height: 54px;
-
-      & > input {
-        background-color: #a26b61;
-        text-align: center;
-        user-select: none;
-        letter-spacing: 1.1px;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
-        border: 0;
-        outline: 0;
-        font-family: 'SpaceHorse';
-        font-size: 12px;
-        height: 18px;
-        color: #fff;
-        border-radius: 5px;
-        border-top: 2px solid #582c25;
-        border-bottom: 2px solid #c49086;
-        padding-bottom: 4px;
-        width: 520px;
-      }
+      text-align: center;
+      user-select: none;
+      letter-spacing: 1.1px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+      border: 0;
+      outline: 0;
+      font-family: 'SpaceHorse';
+      font-size: 12px;
+      height: 18px;
+      color: #fff;
+      border-radius: 5px;
+      border-top: 2px solid #582c25;
+      border-bottom: 2px solid #c49086;
+      padding-bottom: 4px;
+      width: 520px;
     }
 
     .shadowLine {
