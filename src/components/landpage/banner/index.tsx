@@ -5,6 +5,7 @@ import logoRacePlayEarn from '@/assets/landing-page/banner/logo-race-play-earn.g
 import Image from 'next/image'
 import Link from 'next/link'
 import GraphicalButton from '@/utils/components/graphical-button'
+import Frame from '@/utils/components/frame'
 
 const Banner: React.FC = () => {
   return (
@@ -30,18 +31,12 @@ const Banner: React.FC = () => {
         />
       </div>
       <div className={styles.frameFooter}>
-        <div className={styles.clarity} />
-        <div className={styles.clarityLine} />
-        <div className={styles.address}>
-          <input
-            value='Contract Address: Coming soon'
-            type='text'
-            disabled
-          />
-        </div>
-        <div className={styles.shadowLine} />
-        <div className={styles.shadow} />
-        <div className={styles.darkLine} />
+        <Frame /> 
+        <input
+          value='Contract Address: Coming soon'
+          type='text'
+          disabled
+        />
       </div>   
     </div>
   )

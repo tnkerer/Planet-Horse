@@ -4,8 +4,11 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  background-image: url('../../../assets/landing-page/white-paper/table.webp');
   height: 254px;
+  
+  svg {
+    position: absolute;
+  }
 
   .slot {
     position: relative;
