@@ -3,6 +3,7 @@ import styles from './styles.module.scss'
 import phorseCoin from '@/assets/icons/coin.webp'
 import ModalReward from '../Modals/Reward'
 import ModalRaceStart from '../Modals/RaceStart'
+import ModalQuickRace from '../Modals/QuickRace'
 import SingleHorse from '../SingleHorse'
 import { horses } from '@/utils/mocks/game'
 import Image from 'next/image'
@@ -10,6 +11,7 @@ import Image from 'next/image'
 const Horses: React.FC = () => {
   const [modalReward, setToogleModalReward] = useState(false)
   const [modalRaceStart, setToogleModalRaceStart] = useState(false)
+  const [modalQuickRace, setToogleModalQuickRace] = useState(false)
   const [horseId, sethorseId] = useState(0)
 
   const toogleModal = (modalType: string, horseId?: number) => {
@@ -19,6 +21,7 @@ const Horses: React.FC = () => {
       sethorseId(0)
     }
 
+
     if (modalType === 'reward') {
       setToogleModalReward(!modalReward)
     }
@@ -26,12 +29,17 @@ const Horses: React.FC = () => {
     if (modalType === 'raceStart') {
       setToogleModalRaceStart(!modalRaceStart)
     }
+
+    if (modalType === 'quickRace') {
+      setToogleModalQuickRace(!modalQuickRace)
+    }
   }
 
   return (
     <>
     <ModalReward closeModal={toogleModal} status={modalReward} horseId={horseId} />
     <ModalRaceStart closeModal={toogleModal} status={modalRaceStart} horseId={horseId} />
+    <ModalQuickRace closeModal={toogleModal} status={modalQuickRace} horseId={horseId} />
     <div className={styles.secondBar}>
       <div className={styles.containerBar}>
         <div className={styles.actionsOptions}>

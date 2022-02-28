@@ -10,15 +10,15 @@ interface Props {
   horseId: number
 }
 
-const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
+const ModalQuickRace: React.FC<Props> = ({ closeModal, status, horseId }) => {
   // const [horseId, setHorseId] = useState(horse)
   // const [horseData, setHorseData] = useState(null)
 
   return (
-        <div className={`${styles.modalRaceStart} ${status ? styles.modalActive : styles.modalInactive}`}>
+        <div className={`${styles.modalQuickRace} ${status ? styles.modalActive : styles.modalInactive}`}>
             <div className={styles.modalFull}>
                 <div className={styles.modalContent}>
-                    <div className={styles.modalClose} onClick={() => closeModal('raceStart')}>
+                    <div className={styles.modalClose} onClick={() => closeModal('quickRace')}>
                         <Image width={'30px'} height={'30px'} src={close} />
                     </div>
                     <div className={styles.modalInfo}>
@@ -30,4 +30,4 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
   )
 }
 
-export default ModalRaceStart
+export default ModalQuickRace
