@@ -1,0 +1,53 @@
+.modalRaceStart {
+
+    &.modalActive {
+        display: block;
+    }
+
+    &.modalInactive {
+        display: none;
+    }
+
+    .modalFull {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #00000025;
+        height: 100vh;
+        width: 100vw;
+        z-index: 9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .modalContent {
+            position: relative;
+            background-color: white;
+            font-family: 'SpaceHorse';
+            background-size: cover;
+            background-repeat: no-repeat;
+            width: 45vw;
+            height: 26.4vw;
+            padding: 0.7vw 2vw 0.7vw 3vw;
+
+            @media screen and (max-width: 920px) {
+                width: 80vw;
+                height: 67vw;
+                padding: 2vw 0 0.7vw 6vw;
+            }
+
+            .modalInfo {
+                
+            }
+
+            .modalClose {
+                position: absolute;
+                right: -15px;
+                top: -15px;
+                cursor: pointer;
+            }
+    
+        }
+    }
+}
+
