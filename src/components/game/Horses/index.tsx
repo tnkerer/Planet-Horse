@@ -21,7 +21,6 @@ const Horses: React.FC = () => {
       sethorseId(0)
     }
 
-
     if (modalType === 'reward') {
       setToogleModalReward(!modalReward)
     }
