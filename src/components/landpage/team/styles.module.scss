@@ -9,6 +9,7 @@
     font-family: 'UpheavalPro';
     font-size: 30px;
     margin-bottom: 70px;
+    transition: opacity 1.2s;
   }
 
   .team {
@@ -16,6 +17,7 @@
     flex-wrap: wrap;
     width: 1150px;
     margin-bottom: 30px;
+    transition: opacity 1.5s;
 
     @media screen and (max-width: 1200px) {
       width: 80%;
@@ -39,6 +41,7 @@
     color: #fff;
     width: 560px;
     margin-top: 20px;
+    transition: opacity 1.5s;
 
     @media screen and (max-width: 600px) {
       width: 100%;

@@ -7,30 +7,50 @@
   background-image: url('../../../assets/landing-page/banner/background.webp');
   background-attachment: fixed;
   
-  #playButton {
+  .buttonContainer {
     position: fixed;
-    top: 0;
     right: 10%;
     width: 224px;
     height: 73px;
-    border: 0;
-    outline: 0;
-    border-radius: 0 0 15px 15px;
+    animation: playButtonAnimation 0.6s ease-out;
     z-index: 2;
-    cursor: pointer;
-  }
-  
-  .playActive {
-    background-image: url('../../../assets/landing-page/banner/buttons/play/play.webp')
-  }
 
-  .playInactive {
-    background-image: url('../../../assets/landing-page/banner/buttons/play/play-animation.gif')
-  }
+    @keyframes playButtonAnimation {
+      from {
+        top: -73px;
+      }
 
-  .playClick {
-    background-image: url('../../../assets/landing-page/banner/buttons/play/play-click.webp')
-  }
+      to {
+        top: 0;
+      }
+    }
+
+    @media screen and (max-width: 810px) {
+      animation: none;
+    }
+
+    #playButton {
+      right: 10%;
+      width: 224px;
+      height: 73px;
+      border: 0;
+      outline: 0;
+      border-radius: 0 0 15px 15px;
+      cursor: pointer;
+    }
+
+    .playActive {
+      background-image: url('../../../assets/landing-page/banner/buttons/play/play.webp');
+    }
+
+    .playInactive {
+      background-image: url('../../../assets/landing-page/banner/buttons/play/play-animation.gif');
+    }
+
+    .playClick {
+      background-image: url('../../../assets/landing-page/banner/buttons/play/play-click.webp')
+    }
+  } 
 
   .logoMarket {
     position: absolute;
@@ -75,16 +95,11 @@
       background-color: red;
     }
 
-    & > input {
+    & > div {
       position:  relative;
       background-color: #a26b61;
-      text-align: center;
-      user-select: none;
-      letter-spacing: 1.1px;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
       border: 0;
       outline: 0;
-      font-family: 'SpaceHorse';
       font-size: 12px;
       height: 18px;
       color: #fff;
@@ -93,6 +108,32 @@
       border-bottom: 2px solid #c49086;
       padding-bottom: 4px;
       width: 520px;
+
+      span {
+        display: block;
+        position: relative;
+        top: calc(50% - 5px);
+        left: calc(50% - 125px);
+        white-space: nowrap;
+        overflow: hidden;
+        width: 251px;
+        height: 16px;
+        font-family: 'SpaceHorse';
+        font-size: 12px;
+        letter-spacing: 1.1px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, .5);
+        animation: AnimationAddress .6s linear;
+
+        @keyframes AnimationAddress  {
+          from {
+            width: 0;
+          }
+
+          to {
+            width: 251px;
+          }
+        }
+      }
     }
 
     .shadowLine {

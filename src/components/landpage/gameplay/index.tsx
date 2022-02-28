@@ -1,27 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styles from './styles.module.scss'
 import racingDemoGameplay from '@/assets/landing-page/gameplay/racing.gif'
 import barnDemoGameplay from '@/assets/landing-page/gameplay/barn.gif'
 import upgradeDemoGameplay from '@/assets/landing-page/gameplay/upgrade.gif'
 import Card from '../card'
+import { ScrollYValueContext } from '@/utils/providers/scroll-y-value'
 
-const Gameplay: React.FC = () => {
+interface Props {
+  scrollValueToAnimate?: number
+}
+
+const Gameplay: React.FC<Props> = ({ scrollValueToAnimate }) => {
+  const [scrolled, setScrolled] = useState(false)
+  const { scrollY } = useContext(ScrollYValueContext)
+  const [screenWidth, setScreenWidth] = useState(0)
+
+  useEffect(() => {
+    const elementAppearsToUser = scrollY >= scrollValueToAnimate
+    const screenWidthResolution = window.innerWidth
+    elementAppearsToUser && setScrolled(true)
+    setScreenWidth(screenWidthResolution)
+  }, [scrollY])
+
   return (
     <div className={styles.container}>
-      <span>GAMEPLAY</span>
+      <span style={{
+        opacity: scrolled || screenWidth <= 810 ? 1 : 0
+      }}>GAMEPLAY</span>
       <Card
         image={racingDemoGameplay}
+        scrollValueToAnimate={200}
         infoFirstParagraph='Race mode offers PvP or PvC racing.'
         infoSecondParagraph='The rewards for the winners will be: experience points, materials, items, tokens.'
       />
       <Card
         image={barnDemoGameplay}
+        scrollValueToAnimate={600}
         reverse={true}
         infoFirstParagraph='In the market, players can buy/sell horses, materials, items, stables. '
         infoSecondParagraph='Players will spend/earn PlanetHorse token when trading on the market.'
       />
        <Card
         image={upgradeDemoGameplay}
+        scrollValueToAnimate={1000}
         infoFirstParagraph='When your horse gains enough experience points, you can use items to upgrade them. '
         infoSecondParagraph='Horse upgrade will increase: speed, sprint, susten, power.'
       />
