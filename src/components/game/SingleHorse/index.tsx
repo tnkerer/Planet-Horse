@@ -97,12 +97,12 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                         </div>
                         <div className={styles.singleButton}>
                             <button className={styles.quickraceButton}
-                                /* onClick={setPopUp('chest')} */
+                                onClick={() => openModal('quickRace', horse.id)}
                             ></button>
                         </div>
                         <div className={styles.singleButton}>
                             <button className={styles.startButton}
-                                /* onClick={setPopUp('chest')} */
+                                onClick={() => openModal('raceStart', horse.id)}
                             ></button>
                         </div>
                     </div>
