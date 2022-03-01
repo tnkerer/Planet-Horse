@@ -8,6 +8,21 @@
   background-repeat: no-repeat;
   width: 105px;
   height: 335px;
+  animation: animation 1.2s ease-out;
+
+  @keyframes animation {
+    from {
+      left: -105px;
+    }
+
+    to {
+      left: 0;
+    }
+  }
+
+  @media screen and (max-width: 810px) {
+    animation: none;
+  }
 
   .socials {
     margin-left: 15%;

@@ -8,23 +8,26 @@ import Token from '@/components/landpage/token'
 import Team from '@/components/landpage/team'
 import Blackboard from '@/components/landpage/blackboard'
 import SocialMidia from '@/components/landpage/social-midia'
+import { ScrollYValueProvider } from '@/utils/providers/scroll-y-value'
+import SetterScrollYValue from '@/utils/components/setter-scrollY-value'
 
 function App () {
   return (
-    <>
+    <ScrollYValueProvider>
+      <SetterScrollYValue />
       <Banner />
       <Pattern type='light'>
-        <Gameplay />
-        <NFTHorses />
+        <Gameplay scrollValueToAnimate={90} />
+        <NFTHorses scrollValueToAnimate={1300} />
       </Pattern>
       <Pattern type='dark'>
-        <WhitePaper />
-        <Token />
-        <Team />
+        <WhitePaper scrollValueToAnimate={2900} />
+        <Token scrollValueToAnimate={3300} />
+        <Team scrollValueToAnimate={3900} />
       </Pattern>
       <Blackboard />
       <SocialMidia />
-    </>
+    </ScrollYValueProvider>
   )
 }
 

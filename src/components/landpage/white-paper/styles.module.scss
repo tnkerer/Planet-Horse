@@ -15,7 +15,7 @@
     height: 211px;
     width: 100%;
     bottom: 50px;
-    
+
     #whitepaper {
       position: absolute;
       left: 50%;
@@ -41,6 +41,21 @@
     .active {
       background-image: url('../../../assets/landing-page/white-paper/book-over.webp');
       cursor: pointer;
+    }
+  }
+
+  .animation {
+    animation: animation 1.2s ease-out;
+    @keyframes animation {
+      from {
+        bottom: 500px;
+        opacity: 0;
+      }
+      
+      to {
+        bottom: 50px;
+        opacity: 1;
+      }
     }
   }
 }

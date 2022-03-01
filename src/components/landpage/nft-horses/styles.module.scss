@@ -14,6 +14,7 @@
     font-size: 30px;
     height: 35px;
     color: #fff;
+    transition: opacity 1.5s;
   }
 
   .horseGrid {
@@ -27,6 +28,46 @@
     @media screen and (max-width: 850px) {
       flex-direction: column;
       width: 100%;
+    }
+  }
+
+  .animationLeftToRight {
+    animation: category-horse-card-right 1.5s ease;
+    
+    @keyframes category-horse-card-right {
+      from {
+        left: -100px;
+        opacity: 0;
+      }
+      
+      to {
+        left: 0;
+        opacity: 1;
+      }
+    }
+
+    @media screen and (max-width: 810px) {
+      animation: none;
+    }
+  }
+
+  .animationRightToLeft {
+    animation: category-horse-card-left 1.2s ease;
+  
+    @keyframes category-horse-card-left {
+      from {
+        left: 100px;
+        opacity: 0;
+      }
+  
+      to {
+        left: 0;
+        opacity: 1;
+      }
+    }
+
+    @media screen and (max-width: 810px) {
+      animation: none;
     }
   }
 }

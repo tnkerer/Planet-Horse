@@ -3,20 +3,21 @@ import styles from './styles.module.scss'
 import logoPlanetHorse from '@/assets/landing-page/banner/logo-planet-horse.gif'
 import logoRacePlayEarn from '@/assets/landing-page/banner/logo-race-play-earn.gif'
 import Image from 'next/image'
-import Link from 'next/link'
 import GraphicalButton from '@/utils/components/graphical-button'
 import Frame from '@/utils/components/frame'
 
 const Banner: React.FC = () => {
   return (
     <div className={styles.container}>
-      <GraphicalButton
-        to='/home'
-        id={styles.playButton}
-        inactive={styles.playInactive}
-        active={styles.playActive}
-        click={styles.playClick}
-      />
+      <div className={styles.buttonContainer}>
+        <GraphicalButton
+          to='/home'
+          id={styles.playButton}
+          inactive={styles.playInactive}
+          active={styles.playActive}
+          click={styles.playClick}
+        />
+      </div>
       <div className={styles.logoMarket}>
         <Image
           width={300}
@@ -31,13 +32,11 @@ const Banner: React.FC = () => {
         />
       </div>
       <div className={styles.frameFooter}>
-        <Frame /> 
-        <input
-          value='Contract Address: Coming soon'
-          type='text'
-          disabled
-        />
-      </div>   
+        <Frame />
+        <div>
+          <span>Contract Address: Coming soon</span>
+        </div>
+      </div>
     </div>
   )
 }

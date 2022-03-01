@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  
+  .panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #222;
+    width: 90%;
+    
+    @media screen and (max-width: 1340px) {
+      flex-direction: column;
+      height: auto;
+    }
+
+    & > .slot {
+      flex: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 718px;
+      width: 718px;
+      background-color: red;
+      box-shadow: 0 0 10px #000;
+    }
+  }
+}
