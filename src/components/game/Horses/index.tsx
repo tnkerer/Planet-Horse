@@ -27,10 +27,13 @@ const Horses: React.FC = () => {
     <ModalReward closeModal={toogleModal} status={modalReward} horseId={horseId} />
     <div className={styles.secondBar}>
       <div className={styles.containerBar}>
-        <div className={styles.actionsOptions}>
-          <span>FEED ALL HORSES</span>
-          <span>ALL QUICK RACE</span>
-          <span>REWARDS OF SOLD HORSES</span>
+        <div className={styles.actionContainer}>
+          <div className={styles.actionOptions}>
+            <div>ITEMS <span className={styles.notificationBadge}></span></div>
+            <div>FEED ALL HORSES</div>
+            <div>ALL QUICK RACE</div>
+            <div>REWARDS OF SOLD HORSES</div>
+          </div>
         </div>
         <div className={styles.countCurrency}>
           <Image width={50} height={50} src={phorseCoin} alt="phorse coin" />
