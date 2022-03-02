@@ -23,6 +23,7 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
   function getHorseData (): void {
     const horse = horses.find(horse => horse.id === horseId)
     if (horse) {
+      /* NÃO ENTENDI PQ TA MARCANDO ERRO AQUI NA VARIAVEL HORSE */
       setHorse(horse)
       setHorseResult(getRandomNumber(1, 10))
       startingRace()
