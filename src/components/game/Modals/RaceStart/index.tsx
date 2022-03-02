@@ -22,7 +22,6 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
                         <Image width={'30px'} height={'30px'} src={close} />
                     </div>
                     <div className={styles.modalInfo}>
-                        Waiting Modal Layout
                     </div>
                 </div>
             </div>

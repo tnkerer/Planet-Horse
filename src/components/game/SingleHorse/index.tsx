@@ -12,10 +12,6 @@ interface Props {
 
 const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
   const { loading, image } = getHorseImage(horse)
-
-  console.log('image')
-  console.log(image)
-
   return (
         <>
         <div className={styles.singleHorse + ' type-' + horse.profile.type_horse_slug}>
