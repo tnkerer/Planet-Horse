@@ -1,8 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import HorseLegendary from '@/assets/game/horses/horse.png'
 import getHorseImage from '@/utils/hooks/single-horse-image'
-import Image from 'next/image'
 import { Horse } from '@/domain/models/Horse'
 
 interface Props {
