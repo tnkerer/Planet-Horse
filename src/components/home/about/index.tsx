@@ -17,9 +17,9 @@ const About: React.FC = () => {
             />
           </div>
           <div className={styles.description}>
-            <h1 className={styles.title}>what is planethorse</h1>
+            <h1 className={styles.title}>what is planet horse</h1>
             <h3 className={styles.explanation}>
-              PlanetHorse is a game centered around different racehorses where you compete with competitors in search of the incredible Phorse coin
+              Planet Horse is a game centered around different horse races, where you compete with players in search of the incredible Phorse coin.
             </h3>
           </div>
           <div className={styles.sticker}>
