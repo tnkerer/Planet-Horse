@@ -17,7 +17,7 @@ function App () {
       <SetterScrollYValue />
       <Banner />
       <Pattern type='light'>
-        <Gameplay scrollValueToAnimate={90} />
+        <Gameplay />
         <NFTHorses scrollValueToAnimate={1300} />
       </Pattern>
       <Pattern type='dark'>
