@@ -9,6 +9,7 @@
   width: 105px;
   height: 335px;
   animation: animation 1.2s ease-out;
+  transition: left .8s ease-out;
 
   @keyframes animation {
     from {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
 import discord from '@/assets/icons/socials/discord.webp'
@@ -6,11 +6,24 @@ import instagram from '@/assets/icons/socials/instagram.webp'
 import telegram from '@/assets/icons/socials/telegram.webp'
 import twitter from '@/assets/icons/socials/twitter.webp'
 import Link from 'next/link'
+import { ScrollYValueContext } from '@/utils/providers/scroll-y-value'
 
 const SocialMidia: React.FC = () => {
+  const [scrollYValue, setScrollYValue] = useState(0)
+  const { scrollY } = useContext(ScrollYValueContext)
+
+  useEffect(() => {
+    setScrollYValue(scrollY)
+  }, [scrollY])
+
   return (
     <>
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+        style={{
+          left: scrollYValue <= 90 ? 0 : '-105px'
+        }}
+      >
         <div className={styles.socials}>
           <Link href='https://discord.gg/wg3gtRmh'>
             <a className={styles.slot}>
