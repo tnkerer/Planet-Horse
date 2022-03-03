@@ -40,8 +40,8 @@ const Gameplay: React.FC = () => {
        <Card
         image={upgradeDemoGameplay}
         scrollValueToAnimate={1000}
-        infoFirstParagraph='When your horse gains enough experience points, you can use items to upgrade them. '
-        infoSecondParagraph='Horse upgrade will increase: speed, sprint, susten and power.'
+        infoFirstParagraph='You can pay in PHORSE currency to upgrade your horse and increase your win rates and earn more.'
+        infoSecondParagraph='Horses upgrade will increase: speed, sprint, susten and power.'
       />
     </div>
   )
