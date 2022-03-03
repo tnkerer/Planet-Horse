@@ -1,26 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import HorseLegendary from '@/assets/game/horses/horse.png'
-
-interface Horse {
-  id: number
-  profile: {
-    name: string
-    sex: string
-    type_horse: string
-    type_jockey: string
-    time: string
-  }
-  staty: {
-    level: string
-    exp: string
-    power: string
-    sprint: string
-    speed: string
-    energy: string
-  }
-  items: Array<{ id: number }>
-}
+import getHorseImage from '@/utils/hooks/single-horse-image'
+import { Horse } from '@/domain/models/Horse'
 
 interface Props {
   horse: Horse
@@ -28,12 +9,15 @@ interface Props {
 }
 
 const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
+  const { loading, image } = getHorseImage(horse)
   return (
         <>
-        <div className={styles.singleHorse}>
+        <div className={styles.singleHorse + ' type-' + horse.profile.type_horse_slug}>
             <div className={styles.maskCard}>
                 <div className={styles.horseGif}>
-                    <img src={HorseLegendary.src} />
+                    {loading
+                      ? (null)
+                      : (<img src={image.src} />)}
                 </div>
                 <div className={styles.horseInfo}>
                     <div className={styles.horseWrapper}>

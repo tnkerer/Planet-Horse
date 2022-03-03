@@ -22,22 +22,43 @@
 
         .modalContent {
             position: relative;
-            background-color: white;
             font-family: 'SpaceHorse';
-            background-size: cover;
-            background-repeat: no-repeat;
-            width: 45vw;
-            height: 26.4vw;
-            padding: 0.7vw 2vw 0.7vw 3vw;
+            width: 35.7vw;
+            height: 37.3vw;
 
             @media screen and (max-width: 920px) {
-                width: 80vw;
-                height: 67vw;
-                padding: 2vw 0 0.7vw 6vw;
+                width: 90vw;
+                height: 94vw;
             }
 
-            .modalInfo {
-                
+            .modalMask {
+                height: 100%;
+                width: 100%;
+                background-image: url('../../../../assets/game/pop-up/start/smart-fone.webp');
+                background-size: cover;
+                background-repeat: no-repeat;
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 2;
+            }
+
+            .modalContainer {
+                height: 100%;
+                width: 100%;
+                padding: 1vw 1vw 2.7vw 1vw;
+                .modalInner{
+                    height: 100%;
+                    width: 100%;
+                    .modalStartRace{
+                        height: 100%;
+                        width: 100%;
+                        background-image: url('../../../../assets/game/pop-up/start/race-loading.gif');
+                        background-size: cover;
+                        background-repeat: no-repeat;
+
+                    }
+                }
             }
 
             .modalClose {
@@ -45,6 +66,7 @@
                 right: -15px;
                 top: -15px;
                 cursor: pointer;
+                z-index: 3;
             }
     
         }

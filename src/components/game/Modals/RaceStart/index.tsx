@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import close from '@/assets/game/pop-up/fechar.png'
+import { horses } from '@/utils/mocks/game'
+import HorseRace from '../../HorseRacing'
+import RaceFinish from '../../RaceFinish'
 
 import Image from 'next/image'
 
@@ -11,8 +14,54 @@ interface Props {
 }
 
 const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
-  // const [horseId, setHorseId] = useState(horse)
-  // const [horseData, setHorseData] = useState(null)
+  const [horse, setHorse] = useState(false)
+  const [startRace, setStartRace] = useState(false)
+  const [racing, setRacing] = useState(false)
+  const [raceFinish, setRaceFinish] = useState(false)
+  const [horseResult, setHorseResult] = useState(getRandomNumber(1, 10))
+
+  function getHorseData (): void {
+    const horse = horses.find(horse => horse.id === horseId)
+    if (horse) {
+      /* NÃO ENTENDI PQ TA MARCANDO ERRO AQUI NA VARIAVEL HORSE */
+      setHorse(horse)
+      setHorseResult(getRandomNumber(1, 10))
+      startingRace()
+    }
+  }
+
+  function startingRace (): void {
+    setRacing(false)
+    setRaceFinish(false)
+    setStartRace(true)
+
+    setTimeout(function () {
+      raceRunning()
+    }, 2500)
+  }
+
+  function raceRunning (): void {
+    setStartRace(false)
+    setRacing(true)
+
+    setTimeout(function () {
+      finishRace()
+    }, 7000)
+  }
+
+  function finishRace (): void {
+    setStartRace(false)
+    setRacing(false)
+    setRaceFinish(true)
+  }
+
+  function getRandomNumber (min, max): number {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
+  useEffect((): void => {
+    getHorseData()
+  }, [horseId])
 
   return (
         <div className={`${styles.modalRaceStart} ${status ? styles.modalActive : styles.modalInactive}`}>
@@ -21,9 +70,22 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
                     <div className={styles.modalClose} onClick={() => closeModal('raceStart')}>
                         <Image width={'30px'} height={'30px'} src={close} />
                     </div>
-                    <div className={styles.modalInfo}>
-                        Waiting Modal Layout
+                    <div className={styles.modalContainer}>
+                        <div className={styles.modalInner}>
+                            {startRace &&
+                                <div className={styles.modalStartRace}></div>
+                            }
+                            {racing &&
+                                <div className={styles.modalRacing}>
+                                    <HorseRace horse={horse} horseResult={horseResult} />
+                                </div>
+                            }
+                            {raceFinish &&
+                                <RaceFinish horseResult={horseResult} />
+                            }
+                        </div>
                     </div>
+                    <div className={styles.modalMask}></div>
                 </div>
             </div>
         </div>
