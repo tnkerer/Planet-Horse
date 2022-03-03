@@ -10,10 +10,12 @@ import { ScrollYValueContext } from '@/utils/providers/scroll-y-value'
 
 const SocialMidia: React.FC = () => {
   const [scrollYValue, setScrollYValue] = useState(0)
+  const [screenWidthResolution, setScreenWidthResolution] = useState(0)
   const { scrollY } = useContext(ScrollYValueContext)
 
   useEffect(() => {
     setScrollYValue(scrollY)
+    setScreenWidthResolution(window.innerWidth)
   }, [scrollY])
 
   return (
@@ -21,7 +23,7 @@ const SocialMidia: React.FC = () => {
       <div
         className={styles.container}
         style={{
-          left: scrollYValue <= 90 ? 0 : '-105px'
+          left: scrollYValue >= 90 && screenWidthResolution <= 810 ? '-105px' : 0
         }}
       >
         <div className={styles.socials}>
