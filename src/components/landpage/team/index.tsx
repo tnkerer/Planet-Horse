@@ -59,7 +59,7 @@ const Team: React.FC<Props> = ({ scrollValueToAnimate }) => {
         <TeamCard image={jaum} name='jaum' position='dev' />
         <TeamCard image={rayz} name='rayz' position='dev' />
         <TeamCard image={ano} name='ano' position='dev' />
-        <TeamCard image={gusta} name='gusta' position='dev' />
+        <TeamCard image={gusta} name='demonzera' position='dev' />
       </div>
 
       <span
