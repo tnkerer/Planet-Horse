@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import Router from 'next/router'
 
 interface Props {
-  to: string
+  to?: string
   id: string
   inactive: string
   active: string
   click?: string
 }
 
-const AnimatedButton: React.FC<Props> = ({
+const GraphicalButton: React.FC<Props> = ({
   to,
   id,
   inactive,
@@ -35,7 +35,12 @@ const AnimatedButton: React.FC<Props> = ({
             setOnMouseDownUp(true)
           }}
           onClick={() => {
-            Router.push(to)
+            to
+              ? Router.push(to)
+              : window.scrollTo({
+                top: window.innerWidth <= 810 ? 5500 : 3400,
+                behavior: 'smooth'
+              })
           }}
           style={{
             display: onMouseLeaveOver
@@ -74,4 +79,4 @@ const AnimatedButton: React.FC<Props> = ({
   )
 }
 
-export default AnimatedButton
+export default GraphicalButton

@@ -11,7 +11,6 @@ const Banner: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.buttonContainer}>
         <GraphicalButton
-          to='/home'
           id={styles.playButton}
           inactive={styles.playInactive}
           active={styles.playActive}
