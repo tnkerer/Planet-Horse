@@ -5,7 +5,7 @@ import barnDemoGameplay from '@/assets/landing-page/gameplay/barn.gif'
 import upgradeDemoGameplay from '@/assets/landing-page/gameplay/upgrade.gif'
 import Card from '../card'
 import { ScrollYValueContext } from '@/utils/providers/scroll-y-value'
-import AnimateElement from '@/utils/class/animate-elements'
+import AnimateElement from '@/utils/class/animate-element'
 
 const Gameplay: React.FC = () => {
   const [scrolled, setScrolled] = useState(false)

@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from 'react'
 import styles from './styles.module.scss'
 import CategoryHorse from '../category-horse'
 import commonHorse from '@/assets/landing-page/gameplay/cards/common-horse.gif'
-import raroHorse from '@/assets/landing-page/gameplay/cards/raro-horse.gif'
+import rareHorse from '@/assets/landing-page/gameplay/cards/rare-horse.gif'
 import superRareHorse from '@/assets/landing-page/gameplay/cards/super-rare-horse.gif'
 import epicHorse from '@/assets/landing-page/gameplay/cards/epic-horse.gif'
-import legenderyHorse from '@/assets/landing-page/gameplay/cards/legendery-horse.gif'
-import superLegenderyHorse from '@/assets/landing-page/gameplay/cards/super-legendery-horse.gif'
+import legenderyHorse from '@/assets/landing-page/gameplay/cards/legendary-horse.gif'
+import superLegenderyHorse from '@/assets/landing-page/gameplay/cards/super-legendary-horse.gif'
 import { ScrollYValueContext } from '@/utils/providers/scroll-y-value'
 
 interface Props {
@@ -37,7 +37,7 @@ const NFTHorses: React.FC<Props> = ({ scrollValueToAnimate }) => {
           animationClass={scrollY >= 1600 && styles.animationLeftToRight}
         />
         <CategoryHorse
-          sticker={raroHorse}
+          sticker={rareHorse}
           alt={'Raro horse'}
           animationClass={scrollY >= 1600 && styles.animationRightToLeft}
         />
