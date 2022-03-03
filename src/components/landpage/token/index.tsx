@@ -37,11 +37,10 @@ const Token: React.FC<Props> = ({ scrollValueToAnimate }) => {
               opacity: scrollY >= 3420 ? '1' : '0'
             }}
           >
-            Ticker: PHORSE<br />
-            Name: Planet Horse Token<br />
-            Max supply: 100,000,000<br />
-            PHORSE<br />
+            Token: PHORSE<br />
+            Name: Planet Horse Token PHORSE<br />
             Network: Binance Smart Chain
+            Max supply: 100,000,000<br />
           </span>
           <div
             className={styles.coinImage}
@@ -56,7 +55,7 @@ const Token: React.FC<Props> = ({ scrollValueToAnimate }) => {
             opacity: scrollY >= 3534 ? '1' : '0'
           }}
         >
-          The PHORSE Token is the game&apos;s native currency It allows the investor to play, invest and also trade the token.
+          The PHORSE Token is the native game currency. It allows the investor to play, invest and also trade the token.
           <br />
           <br />
           There is a fixed total amount of 100 million PHORSE tokens.
