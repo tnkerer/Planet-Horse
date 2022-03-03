@@ -21,7 +21,7 @@ const Blackboard: React.FC = () => {
       <h2 style={{
         opacity: scrollY >= 5044 || screenWidth <= 810 ? 1 : 0
       }}>
-        OUR BRACKERS
+        OUR PARTNERS
       </h2>
       <div
         className={styles.planethorse}
