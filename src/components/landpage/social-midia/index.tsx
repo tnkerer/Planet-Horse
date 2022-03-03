@@ -27,12 +27,12 @@ const SocialMidia: React.FC = () => {
         }}
       >
         <div className={styles.socials}>
-          <Link href='https://discord.gg/wg3gtRmh'>
+          <Link href='https://discord.gg/PEdmMJe2pK'>
             <a className={styles.slot}>
               <Image src={discord} width={65} height={65} />
             </a>
           </Link>
-          <Link href='/'>
+          <Link href='https://www.instagram.com/planethorsenft/'>
             <a className={styles.slot}>
               <Image src={instagram} width={65} height={65} />
             </a>
@@ -42,7 +42,7 @@ const SocialMidia: React.FC = () => {
               <Image src={twitter} width={65} height={65} />
             </a>
           </Link>
-          <Link href='/'>
+          <Link href='https://www.t.me/planethorse'>
             <a className={styles.slot}>
               <Image src={telegram} width={65} height={65} />
             </a>
