@@ -1,5 +1,15 @@
 .racingContent {
     position: relative;
+    transition: all 3s;
+
+    &.raceActive{
+        opacity: 1;
+
+    }
+    &.raceInactive{
+        opacity: 0;
+
+    }
 
     .racingPlacar{
         position: absolute;

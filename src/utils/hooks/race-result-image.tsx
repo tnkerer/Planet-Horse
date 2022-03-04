@@ -10,8 +10,6 @@ const useImage = (result: number): Props => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [image, setImage] = useState(null)
-  console.log('result')
-  console.log(result)
 
   useEffect((): void => {
     const fetchImage = async (): Promise<void> => {
