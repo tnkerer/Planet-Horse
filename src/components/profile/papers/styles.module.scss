@@ -7,7 +7,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #222;
     width: 90%;
     
     @media screen and (max-width: 1340px) {
@@ -22,8 +21,105 @@
       align-items: center;
       height: 718px;
       width: 718px;
-      background-color: red;
-      box-shadow: 0 0 10px #000;
+
+      .profile {
+        position: relative;
+        height: 25vw;
+        width: 35vw;
+
+        .cardTitle {
+          position: absolute;
+          text-transform: uppercase;
+          font-family: 'UpheavalPro';
+          top: 2vw;
+          left: 11vw;
+          font-size: 2.4vw;
+          color: #603228;
+        }
+
+        .about {
+          display: flex;
+          position: absolute;
+          top: 5vw;
+          left: 1.1vw;
+          width: 29vw;
+          height: 13vw;
+
+          & > .slot {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+
+            & > .profilePicture {
+              display: block;
+              width: 13vw;
+              height: 13vw;
+            }
+
+            & > .phorseCoins {
+              position: relative;
+              width: 13vw;
+              height: 13vw;
+
+              & > .icon {
+                display: block;
+                position: absolute;
+                top: 2.5vw;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 5.2vw;
+                height: 5.2vw;
+              }
+
+              & > .amount {
+                position: absolute;
+                bottom: 2.5vw;
+                font-family: 'SpaceHorse';
+                font-size: 2vw;
+                text-transform: uppercase;
+                text-align: center;
+                color: #6e3f28;
+                width: 100%;
+              }
+            }
+          }
+        }
+
+        .walletAddress {
+          position: absolute;
+          font-family: 'SpaceHorse';
+          bottom: 4.5vw;
+          width: calc(100% - 45px);
+          text-align: center;
+          font-size: 1.2vw;
+        }
+      }
+
+      .token {
+        position: relative;
+        width: 31.2vw;
+        height: 23.5vw;
+
+        .depositPhorse {
+          position: absolute;
+          display: block;
+          width: 22.8vw;
+          height: 6vw;
+          left: 5vw;
+          top: 8vw;
+        }
+
+        .withdrawPhorse {
+          position: absolute;
+          display: block;
+          width: 22.8vw;
+          height: 6vw;
+          left: 5vw;
+          top: 14.2vw;
+        }
+      }
     }
   }
 }
