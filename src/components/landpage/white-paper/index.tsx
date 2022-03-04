@@ -47,6 +47,7 @@ const WhitePaper: React.FC<Props> = ({ scrollValueToAnimate }) => {
           id={styles.whitepaper}
           inactive={styles.inactive}
           active={styles.active}
+          newTab
         />
       </div>
     </div>
