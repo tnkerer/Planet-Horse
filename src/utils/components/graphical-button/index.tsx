@@ -7,6 +7,7 @@ interface Props {
   inactive: string
   active: string
   click?: string
+  newTab: boolean
 }
 
 const GraphicalButton: React.FC<Props> = ({
@@ -14,7 +15,8 @@ const GraphicalButton: React.FC<Props> = ({
   id,
   inactive,
   active,
-  click
+  click,
+  newTab = false
 }) => {
   const [onMouseLeaveOver, setOnMouseLeaveOver] = useState(true)
   const [onMouseDownUp, setOnMouseDownUp] = useState(false)
@@ -55,7 +57,9 @@ const GraphicalButton: React.FC<Props> = ({
             setOnMouseLeaveOver(true)
           }}
           onClick={() => {
-            Router.push(to)
+            newTab
+              ? window.open(to, '_blank')
+              : Router.push(to)
           }}
           style={{
             display: onMouseLeaveOver
