@@ -23,7 +23,10 @@ class MyDocument extends Document {
   render () {
     return (
       <Html>
-        <Head />
+        <Head>
+          <title>PlanetHorse</title>
+          <link rel="icon" href="/favicon.ico"></link>
+        </Head>
         <body>
           <Main />
           <NextScript />
