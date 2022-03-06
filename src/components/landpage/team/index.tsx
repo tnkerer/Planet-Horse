@@ -71,7 +71,7 @@ const Team: React.FC<Props> = ({ scrollValueToAnimate }) => {
         style={{
           opacity: scrollY >= 4700 || screenWidth <= 810 ? 1 : 0
         }}
-      >We will be in our discord server at voice room everyday from 18 UTC to 20 UTC to reply questions and chat with the community.</span>
+      >We will be in our discord server at voice room everyday from 21 UTC to 22 UTC to reply questions and chat with the community.</span>
       <i className={styles.diviser} />
     </div>
   )
