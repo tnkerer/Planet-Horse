@@ -28,7 +28,7 @@ const Gameplay: React.FC = () => {
         image={racingDemoGameplay}
         scrollValueToAnimate={200}
         infoFirstParagraph='Race mode offers PvP or PvC racing.'
-        infoSecondParagraph='The rewards for the winners will be: experience points, materials, items and tokens.'
+        infoSecondParagraph='The rewards for the winners will be: points, materials, items and tokens.'
       />
       <Card
         image={barnDemoGameplay}
