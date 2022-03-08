@@ -41,7 +41,7 @@ const Gameplay: React.FC = () => {
         image={upgradeDemoGameplay}
         scrollValueToAnimate={1000}
         infoFirstParagraph='You can pay in PHORSE currency to upgrade your horse and increase your win rates and earn more.'
-        infoSecondParagraph='Horse upgrade will increase: speed, sprint, susten and power.'
+        infoSecondParagraph='Horses upgrade will increase: speed, sprint, susten and power.'
       />
     </div>
   )

@@ -66,7 +66,7 @@ const Team: React.FC<Props> = ({ scrollValueToAnimate }) => {
         style={{
           opacity: scrollY >= 4650 || screenWidth <= 810 ? 1 : 0
         }}
-      >The team does not disclose their identities as the majority of the team is from Latin America and we need to be cautious for our own safety.</span>
+      >For security terms, the team does not disclose or provide any personal data.</span>
       <span
         style={{
           opacity: scrollY >= 4700 || screenWidth <= 810 ? 1 : 0
