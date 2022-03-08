@@ -1,29 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import Burger from '@/utils/components/burger'
 import logo from '@/assets/utils/logos/planet-horse.webp'
 import Image from 'next/image'
 import Link from 'next/link'
 import exampleUserPic from '@/assets/user-profiles/example-user.gif'
-import wallet from '@/utils/mocks/wallet'
+import useConnectMetamask from '@/utils/hooks/connect-metamask'
+import useInfoUserAccount from '@/utils/hooks/info-user-account'
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
-  const [walletAddress, setWalletAddress] = useState('')
-  const [connected, setConnected] = useState(false)
 
-  function walletAdapter (): string {
-    const { result } = wallet
-    const [firstResult] = result
-    const { address } = firstResult
-    const shorten = address.slice(0, 9)
-    return shorten
-  }
-
-  useEffect(() => {
-    const walletWithEllipsis = `${walletAdapter()}...`
-    setWalletAddress(walletWithEllipsis)
-  }, [])
+  const requestConnectionMetamask = useConnectMetamask()
+  const { walletAddress, isConnected } = useInfoUserAccount()
 
   return (
     <>
@@ -40,7 +29,7 @@ const Navbar: React.FC = () => {
               <rect y='10' fill='#fff' width='30' height='3' />
               <rect y='21' fill='#fff' width='30' height='3' />
               <rect y='32' fill='#fff' width='30' height='3' />
-            </svg> 
+            </svg>
           </button>
           <div className={styles.logo}>
             <Link href='/'>
@@ -72,20 +61,18 @@ const Navbar: React.FC = () => {
           </div>
           <div
             className={styles.account}
-            onClick={() => {
-              setConnected(!connected)
-            }}
+            onClick={() => { requestConnectionMetamask() }}
           >
             <Link href={'#'}>
-              {connected
-                ? <div id={styles.userProfileButton}>
-                    <span className={styles.address}>{walletAddress}</span>
+              {isConnected
+                ? (
+                  <div id={styles.userProfileButton}>
+                    <span className={styles.address}>{walletAddress.slice(0, 9)}</span>
                     <div className={styles.userPicture}>
-                      <Image
-                        src={exampleUserPic}
-                      />
+                    <Image src={exampleUserPic} />
                     </div>
                   </div>
+                  )
                 : <button />}
             </Link>
           </div>
