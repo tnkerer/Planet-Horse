@@ -59,14 +59,14 @@ const Team: React.FC<Props> = ({ scrollValueToAnimate }) => {
         <TeamCard image={jaum} name='jaum' position='dev' />
         <TeamCard image={rayz} name='rayz' position='dev' />
         <TeamCard image={ano} name='ano' position='dev' />
-        <TeamCard image={gusta} name='gusta' position='dev' />
+        <TeamCard image={gusta} name='demonzera' position='dev' />
       </div>
 
       <span
         style={{
           opacity: scrollY >= 4650 || screenWidth <= 810 ? 1 : 0
         }}
-      >The team does not disclose their identities as the majority of the team is from Latin America and we need to be cautious for our own safety.</span>
+      >For security terms, the team does not disclose or provide any personal data.</span>
       <span
         style={{
           opacity: scrollY >= 4700 || screenWidth <= 810 ? 1 : 0
