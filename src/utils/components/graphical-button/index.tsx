@@ -7,7 +7,7 @@ interface Props {
   inactive: string
   active: string
   click?: string
-  newTab: boolean
+  newTab?: boolean
 }
 
 const GraphicalButton: React.FC<Props> = ({
