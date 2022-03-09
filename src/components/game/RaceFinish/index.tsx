@@ -1,23 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import getResultImage from '@/utils/hooks/race-result-image'
+import getResultHorseImage from '@/utils/hooks/race-result-image-horse'
+import { Horse } from '@/domain/models/Horse'
+import CountUp from 'react-countup'
 
 interface Props {
   horseResult: number
+  horse: Horse | boolean
 }
 
-const RaceFinish: React.FC<Props> = ({ horseResult }) => {
+const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
   const { loading, image } = getResultImage(horseResult)
-
-  console.log('image')
-  console.log(image)
-
+  const { loadingHorse, imageHorse } = getResultHorseImage(horse)
 
   return (
     <div className={styles.raceResultContent}>
+        {!loadingHorse &&
+            <div className={styles.raceResultImageHorse}>
+                <img src={imageHorse.src} />
+            </div>
+        }
         {!loading &&
-            <div className={styles.raceResultImage}>
-                <img src={image.src} />
+            <div className={styles.raceResultImageMask}>
+              <div className={styles.raceResultConeMask}>
+                <div className={styles.raceResultConeMaskInside}>
+                </div>
+              </div>
+              <div className={styles.raceResultBlock}>
+                  <div className={styles.raceResultImage}>
+                    <img src={image.src} />
+                  </div>
+                  <div className={styles.raceResultTokens}>
+                    + <CountUp start={0} end={0.1589} decimals={4} /> CHORSE
+                  </div>
+              </div>
             </div>
         }
     </div>

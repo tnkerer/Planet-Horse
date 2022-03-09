@@ -37,7 +37,7 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
 
     setTimeout(function () {
       raceRunning()
-    }, 2500)
+    }, 1500)
   }
 
   function raceRunning (): void {
@@ -45,8 +45,8 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
     setRacing(true)
 
     setTimeout(function () {
-      finishRace()
-    }, 7000)
+      // finishRace()
+    }, 5000)
   }
 
   function finishRace (): void {
@@ -77,11 +77,11 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
                             }
                             {racing &&
                                 <div className={styles.modalRacing}>
-                                    <HorseRace horse={horse} horseResult={horseResult} />
+                                    <HorseRace horseRacingFinish={finishRace} horse={horse} horseResult={horseResult} />
                                 </div>
                             }
                             {raceFinish &&
-                                <RaceFinish horseResult={horseResult} />
+                                <RaceFinish horseResult={horseResult} horse={horse} />
                             }
                         </div>
                     </div>
