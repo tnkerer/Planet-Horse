@@ -25,13 +25,13 @@
     },
     {
         "id": 5,
-        "name": "Legandery",
+        "name": "Legandary",
         "src": "legendery",
         "value": "20"
     },
     {
         "id": 6,
-        "name": "Super Legendery",
+        "name": "Super Legendary",
         "src": "super-legendery",
         "value": "50"
     }
