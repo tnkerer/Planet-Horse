@@ -32,7 +32,7 @@ const SocialMidia: React.FC = () => {
               <Image src={discord} width={65} height={65} />
             </a>
           </Link>
-          <Link href='/'>
+          <Link href='https://instagram.com/planethorse_nft'>
             <a className={styles.slot}>
               <Image src={instagram} width={65} height={65} />
             </a>
