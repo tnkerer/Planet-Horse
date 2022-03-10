@@ -13,7 +13,12 @@
     z-index: 1;
   }
 
-  img {
-    width: 300px;
+  & > span {
+    overflow: visible !important;
+
+    img {
+      width: 300px;
+      filter: drop-shadow(0 10px 2px rgba(0, 0, 0, .3));
+    }
   }
 }
