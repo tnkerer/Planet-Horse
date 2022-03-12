@@ -1,16 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
-import t from '@/assets/landing-page/team/t.webp'
-import bizzo from '@/assets/landing-page/team/bizzo.webp'
-import ko from '@/assets/landing-page/team/ko.webp'
-import musk from '@/assets/landing-page/team/musk.webp'
-import naomi from '@/assets/landing-page/team/naomi.webp'
-import gusta from '@/assets/landing-page/team/gusta.webp'
-import jaum from '@/assets/landing-page/team/jaum.webp'
-import rayz from '@/assets/landing-page/team/rayz.webp'
-import ano from '@/assets/landing-page/team/ano.webp'
-import davi from '@/assets/landing-page/team/davi.webp'
 import TeamCard from '../team-card'
+import t from '@/assets/landing-page/team/avatars/t.webp'
+import bizzo from '@/assets/landing-page/team/avatars/bizzo.webp'
+import ko from '@/assets/landing-page/team/avatars/ko.webp'
+import musk from '@/assets/landing-page/team/avatars/musk.webp'
+import jaum from '@/assets/landing-page/team/avatars/jaum.webp'
+import rayz from '@/assets/landing-page/team/avatars/rayz.webp'
+import ano from '@/assets/landing-page/team/avatars/ano.webp'
+import davi from '@/assets/landing-page/team/avatars/davi.webp'
+import tFace from '@/assets/landing-page/team/faces/t.webp'
+import bizzoFace from '@/assets/landing-page/team/faces/bizzo.webp'
+import koFace from '@/assets/landing-page/team/faces/ko.webp'
+import muskFace from '@/assets/landing-page/team/faces/musk.webp'
+import jaumFace from '@/assets/landing-page/team/faces/jaum.webp'
+import rayzFace from '@/assets/landing-page/team/faces/rayz.webp'
+import anoFace from '@/assets/landing-page/team/faces/ano.webp'
+import daviFace from '@/assets/landing-page/team/faces/davi.webp'
 import { ScrollYValueContext } from '@/utils/providers/scroll-y-value'
 
 interface Props {
@@ -50,26 +56,19 @@ const Team: React.FC<Props> = ({ scrollValueToAnimate }) => {
           opacity: scrollY >= 4050 || screenWidth <= 810 ? 1 : 0
         }}
       >
-        <TeamCard image={t} name='T' position='content manager' />
-        <TeamCard image={bizzo} name='bizzo' position='marketing manager' />
-        <TeamCard image={ko} name='k.d' position='design' />
-        <TeamCard image={musk} name='musk' position='tech lead' />
-        <TeamCard image={naomi} name='naomi' position='blockchain - dev' />
-        <TeamCard image={davi} name='davi' position='dev' />
-        <TeamCard image={jaum} name='jaum' position='dev' />
-        <TeamCard image={rayz} name='rayz' position='dev' />
-        <TeamCard image={ano} name='ano' position='dev' />
-        <TeamCard image={gusta} name='demonzera' position='dev' />
+        <TeamCard imageFront={t} imageBack={tFace} name='T' position='marketing' to='https://www.linkedin.com/in/natã-teixeira-916596228/' />
+        <TeamCard imageFront={bizzo} imageBack={bizzoFace} name='Deividy' position='marketing' to='https://twitter.com/deividy1864' />
+        <TeamCard imageFront={musk} imageBack={muskFace} name='musk' position='dev' to='https://www.linkedin.com/in/igorjcqs' />
+        <TeamCard imageFront={ko} imageBack={koFace} name='k.d' position='artist' to='https://www.behance.net/Koroshy' />
+        <TeamCard imageFront={davi} imageBack={daviFace} name='davi' position='dev' to='https://www.linkedin.com/in/davi-freitas-156729185' />
+        <TeamCard imageFront={ano} imageBack={anoFace} name='ano' position='dev' to='https://www.linkedin.com/in/juliano-senfft' />
+        <TeamCard imageFront={rayz} imageBack={rayzFace} name='rayz' position='dev' to='https://www.behance.net/railsonsergio' />
+        <TeamCard imageFront={jaum} imageBack={jaumFace} name='jaum' position='dev' to='https://www.linkedin.com/in/jaumdark' />
       </div>
 
       <span
         style={{
           opacity: scrollY >= 4650 || screenWidth <= 810 ? 1 : 0
-        }}
-      >For security terms, the team does not disclose or provide any personal data.</span>
-      <span
-        style={{
-          opacity: scrollY >= 4700 || screenWidth <= 810 ? 1 : 0
         }}
       >We will be in our discord server at voice room everyday from 21 UTC to 22 UTC to reply questions and chat with the community.</span>
       <i className={styles.diviser} />
