@@ -5,7 +5,8 @@ import Image from 'next/image'
 interface Props {
   imageFront: StaticImageData
   imageBack: StaticImageData
-  name: string
+  avatarName: string
+  realName: string
   position: string
   to: string
 }
@@ -13,7 +14,8 @@ interface Props {
 const TeamCard: React.FC<Props> = ({
   imageFront,
   imageBack,
-  name,
+  avatarName,
+  realName,
   position,
   to
 }) => {
@@ -21,19 +23,31 @@ const TeamCard: React.FC<Props> = ({
     <div className={styles.container} onClick={() => {
       window.open(to, '_blank')
     }}>
-      <div className={styles.card}>
-        <div className={styles.flipCard}>
-          <div className={styles.flipCardInner}>
-            <div className={styles.flipFront}>
+      <div className={styles.flipCard}>
+        <div className={styles.flipCardInner}>
+          <div className={styles.flipCardFront}>
+            <span className={styles.image}>
               <Image layout='fill' src={imageFront} />
-            </div>
-            <div className={styles.flipBack}>
+            </span>
+            <span className={styles.name}>
+              {avatarName}
+            </span>
+            <span className={styles.position}>
+              {position}
+            </span>
+          </div>
+          <div className={styles.flipCardBack}>
+            <span className={styles.image}>
               <Image layout='fill' src={imageBack} />
-            </div>
+            </span>
+            <span className={styles.name}>
+              {realName}
+            </span>
+            <span className={styles.position}>
+              {position}
+            </span>
           </div>
         </div>
-        <span className={styles.name}>{name}</span>
-        <span className={styles.position}>{position}</span>
       </div>
     </div>
   )
