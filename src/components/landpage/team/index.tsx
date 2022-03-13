@@ -56,14 +56,14 @@ const Team: React.FC<Props> = ({ scrollValueToAnimate }) => {
           opacity: scrollY >= 4050 || screenWidth <= 810 ? 1 : 0
         }}
       >
-        <TeamCard imageFront={t} imageBack={tFace} name='T' position='marketing' to='https://www.linkedin.com/in/natã-teixeira-916596228/' />
-        <TeamCard imageFront={bizzo} imageBack={bizzoFace} name='Deividy' position='marketing' to='https://twitter.com/deividy1864' />
-        <TeamCard imageFront={musk} imageBack={muskFace} name='musk' position='dev' to='https://www.linkedin.com/in/igorjcqs' />
-        <TeamCard imageFront={ko} imageBack={koFace} name='k.d' position='artist' to='https://www.behance.net/Koroshy' />
-        <TeamCard imageFront={davi} imageBack={daviFace} name='davi' position='dev' to='https://www.linkedin.com/in/davi-freitas-156729185' />
-        <TeamCard imageFront={ano} imageBack={anoFace} name='ano' position='dev' to='https://www.linkedin.com/in/juliano-senfft' />
-        <TeamCard imageFront={rayz} imageBack={rayzFace} name='rayz' position='dev' to='https://www.behance.net/railsonsergio' />
-        <TeamCard imageFront={jaum} imageBack={jaumFace} name='jaum' position='dev' to='https://www.linkedin.com/in/jaumdark' />
+        <TeamCard imageFront={t} imageBack={tFace} avatarName='T' realName='natã' position='marketing' to='https://www.linkedin.com/in/natã-teixeira-916596228/' />
+        <TeamCard imageFront={bizzo} imageBack={bizzoFace} avatarName='deividy' realName='deividy' position='marketing' to='https://twitter.com/deividy1864' />
+        <TeamCard imageFront={musk} imageBack={muskFace} avatarName='musk' realName='igor' position='dev' to='https://www.linkedin.com/in/igorjcqs' />
+        <TeamCard imageFront={ko} imageBack={koFace} avatarName='k.d' realName='vinícius' position='artist' to='https://www.behance.net/Koroshy' />
+        <TeamCard imageFront={davi} imageBack={daviFace} avatarName='davi' realName='davi' position='dev' to='https://www.linkedin.com/in/davi-freitas-156729185' />
+        <TeamCard imageFront={ano} imageBack={anoFace} avatarName='ano' realName='juliano' position='dev' to='https://www.linkedin.com/in/juliano-senfft' />
+        <TeamCard imageFront={rayz} imageBack={rayzFace} avatarName='rayz' realName='sérgio' position='dev' to='https://www.behance.net/railsonsergio' />
+        <TeamCard imageFront={jaum} imageBack={jaumFace} avatarName='jaum' realName='João' position='dev' to='https://www.linkedin.com/in/jaumdark' />
       </div>
 
       <span
