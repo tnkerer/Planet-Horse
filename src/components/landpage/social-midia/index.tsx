@@ -27,7 +27,7 @@ const SocialMidia: React.FC = () => {
         }}
       >
         <div className={styles.socials}>
-          <Link href='https://discord.gg/PEdmMJe2pK'>
+          <Link href='https://discord.gg/Z7dMbZqMPr'>
             <a className={styles.slot}>
               <Image src={discord} width={65} height={65} />
             </a>
