@@ -39,7 +39,7 @@ const Token: React.FC<Props> = ({ scrollValueToAnimate }) => {
           >
             Token: PHORSE<br />
             Name: Planet Horse Token PHORSE<br />
-            Network: Binance Smart Chain
+            Network: Binance Smart Chain<br />
             Max supply: 100,000,000<br />
           </span>
           <div
