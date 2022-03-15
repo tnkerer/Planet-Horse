@@ -12,9 +12,16 @@
         width: 100%;
         top: 0;
         left: 0;
+        height: 100%;
         img {
-            width: 100%;
-            max-width: 100%;
+          -webkit-animation: leftRight 20s;
+          -moz-animation: leftRight 20s;
+          animation: leftRight 20s;
+          width: 100%;
+          max-width: 100%;
+          object-fit: cover;
+          object-position: left;
+          height: 100%;
         }
 
     }
@@ -37,7 +44,6 @@
             .raceResultConeMaskInside{
                 width: 80%;
                 height: 80%;
-
                 animation: myAnim 10s ease-out 1s infinite alternate forwards;
                 background-image: repeating-conic-gradient(#fff0 0 9deg, #ffffff08 9deg 18deg);
                 border-radius: 50%;
@@ -75,6 +81,16 @@
     
         }
     }    
+}
+
+
+@keyframes leftRight {
+  0% { 
+    object-position: right;
+  }
+  100% {
+    object-position: left;
+  }
 }
 
 @keyframes fadein {
