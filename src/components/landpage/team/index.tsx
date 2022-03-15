@@ -61,7 +61,7 @@ const Team: React.FC<Props> = ({ scrollValueToAnimate }) => {
         <TeamCard imageFront={musk} imageBack={muskFace} avatarName='musk' realName='igor' position='dev' to='https://www.linkedin.com/in/igorjcqs' />
         <TeamCard imageFront={ko} imageBack={koFace} avatarName='koroshy' realName='vinícius' position='artist' to='https://www.behance.net/Koroshy' />
         <TeamCard imageFront={davi} imageBack={daviFace} avatarName='davi' realName='davi' position='dev' to='https://www.linkedin.com/in/davi-freitas-156729185' />
-        <TeamCard imageFront={ano} imageBack={anoFace} avatarName='ano' realName='juliano' position='dev' to='https://www.linkedin.com/in/juliano-senfft' />
+        <TeamCard imageFront={ano} imageBack={anoFace} avatarName='juliano' realName='juliano' position='dev' to='https://www.linkedin.com/in/juliano-senfft' />
         <TeamCard imageFront={rayz} imageBack={rayzFace} avatarName='rayz' realName='sérgio' position='dev' to='https://www.behance.net/railsonsergio' />
         <TeamCard imageFront={jaum} imageBack={jaumFace} avatarName='jaum' realName='João' position='dev' to='https://www.linkedin.com/in/jaumdark' />
       </div>
