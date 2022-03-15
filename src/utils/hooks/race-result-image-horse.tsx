@@ -5,10 +5,9 @@ interface Props {
   loadingHorse: boolean
   errorHorse: Error
   imageHorse: StaticImageData
-  horse: Horse | boolean
 }
 
-const useImage = (horse): Props => {
+const useImage = (result: number): Props => {
   const [loadingHorse, setLoading] = useState(true)
   const [errorHorse, setError] = useState(null)
   const [imageHorse, setImage] = useState(null)
@@ -16,7 +15,15 @@ const useImage = (horse): Props => {
   useEffect((): void => {
     const fetchImage = async (): Promise<void> => {
       try {
-        const response = await import(`@/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-stopped.gif`)
+
+        let image = 'feliz'
+        if ((result > 3) && (result <= 7)) {
+          image = 'normal'
+        } else if (result > 7) {
+          image = 'triste'
+        }
+
+        const response = await import(`@/assets/game/pop-up/start/torcida-${image}.gif`)
         setImage(response.default)
       } catch (err) {
         setError(err)
@@ -26,7 +33,7 @@ const useImage = (horse): Props => {
     }
 
     fetchImage()
-  }, [horse])
+  }, [result])
 
   return {
     loadingHorse,

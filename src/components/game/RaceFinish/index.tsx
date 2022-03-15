@@ -12,7 +12,7 @@ interface Props {
 
 const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
   const { loading, image } = getResultImage(horseResult)
-  const { loadingHorse, imageHorse } = getResultHorseImage(horse)
+  const { loadingHorse, imageHorse } = getResultHorseImage(horseResult)
 
   return (
     <div className={styles.raceResultContent}>
@@ -32,7 +32,7 @@ const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
                     <img src={image.src} />
                   </div>
                   <div className={styles.raceResultTokens}>
-                    + <CountUp start={0} end={0.1589} decimals={4} /> CHORSE
+                    + <CountUp start={0} end={0.1589} decimals={4} /> PHORSE
                   </div>
               </div>
             </div>
