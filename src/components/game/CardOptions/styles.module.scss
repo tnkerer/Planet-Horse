@@ -1,88 +1,90 @@
 .container {
   width: 100%;
   display: flex;
-  padding-top: 100px;
+  justify-content: center;
 
   .cards {
     width: 1400px;
-    margin: auto;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
 
     @media screen and (max-width: 1330px) {
-      flex-direction: column;
-    }
-  }
-
-  .card {
-    margin: 15px;
-    width: 404px;
-    height: 400px;
-    position: relative;
-
-    img {
+      justify-content: space-around;
       width: 100%;
-      height: 100%;
     }
 
-    .button {
-      background-size: cover;
-      width: 180px;
-      height: 40px;
-      position: absolute;
-      z-index: 1;
-      left: 110px;
-      top: 335px;
-      cursor: pointer;
-    }
+    .card {
+      margin: 15px;
+      width: 404px;
+      height: 400px;
+      position: relative;
 
-    button {
-      background-color: transparent;
-      background-size: cover;
-      border: none;
-      width: 195px;
-      height: 40px;
-      position: absolute;
-      z-index: 1;
-      left: 105px;
-      top: 335px;
-      cursor: pointer;
-
-      &.buyButton {
-        background-image: url('../../../assets/game/actions-cards/buychest.svg');
-
-        &:hover {
-          background-image: url('../../../assets/game/actions-cards/buychest-mouse.svg');
-        }
-
-        &:active {
-          background-image: url('../../../assets/game/actions-cards/buychest-click.svg');
-        }
+      @media screen and (max-width: 440px) {
+        width: 89vw;
+        height: 90vw;
       }
 
-      &.fusionButton {
-        background-image: url('../../../assets/game/actions-cards/horsefuzion.svg');
-
-        &:hover {
-          background-image: url('../../../assets/game/actions-cards/horsefuzion-mouse.svg');
-        }
-
-        &:active {
-          background-image: url('../../../assets/game/actions-cards/horsefuzion-click.svg');
-        }
+      img {
+        width: 100%;
+        height: 100%;
       }
 
-      &.upgradeButton {
-        background-image: url('../../../assets/game/actions-cards/upgrade-stable.svg');
+      button {
+        background-color: transparent;
+        background-size: cover;
+        border: none;
+        width: 195px;
+        height: 40px;
+        position: absolute;
+        z-index: 1;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 20px;
+        cursor: pointer;
 
-        &:hover {
-          background-image: url('../../../assets/game/actions-cards/upgrade-stable-mouse.svg');
+        @media screen and (max-width: 440px) {
+          width: 43.87vw;
+          height: 9vw;
+          bottom: 4.5vw;
         }
 
-        &:active {
-          background-image: url('../../../assets/game/actions-cards/upgrade-stable-click.svg');
+        &.buyButton {
+          background-image: url('../../../assets/game/actions-cards/buychest.svg');
+
+          &:hover {
+            background-image: url('../../../assets/game/actions-cards/buychest-mouse.svg');
+          }
+
+          &:active {
+            background-image: url('../../../assets/game/actions-cards/buychest-click.svg');
+          }
+        }
+
+        &.fusionButton {
+          background-image: url('../../../assets/game/actions-cards/horsefuzion.svg');
+
+          &:hover {
+            background-image: url('../../../assets/game/actions-cards/horsefuzion-mouse.svg');
+          }
+
+          &:active {
+            background-image: url('../../../assets/game/actions-cards/horsefuzion-click.svg');
+          }
+        }
+
+        &.upgradeButton {
+          background-image: url('../../../assets/game/actions-cards/upgrade-stable.svg');
+
+          &:hover {
+            background-image: url('../../../assets/game/actions-cards/upgrade-stable-mouse.svg');
+          }
+
+          &:active {
+            background-image: url('../../../assets/game/actions-cards/upgrade-stable-click.svg');
+          }
         }
       }
     }
