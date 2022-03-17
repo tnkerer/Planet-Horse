@@ -15,10 +15,6 @@ const Game: React.FC = () => {
         <Pattern type="yellow">
           <CardOptions />
         </Pattern>
-        <Pattern type="brown">
-          <Items />
-          <Footer copyrightTextColor="white" />
-        </Pattern>
         <Pattern type="light">
           <Horses />
           <Footer copyrightTextColor="white" />
