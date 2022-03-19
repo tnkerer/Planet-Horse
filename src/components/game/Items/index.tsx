@@ -5,7 +5,11 @@ import SingleItem from '../SingleItem'
 import { items } from '@/utils/mocks/game'
 import Image from 'next/image'
 
-const Items: React.FC = () => {
+interface Props {
+  changeView: (view: string) => void
+}
+
+const Items: React.FC<Props> = ({ changeView }) => {
 
   return (
     <>
@@ -13,7 +17,7 @@ const Items: React.FC = () => {
       <div className={styles.containerBar}>
         <div className={styles.actionContainer}>
           <div className={styles.actionOptions}>
-            <div>HORSES <span className={styles.notificationBadge}></span></div>
+            <div onClick={() => changeView('horses')}>HORSES <span className={styles.notificationBadge}></span></div>
           </div>
         </div>
         <div className={styles.countCurrency}>

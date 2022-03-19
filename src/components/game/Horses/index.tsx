@@ -8,7 +8,11 @@ import SingleHorse from '../SingleHorse'
 import { horses } from '@/utils/mocks/game'
 import Image from 'next/image'
 
-const Horses: React.FC = () => {
+interface Props {
+  changeView: (view: string) => void
+}
+
+const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalReward, setToogleModalReward] = useState(false)
   const [modalRaceStart, setToogleModalRaceStart] = useState(false)
   const [modalQuickRace, setToogleModalQuickRace] = useState(false)
@@ -43,7 +47,7 @@ const Horses: React.FC = () => {
       <div className={styles.containerBar}>
         <div className={styles.actionContainer}>
           <div className={styles.actionOptions}>
-            <div>ITEMS <span className={styles.notificationBadge}></span></div>
+            <div onClick={() => changeView('items')}>ITEMS <span className={styles.notificationBadge}></span></div>
             <div>FEED ALL HORSES</div>
             <div>ALL QUICK RACE</div>
             <div>REWARDS OF SOLD HORSES</div>
