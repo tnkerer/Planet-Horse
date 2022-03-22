@@ -10,6 +10,7 @@ import Blackboard from '@/components/landpage/blackboard'
 import SocialMidia from '@/components/landpage/social-midia'
 import { ScrollYValueProvider } from '@/utils/providers/scroll-y-value'
 import SetterScrollYValue from '@/utils/components/setter-scrollY-value'
+import { FlipperProvider } from '@/utils/providers/flipper'
 
 function App () {
   return (
@@ -23,7 +24,9 @@ function App () {
       <Pattern type='dark'>
         <WhitePaper scrollValueToAnimate={2900} />
         <Token scrollValueToAnimate={3300} />
-        <Team scrollValueToAnimate={3900} />
+        <FlipperProvider>
+          <Team scrollValueToAnimate={3900} />
+        </FlipperProvider>
       </Pattern>
       <Blackboard />
       <SocialMidia />
