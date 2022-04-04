@@ -8,6 +8,7 @@ import Token from '@/components/landpage/token'
 import Team from '@/components/landpage/team'
 import Blackboard from '@/components/landpage/blackboard'
 import SocialMidia from '@/components/landpage/social-midia'
+import PlanetHorseGame from '@/components/landpage/planethorse-game'
 import { ScrollYValueProvider } from '@/utils/providers/scroll-y-value'
 import SetterScrollYValue from '@/utils/components/setter-scrollY-value'
 
@@ -15,7 +16,8 @@ function App () {
   return (
     <ScrollYValueProvider>
       <SetterScrollYValue />
-      <Banner />
+      {/*<Banner />*/}
+      <PlanetHorseGame />
       <Pattern type='light'>
         <Gameplay />
         <NFTHorses scrollValueToAnimate={1300} />
