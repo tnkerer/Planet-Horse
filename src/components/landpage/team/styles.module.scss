@@ -3,13 +3,50 @@
   flex-direction: column;
   align-items: center;
 
-  h1 {
-    color: #fff;
-    text-align: center;
+  & > .title {
+    display: flex;
+    align-items: center;
+    position: relative;
     font-family: 'UpheavalPro';
-    font-size: 30px;
-    margin-bottom: 35px;
+    text-shadow: 0px 3px 2px rgba(0, 0, 0, .2);
+    margin-top: 100px;
+    margin-bottom: 40px;
+    font-size: 45px;
+    height: 50px;
+    color: #fff;
+    opacity: 0;
     transition: opacity 1.2s;
+
+    & > .horizontalLine {
+      position: absolute;
+      height: 2px;
+      width: 175%;
+      background-color: #fff;
+      transform: translateX(-50%);
+      left: 65%;
+      bottom: 0;
+    }
+
+    & > .diagonalLine {
+      position: absolute;
+      height: 100%;
+      width: 2px;
+      background-color: #fff;
+      transform: rotate(-50deg);
+      left: -48px;
+      bottom: -6px;
+
+      .circle {
+        position: absolute;
+        display: block;
+        background-color: #fff;
+        border-radius: 50%;
+        top: -9px;
+        left: -2px;
+        width: 8px;
+        height: 8px;
+      }
+    }
   }
 
   .team {

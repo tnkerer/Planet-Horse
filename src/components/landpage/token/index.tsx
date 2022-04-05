@@ -28,6 +28,10 @@ const Token: React.FC<Props> = ({ scrollValueToAnimate }) => {
           }}
         >
           Token
+          <span className={styles.diagonalLine}>
+            <span className={styles.circle} />
+          </span>
+          <span className={styles.horizontalLine} />
         </span>
         <div className={styles.coinContainer}>
           <span

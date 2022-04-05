@@ -42,12 +42,14 @@ const Team: React.FC<Props> = ({ scrollValueToAnimate }) => {
 
   return (
     <div className={styles.container}>
-      <h1
-        style={{
-          opacity: scrolled || screenWidth <= 810 ? 1 : 0
-        }}
-      >
+      <h1 className={styles.title} style={{
+        opacity: scrolled || screenWidth <= 810 ? 1 : 0
+      }}>
         TEAM
+        <span className={styles.diagonalLine}>
+          <span className={styles.circle} />
+        </span>
+        <span className={styles.horizontalLine} />
       </h1>
       <div
         className={styles.team}

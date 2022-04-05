@@ -16,8 +16,7 @@ function App () {
   return (
     <ScrollYValueProvider>
       <SetterScrollYValue />
-      {/*<Banner />*/}
-      <PlanetHorseGame />
+      <Banner />
       <Pattern type='light'>
         <Gameplay />
         <NFTHorses scrollValueToAnimate={1300} />

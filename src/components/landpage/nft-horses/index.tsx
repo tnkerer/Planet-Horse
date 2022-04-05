@@ -29,7 +29,13 @@ const NFTHorses: React.FC<Props> = ({ scrollValueToAnimate }) => {
     <div className={styles.container}>
       <span style={{
         opacity: scrolled || screenWidth <= 810 ? 1 : 0
-      }}>NFT HORSES</span>
+      }}>
+        NFT HORSES
+        <span className={styles.diagonalLine}>
+          <span className={styles.circle} />
+        </span>
+        <span className={styles.horizontalLine} />
+      </span>
       <div className={styles.horseGrid}>
         <CategoryHorse
           sticker={commonHorse}
