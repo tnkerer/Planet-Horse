@@ -8,6 +8,7 @@ interface Props {
   avatarName: string
   realName: string
   position: string
+  index: number
   to: string
 }
 
@@ -17,14 +18,17 @@ const TeamCard: React.FC<Props> = ({
   avatarName,
   realName,
   position,
+  index,
   to
 }) => {
   return (
-    <div className={styles.container} onClick={() => {
-      window.open(to, '_blank')
-    }}>
+    <div className={styles.container}>
       <div className={styles.flipCard}>
-        <div className={styles.flipCardInner}>
+        <div
+          className={styles.flipCardInner}
+          onClick={() => {
+            window.open(to, '_blank')
+          }}>
           <div className={styles.flipCardFront}>
             <span className={styles.image}>
               <Image layout='fill' src={imageFront} />

@@ -3,70 +3,137 @@
   flex-direction: column;
   position: relative;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  padding-bottom: 200px;
+  height: 881px;
 
-  .content {
+  @media screen and (max-width: 990px) {
+    height: 981px;
+  }
+
+  & > .container_header {
+    position: absolute;
+    top: 0;
+    background-image: url('../../../assets/landpage/ptn-final-mato.png');
+    background-position: center;
+    width: 100%;
+    height: 280px;
+  }
+
+  & > .container_content {
+    position: absolute;
+    top: 280px;
     display: flex;
+    align-items: center;
     font-family: 'SpaceHorse';
     flex-direction: column;
+    width: 100%;
+    background-color: #5d2c1c;
     color: #fff;
-    max-width: 650px;
-    
-    .title {
-      font-family: 'UpheavalPro';
-      text-shadow: 0px 3px 2px rgba(0, 0, 0, .2);
-      padding: 30px 0;
-      padding-top: 200px;
-      font-size: 30px;
-      text-transform: uppercase;
-      align-self: center;
-      transition: opacity 1.2s;
+
+    & > .content_title {
+      margin: 80px 0 100px 0;
+
+      @media screen and (max-width: 990px) {
+        margin: 80px 0 200px 0;
+      }
     }
 
-    .coinContainer {
+    & > .content_information {
       display: flex;
-      align-items: center;
-      flex-direction: row;
-      justify-content: space-between;
-      padding: 40px 0;
+      width: 1100px;
+      height: 350px;
 
-      @media screen and (max-width: 700px) {
+      @media screen and (max-width: 990px) {
         flex-direction: column-reverse;
+        width: 100%;
       }
 
-      .info {
-        margin-left: 1%;
-        width: 50%;
-        font-size: 16px;
-        text-shadow: 0px 3px 2px rgba(0, 0, 0, .2);
-        line-height: 30px;
-        align-self: center;
-        transition: margin-left 1.2s, opacity 1.2s;
+      & > div {
+        flex: 1;
       }
 
-      .coinImage {
-        background-image: url('../../../assets/utils/logos/animted-phorse-coin.gif');
-        width: 150px;
-        height: 150px;
-        transition: opacity 1.2s;
+      & > .information_text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 250px;
+        font-weight: bold;
 
-        @media screen and (max-width: 700px) {
-          background-position: center;
-          background-repeat: no-repeat;
-          padding: 50px;
+        @media screen and (max-width: 990px) {
+          text-align: center;
+          align-items: center;
+        }
+
+        & > .text_title {
+          letter-spacing: 0.05em;
+          margin-left: 50px;
+          font-size: 28px;
+          overflow: hidden;
+          white-space: nowrap;
+          width: 355px;
+          margin-bottom: 30px;
+
+          @media screen and (max-width: 990px) {
+            margin-left: 0;
+            max-width: 100%;
+          }
+        }
+
+        & > .text_description {
+          white-space: nowrap;
+          margin-left: 50px;
+          width: 0;
+          overflow: hidden;
+          font-size: 20px;
+          line-height: 28px;
+
+          @media screen and (max-width: 990px) {
+            margin-left: 0;
+            max-width: 100%;
+          }
+        }
+      }
+
+      & > .animation {
+        & > .text_title {
+          animation: text-description-animation 2s ease-in-out;
+          animation-fill-mode: forwards;
+        }
+
+        & > .text_description {
+          animation: text-description-animation 2s ease-in-out;
+          animation-fill-mode: forwards;
+        }
+      }
+
+      & > .information_icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @media screen and (max-width: 990px) {
+          flex-direction: column-reverse;
+          padding: 30px 0;
+        }
+
+        & > .icon_container {
+          position: relative;
+          width: 270px;
+          height: 270px;
+          background-image: url('../../../assets/utils/logos/animted-phorse-coin.gif');
+          background-size: cover;
         }
       }
     }
+  }
+}
 
-    .description {
-      width: 100%;
-      align-self: center;
-      text-align: center;
-      text-shadow: 0px 3px 2px rgba(0, 0, 0, .2);
-      line-height: 20px;
-      font-size: 18px;
-      transition: opacity 1.2s;
-    }
+@keyframes text-description-animation {
+  from {
+    width: 0;
+  }
+  to {
+    width: 400px;
   }
 }

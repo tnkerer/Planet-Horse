@@ -1,48 +1,83 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.scss'
-import racingDemoGameplay from '@/assets/landing-page/gameplay/racing.gif'
-import barnDemoGameplay from '@/assets/landing-page/gameplay/barn.gif'
-import upgradeDemoGameplay from '@/assets/landing-page/gameplay/upgrade.gif'
-import Card from '../card'
-import { ScrollYValueContext } from '@/utils/providers/scroll-y-value'
-import AnimateElement from '@/utils/class/animate-element'
+
+import Image from 'next/image'
+import Link from 'next/link'
+
+import tvImage from '@/assets/landpage/tv.webp'
+import racingImage from '@/assets/landpage/racing.gif'
+
+import whitepaperImage from '@/assets/landpage/whitepaper.webp'
+import whitepaperHoverImage from '@/assets/landpage/whitepaper-mouse.webp'
+import arboresImage from '@/assets/landpage/arbores.webp'
 
 const Gameplay: React.FC = () => {
-  const [scrolled, setScrolled] = useState(false)
-  const { scrollY } = useContext(ScrollYValueContext)
+  const myRef = useRef()
+  const [IsVisble, setIsVisble] = useState(false)
 
   useEffect(() => {
-    const animateElement = new AnimateElement()
-    const scrollTargetValue = 90
-    const screenWidthResolution = window.innerWidth
-    const showElement = animateElement.showElement(scrollY, scrollTargetValue, screenWidthResolution)
-    showElement && setScrolled(true)
-  }, [scrollY])
+    const observer = new IntersectionObserver(entries => {
+      const { isIntersecting } = entries[0]
+      isIntersecting && setIsVisble(isIntersecting)
+    })
+    observer.observe(myRef.current)
+  }, [])
 
   return (
-    <div className={styles.container}>
-      <span style={{
-        opacity: scrolled ? 1 : 0
-      }}>GAMEPLAY</span>
-      <Card
-        image={racingDemoGameplay}
-        scrollValueToAnimate={200}
-        infoFirstParagraph='Race mode offers PvP or PvC racing.'
-        infoSecondParagraph='The rewards for the winners will be: points, materials, items and tokens.'
-      />
-      <Card
-        image={barnDemoGameplay}
-        scrollValueToAnimate={600}
-        reverse={true}
-        infoFirstParagraph='In the market, players can buy/sell horses, materials, items and stables. '
-        infoSecondParagraph='Players will spend/earn PlanetHorse token when trading on the market.'
-      />
-       <Card
-        image={upgradeDemoGameplay}
-        scrollValueToAnimate={1000}
-        infoFirstParagraph='You can pay in PHORSE currency to upgrade your horse and increase your win rates and earn more.'
-        infoSecondParagraph='Horses upgrade will increase: speed, sprint, susten and power.'
-      />
+    <div ref={myRef} className={styles.container}>
+      <div className={`
+        ${styles.container_content}
+        ${IsVisble && styles.animation}
+      `}>
+        <slot className={styles.content_gameplay}>
+          <div className={styles.gameplay_line__vertical} />
+          <div className={styles.gameplay_content}>
+            <div className={styles.content_head}>
+              <h1 className={styles.head_title}>GAMEPLAY</h1>
+
+              <u className={styles.head_option}>RACING</u>
+              <u className={styles.head_option}>BUY / SELL</u>
+              <u className={styles.head_option}>UPGRADE</u>
+            </div>
+            <div className={styles.gameplay_body}>
+              <span className={styles.gameplay_description__paragraph1}>
+                In the Race Mode you can play PvP or PvC.
+              </span>
+              <span className={styles.gameplay_description__paragraph2}>
+                The rewards for the winners will be:
+                experience points, materials, items
+                and tokens.
+              </span>
+            </div>
+          </div>
+        </slot>
+        <slot className={styles.content_horses}>
+          <div className={styles.horses_content}>
+            <div className={styles.content_viewfinder}>
+              <Image layout='fill' src={racingImage} />
+            </div>
+            <div className={styles.content_tv}>
+              <Image layout='fill' src={tvImage} />
+            </div>
+            <div className={styles.content_btn__touch}>
+              <Link href='https://whitepaper.planethorse.me/'>
+                <a target='_blank' />
+              </Link>
+            </div>
+            <div className={styles.content_btn}>
+              <div className={styles.btn_book__active}>
+                <Image layout='fill' src={whitepaperHoverImage} />
+              </div>
+              <div className={styles.btn_book}>
+                <Image layout='fill' src={whitepaperImage} />
+              </div>
+            </div>
+            <div className={styles.content_bush}>
+              <Image layout='fill' src={arboresImage} />
+            </div>
+          </div>
+        </slot>
+      </div>
     </div>
   )
 }

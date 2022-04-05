@@ -1,0 +1,81 @@
+.container {
+  height: 80px;
+
+  @media screen and (max-width: 597px) {
+    transform: scale(.9);
+  }
+
+  @media screen and (max-width: 520px) {
+    transform: scale(.8);
+  }
+
+  @media screen and (max-width: 484px) {
+    transform: scale(.7);
+  }
+
+  @media screen and (max-width: 424px) {
+    transform: scale(.6);
+  }
+
+  @media screen and (max-width: 366px) {
+    transform: scale(.5);
+  }
+
+  &.animation {
+    & > .container_content {
+      & > .content_title {
+        animation: fadeIn 2s ease-in-out;
+
+        & > svg {
+          animation: fadeIn 2s ease-in-out;
+        }
+      }
+    }
+  }
+
+  & > .container_content {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    height: 100%;
+    transform: translateX(-50%);
+
+    & > .content_title {
+      height: 100%;
+      overflow: hidden;
+      animation-fill-mode: forwards;
+
+      & > svg {
+        position: absolute;
+
+        @media screen and (max-width: 574px) {
+          display: none;
+        }
+      }
+  
+      & > .content_text {
+        position: relative;
+        top: 8px;
+        margin-left: 105px;
+        margin-right: 60px;
+        font-size: 70px;
+        color: #fff;
+        font-family: 'UpheavalPro';
+        text-shadow: rgba(0, 0, 0, .4) 0px 4px 5px;
+
+        @media screen and (max-width: 574px) {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
