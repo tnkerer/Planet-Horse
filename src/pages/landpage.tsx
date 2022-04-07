@@ -1,5 +1,6 @@
 import React from 'react'
-import Banner from '@/components/landpage/banner'
+import Presentation from '@/components/landpage/presentation'
+import Milestones from '@/components/landpage/milestones'
 import Pattern from '@/utils/components/pattern'
 import Gameplay from '@/components/landpage/gameplay'
 import NFTHorses from '@/components/landpage/nft-horses'
@@ -9,14 +10,13 @@ import Team from '@/components/landpage/team'
 import Blackboard from '@/components/landpage/blackboard'
 import SocialMidia from '@/components/landpage/social-midia'
 import { ScrollYValueProvider } from '@/utils/providers/scroll-y-value'
-import SetterScrollYValue from '@/utils/components/setter-scrollY-value'
 import { FlipperProvider } from '@/utils/providers/flipper'
 
 function App () {
   return (
     <ScrollYValueProvider>
-      <SetterScrollYValue />
-      <Banner />
+      <Presentation />
+      <Milestones />
       <Pattern type='light'>
         <Gameplay />
         <NFTHorses scrollValueToAnimate={1300} />
@@ -29,7 +29,6 @@ function App () {
         </FlipperProvider>
       </Pattern>
       <Blackboard />
-      <SocialMidia />
     </ScrollYValueProvider>
   )
 }
