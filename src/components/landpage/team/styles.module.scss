@@ -1,54 +1,118 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  top: -1px;
+  position: relative;
+  width: 100%;
 
-  h1 {
-    color: #fff;
-    text-align: center;
-    font-family: 'UpheavalPro';
-    font-size: 30px;
-    margin-bottom: 35px;
-    transition: opacity 1.2s;
-  }
-
-  .team {
-    display: flex;
-    flex-wrap: wrap;
-    width: 980px;
-    transition: opacity 1.5s;
-
-    @media screen and (max-width: 1200px) {
-      width: 80%;
-    }
-
-    @media screen and (max-width: 500px) {
-      width: 50%;
-    }
-
-    @media screen and (max-width: 600px) {
-      width: 100%;
-    }
-  }
-
-  & > span {
-    font-family: 'SpaceHorse';
-    font-size: 16px;
-    text-shadow: 0px 3px 2px rgba(0, 0, 0, .2);
-    text-align: center;
-    line-height: 24px;
-    color: #fff;
-    width: 560px;
-    margin-top: 70px;
-    transition: opacity 1.5s;
-
-    @media screen and (max-width: 600px) {
-      width: 100%;
-    }
-  }
-
-  & > i {
-    height: 100px;
+  & > .container_header {
+    position: absolute;
     width: 100%;
+    height: 40vw;
+    background-image: url('../../../assets/landpage/final-terra.png');
+    background-size: cover;
+    z-index: 2;
+  }
+
+  & > .container_team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 24vw;
+    background-color: red;
+    width: 100%;
+    background-image: url('../../../assets/landpage/ptn-team.png');
+
+    & > .team_title {
+      margin-top: 8vw;
+    }
+
+    & > .team_cards {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      margin-top: 60px;
+      width: 52%;
+
+      @media screen and (max-width: 1700px) {
+        width: 82%;
+      }
+
+      @media screen and (max-width: 1115px) {
+        width: 100%;
+      }
+
+      & > .cards_card {
+        width: 25%;
+
+        @media screen and (max-width: 938px) {
+          width: 33.3%;
+        }
+
+        @media screen and (max-width: 750px) {
+          width: 50%;
+        }
+
+        @media screen and (max-width: 500px) {
+          width: 100%;
+        }
+      }
+    }
+
+    & > .animation {
+      .cards_card {
+        margin-top: 300px;
+        opacity: 0;
+        animation: cards_card 3s ease-in-out;
+        animation-fill-mode: forwards;
+
+        &:nth-child(1) {
+          animation-delay: 0s;
+        }
+
+        &:nth-child(2) {
+          animation-delay: .5s;
+        }
+
+        &:nth-child(3) {
+          animation-delay: 1s;
+        }
+
+        &:nth-child(4) {
+          animation-delay: 1.5s;
+        }
+
+        &:nth-child(4) {
+          animation-delay: 2s;
+        }
+
+        &:nth-child(5) {
+          animation-delay: 2.5s;
+        }
+
+        &:nth-child(6) {
+          animation-delay: 3s;
+        }
+
+        &:nth-child(7) {
+          animation-delay: 3.5s;
+        }
+
+        &:nth-child(8) {
+          animation-delay: 4s;
+        }
+      }
+    }
+  }
+}
+
+@keyframes cards_card {
+  from {
+    margin-top: 300px;
+    opacity: 0;
+  }
+  to {
+    margin-top: 10px;
+    opacity: 1;
   }
 }

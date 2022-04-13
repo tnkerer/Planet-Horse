@@ -13,6 +13,7 @@ function App () {
       <Milestones />
       <Gameplay />
       <Token />
+      <Team />
     </ScrollYValueProvider>
   )
 }
