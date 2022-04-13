@@ -1,8 +1,10 @@
 import React from 'react'
+import { ScrollYValueProvider } from '@/utils/providers/scroll-y-value'
 import Presentation from '@/components/landpage/presentation'
 import Milestones from '@/components/landpage/milestones'
 import Gameplay from '@/components/landpage/gameplay'
-import { ScrollYValueProvider } from '@/utils/providers/scroll-y-value'
+import Token from '@/components/landpage/token'
+import Team from '@/components/landpage/team'
 
 function App () {
   return (
@@ -10,6 +12,8 @@ function App () {
       <Presentation />
       <Milestones />
       <Gameplay />
+      <Token />
+      <Team />
     </ScrollYValueProvider>
   )
 }
