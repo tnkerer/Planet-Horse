@@ -120,6 +120,12 @@
           z-index: 1;
           cursor: pointer;
 
+          & > a {
+            display: block;
+            width: 100%;
+            height: 100%;
+          }
+
           &:hover {
             & ~ .content_btn {
               & > .btn_book__active {

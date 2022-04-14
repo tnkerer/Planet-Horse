@@ -43,9 +43,11 @@ const Gameplay: React.FC = () => {
             <div className={styles.content_tv}>
               <Image layout='fill' src={tvImage} />
             </div>
-            <Link href='https://whitepaper.planethorse.me/'>
-              <div className={styles.content_btn__touch} />
-            </Link>
+            <div className={styles.content_btn__touch}>
+              <Link href='https://whitepaper.planethorse.me/'>
+                <a target='_blank' />
+              </Link>
+            </div>
             <div className={styles.content_btn}>
               <div className={styles.btn_book__active}>
                 <Image layout='fill' src={whitepaperHoverImage} />
