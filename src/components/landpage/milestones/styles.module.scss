@@ -14,6 +14,7 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
       margin: 28px 0px;
     }
 
@@ -27,6 +28,7 @@
 
       @media screen and (max-width: 995px) {
         margin: 0;
+        width: 100%;
       }
 
       & > span {
@@ -91,17 +93,6 @@
           width: 180px;
           height: 171px;
         }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            top: 50%;
-          }
-          to {
-            opacity: 1; 
-            top: 0;
-          }
-        }
       }
 
       & > .card_title {
@@ -111,17 +102,6 @@
         top: 50%;
         animation: fadeIn 1s ease-out;
         animation-fill-mode: forwards;
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            top: 50%;
-          }
-          to {
-            opacity: 1; 
-            top: 0;
-          }
-        }
       }
 
       & > .card_value {
@@ -131,18 +111,18 @@
         top: 50%;
         animation: fadeIn 1s ease-out;
         animation-fill-mode: forwards;
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            top: 50%;
-          }
-          to {
-            opacity: 1; 
-            top: 0;
-          }
-        }
       }
     }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    top: 50%;
+  }
+  to {
+    opacity: 1; 
+    top: 0;
   }
 }
