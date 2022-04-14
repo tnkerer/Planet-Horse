@@ -24,11 +24,11 @@ const Gameplay: React.FC = () => {
               <u className={styles.head_option}>UPGRADE</u>
             </div>
             <div className={styles.gameplay_body}>
-              <span className={styles.gameplay_description__paragraph1}>Race mode offers PvP or PvC racing.</span>
+              <span className={styles.gameplay_description__paragraph1}>In the Race Mode you can play PvP or PvC.</span>
               <span className={styles.gameplay_description__paragraph2}>
                 The rewards for the winners will be:
-                experience points, materials, items,
-                tokens.
+                experience points, materials, items
+                and tokens.
               </span>
             </div>
           </div>
@@ -37,22 +37,22 @@ const Gameplay: React.FC = () => {
           <div className={styles.horses_content}>
             <div className={styles.content_viewfinder}>
               <Image layout='fill' src={racingImage} />
-            </div> 
+            </div>
             <div className={styles.content_tv}>
               <Image layout='fill' src={tvImage} />
-            </div> 
+            </div>
             <div className={styles.content_btn__touch} />
             <div className={styles.content_btn}>
               <div className={styles.btn_book__active}>
                 <Image layout='fill' src={whitepaperHoverImage} />
-              </div> 
+              </div>
               <div className={styles.btn_book}>
                 <Image layout='fill' src={whitepaperImage} />
               </div>
             </div>
             <div className={styles.content_bush}>
               <Image layout='fill' src={arboresImage} />
-            </div> 
+            </div>
           </div>
         </slot>
       </div>

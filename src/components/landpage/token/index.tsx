@@ -25,8 +25,8 @@ const Token: React.FC = () => {
             <div className={styles.text_description}>
               Symbol: PHORSE<br />
               Name: PlanetHorse<br />
-              Token Max Supply: 100,000,000<br />
-              Chain: BSC Mainnet<br />
+              Token Max Supply: 1.000.000.000<br />
+              Chain: Matic<br />
               Contract: Coming Soon
             </div>
           </div>

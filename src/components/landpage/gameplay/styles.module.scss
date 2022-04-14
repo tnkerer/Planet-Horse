@@ -16,7 +16,6 @@
       align-items: center;
       display: flex;
       color: #e8e8e8;
-      font-weight: bold;
       width: 40%;
       
       & > .gameplay_line__vertical {
@@ -243,6 +242,7 @@
       align-items: center;
       
       & > .content_gameplay {
+        margin: -80px;
         & > .gameplay_content {
           width: 90vw;
           left: 2vw;
