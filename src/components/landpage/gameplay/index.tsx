@@ -2,6 +2,8 @@ import React from 'react'
 import styles from './styles.module.scss'
 
 import Image from 'next/image'
+import Link from 'next/link'
+
 import tvImage from '@/assets/landpage/tv.webp'
 import racingImage from '@/assets/landpage/racing.gif'
 
@@ -41,7 +43,9 @@ const Gameplay: React.FC = () => {
             <div className={styles.content_tv}>
               <Image layout='fill' src={tvImage} />
             </div>
-            <div className={styles.content_btn__touch} />
+            <Link href='https://whitepaper.planethorse.me/'>
+              <div className={styles.content_btn__touch} />
+            </Link>
             <div className={styles.content_btn}>
               <div className={styles.btn_book__active}>
                 <Image layout='fill' src={whitepaperHoverImage} />
