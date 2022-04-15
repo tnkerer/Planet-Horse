@@ -1,84 +1,81 @@
 .container {
-  display: inline-block;
-  position: relative;
-  font-size: 70px;
-  left: 50%;
-  transform: translateX(-50%);
+  height: 80px;
+
+  @media screen and (max-width: 585px) {
+    transform: scale(.9);
+  }
+
+  @media screen and (max-width: 528px) {
+    transform: scale(.8);
+  }
+
+  @media screen and (max-width: 472px) {
+    transform: scale(.7);
+  }
+
+  @media screen and (max-width: 412px) {
+    transform: scale(.6);
+  }
+
+  @media screen and (max-width: 354px) {
+    transform: scale(.5);
+  }
+
+  &.animation {
+    & > .container_content {
+      & > .content_title {
+        animation: fadeIn 2s ease-in-out;
+
+        & > svg {
+          animation: fadeIn 2s ease-in-out;
+        }
+      }
+    }
+  }
 
   & > .container_content {
+    display: inline-block;
     position: relative;
-    color: #fff;
-    height: 70px;
-    overflow: hidden;
-    padding-right: 150px;
+    left: 50%;
+    height: 100%;
+    transform: translateX(-50%);
 
-    @media screen and (max-width: 599px) {
-      transform: scale(0.9);
-    }
-
-    @media screen and (max-width: 539px) {
-      transform: scale(0.8);
-    }
-
-    @media screen and (max-width: 479px) {
-      transform: scale(0.7);
-    }
-
-    @media screen and (max-width: 419px) {
-      transform: scale(0.6);
-    }
-
-    &.animation {
-      animation: 0.8s ease-out 0s 1 slideInFromLeft;
-  
-      @keyframes slideInFromLeft {
-        0% {
-          width: 0;
-          padding-right: 0;
-        }
-        100% {
-          width: 100%;
-        }
-      }
-    }
-
-    & > .content_text {
-      position: relative;
-      display: inline-block;
+    & > .content_title {
+      height: 100%;
       overflow: hidden;
-      font-family: 'UpheavalPro';
-      left: 90px;
-      height: 60px;
-    }
+      animation-fill-mode: forwards;
 
-    & > .content_line__horizontal {
-      position: absolute;
-      background: #fff;
-      width: 100%;
-      height: 2px;
-      bottom: 0;
-      left: 82px;
-    }
-
-    & > .content_line__diagonal {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%) rotate(40deg);
-      position: absolute;
-      background: #fff;
-      width: 103px;
-      height: 2px;
-      left: -10px;
-
-      & > .diagonal_circle {
+      & > svg {
         position: absolute;
-        bottom: 50%;
-        background: #fff;
-        transform: translateY(50%);
-        border-radius: 50%;
-        width: 10px;
-        height: 10px;
+
+        @media screen and (max-width: 574px) {
+          display: none;
+        }
+      }
+  
+      & > .content_text {
+        position: relative;
+        top: 8px;
+        margin-left: 105px;
+        margin-right: 60px;
+        font-size: 70px;
+        color: #fff;
+        font-family: 'UpheavalPro';
+        text-shadow: rgba(0, 0, 0, .4) 0px 4px 5px;
+
+        @media screen and (max-width: 574px) {
+          margin: 0;
+        }
       }
     }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
   }
 }

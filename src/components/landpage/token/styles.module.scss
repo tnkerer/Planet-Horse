@@ -46,6 +46,7 @@
 
       @media screen and (max-width: 990px) {
         flex-direction: column-reverse;
+        width: 100%;
       }
 
       & > div {
@@ -67,7 +68,6 @@
           letter-spacing: 0.05em;
           margin-left: 50px;
           font-size: 28px;
-          white-space: nowrap;
           overflow: hidden;
           width: 355px;
           margin-bottom: 30px;
@@ -76,6 +76,8 @@
 
           @media screen and (max-width: 990px) {
             margin-left: 0;
+            background-color: red;
+            max-width: 100%;
           }
         }
 
@@ -91,6 +93,8 @@
 
           @media screen and (max-width: 990px) {
             margin-left: 0;
+            background-color: red;
+            max-width: 100%;
           }
         }
       }
@@ -109,6 +113,8 @@
           position: relative;
           width: 270px;
           height: 270px;
+          background-image: url('../../../assets/utils/logos/animted-phorse-coin.gif');
+          background-size: cover;
         }
       }
     }

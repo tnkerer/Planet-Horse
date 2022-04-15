@@ -14,12 +14,21 @@
 
   & > .container_icon {
     top: 100px;
+    height: 347px;
+    width: 457px;
     left: 50%;
     transform: translateX(-50%) scale(0.95);
-    width: 457px;
+    background-image: url('../../../assets/landpage/logo-planethorse.gif');
+    background-size: cover;
 
     @media screen and (max-width: 457px) {
-      width: 100%;
+      width: 100vw;
+      height: 76vw;
+    }
+
+    @media screen and (max-height: 546px) {
+      width: 100vh;
+      height: 76vh;
     }
 
     @media screen and (max-height: 670px) {
@@ -29,13 +38,17 @@
 
   & > .container_button {
     font-family: 'UpheavalPro'; 
-    bottom: 200px;
     left: 50%;
     transform: translateX(-50%);
     animation: blinker 1s step-start infinite;
     min-width: 600px;
+    bottom: 200px;
     text-align: center;
     color: #fff;
+
+    &:hover {
+      animation: none;
+    }
 
     @keyframes blinker {
       50% {
@@ -44,7 +57,7 @@
     }
 
     @media screen and (max-height: 670px) {
-      bottom: 10vw 
+      bottom: 09vh;
     }
 
     & > span {

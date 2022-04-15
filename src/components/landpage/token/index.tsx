@@ -1,10 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import styles from './styles.module.scss'
 
 import TitleLayer from '@/components/landpage/title-layer'
-import LogoImage from '@/assets/utils/logos/animted-phorse-coin.gif'
-
-import Image from 'next/image'
 
 const Token: React.FC = () => {
   return (
@@ -20,7 +17,7 @@ const Token: React.FC = () => {
         <div className={styles.content_information}>
           <div className={styles.information_text}>
             <div className={styles.text_title}>
-              <u>PHORSE TOKEN</u> 
+              <u>PHORSE TOKEN</u>
             </div>
             <div className={styles.text_description}>
               Symbol: PHORSE<br />
@@ -31,9 +28,7 @@ const Token: React.FC = () => {
             </div>
           </div>
           <div className={styles.information_icon}>
-            <div className={styles.icon_container}>
-              <Image src={LogoImage} layout='fill' />
-            </div>
+            <div className={styles.icon_container} />
           </div>
         </div>
       </div>
