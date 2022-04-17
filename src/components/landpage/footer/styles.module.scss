@@ -1,0 +1,98 @@
+.container {
+  position: relative;
+  height: 90vh;
+  background-color: #000;
+
+  @media screen and (max-width: 1100px) {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .container_marketing {
+    position: absolute;
+    left: 30px;
+    top: 75px;
+    width: 292px;
+
+    @media screen and (max-width: 1100px) {
+      top: 40px;
+      left: auto;
+    }
+
+    .marketing_community__link {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      color: #fff;
+      text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
+      letter-spacing: 0.05em;
+      font-family: 'UpheavalPro';
+
+      span {
+        font-size: 30px;
+        margin: 0 10px;
+      }
+
+      a {
+        font-size: 18px;
+        letter-spacing: 0.05em;
+        color: #fff;
+      }
+    }
+  }
+
+  .container_partner {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 27.3vw;
+
+    @media screen and (max-width: 1100px) {
+      top: 250px;
+      right: auto;
+    }
+
+    span {
+      color: #fff;
+      text-align: center;
+      text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
+      font-family: 'UpheavalPro';
+    }
+
+    .partner_title {
+      font-size: 30px;
+      margin: 30px 0;
+    }
+
+    .partner_persons {
+      font-size: 65px;
+      letter-spacing: 0.05em;
+      font-weight: bold;
+      margin: 35px 0;
+      z-index: 2;
+    }
+  }
+
+  .container_footer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 240px;
+    background-image: url('../../../assets/landpage/rodape-ptn.png');
+
+    .footer_copyright {
+      font-family: 'UpheavalPro';
+      letter-spacing: 0.05em;
+      font-size: 12px;
+      margin: 16px 0;
+      color: #fff;
+    }  
+  }
+}
