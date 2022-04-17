@@ -22,7 +22,6 @@ import daviFace from '@/assets/landing-page/team/faces/davi.webp'
 
 const Team: React.FC = () => {
   return (
-    <>
     <div className={styles.container}>
       <div className={styles.container_header} />
       <div className={styles.container_team}>
@@ -59,44 +58,6 @@ const Team: React.FC = () => {
         </div>
       </div>
     </div>
-
-    <div className={styles.container}>
-      <div className={styles.container_header} />
-      <div className={styles.container_team}>
-        <div className={styles.team_title}>
-          <TitleLayer>
-            Team
-          </TitleLayer>
-        </div>
-        <div className={`${styles.team_cards} ${styles.animation}`}>
-          <div className={styles.cards_card}>
-            <TeamCard imageFront={t} imageBack={tFace} avatarName='T' realName='natã' position='marketing' index={0} to='https://www.linkedin.com/in/natã-teixeira-916596228/' />
-          </div>
-          <div className={styles.cards_card}>
-            <TeamCard imageFront={bizzo} imageBack={bizzoFace} avatarName='deividy' realName='deividy' position='marketing' index={1} to='https://twitter.com/deividy1864' />
-          </div>
-          <div className={styles.cards_card}>
-            <TeamCard imageFront={musk} imageBack={muskFace} avatarName='musk' realName='igor' position='dev' index={2} to='https://www.linkedin.com/in/igorjcqs' />
-          </div>
-          <div className={styles.cards_card}>
-            <TeamCard imageFront={ko} imageBack={koFace} avatarName='koroshy' realName='vinícius' position='artist' index={3} to='https://www.behance.net/Koroshy' />
-          </div>
-          <div className={styles.cards_card}>
-            <TeamCard imageFront={davi} imageBack={daviFace} avatarName='davi' realName='davi' position='dev' index={4} to='https://www.linkedin.com/in/davi-freitas-156729185' />
-          </div>
-          <div className={styles.cards_card}>
-            <TeamCard imageFront={ano} imageBack={anoFace} avatarName='juliano' realName='juliano' position='advisor' index={5} to='https://www.linkedin.com/in/juliano-senfft' />
-          </div>
-          <div className={styles.cards_card}>
-            <TeamCard imageFront={rayz} imageBack={rayzFace} avatarName='rayz' realName='sérgio' position='dev' index={6} to='https://www.behance.net/railsonsergio' />
-          </div>
-          <div className={styles.cards_card}>
-            <TeamCard imageFront={jaum} imageBack={jaumFace} avatarName='jaum' realName='João' position='dev' index={7} to='https://www.linkedin.com/in/jaumdark' />
-          </div>
-        </div>
-      </div>
-    </div>
-    </>
   )
 }
 
