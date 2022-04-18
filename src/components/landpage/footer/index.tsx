@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 import planethorseLogoImage from '@/assets/landpage/planethorse-logo-sem-ferradura.webp'
 import horseSpriteImage from '@/assets/landpage/horse-sprite.webp'
+import footerHeader from '@/assets/landpage/footer-header.webp'
 
 const Footer: React.FC = () => {
   return (
@@ -31,12 +32,11 @@ const Footer: React.FC = () => {
         />
         <span className={styles.partner_persons}>SOON</span>
       </div>
-
       <div className={styles.container_footer}>
         <span className={styles.footer_copyright}>
           COPYRIGHT @ 2022 PLANETHORSE
         </span>
-      </div>
+        </div>
     </footer>
   )
 }
