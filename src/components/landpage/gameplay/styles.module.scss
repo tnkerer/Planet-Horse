@@ -63,7 +63,7 @@
 
           & > .gameplay_description__paragraph1,
           & > .gameplay_description__paragraph2 {
-            margin-bottom: 40px;
+            margin-bottom: 15px;
             font-size: 25px;
             font-family: 'SpaceHorse';
           }
@@ -157,7 +157,7 @@
     }
   }
 
-  @media screen and (max-width: 1700px) {
+  @media screen and (max-width: 1744px) {
     & > .container_content {
       & > .content_gameplay {
         width: 100%;
@@ -191,16 +191,15 @@
             & > .gameplay_description__paragraph1,
             & > .gameplay_description__paragraph2 {
               font-size: 1.58vw;
+              line-height: 2vw;
             }
 
             & > .gameplay_description__paragraph1 {
               width: 34.5vw;
-              line-height: 1.8vw;
             }
 
             & > .gameplay_description__paragraph2 {
               width: 37vw;
-              line-height: 2vw;
             }
           }
         }
@@ -219,7 +218,7 @@
           }
 
           & > .content_tv {
-            width: 60vw;
+            width: 58vw;
             height: 49vw;
           }
 
@@ -248,7 +247,6 @@
       align-items: center;
       
       & > .content_gameplay {
-        margin: -80px;
         & > .gameplay_content {
           width: 90vw;
           left: 2vw;
@@ -303,7 +301,7 @@
     
           & > .content_tv {
             left: 1vw;
-            width: 93vw;
+            width: 91vw;
             height: 80vw;
           }
     
@@ -329,8 +327,13 @@
   .animation {
     & > .content_gameplay {
       & > .gameplay_line__vertical {
-        animation: line-animation 2s ease-in-out;
+        animation: line-animation-desktop 2s ease-in-out;
         animation-fill-mode: forwards;
+
+        @media screen and (max-width: 995px) {
+          animation: line-animation-mobile 2s ease-in-out;
+          animation-fill-mode: forwards;
+        }
       }
 
       & > .gameplay_content {
@@ -353,14 +356,25 @@
   }
 }
 
-@keyframes line-animation {
+@keyframes line-animation-desktop {
   from {
     opacity: 0;
     height: 0;
   }
   to {
     opacity: 1;
-    height: 84%;
+    height: 39vw;
+  }
+}
+
+@keyframes line-animation-mobile {
+  from {
+    opacity: 0;
+    height: 0;
+  }
+  to {
+    opacity: 1;
+    height: 95vw;
   }
 }
 
