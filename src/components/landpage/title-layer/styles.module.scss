@@ -1,23 +1,23 @@
 .container {
   height: 80px;
 
-  @media screen and (max-width: 585px) {
+  @media screen and (max-width: 597px) {
     transform: scale(.9);
   }
 
-  @media screen and (max-width: 528px) {
+  @media screen and (max-width: 520px) {
     transform: scale(.8);
   }
 
-  @media screen and (max-width: 472px) {
+  @media screen and (max-width: 484px) {
     transform: scale(.7);
   }
 
-  @media screen and (max-width: 412px) {
+  @media screen and (max-width: 424px) {
     transform: scale(.6);
   }
 
-  @media screen and (max-width: 354px) {
+  @media screen and (max-width: 366px) {
     transform: scale(.5);
   }
 

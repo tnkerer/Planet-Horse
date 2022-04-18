@@ -26,7 +26,9 @@ const Gameplay: React.FC = () => {
               <u className={styles.head_option}>UPGRADE</u>
             </div>
             <div className={styles.gameplay_body}>
-              <span className={styles.gameplay_description__paragraph1}>In the Race Mode you can play PvP or PvC.</span>
+              <span className={styles.gameplay_description__paragraph1}>
+                In the Race Mode you can play PvP or PvC.
+              </span>
               <span className={styles.gameplay_description__paragraph2}>
                 The rewards for the winners will be:
                 experience points, materials, items
