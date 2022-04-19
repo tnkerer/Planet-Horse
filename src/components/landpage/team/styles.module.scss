@@ -12,6 +12,16 @@
     z-index: 3;
   }
 
+  &::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: -205px;
+    background-image: url("../../../assets/landpage/ptn-team.png");
+    z-index: -1;
+  }
+
   & > .container_team {
     position: relative;
     display: flex;
