@@ -1,37 +1,33 @@
 .container {
-  display: flex;
-  justify-content: space-around;
-  //align-items: center;
   position: relative;
-  height: 100vh;
+  height: 82.1vh;
   width: 100%;
-  padding-top: 80px;
-  // background-color: rgb(0, 0, 0);
-  background-image: linear-gradient(2.1deg, rgb(0, 0, 0) 90%, transparent 10%);
+  background-color: #fff;
 
-  &::before {
-    content: "";
-    position: absolute;
-    height: 150px;
-    width: 100%;
-    top: -20px;
-    background-image: url("../../../assets/landpage/ptn-team.png");
-    z-index: -1;
+  @media screen and (max-width: 930px) {
+    height: 90vw;
   }
-  @media screen and (max-width: 970px) {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+
+  & > .container_blending__effect {
+    position: absolute;
+    width: 100%;
+    background-image: url("../../../assets/landpage/header-do-rodape.webp");
+    top: -150px;
+    background-size: cover;
+    background-position: center;
+    height: 150px;
   }
 
   .container_marketing {
-    //margin-top: 80px;
+    position: absolute;
+    left: 1.6vw;
     width: 292px;
+    background-color: red;
 
-    @media screen and (max-width: 970px) {
-      top: 40px;
-      left: auto;
+    @media screen and (max-width: 930px) {
+      left: 50%;
+      width: 38vw;
+      transform: translateX(-50%);
     }
 
     .marketing_community__link {
@@ -45,61 +41,88 @@
       letter-spacing: 0.05em;
       font-family: "UpheavalPro";
 
+      @media screen and (max-width: 930px) {
+        margin-top: 4.5vw;
+      }
+
       span {
         font-size: 30px;
         margin: 0 10px;
+
+        @media screen and (max-width: 930px) {
+          font-size: 4vw;
+        }
       }
 
       a {
         font-size: 18px;
         letter-spacing: 0.05em;
         color: #fff;
+
+        @media screen and (max-width: 930px) {
+          font-size: 3vw;
+        }
       }
     }
   }
 
   .container_partner {
-    display: flex;
-    flex-direction: column;
-    right: 22%;
+    position: absolute;
+    top: 50px;
+    right: 27vw;
+    background-color: red;
 
-    @media screen and (max-width: 970px) {
-      max-width: 150px;
-      flex-direction: column;
-      margin-bottom: 10rem;
+    @media screen and (max-width: 930px) {
+      left: 50%;
+      top: auto;
+      bottom: 20px;
+      transform: translateX(-50%);
     }
 
-    span {
+    div {
       color: #fff;
-      text-align: center;
       text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
       font-family: "UpheavalPro";
+      text-align: center;
     }
 
     .partner_title {
       font-size: 30px;
-      margin-bottom: 30px;
+      margin-bottom: 60px;
+
+      @media screen and (max-width: 930px) {
+        font-size: 4.5vw;
+        margin-bottom: 6vw;
+      }
     }
 
     .partner_persons {
       font-size: 65px;
       letter-spacing: 0.05em;
       font-weight: bold;
-      margin: 35px 0;
+      margin-top: 35px;
       z-index: 2;
+
+      @media screen and (max-width: 930px) {
+        font-size: 8.2vw;
+        margin-top: 3.8vw;
+      }
     }
   }
 
   .container_footer {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
     position: absolute;
     bottom: 0;
     width: 100%;
     height: 240px;
     background-image: url("../../../assets/landpage/rodape-ptn.png");
+    background-position: center;
+    background-size: contain;
+    background-color: red;
+
+    @media screen and (max-width: 930px) {
+      height: 20vw;
+    }
 
     .footer_copyright {
       font-family: "UpheavalPro";
@@ -107,29 +130,6 @@
       font-size: 13px;
       margin: 16px 0;
       color: #fff;
-    }
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .container {
-    & .container_marketing {
-      width: 80vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 1rem;
-
-      & .marketing_community__link {
-        margin-top: 10px;
-      }
-    }
-    & .container_partner {
-      max-width: 120px;
-
-      & .partner_persons {
-        font-size: 40px;
-      }
     }
   }
 }
