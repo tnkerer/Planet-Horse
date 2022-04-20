@@ -2,7 +2,7 @@
   position: relative;
   height: 82.1vh;
   width: 100%;
-  background-color: #fff;
+  background-color: #000;
 
   @media screen and (max-width: 930px) {
     height: 90vw;
@@ -19,15 +19,22 @@
   }
 
   .container_marketing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     left: 1.6vw;
     width: 292px;
-    background-color: red;
 
     @media screen and (max-width: 930px) {
       left: 50%;
       width: 38vw;
       transform: translateX(-50%);
+    }
+
+    @media screen and (max-width: 446px) {
+      width: 60vw;
     }
 
     .marketing_community__link {
@@ -70,12 +77,12 @@
     position: absolute;
     top: 50px;
     right: 27vw;
-    background-color: red;
+    z-index: 2;
 
     @media screen and (max-width: 930px) {
       left: 50%;
       top: auto;
-      bottom: 20px;
+      bottom: 8vw;
       transform: translateX(-50%);
     }
 
@@ -111,6 +118,8 @@
   }
 
   .container_footer {
+    display: flex;
+    justify-content: center;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -118,18 +127,23 @@
     background-image: url("../../../assets/landpage/rodape-ptn.png");
     background-position: center;
     background-size: contain;
-    background-color: red;
 
     @media screen and (max-width: 930px) {
       height: 20vw;
     }
 
     .footer_copyright {
+      position: absolute;
       font-family: "UpheavalPro";
       letter-spacing: 0.05em;
       font-size: 13px;
       margin: 16px 0;
+      bottom: 0;
       color: #fff;
+
+      @media screen and (max-width: 930px) {
+        font-size: 1.5vw;
+      }
     }
   }
 }
