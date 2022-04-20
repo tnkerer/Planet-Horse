@@ -11,6 +11,7 @@ import footerHeader from '@/assets/landpage/footer-header.webp'
 const Footer: React.FC = () => {
   return (
     <footer className={styles.container}>
+      <div className={styles.container_blending__effect} />
       <div className={styles.container_marketing}>
         <Image
           src={planethorseLogoImage}
@@ -24,19 +25,19 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <div className={styles.container_partner}>
-        <span className={styles.partner_title}>PARTNER</span>
+        <div className={styles.partner_title}>PARTNER</div>
         <Image
           src={horseSpriteImage}
           width={204}
           height={210}
         />
-        <span className={styles.partner_persons}>SOON</span>
+        <div className={styles.partner_persons}>SOON</div>
       </div>
       <div className={styles.container_footer}>
         <span className={styles.footer_copyright}>
           COPYRIGHT @ 2022 PLANETHORSE
         </span>
-        </div>
+      </div>
     </footer>
   )
 }
