@@ -47,7 +47,7 @@ const Team: React.FC = () => {
           ${IsVisble ? styles.animation : ''}
         `}>
           <div className={styles.cards_card}>
-            <TeamCard imageFront={t} imageBack={tFace} avatarName='T' realName='natã' position='marketing' index={0} to='https://www.linkedin.com/in/natã-teixeira-916596228/' />
+            <TeamCard imageFront={t} imageBack={tFace} avatarName='T' realName='natã' position='CTO' index={0} to='https://www.linkedin.com/in/natã-teixeira-916596228/' />
           </div>
           <div className={styles.cards_card}>
             <TeamCard imageFront={bizzo} imageBack={bizzoFace} avatarName='deividy' realName='deividy' position='marketing' index={1} to='https://twitter.com/deividy1864' />
