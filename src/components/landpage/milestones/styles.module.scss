@@ -18,6 +18,65 @@
       margin: 28px 0px;
     }
 
+    &.animation {
+      .card_image {
+        animation: fadeIn 1s ease-out;
+        animation-fill-mode: forwards;
+      }
+
+      .card_title {
+        animation: fadeIn 1s ease-out;
+        animation-fill-mode: forwards;
+      }
+
+      .card_value {
+        animation: fadeIn 1s ease-out;
+        animation-fill-mode: forwards;
+      }
+
+      div:nth-child(1) {
+        .card_image {
+          animation-delay: .5s;
+        }
+
+        .card_title {
+          animation-delay: .7s;
+        }
+
+        .card_value {
+          animation-delay: 1s;
+        }
+      }
+
+      div:nth-child(2) {
+        .card_image {
+          animation-delay: .8s;
+        }
+
+        .card_title {
+          animation-delay: 1.4s;
+        }
+
+        .card_value {
+          animation-delay: 1.7s;
+        }
+      }
+
+      div:nth-child(3) {
+        .card_image {
+          animation-delay: 1.1s;
+        }
+
+        .card_title {
+          animation-delay: 2.1s;
+        }
+
+        .card_value {
+          animation-delay: 2.4s;
+        }
+      }
+    }
+
     & > .cards_card {
       position: relative;
       display: flex;
@@ -38,56 +97,12 @@
         margin: 15px 0;
       }
 
-      &.animationwallet {
-        .card_image {
-          animation-delay: .5s;
-        }
-
-        .card_title {
-          animation-delay: .7s;
-        }
-
-        .card_value {
-          animation-delay: 1s;
-        }
-      }
-
-      &.animationhorses {
-        .card_image {
-          animation-delay: .8s;
-        }
-
-        .card_title {
-          animation-delay: 1.4s;
-        }
-
-        .card_value {
-          animation-delay: 1.7s;
-        }
-      }
-
-      &.animationvolume {
-        .card_image {
-          animation-delay: 1.1s;
-        }
-
-        .card_title {
-          animation-delay: 2.1s;
-        }
-
-        .card_value {
-          animation-delay: 2.4s;
-        }
-      }
-
       & > .card_image {
         align-self: center;
         width: 125px;
         height: 120px;
         opacity: 0;
         top: 50%;
-        animation: fadeIn 1s ease-out;
-        animation-fill-mode: forwards;
 
         @media screen and (max-width: 995px) {
           width: 180px;
@@ -100,8 +115,6 @@
         font-size: 40px;
         opacity: 0;
         top: 50%;
-        animation: fadeIn 1s ease-out;
-        animation-fill-mode: forwards;
       }
 
       & > .card_value {
@@ -109,8 +122,6 @@
         font-size: 25px;
         opacity: 0;
         top: 50%;
-        animation: fadeIn 1s ease-out;
-        animation-fill-mode: forwards;
       }
     }
   }

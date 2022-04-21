@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styles from './styles.module.scss'
 
 import TitleLayer from '../title-layer'
@@ -21,8 +21,19 @@ import anoFace from '@/assets/landing-page/team/faces/ano.webp'
 import daviFace from '@/assets/landing-page/team/faces/davi.webp'
 
 const Team: React.FC = () => {
+  const myRef = useRef()
+  const [IsVisble, setIsVisble] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      const entry = entries[0]
+      setIsVisble(entry.isIntersecting)
+    }) 
+    observer.observe(myRef.current)
+  }, [])
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={myRef}>
       <div className={styles.container_header} />
       <div className={styles.container_team}>
         <div className={styles.team_title}>
@@ -30,7 +41,10 @@ const Team: React.FC = () => {
             Team
           </TitleLayer>
         </div>
-        <div className={`${styles.team_cards} ${styles.animation}`}>
+        <div className={`
+          ${styles.team_cards}
+          ${IsVisble ? styles.animation : ''}
+        `}>
           <div className={styles.cards_card}>
             <TeamCard imageFront={t} imageBack={tFace} avatarName='T' realName='natã' position='marketing' index={0} to='https://www.linkedin.com/in/natã-teixeira-916596228/' />
           </div>

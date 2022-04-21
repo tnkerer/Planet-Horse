@@ -73,8 +73,6 @@
           white-space: nowrap;
           width: 355px;
           margin-bottom: 30px;
-          animation: text-description-animation 2s ease-in-out;
-          animation-fill-mode: forwards;
 
           @media screen and (max-width: 990px) {
             margin-left: 0;
@@ -89,13 +87,23 @@
           overflow: hidden;
           font-size: 20px;
           line-height: 28px;
-          animation: text-description-animation 2s ease-in-out;
-          animation-fill-mode: forwards;
 
           @media screen and (max-width: 990px) {
             margin-left: 0;
             max-width: 100%;
           }
+        }
+      }
+
+      & > .animation {
+        & > .text_title {
+          animation: text-description-animation 2s ease-in-out;
+          animation-fill-mode: forwards;
+        }
+
+        & > .text_description {
+          animation: text-description-animation 2s ease-in-out;
+          animation-fill-mode: forwards;
         }
       }
 
