@@ -66,9 +66,10 @@
 
     & > .animation {
       .cards_card {
-        margin-top: 300px;
+        position: relative;
+        top: 300px;
         opacity: 0;
-        animation: cards_card 3s ease-in-out;
+        animation: cards_card 2s ease-in-out;
         animation-fill-mode: forwards;
 
         &:nth-child(1) {
@@ -76,35 +77,31 @@
         }
 
         &:nth-child(2) {
-          animation-delay: .5s;
+          animation-delay: .3s;
         }
 
         &:nth-child(3) {
-          animation-delay: 1s;
+          animation-delay: .6s;
         }
 
         &:nth-child(4) {
-          animation-delay: 1.5s;
-        }
-
-        &:nth-child(4) {
-          animation-delay: 2s;
+          animation-delay: .9s;
         }
 
         &:nth-child(5) {
-          animation-delay: 2.5s;
+          animation-delay: 1.2s;
         }
 
         &:nth-child(6) {
-          animation-delay: 3s;
+          animation-delay: 1.5s;
         }
 
         &:nth-child(7) {
-          animation-delay: 3.5s;
+          animation-delay: 1.8s;
         }
 
         &:nth-child(8) {
-          animation-delay: 4s;
+          animation-delay: 2.1s;
         }
       }
     }
@@ -113,11 +110,11 @@
 
 @keyframes cards_card {
   from {
-    margin-top: 300px;
+    top: 300px;
     opacity: 0;
   }
   to {
-    margin-top: 10px;
+    top: 0;
     opacity: 1;
   }
 }

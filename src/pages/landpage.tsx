@@ -1,5 +1,4 @@
 import React from 'react'
-import { ScrollYValueProvider } from '@/utils/providers/scroll-y-value'
 import Presentation from '@/components/landpage/presentation'
 import Milestones from '@/components/landpage/milestones'
 import Gameplay from '@/components/landpage/gameplay'
@@ -9,14 +8,14 @@ import Footer from '@/components/landpage/footer'
 
 function App () {
   return (
-    <ScrollYValueProvider>
+    <>
       <Presentation />
       <Milestones />
       <Gameplay />
       <Token />
       <Team />
       <Footer />
-    </ScrollYValueProvider>
+    </>
   )
 }
 

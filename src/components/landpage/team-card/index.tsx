@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
-import { FlipperContext } from '@/utils/providers/flipper'
-import { ScrollYValueContext } from '@/utils/providers/scroll-y-value'
 
 interface Props {
   imageFront: StaticImageData
@@ -23,30 +21,11 @@ const TeamCard: React.FC<Props> = ({
   index,
   to
 }) => {
-  const { flipper, setFlipper } = useContext(FlipperContext)
-  const { scrollY } = useContext(ScrollYValueContext)
-  const [screenWidth, setScreenWidth] = useState(0)
-
-  useEffect(() => {
-    const screenWidthResolution = window.innerWidth
-    setScreenWidth(screenWidthResolution)
-  }, [scrollY])
-
-  const change = () => {
-    let changer = [...flipper]
-    changer[index] = !changer[index]
-    setFlipper(changer)
-  }
-
   return (
     <div className={styles.container}>
       <div className={styles.flipCard}>
-        {screenWidth <= 1100 && <button onClick={change} />}
         <div
           className={styles.flipCardInner}
-          style={screenWidth <= 1100 ? {
-            transform: flipper[index] ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          } : {}}
           onClick={() => {
             window.open(to, '_blank')
           }}>

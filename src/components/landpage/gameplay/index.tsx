@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.scss'
 
 import Image from 'next/image'
@@ -12,9 +12,23 @@ import whitepaperHoverImage from '@/assets/landpage/whitepaper-mouse.webp'
 import arboresImage from '@/assets/landpage/arbores.webp'
 
 const Gameplay: React.FC = () => {
+  const myRef = useRef()
+  const [IsVisble, setIsVisble] = useState(false)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      const entry = entries[0]
+      setIsVisble(entry.isIntersecting)
+    }) 
+    observer.observe(myRef.current)
+  }, [])
+
   return (
-    <div className={styles.container}>
-      <div className={`${styles.container_content} ${styles.animation}`}>
+    <div ref={myRef} className={styles.container}>
+      <div className={`
+        ${styles.container_content}
+        ${IsVisble ? styles.animation : ''}
+      `}>
         <slot className={styles.content_gameplay}>
           <div className={styles.gameplay_line__vertical} />
           <div className={styles.gameplay_content}>
