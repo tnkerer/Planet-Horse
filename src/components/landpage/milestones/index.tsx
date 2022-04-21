@@ -11,7 +11,8 @@ import TitleLayer from '@/components/landpage/title-layer'
 
 const Milestones: React.FC = () => {
   const myRef = useRef()
-  const [IsVisble, setIsVisble] = useState(false)
+  const [ascendingNumber, setAscendingNumber] = useState(0)
+  const [isVisble, setIsVisble] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
@@ -21,6 +22,18 @@ const Milestones: React.FC = () => {
     observer.observe(myRef.current)
   }, [])
 
+  useEffect(() => {
+    if (isVisble) {
+      let i = 0
+
+      const ascender = setInterval(() => {
+        (i === 300) && clearInterval(ascender)
+        setAscendingNumber(i)
+        i++
+      }, 10)
+    }
+  }, [isVisble])
+
   return (
     <div className={styles.container}>
       <TitleLayer>
@@ -28,7 +41,7 @@ const Milestones: React.FC = () => {
       </TitleLayer>
       <div className={`
         ${styles.container_cards}
-        ${IsVisble && styles.animation}
+        ${isVisble && styles.animation}
       `}>
         <div className={`
           ${styles.cards_card}
@@ -40,7 +53,7 @@ const Milestones: React.FC = () => {
             WALLETS
           </span>
           <span className={styles.card_value}>
-            SOON
+            {ascendingNumber !== 300 ? ascendingNumber : 'SOON'}
           </span>
         </div>
         <div className={`
@@ -53,7 +66,7 @@ const Milestones: React.FC = () => {
             HORSES
           </span>
           <span className={styles.card_value}>
-            SOON
+            {ascendingNumber !== 300 ? ascendingNumber : 'SOON'}
           </span>
         </div>
         <div className={`
@@ -66,7 +79,7 @@ const Milestones: React.FC = () => {
             VOLUME
           </span>
           <span className={styles.card_value}>
-            SOON
+            {ascendingNumber !== 300 ? ascendingNumber : 'SOON'}
           </span>
         </div>
       </div>
