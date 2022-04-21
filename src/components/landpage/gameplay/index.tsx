@@ -17,9 +17,9 @@ const Gameplay: React.FC = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
-      const entry = entries[0]
-      setIsVisble(entry.isIntersecting)
-    }) 
+      const { isIntersecting } = entries[0]
+      isIntersecting && setIsVisble(isIntersecting)
+    })
     observer.observe(myRef.current)
   }, [])
 
@@ -27,7 +27,7 @@ const Gameplay: React.FC = () => {
     <div ref={myRef} className={styles.container}>
       <div className={`
         ${styles.container_content}
-        ${IsVisble ? styles.animation : ''}
+        ${IsVisble && styles.animation}
       `}>
         <slot className={styles.content_gameplay}>
           <div className={styles.gameplay_line__vertical} />

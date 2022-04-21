@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
 
@@ -8,7 +8,7 @@ interface Props {
   avatarName: string
   realName: string
   position: string
-  index: number,
+  index: number
   to: string
 }
 

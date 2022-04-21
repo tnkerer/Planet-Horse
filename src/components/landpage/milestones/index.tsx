@@ -15,9 +15,9 @@ const Milestones: React.FC = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
-      const entry = entries[0]
-      setIsVisble(entry.isIntersecting)
-    }) 
+      const { isIntersecting } = entries[0]
+      isIntersecting && setIsVisble(isIntersecting)
+    })
     observer.observe(myRef.current)
   }, [])
 
@@ -28,7 +28,7 @@ const Milestones: React.FC = () => {
       </TitleLayer>
       <div className={`
         ${styles.container_cards}
-        ${IsVisble ? styles.animation : ''}
+        ${IsVisble && styles.animation}
       `}>
         <div className={`
           ${styles.cards_card}

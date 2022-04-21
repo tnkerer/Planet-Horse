@@ -8,33 +8,42 @@
   background-repeat: no-repeat;
   width: 105px;
   height: 335px;
-  animation: animation 1.2s ease-out;
-  transition: left .8s ease-out;
+  animation: animation .5s ease-out;
+  z-index: 3;
 
   @keyframes animation {
     from {
       left: -105px;
     }
-
     to {
       left: 0;
     }
   }
 
-  @media screen and (max-width: 810px) {
-    animation: none;
-  }
-
-  .socials {
+  .container_socials {
     margin-left: 15%;
     height: 280px;
   }
 
-  .slot {
+  .container_slot {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 95%;
     height: 25%;
+  }
+}
+
+.hide {
+  animation: hide 1s ease-out;
+  animation-fill-mode: forwards;
+
+  @keyframes hide {
+    from {
+      left: 0;
+    }
+    to {
+      left: -105px;
+    }
   }
 }

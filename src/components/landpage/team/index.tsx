@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import styles from './styles.module.scss'
 
 import TitleLayer from '../title-layer'
+
 import TeamCard from '@/components/landpage/team-card'
 import t from '@/assets/landing-page/team/avatars/t.webp'
 import bizzo from '@/assets/landing-page/team/avatars/bizzo.webp'
@@ -26,9 +27,9 @@ const Team: React.FC = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
-      const entry = entries[0]
-      setIsVisble(entry.isIntersecting)
-    }) 
+      const { isIntersecting } = entries[0]
+      isIntersecting && setIsVisble(isIntersecting)
+    })
     observer.observe(myRef.current)
   }, [])
 
