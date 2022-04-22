@@ -3,6 +3,8 @@ import styles from './styles.module.scss'
 
 import Image from 'next/image'
 
+import { useIsVisble } from '@/utils/hooks/is-visible'
+
 import wallet_icon from '@/assets/landpage/wallet-status.webp'
 import horses_icon from '@/assets/landpage/horses-status.webp'
 import volume_icon from '@/assets/landpage/volume-status.webp'
@@ -12,15 +14,7 @@ import TitleLayer from '@/components/landpage/title-layer'
 const Milestones: React.FC = () => {
   const myRef = useRef()
   const [ascendingNumber, setAscendingNumber] = useState(0)
-  const [isVisble, setIsVisble] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const { isIntersecting } = entries[0]
-      isIntersecting && setIsVisble(isIntersecting)
-    })
-    observer.observe(myRef.current)
-  }, [])
+  const isVisble = useIsVisble(myRef)
 
   useEffect(() => {
     if (isVisble) {
