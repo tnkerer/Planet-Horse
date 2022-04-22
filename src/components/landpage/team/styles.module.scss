@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding-bottom: 40vw;
+  padding-bottom: 28vw;
   background-image: url('../../../assets/landpage/ptn-team.png');
 
   @media screen and (max-width: 938px) {
@@ -15,12 +15,13 @@
     height: 40vw;
     background-image: url('../../../assets/landpage/final-terra.png');
     background-size: cover;
-    z-index: 3;
+    z-index: 1;
+    top: -100px;
   }
 
   & > .container_team {
     position: relative;
-    top: 30vw;
+    top: 23vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,28 +38,32 @@
       display: flex;
       flex-wrap: wrap;
       flex-direction: row;
-      width: 52%;
+      margin: 40px 0px;
+      row-gap: 40px;
+      max-width: 920px;
+      width: 100%;
+      z-index: 100;
 
-      @media screen and (max-width: 1700px) {
+      @media screen and (max-width: 920px) {
         width: 82%;
       }
 
-      @media screen and (max-width: 1115px) {
-        width: 100%;
+      @media screen and (max-width: 768px) {
+        width: 68%;
       }
 
       & > .cards_card {
         width: 25%;
 
-        @media screen and (max-width: 938px) {
+        @media screen and (max-width: 920px) {
           width: 33.3%;
         }
 
-        @media screen and (max-width: 750px) {
+        @media screen and (max-width: 768px) {
           width: 50%;
         }
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 626px) {
           width: 100%;
         }
       }

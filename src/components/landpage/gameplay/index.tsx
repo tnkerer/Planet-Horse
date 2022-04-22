@@ -1,33 +1,58 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './styles.module.scss'
 
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { useIsVisible } from '@/utils/hooks/is-visible'
+
 import tvImage from '@/assets/landpage/tv.webp'
 import racingImage from '@/assets/landpage/racing.gif'
+import buySell from '@/assets/landpage/buy-sell.gif'
+import upgrade from '@/assets/landpage/upgrade.gif'
+import noiseTv from '@/assets/landpage/chiado.gif'
 
 import whitepaperImage from '@/assets/landpage/whitepaper.webp'
 import whitepaperHoverImage from '@/assets/landpage/whitepaper-mouse.webp'
 import arboresImage from '@/assets/landpage/arbores.webp'
+import gloves from '@/assets/landpage/luvas.gif'
 
 const Gameplay: React.FC = () => {
   const myRef = useRef()
-  const [IsVisble, setIsVisble] = useState(false)
+  const isVisible = useIsVisible(myRef)
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const { isIntersecting } = entries[0]
-      isIntersecting && setIsVisble(isIntersecting)
-    })
-    observer.observe(myRef.current)
-  }, [])
+  const racingText = 'In the Race Mode you can play PvP or PvC. The rewards for the winners will be: experience points, materials, items and tokens.'
+  const buySellText = 'In the market, players can buy/sell horses, materials, items and stables. Players will spend/earn PlanetHorse token when trading on the market.'
+  const upgradeText = 'You can pay in PHORSE currency to upgrade your horse. Increase your win rates and earn more. Horse upgrade increases speed, sprint, support and power.'
+
+  const [urlIsVisible, setUrlIsVisible] = useState(racingImage)
+  const [textIsVisible, setTextIsVisible] = useState(racingText)
+
+  function changeTvChannel () {
+    setUrlIsVisible(noiseTv)
+  }
+
+  function handleClickRacing () {
+    changeTvChannel()
+    setTimeout(() => setUrlIsVisible(racingImage), 500)
+    setTextIsVisible(racingText)
+  }
+  function handleClickUpgrade () {
+    changeTvChannel()
+    setTimeout(() => setUrlIsVisible(upgrade), 500)
+    setTextIsVisible(upgradeText)
+  }
+  function handleClickBuySell () {
+    changeTvChannel()
+    setTimeout(() => setUrlIsVisible(buySell), 500)
+    setTextIsVisible(buySellText)
+  }
 
   return (
-    <div ref={myRef} className={styles.container}>
+    <div className={styles.container} ref={myRef}>
       <div className={`
         ${styles.container_content}
-        ${IsVisble && styles.animation}
+        ${isVisible && styles.animation}
       `}>
         <slot className={styles.content_gameplay}>
           <div className={styles.gameplay_line__vertical} />
@@ -35,18 +60,13 @@ const Gameplay: React.FC = () => {
             <div className={styles.content_head}>
               <h1 className={styles.head_title}>GAMEPLAY</h1>
 
-              <u className={styles.head_option}>RACING</u>
-              <u className={styles.head_option}>BUY / SELL</u>
-              <u className={styles.head_option}>UPGRADE</u>
+              <u className={styles.head_option} onClick={handleClickRacing}>RACING</u>
+              <u className={styles.head_option} onClick={handleClickBuySell}>BUY / SELL</u>
+              <u className={styles.head_option} onClick={handleClickUpgrade}>UPGRADE</u>
             </div>
             <div className={styles.gameplay_body}>
               <span className={styles.gameplay_description__paragraph1}>
-                In the Race Mode you can play PvP or PvC.
-              </span>
-              <span className={styles.gameplay_description__paragraph2}>
-                The rewards for the winners will be:
-                experience points, materials, items
-                and tokens.
+                {textIsVisible}
               </span>
             </div>
           </div>
@@ -54,7 +74,7 @@ const Gameplay: React.FC = () => {
         <slot className={styles.content_horses}>
           <div className={styles.horses_content}>
             <div className={styles.content_viewfinder}>
-              <Image layout='fill' src={racingImage} />
+              <Image layout='fill' src={urlIsVisible} />
             </div>
             <div className={styles.content_tv}>
               <Image layout='fill' src={tvImage} />
@@ -71,9 +91,12 @@ const Gameplay: React.FC = () => {
               <div className={styles.btn_book}>
                 <Image layout='fill' src={whitepaperImage} />
               </div>
+              <div className={styles.white_glove}>
+                <Image height={70} width={45} src={gloves}/>
+              </div>
             </div>
             <div className={styles.content_bush}>
-              <Image layout='fill' src={arboresImage} />
+              <Image src={arboresImage} />
             </div>
           </div>
         </slot>

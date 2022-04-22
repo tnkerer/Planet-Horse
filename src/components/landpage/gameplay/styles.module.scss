@@ -50,6 +50,7 @@
             margin-bottom: 50px;
             font-size: 35px;
             font-family: 'UpheavalPro';
+            cursor: pointer;
           }
         }
 
@@ -61,8 +62,7 @@
             display: block;
           }
 
-          & > .gameplay_description__paragraph1,
-          & > .gameplay_description__paragraph2 {
+          & > .gameplay_description__paragraph1 {
             margin-bottom: 15px;
             font-size: 25px;
             font-family: 'SpaceHorse';
@@ -117,7 +117,7 @@
         }
 
         & > .content_btn__touch {
-          z-index: 1;
+          z-index: 2;
           cursor: pointer;
 
           & > a {
@@ -140,9 +140,21 @@
             opacity: 0;
           }
 
+          & > .white_glove {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+            z-index: 1;
+            cursor: pointer;
+          }
+
           &:hover {
             & > .btn_book__active {
               opacity: 1;
+            }
+            & > .white_glove {
+              opacity: 0;
             }
           }
         }
@@ -212,7 +224,7 @@
 
           & > .content_viewfinder {
             top: 2vw;
-            left: 18vw;
+            left: 17vw;
             width: 21vw;
             height: 21vw;
           }
