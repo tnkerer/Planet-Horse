@@ -59,7 +59,7 @@ const Team: React.FC = () => {
             <TeamCard imageFront={ko} imageBack={koFace} avatarName='koroshy' realName='vinícius' position='artist' index={3} to='https://www.behance.net/Koroshy' />
           </div>
           <div className={styles.cards_card}>
-            <TeamCard imageFront={davi} imageBack={daviFace} avatarName='davi' realName='davi' position='dev' index={4} to='https://www.linkedin.com/in/davi-freitas-156729185' />
+            <TeamCard imageFront={davi} imageBack={daviFace} avatarName='davi' realName='davi' position='CTO' index={4} to='https://www.linkedin.com/in/davi-freitas-156729185' />
           </div>
           <div className={styles.cards_card}>
             <TeamCard imageFront={ano} imageBack={anoFace} avatarName='juliano' realName='juliano' position='dev' index={5} to='https://www.linkedin.com/in/juliano-senfft' />
