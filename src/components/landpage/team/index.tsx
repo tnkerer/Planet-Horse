@@ -13,7 +13,7 @@ import rayz from '@/assets/landing-page/team/avatars/rayz.webp'
 import ano from '@/assets/landing-page/team/avatars/ano.webp'
 import davi from '@/assets/landing-page/team/avatars/davi.webp'
 import tFace from '@/assets/landing-page/team/faces/t.webp'
-import bizzoFace from '@/assets/landing-page/team/faces/bizzo.webp'
+import bizzoFace from '@/assets/landing-page/team/faces/phillipe.jpg'
 import koFace from '@/assets/landing-page/team/faces/ko.webp'
 import muskFace from '@/assets/landing-page/team/faces/musk.webp'
 import jaumFace from '@/assets/landing-page/team/faces/jaum.webp'
@@ -50,7 +50,7 @@ const Team: React.FC = () => {
             <TeamCard imageFront={t} imageBack={tFace} avatarName='T' realName='natã' position='CEO' index={0} to='https://www.linkedin.com/in/natã-teixeira-916596228/' />
           </div>
           <div className={styles.cards_card}>
-            <TeamCard imageFront={bizzo} imageBack={bizzoFace} avatarName='deividy' realName='deividy' position='marketing' index={1} to='https://twitter.com/deividy1864' />
+            <TeamCard imageFront={bizzo} imageBack={bizzoFace} avatarName='phillipe' realName='phillipe' position='marketing' index={1} to='https://github.com/menezesphill' />
           </div>
           <div className={styles.cards_card}>
             <TeamCard imageFront={musk} imageBack={muskFace} avatarName='musk' realName='igor' position='dev' index={2} to='https://www.linkedin.com/in/igorjcqs' />
