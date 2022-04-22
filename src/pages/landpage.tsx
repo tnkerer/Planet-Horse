@@ -5,6 +5,7 @@ import Gameplay from '@/components/landpage/gameplay'
 import Token from '@/components/landpage/token'
 import Team from '@/components/landpage/team'
 import Footer from '@/components/landpage/footer'
+import SocialMidia from '@/components/landpage/social-midia'
 
 function App () {
   return (
@@ -15,6 +16,7 @@ function App () {
       <Token />
       <Team />
       <Footer />
+      <SocialMidia />
     </>
   )
 }

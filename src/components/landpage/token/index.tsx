@@ -9,9 +9,9 @@ const Token: React.FC = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
-      const entry = entries[0]
-      setIsVisble(entry.isIntersecting)
-    }) 
+      const { isIntersecting } = entries[0]
+      isIntersecting && setIsVisble(isIntersecting)
+    })
     observer.observe(myRef.current)
   }, [])
 
