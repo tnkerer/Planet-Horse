@@ -3,6 +3,8 @@ import styles from './styles.module.scss'
 
 import Image from 'next/image'
 
+import { useIsVisible } from '@/utils/hooks/is-visible'
+
 import wallet_icon from '@/assets/landpage/wallet-status.webp'
 import horses_icon from '@/assets/landpage/horses-status.webp'
 import volume_icon from '@/assets/landpage/volume-status.webp'
@@ -12,18 +14,10 @@ import TitleLayer from '@/components/landpage/title-layer'
 const Milestones: React.FC = () => {
   const myRef = useRef()
   const [ascendingNumber, setAscendingNumber] = useState(0)
-  const [isVisble, setIsVisble] = useState(false)
+  const isVisible = useIsVisible(myRef)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const { isIntersecting } = entries[0]
-      isIntersecting && setIsVisble(isIntersecting)
-    })
-    observer.observe(myRef.current)
-  }, [])
-
-  useEffect(() => {
-    if (isVisble) {
+    if (isVisible) {
       let i = 0
 
       const ascender = setInterval(() => {
@@ -32,7 +26,7 @@ const Milestones: React.FC = () => {
         i++
       }, 10)
     }
-  }, [isVisble])
+  }, [isVisible])
 
   return (
     <div className={styles.container}>
@@ -41,11 +35,9 @@ const Milestones: React.FC = () => {
       </TitleLayer>
       <div className={`
         ${styles.container_cards}
-        ${isVisble && styles.animation}
+        ${isVisible && styles.animation}
       `}>
-        <div className={`
-          ${styles.cards_card}
-        `} ref={myRef}>
+        <div className={styles.cards_card} ref={myRef}>
           <span className={styles.card_image}>
             <Image layout='fill' src={wallet_icon} />
           </span>

@@ -1,7 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef } from 'react'
 import styles from './styles.module.scss'
 
 import TitleLayer from '../title-layer'
+
+import { useIsVisible } from '@/utils/hooks/is-visible'
 
 import TeamCard from '@/components/landpage/team-card'
 import t from '@/assets/landing-page/team/avatars/t.webp'
@@ -23,15 +25,7 @@ import daviFace from '@/assets/landing-page/team/faces/davi.webp'
 
 const Team: React.FC = () => {
   const myRef = useRef()
-  const [IsVisble, setIsVisble] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const { isIntersecting } = entries[0]
-      isIntersecting && setIsVisble(isIntersecting)
-    })
-    observer.observe(myRef.current)
-  }, [])
+  const isVisible = useIsVisible(myRef)
 
   return (
     <div className={styles.container} ref={myRef}>
@@ -44,7 +38,7 @@ const Team: React.FC = () => {
         </div>
         <div className={`
           ${styles.team_cards}
-          ${IsVisble ? styles.animation : ''}
+          ${isVisible && styles.animation}
         `}>
           <div className={styles.cards_card}>
             <TeamCard imageFront={t} imageBack={tFace} avatarName='T' realName='natã' position='CEO' index={0} to='https://www.linkedin.com/in/natã-teixeira-916596228/' />

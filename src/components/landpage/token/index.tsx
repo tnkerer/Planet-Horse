@@ -1,19 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef } from 'react'
 import styles from './styles.module.scss'
 
 import TitleLayer from '@/components/landpage/title-layer'
 
+import { useIsVisible } from '@/utils/hooks/is-visible'
+
 const Token: React.FC = () => {
   const myRef = useRef()
-  const [IsVisble, setIsVisble] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const { isIntersecting } = entries[0]
-      isIntersecting && setIsVisble(isIntersecting)
-    })
-    observer.observe(myRef.current)
-  }, [])
+  const isVisible = useIsVisible(myRef)
 
   return (
     <div className={styles.container} ref={myRef}>
@@ -28,7 +22,7 @@ const Token: React.FC = () => {
         <div className={styles.content_information}>
           <div className={`
             ${styles.information_text}
-            ${IsVisble ? styles.animation : ''}
+            ${isVisible && styles.animation}
           `}>
             <div className={styles.text_title}>
               <u>PHORSE TOKEN</u>

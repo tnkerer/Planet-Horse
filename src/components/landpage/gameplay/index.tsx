@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import styles from './styles.module.scss'
 
 import Image from 'next/image'
 import Link from 'next/link'
+
+import { useIsVisible } from '@/utils/hooks/is-visible'
 
 import tvImage from '@/assets/landpage/tv.webp'
 import racingImage from '@/assets/landpage/racing.gif'
@@ -13,21 +15,13 @@ import arboresImage from '@/assets/landpage/arbores.webp'
 
 const Gameplay: React.FC = () => {
   const myRef = useRef()
-  const [IsVisble, setIsVisble] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const { isIntersecting } = entries[0]
-      isIntersecting && setIsVisble(isIntersecting)
-    })
-    observer.observe(myRef.current)
-  }, [])
+  const isVisible = useIsVisible(myRef)
 
   return (
-    <div ref={myRef} className={styles.container}>
+    <div className={styles.container} ref={myRef}>
       <div className={`
         ${styles.container_content}
-        ${IsVisble && styles.animation}
+        ${isVisible && styles.animation}
       `}>
         <slot className={styles.content_gameplay}>
           <div className={styles.gameplay_line__vertical} />
