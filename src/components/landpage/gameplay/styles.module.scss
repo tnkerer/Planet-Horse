@@ -50,6 +50,7 @@
             margin-bottom: 50px;
             font-size: 35px;
             font-family: 'UpheavalPro';
+            cursor: pointer;
           }
         }
 
@@ -61,8 +62,7 @@
             display: block;
           }
 
-          & > .gameplay_description__paragraph1,
-          & > .gameplay_description__paragraph2 {
+          & > .gameplay_description__paragraph1 {
             margin-bottom: 15px;
             font-size: 25px;
             font-family: 'SpaceHorse';
@@ -212,7 +212,7 @@
 
           & > .content_viewfinder {
             top: 2vw;
-            left: 18vw;
+            left: 17vw;
             width: 21vw;
             height: 21vw;
           }
