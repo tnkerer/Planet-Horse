@@ -37,28 +37,31 @@
       display: flex;
       flex-wrap: wrap;
       flex-direction: row;
-      width: 52%;
+      margin: 40px 0px;
+      row-gap: 40px;
+      max-width: 920px;
+      width: 100%;
 
-      @media screen and (max-width: 1700px) {
+      @media screen and (max-width: 920px) {
         width: 82%;
       }
 
-      @media screen and (max-width: 1115px) {
-        width: 100%;
+      @media screen and (max-width: 768px) {
+        width: 68%;
       }
 
       & > .cards_card {
         width: 25%;
 
-        @media screen and (max-width: 938px) {
+        @media screen and (max-width: 920px) {
           width: 33.3%;
         }
 
-        @media screen and (max-width: 750px) {
+        @media screen and (max-width: 768px) {
           width: 50%;
         }
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: 626px) {
           width: 100%;
         }
       }
