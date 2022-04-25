@@ -2,11 +2,11 @@ import React from 'react'
 import styles from './styles.module.scss'
 
 import Image from 'next/image'
+import Link from 'next/link'
 
 import discordIcon from '@/assets/icons/socials/discord.webp'
-import twitterIcon from '@/assets/icons/socials/instagram.webp'
+import twitterIcon from '@/assets/icons/socials/twitter.webp'
 import telegramIcon from '@/assets/icons/socials/telegram.webp'
-import instagramIcon from '@/assets/icons/socials/twitter.webp'
 
 import planethorseLogoImage from '@/assets/landpage/planethorse-logo-sem-ferradura.webp'
 import horseSpriteImage from '@/assets/landpage/horse-sprite.webp'
@@ -26,10 +26,21 @@ const Footer: React.FC = () => {
           </div>
 
           <div className={styles.social_media}>
-            <img src={discordIcon.src} alt="Discord Planet Horse" />
-            <img src={twitterIcon.src} alt="Twitter Planet Horse" />
-            <img src={instagramIcon.src} alt="Instagram Planter Horse" />
-            <img src={telegramIcon.src} alt="Telegram Planet Horse" />
+            <Link href='https://discord.gg/3EDMdSYUXs'>
+              <a target="_blank" rel="noreferrer">
+                <img src={discordIcon.src} alt="Discord Planet Horse" />
+              </a>
+            </Link>
+            <Link href='https://www.t.me/planethorse'>
+              <a target="_blank" rel="noreferrer">
+                <img src={telegramIcon.src} alt="Telegram Planet Horse" />
+              </a>
+            </Link>
+            <Link href='https://twitter.com/PlanetHorseNFT'>
+              <a target="_blank" rel="noreferrer">
+                <img src={twitterIcon.src} alt="Twitter Planet Horse" />
+              </a>
+            </Link>
           </div>
         </div>
 
