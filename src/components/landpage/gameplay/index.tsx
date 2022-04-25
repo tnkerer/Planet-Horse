@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './styles.module.scss'
 
 import Image from 'next/image'
@@ -8,6 +8,9 @@ import { useIsVisible } from '@/utils/hooks/is-visible'
 
 import tvImage from '@/assets/landpage/tv.webp'
 import racingImage from '@/assets/landpage/racing.gif'
+import buySell from '@/assets/landpage/buy-sell.gif'
+import upgrade from '@/assets/landpage/upgrade.gif'
+import noiseTv from '@/assets/landpage/chiado.gif'
 
 import whitepaperImage from '@/assets/landpage/whitepaper.webp'
 import whitepaperHoverImage from '@/assets/landpage/whitepaper-mouse.webp'
@@ -16,6 +19,33 @@ import arboresImage from '@/assets/landpage/arbores.webp'
 const Gameplay: React.FC = () => {
   const myRef = useRef()
   const isVisible = useIsVisible(myRef)
+
+  const racingText = 'In the Race Mode you can play PvP or PvC. The rewards for the winners will be: experience points, materials, items and tokens.'
+  const buySellText = 'teste1'
+  const upgradeText = 'teste2'
+
+  const [urlIsVisible, setUrlIsVisible] = useState(racingImage)
+  const [textIsVisible, setTextIsVisible] = useState(racingText)
+
+  function changeTvChannel () {
+    setUrlIsVisible(noiseTv)
+  }
+
+  function handleClickRacing () {
+    changeTvChannel()
+    setTimeout(() => setUrlIsVisible(racingImage), 500)
+    setTextIsVisible(racingText)
+  }
+  function handleClickUpgrade () {
+    changeTvChannel()
+    setTimeout(() => setUrlIsVisible(upgrade), 500)
+    setTextIsVisible(upgradeText)
+  }
+  function handleClickBuySell () {
+    changeTvChannel()
+    setTimeout(() => setUrlIsVisible(buySell), 500)
+    setTextIsVisible(buySellText)
+  }
 
   return (
     <div className={styles.container} ref={myRef}>
@@ -29,18 +59,13 @@ const Gameplay: React.FC = () => {
             <div className={styles.content_head}>
               <h1 className={styles.head_title}>GAMEPLAY</h1>
 
-              <u className={styles.head_option}>RACING</u>
-              <u className={styles.head_option}>BUY / SELL</u>
-              <u className={styles.head_option}>UPGRADE</u>
+              <u className={styles.head_option} onClick={handleClickRacing}>RACING</u>
+              <u className={styles.head_option} onClick={handleClickBuySell}>BUY / SELL</u>
+              <u className={styles.head_option} onClick={handleClickUpgrade}>UPGRADE</u>
             </div>
             <div className={styles.gameplay_body}>
               <span className={styles.gameplay_description__paragraph1}>
-                In the Race Mode you can play PvP or PvC.
-              </span>
-              <span className={styles.gameplay_description__paragraph2}>
-                The rewards for the winners will be:
-                experience points, materials, items
-                and tokens.
+                {textIsVisible}
               </span>
             </div>
           </div>
@@ -48,7 +73,7 @@ const Gameplay: React.FC = () => {
         <slot className={styles.content_horses}>
           <div className={styles.horses_content}>
             <div className={styles.content_viewfinder}>
-              <Image layout='fill' src={racingImage} />
+              <Image layout='fill' src={urlIsVisible} />
             </div>
             <div className={styles.content_tv}>
               <Image layout='fill' src={tvImage} />
