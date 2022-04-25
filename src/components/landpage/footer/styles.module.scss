@@ -8,16 +8,6 @@
     height: 90vw;
   }
 
-  & > .container_blending__effect {
-    position: absolute;
-    width: 100%;
-    background-image: url("../../../assets/landpage/header-do-rodape.webp");
-    top: -150px;
-    background-size: cover;
-    background-position: center;
-    height: 150px;
-  }
-
   .container_marketing {
     display: flex;
     flex-direction: column;

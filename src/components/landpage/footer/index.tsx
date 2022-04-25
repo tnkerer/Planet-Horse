@@ -10,7 +10,6 @@ import horseSpriteImage from '@/assets/landpage/horse-sprite.webp'
 const Footer: React.FC = () => {
   return (
     <footer className={styles.container}>
-      <div className={styles.container_blending__effect} />
       <div className={styles.container_marketing}>
         <Image
           src={planethorseLogoImage}
