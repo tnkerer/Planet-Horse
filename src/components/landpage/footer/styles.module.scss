@@ -1,6 +1,18 @@
 .container {
   width: 100%;
-  background-color: #000;
+  //background-color: #000;
+  background-image: linear-gradient(2.1deg, rgb(0, 0, 0) 90%, transparent 10%);
+  z-index: 3;
+
+  &::before {
+    content: "";
+    position: relative;
+    display: block;
+    height: 150px;
+    width: 100%;
+    background-image: url("../../../assets/landpage/ptn-team.png");
+    z-index: -1;
+  }
 
   .container_topside {
     margin: 0 auto;

@@ -140,9 +140,20 @@
             opacity: 0;
           }
 
+          & > .white_glove {
+            position: relative;
+            right: -150px;
+            top: 100px;
+            z-index: 10;
+            cursor: pointer;
+          }
+
           &:hover {
             & > .btn_book__active {
               opacity: 1;
+            }
+            & > .white_glove {
+              opacity: 0;
             }
           }
         }
