@@ -17,7 +17,7 @@
     height: 347px;
     width: 457px;
     left: 50%;
-    transform: translateX(-50%) scale(0.95);
+    transform: translateX(-50%) scale(0.65);
     background-image: url('../../../assets/landpage/logo-planethorse.gif');
     background-size: cover;
 
@@ -39,10 +39,10 @@
   & > .container_button {
     font-family: 'UpheavalPro'; 
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(0.70);
     animation: blinker 1s step-start infinite;
     min-width: 600px;
-    bottom: 200px;
+    margin-bottom: 100px;
     text-align: center;
     color: #fff;
 

@@ -22,8 +22,8 @@ const Gameplay: React.FC = () => {
   const isVisible = useIsVisible(myRef)
 
   const racingText = 'In the Race Mode you can play PvP or PvC. The rewards for the winners will be: experience points, materials, items and tokens.'
-  const buySellText = 'teste1'
-  const upgradeText = 'teste2'
+  const buySellText = 'In the market, players can buy/sell horses, materials, items and stables. Players will spend/earn PlanetHorse token when trading on the market.'
+  const upgradeText = 'You can pay in PHORSE currency to upgrade your horse. Increase your win rates and earn more. Horse upgrade increases speed, sprint, support and power.'
 
   const [urlIsVisible, setUrlIsVisible] = useState(racingImage)
   const [textIsVisible, setTextIsVisible] = useState(racingText)
