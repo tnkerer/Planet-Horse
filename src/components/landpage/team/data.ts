@@ -24,12 +24,12 @@ export const TEAM = [{
   socialLink: 'https://www.linkedin.com/in/natã-teixeira-916596228/'
 },
 {
-  avatarName: 'phillipe',
-  realName: 'phillipe',
-  position: 'dev',
-  avatarImageFront: bizzo,
-  avatarImageBack: bizzoFace,
-  socialLink: 'https://github.com/menezesphill'
+  avatarName: 'davi',
+  realName: 'davi',
+  position: 'CTO',
+  avatarImageFront: davi,
+  avatarImageBack: daviFace,
+  socialLink: 'https://www.linkedin.com/in/davi-freitas-156729185'
 },
 {
   avatarName: 'Musk',
@@ -48,12 +48,12 @@ export const TEAM = [{
   socialLink: 'https://www.behance.net/Koroshy'
 },
 {
-  avatarName: 'davi',
-  realName: 'davi',
-  position: 'CTO',
-  avatarImageFront: davi,
-  avatarImageBack: daviFace,
-  socialLink: 'https://www.linkedin.com/in/davi-freitas-156729185'
+  avatarName: 'phillipe',
+  realName: 'phillipe',
+  position: 'dev',
+  avatarImageFront: bizzo,
+  avatarImageBack: bizzoFace,
+  socialLink: 'https://github.com/menezesphill'
 },
 {
   avatarName: 'Juliano',
