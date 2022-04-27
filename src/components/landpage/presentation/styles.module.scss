@@ -42,7 +42,7 @@
     transform: translateX(-50%) scale(0.70);
     animation: blinker 1s step-start infinite;
     min-width: 600px;
-    margin-bottom: 100px;
+    bottom: 220px;
     text-align: center;
     color: #fff;
 
@@ -57,7 +57,7 @@
     }
 
     @media screen and (max-height: 670px) {
-      bottom: 09vh;
+      bottom: 150px;
     }
 
     & > span {

@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding-bottom: 20vw;
+  padding-bottom: 28vw;
   background-image: url('../../../assets/landpage/ptn-team.png');
 
   @media screen and (max-width: 938px) {
@@ -15,13 +15,13 @@
     height: 40vw;
     background-image: url('../../../assets/landpage/final-terra.png');
     background-size: cover;
-    z-index: 3;
-    top: -115px;
+    z-index: 1;
+    top: -100px;
   }
 
   & > .container_team {
     position: relative;
-    top: 20vw;
+    top: 23vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,6 +42,7 @@
       row-gap: 40px;
       max-width: 920px;
       width: 100%;
+      z-index: 100;
 
       @media screen and (max-width: 920px) {
         width: 82%;

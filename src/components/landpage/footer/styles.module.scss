@@ -1,22 +1,11 @@
 .container {
   width: 100%;
-  //background-color: #000;
-  background-image: linear-gradient(2.1deg, rgb(0, 0, 0) 90%, transparent 10%);
-  z-index: 3;
-
-  &::before {
-    content: "";
-    position: relative;
-    display: block;
-    height: 150px;
-    width: 100%;
-    background-image: url("../../../assets/landpage/ptn-team.png");
-    z-index: -1;
-  }
+  background-color: #000;
+  padding-top: 60px;
 
   .container_topside {
     margin: 0 auto;
-    padding: 64px 0 24px 0;
+    padding: 44px 0 14px 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -43,8 +32,8 @@
     gap: 26px;
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
     }
   }
 
@@ -52,7 +41,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 15px;
 
     .marketing_community__link {
       display: flex;
@@ -92,8 +81,8 @@
     }
 
     .partner_title {
-      font-size: 30px;
-      margin-bottom: 42px;
+      font-size: 25px;
+      margin-bottom: 32px;
 
       @media screen and (max-width: 930px) {
         font-size: 4.5vw;
@@ -102,10 +91,10 @@
     }
 
     .partner_persons {
-      font-size: 65px;
+      font-size: 45px;
       letter-spacing: 0.05em;
       font-weight: bold;
-      margin-top: 32px;
+      margin-top: 22px;
 
       @media screen and (max-width: 930px) {
         font-size: 8.2vw;
@@ -118,7 +107,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 240px;
+    height: 100px;
     background-image: url("../../../assets/landpage/rodape-ptn.png");
     background-position: center;
     background-size: contain;
@@ -132,11 +121,11 @@
       font-family: "UpheavalPro";
       letter-spacing: 0.05em;
       font-size: 16px;
-      margin-top: calc(240px / 1.4);
+      margin-top: 55px;
       color: #fff;
 
       @media screen and (max-width: 930px) {
-        font-size: 1.5vw;
+        font-size: 2.8vw;
         margin-top: calc(20vw / 1.8);
       }
     }

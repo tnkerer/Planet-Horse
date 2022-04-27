@@ -18,8 +18,8 @@ const Footer: React.FC = () => {
         <div className={styles.container_marketing}>
           <Image
             src={planethorseLogoImage}
-            width={292}
-            height={118}
+            width={202}
+            height={78}
           />
           <div className={styles.marketing_community__link}>
             <p><span>•</span>COMMUNITY<span>•</span></p>
@@ -48,8 +48,8 @@ const Footer: React.FC = () => {
           <div className={styles.partner_title}>PARTNER</div>
           <Image
             src={horseSpriteImage}
-            width={204}
-            height={210}
+            width={154}
+            height={150}
           />
           <div className={styles.partner_persons}>SOON</div>
         </div>

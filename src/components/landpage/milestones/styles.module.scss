@@ -10,7 +10,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 800px;
-    padding-top: 100px;
+    padding-top: 20px;
 
     @media screen and (max-width: 1211px) {
       flex-direction: column;
@@ -107,7 +107,7 @@
         top: 50%;
 
         @media screen and (max-width: 995px) {
-          width: 110px;
+          width: 90px;
           height: 190px;
         }
       }

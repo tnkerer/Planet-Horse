@@ -13,26 +13,8 @@ const Presentation: React.FC = () => {
       <div className={styles.container_icon} />
       <div className={styles.container_button}>
         <span>•</span>
-        <Link href='#'>Press to explorer</Link>
+        <Link href='#'>Press to explore</Link>
         <span>•</span>
-      </div>
-
-      <div className={styles.social_media}>
-        <Link href='https://discord.gg/3EDMdSYUXs'>
-          <a target="_blank" rel="noreferrer">
-            <img src={discordIcon.src} alt="Discord Planet Horse" />
-          </a>
-        </Link>
-        <Link href='https://www.t.me/planethorse'>
-          <a target="_blank" rel="noreferrer">
-            <img src={telegramIcon.src} alt="Telegram Planet Horse" />
-          </a>
-        </Link>
-        <Link href='https://twitter.com/PlanetHorseNFT'>
-          <a target="_blank" rel="noreferrer">
-            <img src={twitterIcon.src} alt="Twitter Planet Horse" />
-          </a>
-        </Link>
       </div>
     </div>
   )
