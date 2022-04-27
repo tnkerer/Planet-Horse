@@ -15,8 +15,8 @@
     height: 40vw;
     background-image: url('../../../assets/landpage/final-terra.png');
     background-size: cover;
-    z-index: 3;
-    top: -65px;
+    z-index: 1;
+    top: -100px;
   }
 
   & > .container_team {
@@ -42,6 +42,7 @@
       row-gap: 40px;
       max-width: 920px;
       width: 100%;
+      z-index: 100;
 
       @media screen and (max-width: 920px) {
         width: 82%;
