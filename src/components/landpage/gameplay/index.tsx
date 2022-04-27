@@ -92,7 +92,7 @@ const Gameplay: React.FC = () => {
                 <Image layout='fill' src={whitepaperImage} />
               </div>
               <div className={styles.white_glove}>
-                <Image height={100} width={60} src={gloves} />
+                <Image height={70} width={45} src={gloves} />
               </div>
             </div>
             <div className={styles.content_bush}>

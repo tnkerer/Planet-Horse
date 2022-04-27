@@ -141,11 +141,14 @@
           }
 
           & > .white_glove {
-            position: absolute;
-            right: 100px;
-            top: 50px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
             z-index: 10;
             cursor: pointer;
+            border: solid red;
+
           }
 
           &:hover {
@@ -322,10 +325,6 @@
              height: 25.6vw;
              left: 23vw;
              bottom: 14vw;
-             & > .white_glove {
-              right: 80px;
-              top: 50px;
-            }
           }
     
           & > .content_bush {
