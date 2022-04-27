@@ -141,9 +141,9 @@
           }
 
           & > .white_glove {
-            position: relative;
-            right: -150px;
-            top: 100px;
+            position: absolute;
+            right: 100px;
+            top: 50px;
             z-index: 10;
             cursor: pointer;
           }
@@ -322,6 +322,10 @@
              height: 25.6vw;
              left: 23vw;
              bottom: 14vw;
+             & > .white_glove {
+              right: 80px;
+              top: 50px;
+            }
           }
     
           & > .content_bush {
