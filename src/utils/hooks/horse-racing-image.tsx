@@ -7,7 +7,7 @@ interface Props {
   image: StaticImageData
 }
 
-const useImage = (horse: Horse | boolean): Props => {
+const useImage = (horse: Horse): Props => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [image, setImage] = useState(null)

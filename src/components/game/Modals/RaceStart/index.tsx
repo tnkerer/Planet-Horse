@@ -14,19 +14,20 @@ interface Props {
 }
 
 const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
-  const [horse, setHorse] = useState(false)
-  const [startRace, setStartRace] = useState(false)
-  const [racing, setRacing] = useState(false)
-  const [raceFinish, setRaceFinish] = useState(false)
+  const [horse, setHorse] = useState(null)
+  const [startRace, setStartRace] = useState(null)
+  const [racing, setRacing] = useState(null)
+  const [raceFinish, setRaceFinish] = useState(null)
   const [horseResult, setHorseResult] = useState(getRandomNumber(1, 10))
 
   function getHorseData (): void {
     const horse = horses.find(horse => horse.id === horseId)
-    if (horse) {
-      /* NÃO ENTENDI PQ TA MARCANDO ERRO AQUI NA VARIAVEL HORSE */
+    if (horse  && horse !== null) {
       setHorse(horse)
       setHorseResult(getRandomNumber(1, 10))
       startingRace()
+    } else if (horse === undefined) {
+      console.log("ERROR: Horse is Undefined")
     }
   }
 
