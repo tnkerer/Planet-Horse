@@ -1,7 +1,9 @@
 .container {
+  position: relative;
   width: 100%;
   background-color: #000;
   padding-top: 60px;
+  z-index: 999;
 
   .container_topside {
     margin: 0 auto;

@@ -27,20 +27,18 @@ const Team: React.FC = () => {
           ${isVisible && styles.animation}
         `}>
          {TEAM.map(({ avatarImageFront, avatarImageBack, avatarName, realName, position, socialLink }, index) =>
-          <>
-            <div className={styles.cards_card}>
-              <TeamCard
-                key={index}
-                index={index}
-                to={socialLink}
-                realName={realName}
-                avatarName={avatarName}
-                position={position}
-                imageFront={avatarImageFront}
-                imageBack={avatarImageBack}
-                />
-            </div>
-          </>)}
+          <div key={index} className={styles.cards_card}>
+            <TeamCard
+              index={index}
+              to={socialLink}
+              realName={realName}
+              avatarName={avatarName}
+              position={position}
+              imageFront={avatarImageFront}
+              imageBack={avatarImageBack}
+            />
+          </div>
+          )}
         </div>
       </div>
     </div>
