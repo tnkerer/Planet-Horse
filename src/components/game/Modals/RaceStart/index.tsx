@@ -22,12 +22,10 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
 
   function getHorseData (): void {
     const horse = horses.find(horse => horse.id === horseId)
-    if (horse  && horse !== null) {
+    if (horse  && horse !== undefined) {
       setHorse(horse)
       setHorseResult(getRandomNumber(1, 10))
       startingRace()
-    } else if (horse === undefined) {
-      console.log("ERROR: Horse is Undefined")
     }
   }
 
