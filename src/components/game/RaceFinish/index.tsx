@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styles from './styles.module.scss'
 import getResultImage from '@/utils/hooks/race-result-image'
 import getResultHorseImage from '@/utils/hooks/race-result-image-horse'

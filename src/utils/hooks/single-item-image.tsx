@@ -16,7 +16,7 @@ const useImage = (item: Items): Props => {
   useEffect((): void => {
     const fetchImage = async (): Promise<void> => {
       try {
-        const response = await import(`@/assets/game/items/baus/bau-${item.src}.gif`)
+        const response = await import(`@/assets/game/Items/baus/bau-${item.src}.gif`)
         setImage(response.default)
       } catch (err) {
         setError(err)

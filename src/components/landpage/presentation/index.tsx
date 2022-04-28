@@ -3,9 +3,9 @@ import styles from './styles.module.scss'
 
 import Link from 'next/link'
 
-import discordIcon from '@/assets/icons/socials/discord.webp'
+/* import discordIcon from '@/assets/icons/socials/discord.webp'
 import twitterIcon from '@/assets/icons/socials/twitter.webp'
-import telegramIcon from '@/assets/icons/socials/telegram.webp'
+import telegramIcon from '@/assets/icons/socials/telegram.webp' */
 
 const Presentation: React.FC = () => {
   return (

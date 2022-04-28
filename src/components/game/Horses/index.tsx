@@ -75,7 +75,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
               +
             </div>
             <div className={styles.addHorseText}>
-              GET MORE FIRST HORSE, THIS IS THE FIRST STEP TO BECOMING A GREAT RUNNER
+              GET MORE HORSES, THIS IS THE FIRST STEP TO BECOMING A GREAT RUNNER
             </div>
           </div>
         </div>

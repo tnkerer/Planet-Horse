@@ -5,7 +5,7 @@ import { Horse } from '@/domain/models/Horse'
 import CountUp from 'react-countup'
 
 interface Props {
-  horse: Horse | boolean
+  horse: Horse
   horseResult: number
   horseRacingFinish: () => void
 }

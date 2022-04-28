@@ -14,7 +14,7 @@ const useImage = (result: number): Props => {
   useEffect((): void => {
     const fetchImage = async (): Promise<void> => {
       try {
-        const response = await import(`@/assets/game/pop-up/start/${result}.webp`)
+        const response = await import(`@/assets/game/pop-up/start/${result}.gif`)
         setImage(response.default)
       } catch (err) {
         setError(err)
