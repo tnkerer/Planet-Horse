@@ -41,6 +41,13 @@ const Team: React.FC = () => {
           )}
         </div>
       </div>
+      <div className={styles.partners_footer}>
+        <div className={styles.partners_title}>
+          <TitleLayer>
+            Partners
+          </TitleLayer>
+        </div>
+      </div>
     </div>
   )
 }
