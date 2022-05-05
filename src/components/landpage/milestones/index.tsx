@@ -21,10 +21,10 @@ const Milestones: React.FC = () => {
       let i = 0
 
       const ascender = setInterval(() => {
-        (i === 300) && clearInterval(ascender)
+        (i === 20000) && clearInterval(ascender)
         setAscendingNumber(i)
-        i++
-      }, 10)
+        i = + i + 25
+      }, 2)
     }
   }, [isVisible])
 
@@ -45,7 +45,7 @@ const Milestones: React.FC = () => {
             WALLETS
           </span>
           <span className={styles.card_value}>
-            {ascendingNumber !== 300 ? ascendingNumber : 'SOON'}
+            {ascendingNumber !== 20000 ? ascendingNumber : 'SOON'}
           </span>
         </div>
         <div className={`
@@ -58,7 +58,7 @@ const Milestones: React.FC = () => {
             HORSES
           </span>
           <span className={styles.card_value}>
-            {ascendingNumber !== 300 ? ascendingNumber : 'SOON'}
+            {ascendingNumber !== 20000 ? ascendingNumber : 'SOON'}
           </span>
         </div>
         <div className={`
@@ -71,7 +71,7 @@ const Milestones: React.FC = () => {
             VOLUME
           </span>
           <span className={styles.card_value}>
-            {ascendingNumber !== 300 ? ascendingNumber : 'SOON'}
+            {ascendingNumber !== 20000 ? ascendingNumber : 'SOON'}
           </span>
         </div>
       </div>

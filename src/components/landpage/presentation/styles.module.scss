@@ -1,12 +1,15 @@
 .container {
   position: relative;
-  height: 100vh;
+  height: 110vh;
+  top: -10vh;
+  margin-bottom: -10vh;
   width: 100%;
   overflow: hidden;
   background: url('../../../assets/landpage/fundo-provisorio.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  //cursor: url('../../../assets/landpage/cursor/luva-clicada.cur'), default;
 
   & > div {
     position: absolute;

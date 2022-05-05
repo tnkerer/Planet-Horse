@@ -51,6 +51,7 @@
             font-size: 35px;
             font-family: 'UpheavalPro';
             cursor: pointer;
+            margin-right: 6000px;
           }
         }
 
@@ -110,10 +111,11 @@
 
         & > .content_btn__touch,
         & > .content_btn {
-           bottom: 140px;
-           left: 250px;
-           width: 435px;
-           height: 267px;
+          position: absolute;
+          bottom: 140px;
+          left: 250px;
+          width: 435px;
+          height: 267px;
         }
 
         & > .content_btn__touch {
@@ -140,21 +142,9 @@
             opacity: 0;
           }
 
-          & > .white_glove {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            padding-top: 40px;
-            z-index: 1;
-            cursor: pointer;
-          }
-
           &:hover {
             & > .btn_book__active {
               opacity: 1;
-            }
-            & > .white_glove {
-              opacity: 0;
             }
           }
         }
@@ -240,6 +230,7 @@
              left: 14.5vw;
              width: 25.5vw;
              height: 15.3vw;
+             margin-top: 500px;
           }
 
           & > .content_bush {
@@ -362,8 +353,12 @@
     }
 
     & > .content_horses {
-      animation: content-horses-animation 3s ease-in-out;
-      animation-fill-mode: forwards;
+      & > .horses_content {
+        & > .content_btn {
+          animation: content-btn-animation 1.2s ease-out;
+          animation-fill-mode: forwards;
+        }
+      }
     }
   }
 }
@@ -417,6 +412,18 @@
     opacity: 0;
   }
   to {
+    opacity: 1;
+  }
+}
+
+@keyframes content-btn-animation {
+  from {
+    bottom: 800px;
+    opacity: 0.5;
+  }
+  
+  to {
+    bottom: 200px;
     opacity: 1;
   }
 }

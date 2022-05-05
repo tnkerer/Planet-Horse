@@ -30,8 +30,8 @@ const Token: React.FC = () => {
             <div className={styles.text_description}>
               Symbol: PHORSE<br />
               Name: PlanetHorse<br />
-              Token Supply: 1.000.000.000<br />
-              Chain: Matic<br />
+              Token Supply: 1,000,000,000<br />
+              Chain: Polygon<br />
               Contract: Coming Soon
             </div>
           </div>

@@ -91,9 +91,6 @@ const Gameplay: React.FC = () => {
               <div className={styles.btn_book}>
                 <Image layout='fill' src={whitepaperImage} />
               </div>
-              <div className={styles.white_glove}>
-                <Image height={70} width={45} src={gloves}/>
-              </div>
             </div>
             <div className={styles.content_bush}>
               <Image src={arboresImage} />
