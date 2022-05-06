@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './styles.module.scss'
 
 import Link from 'next/link'
-import Image from 'next/Image'
+import Image from 'next/image'
 
 import discordIcon from '@/assets/icons/socials/discord.webp'
 import twitterIcon from '@/assets/icons/socials/twitter.webp'
