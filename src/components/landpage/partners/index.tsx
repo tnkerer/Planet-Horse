@@ -37,6 +37,7 @@ const Team: React.FC = () => {
             height={120}
            />
         </div>
+      </div>
   )
 }
 
