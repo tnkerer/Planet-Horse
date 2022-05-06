@@ -37,9 +37,6 @@ const Team: React.FC = () => {
             height={120}
            />
         </div>
-      </div>
-        <div className={styles.partners_footer} />
-    </div>
   )
 }
 
