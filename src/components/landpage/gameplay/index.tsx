@@ -15,7 +15,6 @@ import noiseTv from '@/assets/landpage/chiado.gif'
 import whitepaperImage from '@/assets/landpage/whitepaper.webp'
 import whitepaperHoverImage from '@/assets/landpage/whitepaper-mouse.webp'
 import arboresImage from '@/assets/landpage/arbores.webp'
-import gloves from '@/assets/landpage/luvas.gif'
 
 const Gameplay: React.FC = () => {
   const myRef = useRef()
@@ -90,9 +89,6 @@ const Gameplay: React.FC = () => {
               </div>
               <div className={styles.btn_book}>
                 <Image layout='fill' src={whitepaperImage} />
-              </div>
-              <div className={styles.white_glove}>
-                <Image height={70} width={45} src={gloves}/>
               </div>
             </div>
             <div className={styles.content_bush}>
