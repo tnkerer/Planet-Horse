@@ -7,11 +7,8 @@ import metamathLogo from '@/assets/landpage/metamath-logo.png'
 
 import TitleLayer from '../title-layer'
 
-import { useIsVisible } from '@/utils/hooks/is-visible'
-
 const Team: React.FC = () => {
   const myRef = useRef()
-  const isVisible = useIsVisible(myRef)
 
   return (
     <div className={styles.container} ref={myRef}>
