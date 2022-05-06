@@ -31,7 +31,7 @@ const Team: React.FC = () => {
           <p>DEVELOPED BY</p>
         </div>
         <div className={styles.metamath_logo}>
-          <Image 
+          <Image
             src={metamathLogo}
             width={500}
             height={120}
