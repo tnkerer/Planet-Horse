@@ -1,326 +1,243 @@
+ @use "sass:map";
+
+$padding: 24px;
+$max-width: calc(1440px + $padding);
+$max-width-tv: 864px;
+$max-height-tv: 648px;
+
+$width-1920: (
+  "tv": ("width": 1152px, "height": 910px),
+  "bush": ("width": 962px, "height": 464px, "top": 458px),
+  "book": ("width": 396px, "height": 246px, "left": 315px, "top": 506px),
+  "tv-image": ("width": 402px, "height": 378px, "left": 340px, "top": 50px),
+);
+
+$width-1440: (
+  "tv": ("width": 864px, "height": 683px),
+  "bush": ("width": 723px, "height": 348px, "top": 345px),
+  "book": ("width": 297px, "height": 185px, "left": 237px, "top": 380px),
+  "tv-image": ("width": 302px, "height": 284px, "left": 255px, "top": 38px),
+);
+
+$width-1280: (
+  "tv": ("width": 768px, "height": 606px),
+  "bush": ("width": 642px, "height": 310px, "top": 300px),
+  "book": ("width": 264px, "height": 164px, "left": 210px, "top": 338px),
+  "tv-image": ("width": 268px, "height": 252px, "left": 227px, "top": 34px),
+);
+
+$width-1024: (
+  "tv": ("width": 615px, "height": 486px),
+  "bush": ("width": 515px, "height": 248px, "top": 243px),
+  "book": ("width": 212px, "height": 132px, "left": 168px, "top": 270px),
+  "tv-image": ("width": 214px, "height": 202px, "left": 182px, "top": 27px),
+);
+
+$width-860: (
+  "tv": ("width": 516px, "height":  408px),
+  "bush": ("width": 431px, "height": 208px, "top": 200px),
+  "book": ("width": 178px, "height": 110px, "left": 142px, "top": 227px),
+  "tv-image": ("width": 180px, "height": 170px, "left": 152px, "top": 23px),
+);
+
+$gaps: ("860px": 17px, "1024px": 21px, "1280px": 25px, "1440px": 29px, "1920px": 38px);
+$media-queries: (
+  "860px": $width-860,
+  "1024px": $width-1024,
+  "1280px": $width-1024,
+  "1440px": $width-1440,
+  "1920px": $width-1920
+);
+
+
+
 .container {
-  display: flex;
-  justify-content: center;
   background-color: #000;
+  justify-content: center;
+  min-height: 80vh;
 
-  & > .container_content {
-    position: relative;
-    align-items: center;
+  .container_content {
     display: flex;
-    width: 93%;
-    height: 100%;
+    justify-content: center;
 
-    & > .content_gameplay {
-      position: relative;
-      flex-direction: column;
-      align-items: center;
+    .content_gameplay {
       display: flex;
       color: #e8e8e8;
-      width: 40%;
-      
-      & > .gameplay_line__vertical {
-        position: absolute;
-        left: 0;
+      margin-top: 20px;
+      width: 100%;
+
+      &::before {
+        content: '';
         width: 2px;
-        background-color: #fff;
+        height: $max-height-tv;
+        background-color: var(--white);
+        margin-right: 36px;
       }
 
-      & > .gameplay_content {
-        position: relative;
-        justify-self: center;
-        left: 40px;
-        width: 600px;
-        height: 80%;
-        overflow: hidden;
+      & > div {
+        font-family: 'UpheavalPro';
 
-        & > .content_head {
-          white-space: nowrap;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-
-          & > .head_title {
-            margin-left: 10px;
-            margin-bottom: 65px;
-            font-size: 70px;
-            font-family: 'UpheavalPro';
-          }
-
-          & > .head_option {
-            margin-bottom: 50px;
-            font-size: 35px;
-            font-family: 'UpheavalPro';
-            cursor: pointer;
-            margin-right: 6000px;
+        .content_head {
+          & > h1 {
+            font-size: 56px;
+            margin-bottom: 56px;
           }
         }
+  
+        .gameplay_topics {
+          display: flex;
+          flex-direction: column;
 
-        & > .gameplay_body {
-          position: relative;
-          height: 300px;
-
-          span {
-            display: block;
+          & > li {
+            margin-bottom: 42px;
+            font-size: 32px;
+            cursor: pointer;
           }
-
-          & > .gameplay_description__paragraph1 {
+        }
+  
+        .gameplay_body {
+          & > p {
             margin-bottom: 15px;
-            font-size: 25px;
+            font-size: 24px;
             font-family: 'SpaceHorse';
-          }
-
-          & > .gameplay_description__paragraph1 {
-            line-height: 30px;
-            width: 550px;
-          }
-
-          & > .gameplay_description__paragraph2 {
-            line-height: 35px;
-            width: 560px;
+            line-height: 1.6;
           }
         }
       }
     }
 
-    & > .content_horses {
-      position: relative;
+    .content_horses {
       display: flex;
-      justify-content: center;
-      width: 60%;
 
-      & > .horses_content {
+      .horses_content {
         position: relative;
-        width: 1028px;
-        height: 854px;
 
         & > div {
           position: absolute;
         }
 
-        & > .content_viewfinder {
-          top: 45px;
-          left: 310px;
-          width: 350px;
-          height: 350px;
+        .content_tv {
+          width: 100%;
+          height: 100%;
         }
 
-        & > .content_tv {
-          width: 1028px;
-          height: 812px;
-        }
-
-        & > .content_btn__touch,
-        & > .content_btn {
-          position: absolute;
-          bottom: 140px;
-          left: 250px;
-          width: 435px;
-          height: 267px;
-        }
-
-        & > .content_btn__touch {
+        .link {
           z-index: 2;
-          cursor: pointer;
 
           & > a {
+            cursor: pointer;
             display: block;
             width: 100%;
             height: 100%;
           }
 
           &:hover {
-            & ~ .content_btn {
-              & > .btn_book__active {
-                opacity: 1;
-              }
+            & ~ .book_container {
+              .book_hover { opacity: 1; }
+              .book { opacity: 0; }
             }
           }
         }
-
-        & > .content_btn {
-          & > .btn_book__active {
-            opacity: 0;
+        
+        .book_container {
+          .book, .book_hover {
+            translate: opacity .25s;
           }
 
-          &:hover {
-            & > .btn_book__active {
-              opacity: 1;
-            }
+          .book_hover {
+            opacity: 0
           }
         }
 
-        & > .content_bush {
-          width: 889px;
-          height: 429px;
-          bottom: 0;
-          left: 30px;
+        .content_bush {
+          left: 0;
         }
       }
     }
-  }
 
-  @media screen and (max-width: 1744px) {
-    & > .container_content {
-      & > .content_gameplay {
-        width: 100%;
-
-        & > .gameplay_line__vertical {
-          width: .3vw;
-        }
-
-        & > .gameplay_content {
-          position: relative;
-          align-self: center;
-          left: 40px;
-          width: 37vw;
-
-          & > .content_head {
-            & > .head_title {
-              font-size: 4.4vw;
-              margin-left: 1vw;
-              margin-bottom: 4vw;
-            }
-
-            & > .head_option {
-              margin-bottom: 3.14vw;
-              font-size: 2.2vw;
-            }
-          }
-
-          & > .gameplay_body {
-            height: 20vw;
-
-            & > .gameplay_description__paragraph1,
-            & > .gameplay_description__paragraph2 {
-              font-size: 1.58vw;
-              line-height: 2vw;
-            }
-
-            & > .gameplay_description__paragraph1 {
-              width: 34.5vw;
-            }
-
-            & > .gameplay_description__paragraph2 {
-              width: 37vw;
-            }
-          }
-        }
-      }
-
-      & > .content_horses {
-        & > .horses_content {
-          width: 55vw;
-          height: 55vw;
-
-          & > .content_viewfinder {
-            top: 2vw;
-            left: 17vw;
-            width: 21vw;
-            height: 21vw;
-          }
-
-          & > .content_tv {
-            width: 58vw;
-            height: 49vw;
-          }
-
-          & > .content_btn__touch,
-          & > .content_btn {
-             bottom: 12.5vw;
-             left: 14.5vw;
-             width: 25.5vw;
-             height: 15.3vw;
-             margin-top: 500px;
-          }
-
-          & > .content_bush {
-            top: 26vw;
-            left: 1.8vw;
-            width: 52vw;
-            height: 25vw;
-          }
-        }
-      }
-    }
-  }
-
-  @media screen and (max-width: 995px) {
-    & > .container_content {
+    @media (max-width: 989px) {
       flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
-      
-      & > .content_gameplay {
-        & > .gameplay_content {
-          width: 90vw;
-          left: 2vw;
-  
-          & > .content_head {
-            & > .head_title {
-              margin-left: 2vw;
-              margin-bottom: 8vw;
-              font-size: 12vw;
-            }
-  
-            & > .head_option {
-              margin-bottom: 7vw;
-              font-size: 5vw;
-            }
-          }
-  
-          & > .gameplay_body {
-            height: 50vw;
 
-            & > .gameplay_description__paragraph1,
-            & > .gameplay_description__paragraph2 {
-              margin-bottom: 7vw;
-              font-size: 4vw;
-              line-height: 5vw;
-            }
+      .content_gameplay {
+        width: 90%;
+        margin-top: 0;
+        margin-bottom: 100px;
   
-            & > .gameplay_description__paragraph1 {
-              width: 90vw;
-            }
-  
-            & > .gameplay_description__paragraph2 {
-              width: 90vw;
-            }
-          }
+        &::before {
+          height: calc(100% + 42px);
         }
       }
 
-      & > .content_horses {
-        width: 100%;
-    
-        & > .horses_content {
-          width: 100vw;
-          height: 84vw;
-    
-          & > .content_viewfinder {
-            left: 28vw;
-            top: 4.5vw;
-            width: 32.2vw;
-            height: 33vw;
+      .horses_content {
+        width: 96vw;
+        height: 80vw;
+        margin-bottom: 24px;
+
+        .content_viewfinder {
+          left: 30%;
+          top: 5%;
+          width: 34%;
+          height: 42%;
+        }
+
+        .book_container, .link {
+          width: 40vw;
+          height: 26vw;
+          left: 24%;
+          bottom: 14%;
+        }
+
+        .content_bush {
+          width: 82%;
+          height: 42vw;
+          top: 42vw;
+        }
+      }
+    }
+
+    @each $width, $elements in $media-queries {
+      $tv: map.get($elements, "tv");
+      $bush: map.get($elements, "bush");
+      $book: map.get($elements, "book");
+      $tv-image: map.get($elements, "tv-image");
+
+      $gap: map.get($gaps, $width);
+      $width-container: calc(#{$width} + #{$gap});
+      $min-width: calc(#{$width} + 40px);
+
+      @media (min-width: #{$min-width}) {
+        max-width: #{$width-container};
+        gap: #{$gap};
+
+        .horses_content {
+          width: map.get($tv, "width");
+          height: map.get($tv, "height");
+  
+          .content_viewfinder {
+            top: map.get($tv-image, "top");
+            left: map.get($tv-image, "left");
+            width: map.get($tv-image, "width");
+            height: map.get($tv-image, "height");
           }
-    
-          & > .content_tv {
-            left: 1vw;
-            width: 91vw;
-            height: 80vw;
+  
+          .content_tv {
+            width: map.get($tv, "width");
+            height: map.get($tv, "height");
           }
-    
-          & > .content_btn__touch,
-          & > .content_btn {
-             width: 40vw;
-             height: 25.6vw;
-             left: 23vw;
-             bottom: 14vw;
+  
+          .book_container, .link {
+            top: map.get($book, "top");
+            left: map.get($book, "left");
+            width: map.get($book, "width");
+            height: map.get($book, "height");
           }
-    
-          & > .content_bush {
-            width: 83vw;
-            height: 42vw;
-            left: 2.4vw;
-            top: 42vw;
+  
+          .content_bush {
+            top: map.get($bush, "top");
+            width: map.get($bush, "width");
+            height: map.get($bush, "height");
           }
         }
       }
@@ -401,6 +318,7 @@
     opacity: 0;
     top: 200px;
   }
+
   to {
     opacity: 1;
     top: 20px;
@@ -427,3 +345,59 @@
     opacity: 1;
   }
 }
+
+.wrap_collapsible {
+  height: 100%;
+  color: var(--white);
+  
+  .toggle {
+    display: flex;
+    align-items: center;
+    font-size: 35px;
+    font-family: 'UpheavalPro';
+    color: var(--white);
+    background: none;
+    border: 0;
+    outline: 0;
+    font-size: 28px;
+
+    &::before {
+      content: "•";
+      font-size: 48px;
+      display: flex;
+      align-items: center;
+      margin-right: 16px;
+      margin-top: 4px;
+      padding-top: 4px;
+      height: 14px;
+      overflow: hidden;
+      transform: rotate(90deg);
+      transition: transform .2s linear;
+    }
+  }
+
+  .collapsible_content {
+    max-height: 0px;
+    overflow: hidden;
+    opacity: 0;
+    transition: all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+    .content_inner {
+      font-size: 24px;
+      line-height: 1.6;
+      font-family: 'SpaceHorse';
+    }
+  }
+
+  &.open {
+    .toggle::before {
+      transform: rotate(180deg);
+    }
+
+    .collapsible_content {
+      max-height: 320px;
+      opacity: 1;
+    }
+  }
+}
+
