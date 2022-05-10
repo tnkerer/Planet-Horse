@@ -1,143 +1,187 @@
 .container {
-  display: flex;
   flex-direction: column;
-  position: relative;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 741px;
   background-color: #5d2c1c;
-
-  @media screen and (max-width: 990px) {
-    height: 981px;
-  }
-
-  & > .container_header {
-    position: absolute;
+  width: 100%;
+  
+  &::before {
+    content: "";
     background-image: url('../../../assets/landpage/ptn-final-mato.png');
     background-position: center;
     background-size: 300px;
     width: 100%;
     height: 170px;
-    top: 0px;
   }
-
-  & > .container_content {
-    position: absolute;
-    top: 160px;
+  
+  .container_content {
     display: flex;
-    align-items: center;
-    font-family: 'SpaceHorse';
     flex-direction: column;
-    width: 100%;
+    align-items: center;
+    margin-bottom: 32px;
+
     color: #fff;
+    font-family: 'SpaceHorse';
 
-    & > .content_title {
-      margin: 80px 0 100px 0;
-      height: 0px;
+    .content_title {
+      margin-bottom: 80px;
+      margin-top: 96px;
 
-      @media screen and (max-width: 990px) {
-        margin: 80px 0 200px 0;
-        margin-top: 30px;
+      @media screen and (max-width: 768px) {
+        margin-top: 32px;
+        margin-bottom: 64px;
       }
     }
 
-    & > .content_information {
+    .content_information {
       display: flex;
-      width: 1100px;
-      height: 350px;
-
-      @media screen and (max-width: 990px) {
+      align-items: center;
+      justify-content: space-between;
+      width: 664px;
+      
+      @media screen and (max-width: 768px) {
         flex-direction: column-reverse;
         width: 100%;
       }
 
-      & > div {
-        flex: 1;
-      }
-
-      & > .information_text {
+      .information_text {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        min-height: 250px;
+        min-height: 300px;
         font-weight: bold;
 
-        @media screen and (max-width: 990px) {
+        @media screen and (max-width: 768px) {
           text-align: center;
           align-items: center;
         }
 
-        & > .text_title {
+        .text_title {
           letter-spacing: 0.05em;
-          margin-left: 250px;
           font-size: 25px;
           font-weight: bold;
+          margin-bottom: 24px;
+          text-decoration: underline;
+          text-transform: uppercase;
           overflow: hidden;
           white-space: nowrap;
-          width: 355px;
-          margin-bottom: 20px;
-
-          @media screen and (max-width: 990px) {
-            margin-left: 0;
-            max-width: 100%;
-          }
+          line-height: 1.2;
+          height: fit-content;
         }
 
-        & > .text_description {
+        .text_description {
           white-space: nowrap;
-          margin-left: 250px;
-          width: 0;
           overflow: hidden;
           font-size: 18px;
-          line-height: 28px;
+          width: 0;
 
-          @media screen and (max-width: 990px) {
-            margin-left: 0;
-            max-width: 100%;
+          li {
+            margin-bottom: 14px;
           }
+
+          span { margin-left: 6px; }
         }
       }
 
       & > .animation {
-        & > .text_title {
+        .text_title {
           animation: text-description-animation 2s ease-in-out;
           animation-fill-mode: forwards;
         }
 
-        & > .text_description {
+        .text_description {
           animation: text-description-animation 2s ease-in-out;
           animation-fill-mode: forwards;
+          animation-delay: .5s;
         }
       }
 
-      & > .information_icon {
+      .information_icon {
+        position: relative;
+        width: 200px;
+        height: 200px;
+
+        @media screen and (max-width: 768px) {
+          margin: 30px 0;
+        }
+      }
+    }
+
+    .contract_info {
+      opacity: 0;
+      max-width: 0;
+
+      animation: text-contract-animation 2s ease-in-out;
+      animation-fill-mode: forwards;
+      animation-delay: .5s;
+
+      @keyframes text-contract-animation {
+        to {
+          opacity: 1;
+          max-width: 664px;
+        }
+      }
+
+      @media screen and (max-width: 768px) {
+        @keyframes text-contract-animation {
+          to {
+            opacity: 1;
+            max-width: 480px;
+          }
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        @keyframes text-contract-animation {
+          to {
+            opacity: 1;
+            max-width: 290px;
+          }
+        }
+      }
+
+      & > p {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        width: 100%;
 
-        @media screen and (max-width: 990px) {
-          flex-direction: column-reverse;
-          padding: 30px 0;
-        }
+        letter-spacing: 0.05em;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 36px;
+        margin-bottom: 64px;
 
-        & > .icon_container {
-          position: relative;
-          width: 200px;
-          height: 200px;
-          background-image: url('../../../assets/utils/logos/animted-phorse-coin.gif');
-          background-size: cover;
+        & > span {
+          margin-left: 6px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
       }
+    }
+
+    .add_metamask {
+      opacity: 0;
+      animation: fadeIn 1.2s ease-in-out;
+      animation-fill-mode: forwards;
+      animation-delay: 1.8s;
     }
   }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @keyframes text-description-animation {
   from {
+    opacity: 0;
     width: 0;
   }
+
   to {
-    width: 400px;
+    opacity: 1;
+    width: 300px;
   }
 }

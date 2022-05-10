@@ -14,35 +14,26 @@ const Team: React.FC = () => {
   const isVisible = useIsVisible(myRef)
 
   return (
-    <div className={styles.container} ref={myRef}>
-      <div className={styles.container_header} />
-      <div className={styles.container_team}>
-        <div className={styles.partners_title}>
-          <TitleLayer>
-            Partners
-          </TitleLayer>
-        </div>
+    <section className={styles.container} ref={myRef}>
+      <div className={styles.content}>
+        <TitleLayer>Partners</TitleLayer>
+
         <div className={styles.partners}>
-          <Image
-            src={horseSpriteImage}
-            width={134}
-            height={144}
-          />
-          <div className={styles.partner_persons}>SOON</div>
+          <div>
+            <Image src={horseSpriteImage} alt="Horse"/>
+          </div>
+          <strong className={styles.partner_persons}>SOON</strong>
         </div>
+        
         <div className={styles.developer_title}>
-          <p>DEVELOPED BY</p>
-        </div>
-        <div className={styles.metamath_logo}>
-          <Image 
-            src={metamathLogo}
-            width={500}
-            height={120}
-           />
+          <strong>DEVELOPED BY</strong>
+
+          <div className={styles.metamath_logo}>
+            <Image src={metamathLogo} alt="MetaMatch&trade;"/>
+          </div>
         </div>
       </div>
-        <div className={styles.partners_footer} />
-    </div>
+    </section>
   )
 }
 
