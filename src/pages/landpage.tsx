@@ -17,9 +17,9 @@ function App () {
         <Milestones />
         <Gameplay />
         <Token />
-        <Partners />
+        {/* <Partners /> */}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }
