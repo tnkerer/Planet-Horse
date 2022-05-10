@@ -13,8 +13,8 @@
   background-size: cover;
 
   .container_icon {
-    max-width: 447px;
-    max-height: 336px;
+    max-width: 364px;
+    margin-top: -42px;
   }
 
   .container_button {
@@ -55,6 +55,21 @@
     }
   }
 
+  @media (max-width: 1440px) {
+    .container_icon {
+      max-width: 270px;
+    }
+
+    .container_button {
+      span { font-size: 38px; }
+
+      a {
+        font-size: 32px;
+        margin: 0 12px;
+      }
+    }
+  }
+
   @media (max-width: 768px) {
     .container_icon {
       width: 76%;
@@ -66,7 +81,7 @@
       }
 
       a {
-        font-size: 36px;
+        // font-size: 36px;
         margin: 0 12px;
       }
     }
