@@ -19,7 +19,7 @@ function App () {
         <Token />
         <Partners />
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   )
 }
