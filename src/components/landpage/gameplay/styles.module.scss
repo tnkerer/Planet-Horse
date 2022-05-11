@@ -1,14 +1,9 @@
  @use "sass:map";
 
-$padding: 24px;
-$max-width: calc(1440px + $padding);
-$max-width-tv: 864px;
-$max-height-tv: 648px;
-
 $width-1920: (
   "tv": ("width": 1152px, "height": 910px),
   "bush": ("width": 962px, "height": 464px, "top": 458px),
-  "book": ("width": 396px, "height": 246px, "left": 315px, "top": 506px),
+  "book": ("width": 406px, "height": 256px, "left": 315px, "top": 500px),
   "tv-image": ("width": 402px, "height": 378px, "left": 340px, "top": 50px),
 );
 
@@ -22,14 +17,14 @@ $width-1440: (
 $width-1280: (
   "tv": ("width": 768px, "height": 606px),
   "bush": ("width": 642px, "height": 310px, "top": 300px),
-  "book": ("width": 264px, "height": 164px, "left": 210px, "top": 338px),
+  "book": ("width": 272px, "height": 182px, "left": 210px, "top": 338px),
   "tv-image": ("width": 268px, "height": 252px, "left": 227px, "top": 34px),
 );
 
 $width-1024: (
   "tv": ("width": 615px, "height": 486px),
   "bush": ("width": 515px, "height": 248px, "top": 243px),
-  "book": ("width": 212px, "height": 132px, "left": 168px, "top": 270px),
+  "book": ("width": 220px, "height": 140px, "left": 168px, "top": 264px),
   "tv-image": ("width": 214px, "height": 202px, "left": 182px, "top": 27px),
 );
 
@@ -40,7 +35,6 @@ $width-860: (
   "tv-image": ("width": 180px, "height": 170px, "left": 152px, "top": 23px),
 );
 
-$gaps: ("860px": 17px, "1024px": 21px, "1280px": 25px, "1440px": 29px, "1920px": 38px);
 $media-queries: (
   "860px": $width-860,
   "1024px": $width-1024,
@@ -54,33 +48,40 @@ $media-queries: (
 .container {
   background-color: #000;
   justify-content: center;
-  min-height: 80vh;
 
   .container_content {
     display: flex;
     justify-content: center;
+    margin-bottom: 32px;
+    overflow: hidden;
 
     .content_gameplay {
       display: flex;
       color: #e8e8e8;
-      margin-top: 20px;
       width: 100%;
+      height: fit-content;
 
       &::before {
         content: '';
         width: 2px;
-        height: $max-height-tv;
         background-color: var(--white);
-        margin-right: 36px;
+        margin-right: 24px;
+        
+        opacity: 0;
+        transform: translateY(-100%);
       }
 
       & > div {
         font-family: 'UpheavalPro';
+        margin-bottom: 64px;
 
         .content_head {
+          margin-bottom: 56px;
+          opacity: 0;
+          transform: translateX(-100%);
+
           & > h1 {
             font-size: 56px;
-            margin-bottom: 56px;
           }
         }
   
@@ -88,16 +89,32 @@ $media-queries: (
           display: flex;
           flex-direction: column;
 
-          & > li {
+          li {
+            opacity: 0;
+            transform: translateX(-100%);
             margin-bottom: 42px;
-            font-size: 32px;
-            cursor: pointer;
+            
+            & > button {
+              color: #e8e8e8;
+              font-size: 32px;
+              font-family: 'UpheavalPro';
+              text-decoration: underline;
+              
+              background: none;
+              border: none;
+              box-shadow: none;
+              outline: none;
+
+              cursor: pointer;
+            }
           }
         }
   
         .gameplay_body {
+          opacity: 0;
+          transform: translateY(50%);
+
           & > p {
-            margin-bottom: 15px;
             font-size: 24px;
             font-family: 'SpaceHorse';
             line-height: 1.6;
@@ -121,6 +138,11 @@ $media-queries: (
           height: 100%;
         }
 
+        .link, .book_container {
+          opacity: 0;
+          transform: translateY(-200%);
+        }
+
         .link {
           z-index: 2;
 
@@ -140,18 +162,12 @@ $media-queries: (
         }
         
         .book_container {
-          .book, .book_hover {
-            translate: opacity .25s;
-          }
+          .book, .book_hover { translate: opacity .25s; }
 
-          .book_hover {
-            opacity: 0
-          }
+          .book_hover { opacity: 0; }
         }
 
-        .content_bush {
-          left: 0;
-        }
+        .content_bush { left: 0; }
       }
     }
 
@@ -163,10 +179,20 @@ $media-queries: (
       .content_gameplay {
         width: 90%;
         margin-top: 0;
-        margin-bottom: 100px;
-  
-        &::before {
-          height: calc(100% + 42px);
+        margin-bottom: 24px;
+
+        & > div {
+          .gameplay_topics > li {
+            margin-bottom: 30px;
+
+            button {
+              font-size: 28px;
+            }
+          }
+    
+          .gameplay_body > p {
+            font-size: 18px;
+          }
         }
       }
 
@@ -197,19 +223,50 @@ $media-queries: (
       }
     }
 
+    @media (max-width: 1440px) {
+      .content_gameplay {
+        & > div {
+          .content_head {
+            margin-bottom: 40px;
+
+            & >h1 {
+              font-size: 46px;
+            }
+          }
+    
+          .gameplay_topics > li {
+            margin-bottom: 34px;
+            button {
+              font-size: 28px;
+            }
+          }
+    
+          .gameplay_body > p {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+
     @each $width, $elements in $media-queries {
       $tv: map.get($elements, "tv");
       $bush: map.get($elements, "bush");
       $book: map.get($elements, "book");
       $tv-image: map.get($elements, "tv-image");
 
-      $gap: map.get($gaps, $width);
-      $width-container: calc(#{$width} + #{$gap});
-      $min-width: calc(#{$width} + 40px);
+      $container: calc(#{$width} - 92px);
+      $min-width: calc(#{$width} + 12px);
 
       @media (min-width: #{$min-width}) {
-        max-width: #{$width-container};
-        gap: #{$gap};
+        margin-left: 32px;
+
+        max-width: #{$container};
+
+        .content_gameplay {
+          & > div .gameplay_body > p {
+            padding-right: 20px;
+          }
+        }
 
         .horses_content {
           width: map.get($tv, "width");
@@ -245,159 +302,61 @@ $media-queries: (
   }
 
   .animation {
-    & > .content_gameplay {
-      & > .gameplay_line__vertical {
-        animation: line-animation-desktop 2s ease-in-out;
+    .content_gameplay {
+      &::before {
+        animation: translateY-animation 2s ease-in-out;
         animation-fill-mode: forwards;
-
-        @media screen and (max-width: 995px) {
-          animation: line-animation-mobile 2s ease-in-out;
-          animation-fill-mode: forwards;
-        }
       }
 
-      & > .gameplay_content {
-        & > .content_head {
-          animation: gameplay-head-animation 2s ease-in-out;
+      & > div {
+        .content_head {
+          animation: translateX-animation 2s ease-in-out;
           animation-fill-mode: forwards;
+          animation-delay: .25s;
         }
 
-        & > .gameplay_body {
-          animation: gameplay-body-animation 2s ease-in-out;
-          animation-fill-mode: forwards;
+        .gameplay_topics {
+          & > li {
+            animation: translateX-animation 2s ease-in-out;
+            animation-fill-mode: forwards;
+          }
+
+          @for $i from 1 through 3 {
+            li:nth-child(#{$i}) {
+              animation-delay: #{($i * .25) + .25}s;
+            }
+          }
         }
-      }
-    }
-
-    & > .content_horses {
-      & > .horses_content {
-        & > .content_btn {
-          animation: content-btn-animation 1.2s ease-out;
-          animation-fill-mode: forwards;
-        }
-      }
-    }
-  }
-}
-
-@keyframes line-animation-desktop {
-  from {
-    opacity: 0;
-    height: 0;
-  }
-  to {
-    opacity: 1;
-    height: 39vw;
-  }
-}
-
-@keyframes line-animation-mobile {
-  from {
-    opacity: 0;
-    height: 0;
-  }
-  to {
-    opacity: 1;
-    height: 95vw;
-  }
-}
-
-@keyframes gameplay-head-animation {
-  from {
-    opacity: 0;
-    width: 0;
-  }
-  to {
-    opacity: 1;
-    width: 600px;
-  }
-}
-
-@keyframes gameplay-body-animation {
-  from {
-    opacity: 0;
-    top: 200px;
-  }
-
-  to {
-    opacity: 1;
-    top: 20px;
-  }
-}
-
-@keyframes content-horses-animation {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes content-btn-animation {
-  from {
-    bottom: 800px;
-    opacity: 0.5;
-  }
   
-  to {
-    bottom: 200px;
-    opacity: 1;
+        .gameplay_body {
+          animation: translateY-animation 2s ease-in-out;
+          animation-fill-mode: forwards;
+          animation-delay: 2s;
+        }
+      }
+    }
+
+    .content_horses {
+      .link, .book_container {
+        animation: translateY-animation 1.25s ease-out;
+        animation-fill-mode: forwards;
+        animation-delay: 1s;
+      }
+    }
   }
 }
 
-.wrap_collapsible {
-  height: 100%;
-  color: var(--white);
-  
-  .toggle {
-    display: flex;
-    align-items: center;
-    font-size: 35px;
-    font-family: 'UpheavalPro';
-    color: var(--white);
-    background: none;
-    border: 0;
-    outline: 0;
-    font-size: 28px;
-
-    &::before {
-      content: "•";
-      font-size: 48px;
-      display: flex;
-      align-items: center;
-      margin-right: 16px;
-      margin-top: 4px;
-      padding-top: 4px;
-      height: 14px;
-      overflow: hidden;
-      transform: rotate(90deg);
-      transition: transform .2s linear;
-    }
+@keyframes translateY-animation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .collapsible_content {
-    max-height: 0px;
-    overflow: hidden;
-    opacity: 0;
-    transition: all .3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
-
-    .content_inner {
-      font-size: 24px;
-      line-height: 1.6;
-      font-family: 'SpaceHorse';
-    }
-  }
-
-  &.open {
-    .toggle::before {
-      transform: rotate(180deg);
-    }
-
-    .collapsible_content {
-      max-height: 320px;
-      opacity: 1;
-    }
+@keyframes translateX-animation {
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
