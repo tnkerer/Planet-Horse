@@ -39,21 +39,20 @@ const CHANNELS = {
   },
 }
 
-type Channel = keyof typeof CHANNELS
+type Channel = typeof CHANNELS.racing
+type ChannelName = keyof typeof CHANNELS
 
 const GamePlay: React.FC = () => {
   const myRef = useRef()
   const isVisible = useIsVisible(myRef)
 
-  const [urlIsVisible, setUrlIsVisible] = useState(CHANNELS.racing.image)
-  const [textIsVisible, setTextIsVisible] = useState(CHANNELS.racing.content)
+  const [currentChanel, setCurrentChannel] = useState<Channel>({...CHANNELS.racing})
 
-  function changeTvChannel (toChannel: Channel) {
-    const channel = CHANNELS[toChannel];
+  function changeTvChannel (toChannel: ChannelName) {
+    const { title, content, image  } = CHANNELS[toChannel];
 
-    setUrlIsVisible(noiseTv)
-    setTextIsVisible(channel.content)
-    setTimeout(() => setUrlIsVisible(channel.image), 500)
+    setCurrentChannel({ title, content, image: noiseTv })
+    setTimeout(() => setCurrentChannel(state => ({ ...state, image })), 500)
   }
 
   return (
@@ -62,24 +61,21 @@ const GamePlay: React.FC = () => {
         <div className={styles.content_gameplay}>
           <div>
             <header className={styles.content_head}>
-              <h1>Game Play</h1>
+              <h1>GamePlay</h1>
             </header>
 
             <ul className={styles.gameplay_topics}>
               {Object.entries(CHANNELS).map(([key , channel]) => (
-                <li
-                  key={key}
-                  about={channel.title}
-                  className={styles.toggle}
-                  onClick={() => changeTvChannel(key as Channel)}
-                >
-                  <u>{channel.title}</u>
+                <li key={key} about={channel.title} className={styles.toggle}>
+                  <button onClick={() => changeTvChannel(key as ChannelName)}>
+                    {channel.title}
+                  </button>
                 </li>
               ))}
             </ul>
 
             <div className={styles.gameplay_body}>
-              <p>{textIsVisible}</p>
+              <p>{currentChanel.content}</p>
             </div>
           </div>
         </div>
@@ -88,11 +84,11 @@ const GamePlay: React.FC = () => {
           <div className={styles.horses_content}>
 
             <div className={styles.content_viewfinder}>
-              <Image layout='fill' src={urlIsVisible} />
+              <Image layout='fill' src={currentChanel.image} alt={currentChanel.title}/>
             </div>
 
             <div className={styles.content_tv}>
-              <Image layout='fill' src={tvImage} />
+              <Image layout='fill' src={tvImage} alt="Tv"/>
             </div>
 
             <div className={styles.link}>
@@ -102,13 +98,12 @@ const GamePlay: React.FC = () => {
             </div>
 
             <div className={styles.book_container}>
-              <Image layout='fill' src={whitepaperImage} className={styles.book} />
-              <Image layout='fill' src={whitepaperHoverImage} className={styles.book_hover} />
+              <Image layout='fill' src={whitepaperImage} className={styles.book} alt="Whitepaper PlanetHorse"/>
+              <Image layout='fill' src={whitepaperHoverImage} className={styles.book_hover} alt="Whitepaper PlanetHorse"/>
             </div>
-
             
             <div className={styles.content_bush}>
-              <Image src={arboresImage} layout='fill' />
+              <Image src={arboresImage} layout='fill'/>
             </div>
           </div>
         </div>
