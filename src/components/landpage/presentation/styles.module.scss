@@ -9,12 +9,17 @@
   
   background: url('../../../assets/landpage/fundo-provisorio.png');
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: bottom;
   background-size: cover;
 
   .container_icon {
-    width: 312px;
-    margin-top: -52px;
+    height: 347px;
+    width: 457px;
+    left: 50%;
+    transform: scale(0.65);
+    margin-top: -180px;
+    background-image: url('../../../assets/landpage/logo-planethorse.gif');
+    background-size: cover;
   }
 
   .container_button {
@@ -22,6 +27,7 @@
     animation: blinker 1.5s step-start infinite;
     text-align: center;
     color: var(--white);
+    margin-top: -100px;
 
     display: flex;
     align-items: center;
@@ -55,10 +61,13 @@
     }
   }
 
+
   @media (max-width: 1440px) {
     .container_icon {
-      max-width: 270px;
+      height: 347px;
+      width: 457px;
     }
+    
 
     .container_button {
       span { font-size: 38px; }
@@ -67,12 +76,15 @@
         font-size: 32px;
         margin: 0 12px;
       }
+
+      margin-top: -80px;
     }
   }
 
   @media (max-width: 768px) {
     .container_icon {
-      width: 76%;
+      height: 260px;
+      width: 342px;
     }
 
     .container_button {
@@ -84,6 +96,7 @@
         font-size: 36px;
         margin: 0 12px;
       }
+      margin-top: 10px;
     }
   }
 }
