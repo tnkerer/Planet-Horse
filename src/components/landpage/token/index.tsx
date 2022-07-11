@@ -35,7 +35,7 @@ const Token: React.FC = () => {
               <li>Symbol: <span>PHORSE</span></li>
               <li>Name: <span>PlanetHorse</span></li>
               <li>Token Supply: <span>1.000.000.000</span></li>
-              <li>Chain: <span>Polygon</span></li>
+              <li>Chain: <span>TBD</span></li>
             </ul>
           </div>
 
