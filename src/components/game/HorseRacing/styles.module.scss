@@ -1,0 +1,34 @@
+.racingContent {
+    position: relative;
+    transition: all 3s;
+
+    &.raceActive{
+        opacity: 1;
+
+    }
+    &.raceInactive{
+        opacity: 0;
+
+    }
+
+    .racingPlacar{
+        position: absolute;
+        left: 2vw;
+        top: 3vw;
+        color: white;
+        font-size: 2vw;
+
+        @media screen and (max-width: 920px) {
+            left: 6vw;
+            top: 8vw;
+            font-size: 5vw;
+        }
+    }
+
+    .racingHorseGif {
+        img {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+}
