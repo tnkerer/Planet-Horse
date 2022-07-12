@@ -1,0 +1,163 @@
+.raceResultContent {
+    position: relative;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .raceResultImageHorse{
+        -webkit-animation: fadein 2s;
+        -moz-animation: fadein 2s;
+        animation: fadein 2s;
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+        height: 100%;
+        img {
+          -webkit-animation: leftRight 20s;
+          -moz-animation: leftRight 20s;
+          animation: leftRight 20s;
+          width: 100%;
+          max-width: 100%;
+          object-fit: cover;
+          object-position: left;
+          height: 100%;
+        }
+
+    }
+    .raceResultImageMask{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #00000050;
+        .raceResultConeMask{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .raceResultConeMaskInside{
+                width: 80%;
+                height: 80%;
+                animation: myAnim 10s ease-out 1s infinite alternate forwards;
+                background-image: repeating-conic-gradient(#fff0 0 9deg, #ffffff08 9deg 18deg);
+                border-radius: 50%;
+
+            }
+        }
+        .raceResultBlock {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: Bounce 1s ease 0s 1 normal forwards;
+            .raceResultImage {
+                display: flex;
+                width: 100%;
+
+                img {
+                    margin: 0 auto;
+                    position: relative;
+                    bottom: 2vw;
+                    width: 80%;
+                }
+            }
+            .raceResultTokens {
+                position: relative;
+                bottom: 5.9vw;
+                font-size: 1.2vw;
+                @media screen and (max-width: 920px) {
+                    bottom: 12vw;
+                    font-size: 3vw;
+                }
+            }
+    
+        }
+    }    
+}
+
+
+@keyframes leftRight {
+  0% { 
+    object-position: right;
+  }
+  100% {
+    object-position: left;
+  }
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+@keyframes myAnim {
+    0% {
+      transform: rotate(0);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+
+@keyframes Bounce {
+    0% {
+      animation-timing-function: ease-in;
+      opacity: 0;
+      transform: translateY(-250px);
+    }
+  
+    38% {
+      animation-timing-function: ease-out;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  
+    55% {
+      animation-timing-function: ease-in;
+      transform: translateY(-65px);
+    }
+  
+    72% {
+      animation-timing-function: ease-out;
+      transform: translateY(0);
+    }
+  
+    81% {
+      animation-timing-function: ease-in;
+      transform: translateY(-28px);
+    }
+  
+    90% {
+      animation-timing-function: ease-out;
+      transform: translateY(0);
+    }
+  
+    95% {
+      animation-timing-function: ease-in;
+      transform: translateY(-8px);
+    }
+  
+    100% {
+      animation-timing-function: ease-out;
+      transform: translateY(0);
+    }
+  }
+  
+
+
+
+
+
+
+  
