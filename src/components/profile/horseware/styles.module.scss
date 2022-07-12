@@ -1,5 +1,6 @@
 .container {
   margin-bottom: 200px;
+
   .screen {
     position: relative;
     display: flex;
@@ -17,9 +18,130 @@
     }
 
     .transation {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background-color: #ddc4e6;
       width: 100%;
       height: 1218px;
+      
+      .tableContainer {
+        width: 1300px;
+        overflow: auto;
+
+        .tableTitle {
+          display: block;
+          margin-bottom: 100px;
+          text-align: center;
+          color: #fff;
+          font-size: 85px;
+          font-family: 'UpheavalPro';
+        }
+
+        .columns {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 90px;
+          width: 100%;
+
+          & > span {
+            position: relative;
+            color: #fff;
+            font-size: 40px;
+            font-family: 'UpheavalPro';
+            text-align: center;
+            height: 100%;
+
+            span {
+              position: relative;
+              top: 10px;
+            }
+          }
+
+          & > span:nth-child(1) {
+            width: 130px;
+            border-right: 1px solid #fff;
+          }
+
+          & > span:nth-child(2) {
+            width: 200px;
+            border-right: 1px solid #fff;
+          }
+          
+          & > span:nth-child(3) {
+            width: 160px;
+            border-right: 1px solid #fff;
+          }
+
+          & > span:nth-child(4) {
+            width: 475px;
+            border-right: 1px solid #fff;
+          }
+
+          & > span:nth-child(5) {
+            width: 130px;
+            border-right: 1px solid #fff;
+          }
+
+          & > span:nth-child(6) {
+            width: 200px;
+          }
+        }
+
+        table {
+          display: block;
+          height: 600px;
+          overflow: auto;
+          
+          tr {
+            td {
+              text-align: center;
+              padding: 12px 0;
+              color: #fff;
+              font-family: 'UpheavalPro';
+              font-size: 18px;
+            }
+
+            & > td:nth-child(1) {
+              width: 130px;
+              border-right: 1px solid #fff;
+            }
+
+            & > td:nth-child(2) {
+              width: 200px;
+              border-right: 1px solid #fff;
+            }
+
+            & > td:nth-child(3) {
+              width: 160px;
+              border-right: 1px solid #fff;
+            }
+
+            & > td:nth-child(4) {
+              width: 475px;
+              border-right: 1px solid #fff;
+            }
+
+            & > td:nth-child(5) {
+              width: 130px;
+              border-right: 1px solid #fff;
+            }
+
+            & > td:nth-child(6) {
+              width: 200px;
+            }
+          }
+
+          tr:nth-child(odd) {
+            background: #d2bada;
+          }
+          
+          tr:nth-child(even) {
+            background: #c7b1cf;
+          }
+        }
+      }
     }
 
     .logo {
@@ -36,6 +158,13 @@
     background-color: #98645b;
     width: 100%;
     height: 662px;
+
+    & > .light {
+      position: absolute;
+      display: block;
+      width: 75px;
+      height: 40px;
+    }
 
     & > .clarity {
       display: flex;
