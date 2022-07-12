@@ -1,95 +1,102 @@
 .container {
-  position: relative;
   height: 100vh;
   width: 100%;
-  overflow: hidden;
+  
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 25vh;
+  
   background: url('../../../assets/landpage/fundo-provisorio.png');
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: bottom;
   background-size: cover;
 
-  & > div {
-    position: absolute;
-  }
-
-  & > .container_icon {
-    top: 100px;
+  .container_icon {
     height: 347px;
     width: 457px;
     left: 50%;
-    transform: translateX(-50%) scale(0.65);
+    transform: scale(0.65);
+    margin-top: -180px;
     background-image: url('../../../assets/landpage/logo-planethorse.gif');
     background-size: cover;
-
-    @media screen and (max-width: 457px) {
-      width: 100vw;
-      height: 76vw;
-    }
-
-    @media screen and (max-height: 546px) {
-      width: 100vh;
-      height: 76vh;
-    }
-
-    @media screen and (max-height: 670px) {
-      top: 2vw;
-    }
   }
 
-  & > .container_button {
+  .container_button {
     font-family: 'UpheavalPro'; 
-    left: 50%;
-    transform: translateX(-50%) scale(0.70);
-    animation: blinker 1s step-start infinite;
-    min-width: 600px;
-    bottom: 220px;
+    animation: blinker 1.5s step-start infinite;
     text-align: center;
-    color: #fff;
+    color: var(--white);
+    margin-top: -100px;
+
+    display: flex;
+    align-items: center;
 
     &:hover {
       animation: none;
     }
 
     @keyframes blinker {
-      50% {
-        opacity: 0;
-      }
+      35% { opacity: 0 }
+      100% { opacity: 1 }
     }
 
-    @media screen and (max-height: 670px) {
-      bottom: 150px;
+    span {
+      font-size: 60px;
     }
-
-    & > span {
-      position: relative;
-      top: .25vw;
-      height: 100px;
-      font-size: 65px;
-
-      @media screen and (max-width: 650px) {
-        font-size: 9vw;
-        top: .2vw;
-        min-width: auto;
-        width: 100%;
-      }
-    }
-
-    & > a {
-      color: #fff;
+    
+    a {
+      font-size: 38px;
       margin: 0 20px;
-      font-size: 55px;
+      color: var(--white);
       text-decoration: none;
-
-      @media screen and (max-width: 650px) {
-        margin: 0 2vw;
-        min-width: auto;
-        width: 100%;
-        font-size: 9vw;
-      }
 
       &:hover {
         text-decoration: underline;
       }
+    }
+
+    @media (max-width: 425px) {
+      max-width: 238px;
+    }
+  }
+
+
+  @media (max-width: 1440px) {
+    .container_icon {
+      height: 347px;
+      width: 457px;
+    }
+    
+
+    .container_button {
+      span { font-size: 38px; }
+
+      a {
+        font-size: 32px;
+        margin: 0 12px;
+      }
+
+      margin-top: -80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container_icon {
+      height: 260px;
+      width: 342px;
+    }
+
+    .container_button {
+      span {
+        font-size: 48px;
+      }
+
+      a {
+        font-size: 36px;
+        margin: 0 12px;
+      }
+      margin-top: 10px;
     }
   }
 }

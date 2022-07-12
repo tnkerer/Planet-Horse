@@ -15,16 +15,12 @@ interface Props {
 }
 
 const SingleChest: React.FC<Props> = ({ chest }) => {
-  const { loading, image } = chestImage(chest.src)
+  const { image } = chestImage(chest.src)
   return (
     <>
     <div className={styles.singleChest}>
       <div className={styles.singleChestImage}>
-        {loading && <Image src={image} />}
-          ? (null)
-          : (
-            <Image src={image} />
-          )
+        {image && <Image src={image} />}
         <div className={styles.singleChestButtonArea}>
             <button className={styles.buyButton}
                 /* onClick={setPopUp('chest')} */

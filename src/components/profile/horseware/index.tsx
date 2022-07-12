@@ -1,11 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
 import logoHorseware from '@/assets/profile/logo-horseware.png'
 import tapeGraph from '@/assets/utils/tape.webp'
 import keyboard from '@/assets/profile/keyboard.gif'
+import lightOff from '@/assets/profile/light-off.webp'
+import lightOn from '@/assets/profile/light-on.webp'
 
 const Horseware = () => {
+  const [light, setLight] = useState(false)
+
+  useEffect(() => {
+    function interval () {
+      const min = 1
+      const max = 5
+      const rand = Math.floor(Math.random() * (max - min + 1) + min)
+      setLight(!light)
+      setTimeout(interval, rand * 1000)
+    }
+    interval()
+  }, [])
+
+  useEffect(() => {
+    console.log(light)
+  }, [light])
+
   return (
     <div className={styles.container}>
       <div className={styles.screen}>
@@ -21,6 +40,183 @@ const Horseware = () => {
           />
         </div>
         <div className={styles.transation}>
+          <div className={styles.tableContainer}>
+            <span className={styles.tableTitle}>transactions</span>
+            <div className={styles.columns}>
+              <span>
+                <span>type</span>
+              </span>
+              <span>
+                <span>status</span>
+              </span>
+              <span>
+                <span>value</span>
+              </span>
+              <span>
+                <span>note</span>
+              </span>
+              <span>
+                <span>data</span>
+              </span>
+              <span>
+                <span>view</span>
+              </span>
+            </div>
+            <table>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+              <tr>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+                <td>value</td>
+              </tr>
+            </table>
+          </div>
         </div>
         <svg width='100%' height='130'>
           <rect fill='#252425' width='100%' height='14' />
@@ -44,6 +240,12 @@ const Horseware = () => {
           <rect fill='#252425' x='220' width='260' height='228' />
           <rect fill='#252425' x='220' y='228' width='253' height='6' />
         </svg>
+        <span className={styles.light}>
+          <Image
+            src={light ? lightOff : lightOn}
+            layout='responsive'
+          />
+        </span>
         <div className={styles.clarity}>
           <span>
             <Image

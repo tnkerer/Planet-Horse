@@ -1,41 +1,42 @@
 .container {
-  position: relative;
   width: 100%;
-  background-color: #000;
-  padding-top: 60px;
-  z-index: 999;
+  background-color: #0f1012;
 
-  .container_topside {
-    margin: 0 auto;
-    padding: 44px 0 14px 0;
+  .container_mid {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    max-width: 1448px;
-
-    @media screen and (max-width: 1600px) {
-      max-width: 1024px;
-    }
-
-    @media screen and (max-width: 1024px) {
-      padding: 54px 32px 12px 32px;
-    }
-
-    @media screen and (max-width: 920px) {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 64px;
-    }
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 36px 0;
   }
 
   .social_media {
     display: flex;
-    gap: 26px;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
 
-    img {
-      width: 30px;
-      height: 30px;
+    li {
+      position: relative;
+      height: 40px;
+      width: 40px;
+      transform: scale(1);
+      transition: transform 0.25s;
+      
+      &:hover {
+        transform: scale(1.25);
+      }
+    }
+
+    @media screen and (max-width: 560px) {
+      gap: 24px;
+
+      li {
+        height: 24px;
+        width: 24px;
+      }
     }
   }
 
@@ -43,63 +44,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
 
-    .marketing_community__link {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .marketing_community {
       color: #fff;
-      text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
-      letter-spacing: 0.05em;
+      font-size: 36px;
+      letter-spacing: 0.08em;
       font-family: "UpheavalPro";
+      margin-bottom: 28px;
 
-      span {
-        font-size: 30px;
-        margin: 0 10px;
-
-        @media screen and (max-width: 930px) {
-          font-size: 4vw;
-        }
+      @media screen and (max-width: 560px) {
+        font-size: 26px;
       }
 
-      p {
-        font-size: 18px;
-        color: #fff;
-
-        @media screen and (max-width: 930px) {
-          font-size: 3vw;
-        }
-      }
-    }
-  }
-
-  .container_partner {
-    div {
-      color: #fff;
-      text-shadow: rgba(0, 0, 0, 0.4) 0px 4px 5px;
-      font-family: "UpheavalPro";
-      text-align: center;
-    }
-
-    .partner_title {
-      font-size: 25px;
-      margin-bottom: 32px;
-
-      @media screen and (max-width: 930px) {
-        font-size: 4.5vw;
-        margin-bottom: 6vw;
-      }
-    }
-
-    .partner_persons {
-      font-size: 45px;
-      letter-spacing: 0.05em;
-      font-weight: bold;
-      margin-top: 22px;
-
-      @media screen and (max-width: 930px) {
-        font-size: 8.2vw;
+      @media screen and (max-width: 375px) {
+        font-size: 24px;
       }
     }
   }
@@ -108,27 +66,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100px;
-    background-image: url("../../../assets/landpage/rodape-ptn.png");
-    background-position: center;
-    background-size: contain;
-
-    @media screen and (max-width: 930px) {
-      height: 20vw;
-      margin-top: 20px;
-    }
-
+    margin-top: 64px;
+    
     .footer_copyright {
       font-family: "UpheavalPro";
       letter-spacing: 0.05em;
       font-size: 16px;
-      margin-top: 55px;
       color: #fff;
 
       @media screen and (max-width: 930px) {
         font-size: 2.8vw;
-        margin-top: calc(20vw / 1.8);
       }
     }
   }

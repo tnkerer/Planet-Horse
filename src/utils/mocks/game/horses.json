@@ -85,5 +85,34 @@
                 "id": 2
             }
         ]
+    },
+    {
+        "id": 4,
+        "profile": {
+            "name": "Dark Brown",
+            "name_slug": "dark-brown-horse",
+            "sex": "Male",
+            "type_horse": "COMMON",
+            "type_horse_slug": "common",
+            "type_jockey": "NORMAL",
+            "time": "120 DAY"
+        },
+        "staty": {
+            "status": "stopped",
+            "level": "1",
+            "exp": "5/99",
+            "power": "10",
+            "sprint": "15",
+            "speed": "50",
+            "energy": "2/9"
+        },
+        "items": [
+            {
+                "id": 1
+            },
+            {
+                "id": 2
+            }
+        ]
     }
 ]
