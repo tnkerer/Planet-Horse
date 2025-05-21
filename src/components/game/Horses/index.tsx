@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import phorseCoin from '@/assets/icons/coin.webp'
 import ModalReward from '../Modals/Reward'
 import ModalRaceStart from '../Modals/RaceStart'
 import ModalQuickRace from '../Modals/QuickRace'
@@ -54,7 +53,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
             </div>
           </div>
           <div className={styles.countCurrency}>
-            <Image width={50} height={50} src={phorseCoin} alt="phorse coin" />
+            <Image width={50} height={50} src='/assets/icons/coin.webp' alt="phorse coin" />
             <span>100000.00</span>
           </div>
         </div>

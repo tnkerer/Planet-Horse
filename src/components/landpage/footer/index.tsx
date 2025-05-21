@@ -3,18 +3,13 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-import discordIcon from '@/assets/icons/socials/discord.webp'
-import twitterIcon from '@/assets/icons/socials/twitter.webp'
-import telegramIcon from '@/assets/icons/socials/telegram.webp'
-import instagramIcon from '@/assets/landpage/intagram.png'
-
 import styles from './styles.module.scss'
 
 const socialMediaIcons = {
-  discord: discordIcon,
-  telegram: telegramIcon,
-  instagram: instagramIcon,
-  twitter: twitterIcon,
+  discord: '/assets/icons/socials/discord.webp',
+  telegram: '/assets/icons/socials/telegram.webp',
+  instagram: '/assets/icons/socials/instagram.webp',
+  twitter: '/assets/icons/socials/twitter.webp',
 }
 
 type SocialMediaType = keyof typeof socialMediaIcons;

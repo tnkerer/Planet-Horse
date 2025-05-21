@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import Burger from '@/utils/components/burger'
-import logo from '@/assets/utils/logos/planet-horse.webp'
 import Image from 'next/image'
 import Link from 'next/link'
 import exampleUserPic from '@/assets/user-profiles/example-user.gif'
@@ -32,8 +31,10 @@ const Navbar: React.FC = () => {
               <a>
                 <Image
                   layout='intrinsic'
-                  src={logo}
+                  src='/assets/utils/logos/planet-horse.webp'
                   alt='PlanetHorse'
+                  width={136}
+                  height={55}
                 />
               </a>
             </Link>

@@ -2,9 +2,6 @@ import React, { useRef } from 'react'
 import styles from './styles.module.scss'
 
 import Image from 'next/image'
-import horseSpriteImage from '@/assets/landpage/horse-sprite.webp'
-import metamathLogo from '@/assets/landpage/metamath-logo.png'
-
 import TitleLayer from '../title-layer'
 
 import { useIsVisible } from '@/utils/hooks/is-visible'
@@ -20,7 +17,7 @@ const Team: React.FC = () => {
 
         <div className={styles.partners}>
           <div>
-            <Image src={horseSpriteImage} alt="Horse"/>
+            <Image src='/assets/landpage/horse-sprite.webp' alt="Horse" width={204} height={210}/>
           </div>
           <strong className={styles.partner_persons}>SOON</strong>
         </div>

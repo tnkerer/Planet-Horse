@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import phorseCoin from '@/assets/icons/coin.webp'
 import SingleItem from '../SingleItem'
 import { items } from '@/utils/mocks/game'
 import Image from 'next/image'
@@ -21,7 +20,7 @@ const Items: React.FC<Props> = ({ changeView }) => {
           </div>
         </div>
         <div className={styles.countCurrency}>
-          <Image width={50} height={50} src={phorseCoin} alt="phorse coin" />
+          <Image width={50} height={50} src='/assets/icons/coin.webp' alt="phorse coin" />
           <span>100000.00</span>
         </div>
       </div>

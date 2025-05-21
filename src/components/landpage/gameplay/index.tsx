@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 import { useIsVisible } from '@/utils/hooks/is-visible'
 
-import tvImage from '@/assets/landpage/tv.webp'
 import racingImage from '@/assets/landpage/racing.gif'
 import buySell from '@/assets/landpage/buy-sell.gif'
 import upgrade from '@/assets/landpage/upgrade.gif'
@@ -13,7 +12,6 @@ import noiseTv from '@/assets/landpage/chiado.gif'
 
 import whitepaperImage from '@/assets/landpage/whitepaper.webp'
 import whitepaperHoverImage from '@/assets/landpage/whitepaper-mouse.webp'
-import arboresImage from '@/assets/landpage/arbores.webp'
 
 import styles from './styles.module.scss'
 
@@ -88,7 +86,7 @@ const GamePlay: React.FC = () => {
             </div>
 
             <div className={styles.content_tv}>
-              <Image layout='fill' src={tvImage} alt="Tv"/>
+              <Image layout='fill' src='/assets/landpage/tv.webp' alt="Tv"/>
             </div>
 
             <div className={styles.link}>
@@ -98,12 +96,12 @@ const GamePlay: React.FC = () => {
             </div>
 
             <div className={styles.book_container}>
-              <Image layout='fill' src={whitepaperImage} className={styles.book} alt="Whitepaper PlanetHorse"/>
-              <Image layout='fill' src={whitepaperHoverImage} className={styles.book_hover} alt="Whitepaper PlanetHorse"/>
+              <Image layout='fill' src='/assets/landpage/whitepaper.webp' className={styles.book} alt="Whitepaper PlanetHorse"/>
+              <Image layout='fill' src='/assets/landpage/whitepaper-mouse.webp' className={styles.book_hover} alt="Whitepaper PlanetHorse"/>
             </div>
             
             <div className={styles.content_bush}>
-              <Image src={arboresImage} layout='fill'/>
+              <Image src='/assets/landpage/arbores.webp' layout='fill'/>
             </div>
           </div>
         </div>

@@ -1,11 +1,6 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import logo from '@/assets/utils/logos/planet-horse.webp'
 import Image from 'next/image'
-import discord from '@/assets/icons/socials/discord.webp'
-import instagram from '@/assets/icons/socials/instagram.webp'
-import telegram from '@/assets/icons/socials/telegram.webp'
-import twitter from '@/assets/icons/socials/twitter.webp'
 import Link from 'next/link'
 
 interface Props {
@@ -18,7 +13,7 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
       <div className={styles.content}>
         <div className={styles.logo}>
           <Image
-            src={logo}
+            src='/assets/utils/logos/planet-horse.webp'
             width={136}
             height={55}
           />
@@ -28,7 +23,7 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
           <Link href={'https://discord.com/invite/ronen'}>
           <a target="_blank" rel="noreferrer">
             <Image
-              src={discord}
+              src='/assets/icons/socials/discord.webp'
               width={40}
               height={40}
             />
@@ -39,7 +34,7 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
           <Link href={'https://twitter.com/'}>
           <a target="_blank" rel="noreferrer">
             <Image
-              src={twitter}
+              src='/assets/icons/socials/twitter.webp'
               width={40}
               height={40}
             />
@@ -48,14 +43,14 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
           </div>
           {/* <div className={styles.slot}>
             <Image
-              src={telegram}
+              src={'/assets/icons/socials/telegram.webp'}
               width={40}
               height={40}
             />
           </div>
           <div className={styles.slot}>
             <Image
-              src={instagram}
+              src='/assets/icons/socials/instagram.webp'
               width={40}
               height={40}
             />

@@ -1,11 +1,6 @@
 import React, {  useRef } from 'react'
 
 import { useIsVisible } from '@/utils/hooks/is-visible'
-
-import wallet_icon from '@/assets/landpage/wallet-status.webp'
-import horses_icon from '@/assets/landpage/horses-status.webp'
-import volume_icon from '@/assets/landpage/volume-status.webp'
-
 import TitleLayer from '@/components/landpage/title-layer'
 
 import Card from './card.component'
@@ -17,9 +12,9 @@ const Milestones: React.FC = () => {
   const isVisible = useIsVisible(myRef)
 
   const CARDS = [
-    { id: 'card-wallets', title: 'Wallets', icon: wallet_icon, value: 20000 }, 
-    { id: 'card-horses', title: 'Horses', icon: horses_icon, value: 20000 },
-    { id: 'card-volume', title: 'Volume', icon: volume_icon, value: 20000 }
+    { id: 'card-wallets', title: 'Wallets', icon: '/assets/landpage/wallet-status.webp', value: 20000 }, 
+    { id: 'card-horses', title: 'Horses', icon: '/assets/landpage/horses-status.webp', value: 20000 },
+    { id: 'card-volume', title: 'Volume', icon: '/assets/landpage/volume-status.webp', value: 20000 }
   ]
 
   return (

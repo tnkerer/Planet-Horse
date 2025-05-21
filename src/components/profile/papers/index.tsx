@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
 import profilePicture from '@/assets/profile/horse.gif'
-import phorseToken from '@/assets/profile/phorse token.svg'
-import yellowPaper from '@/assets/profile/yellow-paper.webp'
-import tokenBridge from '@/assets/profile/token-bridge.webp'
 import depositPhorse from '@/assets/profile/deposit-phorse.png'
 import depositPhorseOver from '@/assets/profile/deposit-horse-mouse.gif'
 import withdrawHorse from '@/assets/profile/with-horse.png'
@@ -20,8 +17,10 @@ const Papers: React.FC = () => {
         <span className={styles.slot}>
           <span className={styles.profile}>
             <Image
-              src={yellowPaper}
+              src='/assets/profile/yellow-paper.webp'
               layout='responsive'
+              width={645}
+              height={451}
             />
             <span className={styles.cardTitle}>
               profile
@@ -38,7 +37,7 @@ const Papers: React.FC = () => {
               <span className={styles.slot}>
                 <span className={styles.phorseCoins}>
                   <span className={styles.icon}>
-                    <Image src={phorseToken} />
+                    <Image src='/assets/profile/phorse token.svg' width={250} height={250} />
                   </span>
                   <span className={styles.amount}>
                     0 phorse
@@ -54,8 +53,10 @@ const Papers: React.FC = () => {
         <span className={styles.slot}>
           <span className={styles.token}>
             <Image
-              src={tokenBridge}
+              src='/assets/profile/token-bridge.webp'
               layout='responsive'
+              width={590}
+              height={444}
             />
             <span
               className={styles.depositPhorse}

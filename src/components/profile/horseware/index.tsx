@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
 import logoHorseware from '@/assets/profile/logo-horseware.png'
-import tapeGraph from '@/assets/utils/tape.webp'
 import keyboard from '@/assets/profile/keyboard.gif'
-import lightOff from '@/assets/profile/light-off.webp'
-import lightOn from '@/assets/profile/light-on.webp'
 
 const Horseware = () => {
   const [light, setLight] = useState(false)
@@ -34,7 +31,7 @@ const Horseware = () => {
         </svg>
         <div className={styles.tape}>
           <Image
-            src={tapeGraph}
+            src='/assets/utils/tape.webp'
             width={205}
             height={62}
           />
@@ -167,54 +164,6 @@ const Horseware = () => {
                 <td>value</td>
                 <td>value</td>
               </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
             </table>
           </div>
         </div>
@@ -242,8 +191,10 @@ const Horseware = () => {
         </svg>
         <span className={styles.light}>
           <Image
-            src={light ? lightOff : lightOn}
+            src={light ? '/assets/profile/light-off.webp' : '/assets/profile/light-on.webp'}
             layout='responsive'
+            width={132}
+            height={40}
           />
         </span>
         <div className={styles.clarity}>
