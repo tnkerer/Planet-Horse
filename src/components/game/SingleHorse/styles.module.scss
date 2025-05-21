@@ -151,6 +151,19 @@
                                 background-image: url('../../../assets/game/horses/quickrace-clicado.png');
                             }
                         }
+                        &.restoreButton {
+                            width: 5.8vw;
+                            background-image: url('../../../assets/game/horses/restore.png');
+                            @media screen and (max-width: 920px) {
+                                width: 13vw;
+                            }
+                            &:hover {
+                                background-image: url('../../../assets/game/horses/restore-mouse.png');
+                            }
+                            &:active {
+                                background-image: url('../../../assets/game/horses/restore-clicado.png');
+                            }
+                        }
                         &.startButton {
                             width: 3.6vw;
                             background-image: url('../../../assets/game/horses/start.png');

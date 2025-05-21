@@ -6,8 +6,10 @@ import PageContent from '@/utils/components/page-content'
 import Horseware from '@/components/profile/horseware'
 import Footer from '@/utils/components/footer'
 import MessageFromMom from '@/components/profile/messageFromMom'
+import { useMediaQuery } from 'react-responsive'
 
 const Profile: React.FC = () => {
+  const isWide = useMediaQuery({ minWidth: 1120 })
   return (
     <>
       <Navbar />
@@ -15,10 +17,10 @@ const Profile: React.FC = () => {
         <Pattern type='light'>
           <Papers />
         </Pattern>
-        <Pattern type='blurredDarkBlue'>
-          <Horseware />
-          <Footer copyrightTextColor='#fff' />
-          <MessageFromMom />
+        <Pattern type="blurredDarkBlue">
+          {isWide && <Horseware />}
+          <Footer copyrightTextColor="#fff" />
+          {isWide && <MessageFromMom />}
         </Pattern>
       </PageContent>
     </>

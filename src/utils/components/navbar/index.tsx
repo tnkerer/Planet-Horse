@@ -5,14 +5,10 @@ import logo from '@/assets/utils/logos/planet-horse.webp'
 import Image from 'next/image'
 import Link from 'next/link'
 import exampleUserPic from '@/assets/user-profiles/example-user.gif'
-import useConnectMetamask from '@/utils/hooks/connect-metamask'
-import useInfoUserAccount from '@/utils/hooks/info-user-account'
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
-
-  const requestConnectionMetamask = useConnectMetamask()
-  const { walletAddress, isConnected } = useInfoUserAccount()
+  const [isConnected, setIsConnected] = useState(false)
 
   return (
     <>
@@ -43,36 +39,36 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
           <div className={styles.options}>
-            <Link href='/home'>
+            <Link href='/'>
               <a>HOME</a>
-            </Link>
-            <Link href='/marketplace'>
-              <a>MARKETPLACE</a>
             </Link>
             <Link href='/game'>
               <a>GAME</a>
             </Link>
-            <Link href='/staking'>
+            <Link href='/profile'>
+              <a>PROFILE</a>
+            </Link>
+            <Link href='https://opensea.io/0x96ca93ac0d9e26179dcd11db08af88a3506e8f03/created'>
+              <a target="_blank">MARKETPLACE</a>
+            </Link>
+            {/*<Link href='/staking'>
               <a>STAKING</a>
-            </Link>
-            <Link href='/barn'>
-              <a>BARN</a>
-            </Link>
+            </Link> */}
           </div>
           <div
             className={styles.account}
-            onClick={() => { requestConnectionMetamask() }}
+            onClick={() => setIsConnected(!isConnected)}
           >
             <Link href={'#'}>
               {isConnected
                 ? (
                   <div id={styles.userProfileButton}>
-                    <span className={styles.address}>{walletAddress.slice(0, 9)}</span>
+                    <span className={styles.address}>{'0x4431fadc0694ba'.slice(0, 9)}</span>
                     <div className={styles.userPicture}>
-                    <Image src={exampleUserPic} />
+                      <Image src={exampleUserPic} />
                     </div>
                   </div>
-                  )
+                )
                 : <button />}
             </Link>
           </div>

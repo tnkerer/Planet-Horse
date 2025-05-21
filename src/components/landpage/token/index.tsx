@@ -1,13 +1,8 @@
 import React, { useRef } from 'react'
-
 import Image from 'next/image'
 import TitleLayer from '@/components/landpage/title-layer'
-import AddMetamaskButton from '@/components/landpage/add-metamask-button'
-
 import { useIsVisible } from '@/utils/hooks/is-visible'
-
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
-
 import styles from './styles.module.scss'
 
 
@@ -15,7 +10,7 @@ const Token: React.FC = () => {
   const myRef = useRef()
   const isVisible = useIsVisible(myRef)
 
-  const CONTRACT_HASH = '0xc630bd2f1df25736177B5126cD4F3bBc3714A3c5'
+  const CONTRACT_HASH = 'Soon'
 
   return (
     <section className={styles.container} ref={myRef}>
@@ -34,8 +29,8 @@ const Token: React.FC = () => {
             <ul className={styles.text_description}>
               <li>Symbol: <span>PHORSE</span></li>
               <li>Name: <span>PlanetHorse</span></li>
-              <li>Token Supply: <span>1.000.000.000</span></li>
-              <li>Chain: <span>TBD</span></li>
+              <li>Token Supply: <span>300.000.000</span></li>
+              <li>Chain: <span>Ronin Network</span></li>
             </ul>
           </div>
 
@@ -47,8 +42,6 @@ const Token: React.FC = () => {
         <div className={styles.contract_info}>
           <p>Contract: <span>{CONTRACT_HASH}</span></p>
         </div>
-
-        <AddMetamaskButton className={styles.add_metamask}/>
       </div>
     </section>
   )

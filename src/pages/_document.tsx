@@ -23,8 +23,8 @@ class MyDocument extends Document {
   render () {
     return (
       <Html>
+        <title>PlanetHorse</title>
         <Head>
-          <title>PlanetHorse</title>
           <link rel="icon" href="/favicon.ico"></link>
         </Head>
         <body>

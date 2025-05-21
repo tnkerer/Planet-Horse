@@ -12,19 +12,19 @@ import styles from './styles.module.scss'
 
 const socialMediaIcons = {
   discord: discordIcon,
-  telegram: twitterIcon,
-  instagram: telegramIcon,
-  twitter: instagramIcon,
+  telegram: telegramIcon,
+  instagram: instagramIcon,
+  twitter: twitterIcon,
 }
 
 type SocialMediaType = keyof typeof socialMediaIcons;
 
 const Footer: React.FC = () => {
   const socialMediaLinks = {
-    discord: 'https://discord.gg/3EDMdSYUXs',
-    telegram: 'https://www.t.me/planethorse',
-    instagram: 'https://twitter.com/PlanetHorseNFT',
-    twitter: 'https://twitter.com/PlanetHorseNFT',
+    discord: 'https://discord.com/invite/ronen',
+/*     telegram: 'https://www.t.me/planethorse',
+    instagram: 'https://twitter.com/PlanetHorseNFT', */
+    twitter: 'https://twitter.com/',
   }
 
   const renderSocialMediaElements = () =>
@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
 
         <div className={styles.container_footer}>
           <span className={styles.footer_copyright}>
-            Copyright © 2022 PlanetHorse
+            Copyright © 2025 PlanetHorse
           </span>
         </div>
       </div>

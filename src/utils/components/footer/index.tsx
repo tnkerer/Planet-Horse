@@ -6,6 +6,7 @@ import discord from '@/assets/icons/socials/discord.webp'
 import instagram from '@/assets/icons/socials/instagram.webp'
 import telegram from '@/assets/icons/socials/telegram.webp'
 import twitter from '@/assets/icons/socials/twitter.webp'
+import Link from 'next/link'
 
 interface Props {
   copyrightTextColor: string
@@ -24,20 +25,28 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
         </div>
         <div className={styles.socials}>
           <div className={styles.slot}>
+          <Link href={'https://discord.com/invite/ronen'}>
+          <a target="_blank" rel="noreferrer">
             <Image
               src={discord}
               width={40}
               height={40}
             />
+            </a>
+            </Link>
           </div>
           <div className={styles.slot}>
+          <Link href={'https://twitter.com/'}>
+          <a target="_blank" rel="noreferrer">
             <Image
               src={twitter}
               width={40}
               height={40}
             />
+            </a>
+            </Link>
           </div>
-          <div className={styles.slot}>
+          {/* <div className={styles.slot}>
             <Image
               src={telegram}
               width={40}
@@ -50,14 +59,14 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
               width={40}
               height={40}
             />
-          </div>
+          </div> */}
         </div>
         <span
           style={{
             color: copyrightTextColor
           }}
         >
-          Copyright © 2022 planethorse
+          Copyright © 2025 planethorse
         </span>
       </div>
     </div>

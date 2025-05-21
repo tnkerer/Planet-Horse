@@ -25,13 +25,13 @@ const Team: React.FC = () => {
           <strong className={styles.partner_persons}>SOON</strong>
         </div>
         
-        <div className={styles.developer_title}>
+{/*         <div className={styles.developer_title}>
           <strong>DEVELOPED BY</strong>
 
           <div className={styles.metamath_logo}>
             <Image src={metamathLogo} alt="MetaMatch&trade;"/>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   )

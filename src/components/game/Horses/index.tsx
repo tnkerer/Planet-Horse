@@ -40,48 +40,48 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
   return (
     <>
-    <ModalReward closeModal={toogleModal} status={modalReward} horseId={horseId} />
-    <ModalRaceStart closeModal={toogleModal} status={modalRaceStart} horseId={horseId} />
-    <ModalQuickRace closeModal={toogleModal} status={modalQuickRace} horseId={horseId} />
-    <div className={styles.secondBar}>
-      <div className={styles.containerBar}>
-        <div className={styles.actionContainer}>
-          <div className={styles.actionOptions}>
-            <div onClick={() => changeView('items')}>ITEMS <span className={styles.notificationBadge}></span></div>
-            <div>FEED ALL HORSES</div>
-            <div>ALL QUICK RACE</div>
-            <div>REWARDS OF SOLD HORSES</div>
-          </div>
-        </div>
-        <div className={styles.countCurrency}>
-          <Image width={50} height={50} src={phorseCoin} alt="phorse coin" />
-          <span>100000.00</span>
-        </div>
-      </div>
-    </div>
-
-    <div className={styles.container}>
-      <span className={styles.countHorses}>{horses.length}/15</span>
-
-      <div className={styles.cardHorses}>
-
-        {horses.map((horse) => (
-          <SingleHorse openModal={toogleModal} key={horse.id} horse={horse} />
-        ))}
-
-        <div className={styles.addHorse}>
-          <div className={styles.addHorseWrapper}>
-            <div className={styles.plusHorse}>
-              +
-            </div>
-            <div className={styles.addHorseText}>
-              GET MORE HORSES, THIS IS THE FIRST STEP TO BECOMING A GREAT RUNNER
+      <ModalReward closeModal={toogleModal} status={modalReward} horseId={horseId} />
+      <ModalRaceStart closeModal={toogleModal} status={modalRaceStart} horseId={horseId} />
+      <ModalQuickRace closeModal={toogleModal} status={modalQuickRace} horseId={horseId} />
+      <div className={styles.secondBar}>
+        <div className={styles.containerBar}>
+          <div className={styles.actionContainer}>
+            <div className={styles.actionOptions}>
+              <div onClick={() => changeView('items')}>ITEMS <span className={styles.notificationBadge}></span></div>
+              <div>CURE ALL HORSES</div>
+              <div>QUICK RACE</div>
+              <div>REWARDS OF SOLD HORSES</div>
             </div>
           </div>
+          <div className={styles.countCurrency}>
+            <Image width={50} height={50} src={phorseCoin} alt="phorse coin" />
+            <span>100000.00</span>
+          </div>
         </div>
-
       </div>
-    </div>
+
+      <div className={styles.container}>
+        <span className={styles.countHorses}>{horses.length}/15</span>
+
+        <div className={styles.cardHorses}>
+
+          {horses.map((horse) => (
+            <SingleHorse openModal={toogleModal} key={horse.id} horse={horse} />
+          ))}
+
+          <div className={styles.addHorse}>
+            <div className={styles.addHorseWrapper}>
+              <div className={styles.plusHorse}>
+                +
+              </div>
+              <div className={styles.addHorseText}>
+                GET MORE HORSES, THIS IS THE FIRST STEP TO BECOMING A GREAT RUNNER
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </>
   )
 }

@@ -1,4 +1,6 @@
-*, :after, :before {
+*,
+:after,
+:before {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -11,16 +13,18 @@
 }
 
 @font-face {
-  font-family: 'SpaceHorse';
-  src: local('SpaceHorse'), url('../assets/fonts/SpaceHorse.ttf') format('truetype');
+	font-family: 'SpaceHorse';
+	src: local('SpaceHorse'), url('../assets/fonts/SpaceHorse.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'UpheavalPro';
-  src: local('UpheavalPro'), url('../assets/fonts/UpheavalPro.ttf') format('truetype');
+	font-family: 'UpheavalPro';
+	src: local('UpheavalPro'), url('../assets/fonts/UpheavalPro.ttf') format('truetype');
 }
 
-body, html {
+body,
+html {
+
 	scroll-behavior: smooth;
 
 	&::-webkit-scrollbar {
@@ -29,13 +33,15 @@ body, html {
 		scrollbar-width: 10px;
 	}
 
-	&::-webkit-scrollbar, ::-webkit-scrollbar-track {
+	&::-webkit-scrollbar,
+	::-webkit-scrollbar-track {
 		background: transparent;
 	}
 
 	&::-webkit-scrollbar-thumb {
 		background: #4d4d4d;
 	}
+
 }
 
 html {
@@ -53,6 +59,7 @@ button {
 	cursor: pointer;
 }
 
-ol, ul {
+ol,
+ul {
 	list-style: none;
 }

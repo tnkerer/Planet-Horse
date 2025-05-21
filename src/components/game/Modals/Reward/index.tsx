@@ -36,7 +36,7 @@ const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
                         <div className={styles.tableInfoRewards}>
 
                             <div>Total Rewards: 2 PHORSE</div>
-                            <div>Jan 02, 2022 (UTC+0)</div>
+                            <div>Jan 02, 2025 (UTC+0)</div>
                         </div>
                         <div className={styles.tableInfoFee}>
                             <div>(clain) fee 10% phorse</div>

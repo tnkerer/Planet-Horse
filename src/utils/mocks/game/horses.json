@@ -2,12 +2,12 @@
     {
         "id": 1,
         "profile": {
-            "name": "Orange Horse",
+            "name": "Orange",
             "name_slug": "orange-horse",
             "sex": "Male",
-            "type_horse": "Rare",
+            "type_horse": "UNCOMMON",
             "type_horse_slug": "rare",
-            "type_jockey": "NORMAL",
+            "type_jockey": "NONE",
             "time": "120 DAY"
         },
         "staty": {
@@ -31,12 +31,12 @@
     {
         "id": 2,
         "profile": {
-            "name": "Fire Horse",
+            "name": "Wildfire",
             "name_slug": "fire-horse",
             "sex": "Male",
-            "type_horse": "SUPER LEGENDERY",
+            "type_horse": "MYTHIC",
             "type_horse_slug": "super-legendery",
-            "type_jockey": "NORMAL",
+            "type_jockey": "NONE",
             "time": "120 DAY"
         },
         "staty": {
@@ -60,12 +60,12 @@
     {
         "id": 3,
         "profile": {
-            "name": "Dark Brown",
+            "name": "Light Bay",
             "name_slug": "dark-brown-horse",
             "sex": "Male",
             "type_horse": "COMMON",
             "type_horse_slug": "common",
-            "type_jockey": "NORMAL",
+            "type_jockey": "NONE",
             "time": "120 DAY"
         },
         "staty": {
@@ -87,18 +87,46 @@
         ]
     },
     {
-        "id": 4,
+        "id": 3,
         "profile": {
-            "name": "Dark Brown",
+            "name": "Light Bay",
             "name_slug": "dark-brown-horse",
             "sex": "Male",
             "type_horse": "COMMON",
             "type_horse_slug": "common",
-            "type_jockey": "NORMAL",
+            "type_jockey": "NONE",
             "time": "120 DAY"
         },
         "staty": {
             "status": "stopped",
+            "level": "1",
+            "exp": "5/99",
+            "power": "10",
+            "sprint": "15",
+            "speed": "50",
+            "energy": "2/9"
+        },
+        "items": [
+            {
+                "id": 1
+            },
+            {
+                "id": 2
+            }
+        ]
+    },{
+        "id": 3,
+        "profile": {
+            "name": "Light Bay",
+            "name_slug": "dark-brown-horse",
+            "sex": "Male",
+            "type_horse": "COMMON",
+            "type_horse_slug": "common",
+            "type_jockey": "NONE",
+            "time": "120 DAY"
+        },
+        "staty": {
+            "status": "running",
             "level": "1",
             "exp": "5/99",
             "power": "10",

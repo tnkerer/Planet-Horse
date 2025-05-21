@@ -14,20 +14,17 @@ const Burger: React.FC<Props> = ({ close = false }) => {
         left: close ? '0' : '-300px'
       }}
     >
-      <Link href='/home'>
+      <Link href='/'>
         <a>Home</a>
       </Link>
-      <Link href='/home'>
-        <a>Marketplace</a>
-      </Link>
-      <Link href='/home'>
+      <Link href='/game'>
         <a>Game</a>
       </Link>
-      <Link href='/home'>
-        <a>Staking</a>
+      <Link href='/profile'>
+        <a>Profile</a>
       </Link>
-      <Link href='/home'>
-        <a>Barn</a>
+      <Link href='https://opensea.io/0x96ca93ac0d9e26179dcd11db08af88a3506e8f03/created'>
+        <a target="_blank">Marketplace</a>
       </Link>
     </div>
   )
