@@ -17,7 +17,7 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                     <div className={styles.horseGif}>
                         {loading
                             ? (null)
-                            : (<img src={image.src} />)}
+                            : (<img src={image?.src} />)}
                     </div>
                     <div className={styles.horseInfo}>
                         <div className={styles.horseWrapper}>
@@ -37,7 +37,7 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                                     STABLE TYPE: <span className={styles.horseItemDescriptionGray}>{horse.profile.type_jockey}</span>
                                 </div>
                                 <div className={styles.horseItemDescription}>
-                                    CARRER: <span>{horse.profile.time}</span>
+                                    STATUS: <span>{horse.staty.status}</span>
                                 </div>
                             </div>
                             <div className={styles.horseStaty}>

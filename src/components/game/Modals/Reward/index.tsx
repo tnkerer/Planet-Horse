@@ -60,8 +60,6 @@ const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
                                             <td> {reward.dado_2} </td>
                                             <td> {reward.dado_3} </td>
                                             <td> {reward.dado_4} </td>
-                                            <td> {reward.dado_5} </td>
-                                            <td> {reward.dado_6} </td>
                                         </tr>
                                     ))}
                                 </tbody>

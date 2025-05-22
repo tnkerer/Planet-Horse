@@ -1,0 +1,91 @@
+.modalRecovery {
+    &.modalActive { display: block; }
+    &.modalInactive { display: none; }
+  
+    .modalFull {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.15);
+      width: 100vw;
+      height: 100vh;
+      z-index: 9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      .modalContent {
+        position: relative;
+        font-family: 'SpaceHorse';
+        width: 462px;
+        height: 382px;
+        background-image: url('/assets/stable.gif');
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 0; /* todo o layout fica por background */
+  
+        @media screen and (max-width: 920px) {
+          width: 80vw;
+          height: 67vw;
+        }
+  
+        /* botão fechar */
+        .modalClose {
+          position: absolute;
+          top: -15px;
+          right: -15px;
+          cursor: pointer;
+          z-index: 2;
+        }
+  
+        /* diálogo + texto */
+        .dialogContainer {
+          position: absolute;
+          top: 10%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80%;
+          text-align: center;
+          z-index: 2;
+  
+          .dialogText {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 75%;
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.2;
+            color: #000; /* ajuste se precisar */
+            @media screen and (max-width: 920px) {
+              font-size: 12px;
+              line-height: 0.9;
+            }
+          }
+        }
+  
+        /* botão BUY com 3 estados */
+        .buyButton {
+          position: absolute;
+          bottom: 12%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 140px;
+          height: 73px;
+          border: none;
+          background: url('/assets/normal.webp') no-repeat center/contain;
+          cursor: pointer;
+          z-index: 2;
+  
+          &:hover {
+            background-image: url('/assets/hovering.webp');
+          }
+          &:active {
+            background-image: url('/assets/clicked.webp');
+          }
+        }
+      }
+    }
+  }
+  

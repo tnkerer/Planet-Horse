@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import ModalReward from '../Modals/Reward'
 import ModalRaceStart from '../Modals/RaceStart'
-import ModalQuickRace from '../Modals/QuickRace'
+import RecoveryCenter from '../Modals/RecoveryCenter'
 import SingleHorse from '../SingleHorse'
 import { horses } from '@/utils/mocks/game'
 import Image from 'next/image'
@@ -14,7 +14,7 @@ interface Props {
 const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalReward, setToogleModalReward] = useState(false)
   const [modalRaceStart, setToogleModalRaceStart] = useState(false)
-  const [modalQuickRace, setToogleModalQuickRace] = useState(false)
+  const [modalRestore, setToogleModalRestore] = useState(false)
   const [horseId, sethorseId] = useState(0)
 
   const toogleModal = (modalType: string, horseId?: number) => {
@@ -32,8 +32,8 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       setToogleModalRaceStart(!modalRaceStart)
     }
 
-    if (modalType === 'quickRace') {
-      setToogleModalQuickRace(!modalQuickRace)
+    if (modalType === 'restore') {
+      setToogleModalRestore(!modalRestore)
     }
   }
 
@@ -41,7 +41,14 @@ const Horses: React.FC<Props> = ({ changeView }) => {
     <>
       <ModalReward closeModal={toogleModal} status={modalReward} horseId={horseId} />
       <ModalRaceStart closeModal={toogleModal} status={modalRaceStart} horseId={horseId} />
-      <ModalQuickRace closeModal={toogleModal} status={modalQuickRace} horseId={horseId} />
+      {modalRestore && (
+        <RecoveryCenter
+          status={modalRestore}
+          horseId={horseId}
+          cost={1000}
+          closeModal={toogleModal}
+        />
+      )}
       <div className={styles.secondBar}>
         <div className={styles.containerBar}>
           <div className={styles.actionContainer}>
@@ -60,7 +67,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       </div>
 
       <div className={styles.container}>
-        <span className={styles.countHorses}>{horses.length}/15</span>
+        <span className={styles.countHorses}>{horses.length} Horses</span>
 
         <div className={styles.cardHorses}>
 
