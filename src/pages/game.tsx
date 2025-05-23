@@ -19,7 +19,7 @@ const Game: React.FC = () => {
       <Navbar />
       <PageContent>
         <Pattern type="yellow">
-          <CardOptions />
+          <CardOptions changeView={toogleView} />
         </Pattern>
         {view === 'items' && (
           <Pattern type="brown">

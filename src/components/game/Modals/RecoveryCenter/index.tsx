@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styles from './styles.module.scss'
+import close from '@/assets/game/pop-up/fechar.png'
 
 interface Props {
   closeModal: (modalType: string, horseId?: number) => void
@@ -15,6 +16,26 @@ const RecoveryCenter: React.FC<Props> = ({
   horseId,
   cost
 }) => {
+
+  const fullText = `Do you wish to buy a treatment for ${cost} PHORSE?`
+  const [displayedText, setDisplayedText] = useState('')
+
+  useEffect(() => {
+    if (!status) return
+    setDisplayedText('')
+    let i = 0
+    const timer = setInterval(() => {
+      i++
+      setDisplayedText(fullText.slice(0, i))
+      if (i >= fullText.length) {
+        clearInterval(timer)
+      }
+    }, 50)
+    return () => clearInterval(timer)
+  }, [status, fullText])
+
+  if (!status) return null
+
   return (
     <div
       className={`
@@ -30,8 +51,8 @@ const RecoveryCenter: React.FC<Props> = ({
             onClick={() => closeModal('restore')}
           >
             <Image
-              src="/assets/x.webp"
-              alt="Fechar"
+              src={close}
+              alt="Close"
               width={30}
               height={30}
             />
@@ -45,9 +66,10 @@ const RecoveryCenter: React.FC<Props> = ({
               width={300}
               height={100}
             />
-            <p className={styles.dialogText}>
-              Do you wish to buy a treatment for <strong>{cost} PHORSE</strong>?
-            </p>
+            <div className={styles.dialogText}>
+              {displayedText}
+              <span className={styles.cursor}>|</span>
+            </div>
           </div>
 
           {/* Botão BUY */}

@@ -58,10 +58,23 @@
             font-size: 14px;
             line-height: 1.2;
             color: #000; /* ajuste se precisar */
+            white-space: pre-wrap;
             @media screen and (max-width: 920px) {
-              font-size: 12px;
+              top: 14px;
+              font-size: 16px;
               line-height: 0.9;
             }
+
+            .cursor {
+              display: inline-block;
+              margin-left: 2px;
+              /* efeito de piscar */
+              animation: blink 1s step-start infinite;
+            }
+          }
+
+          @keyframes blink {
+            50% { opacity: 0; }
           }
         }
   

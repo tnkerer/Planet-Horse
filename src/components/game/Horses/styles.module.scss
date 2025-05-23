@@ -40,6 +40,33 @@
             text-decoration: underline;
           }
         }
+
+        .bagButton {
+          position: relative;
+          width: 96px;
+          height: 96px;
+          background: url('/assets/icons/bag.png') no-repeat center/contain;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          margin: 0;
+          
+          &:hover {
+            background-image: url('/assets/icons/bag_hover.png');
+          }
+        
+          // badge de notificação, se você quiser posicionar o span dentro dele
+          .notificationBadge {
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+        
+          @media (max-width: 700px) {
+            width: 86px;
+            height: 86px;
+          }
+        }
       }
   
     }
@@ -126,9 +153,23 @@
             font-size: 5vw;
             margin-bottom: 5px;
           }
-          .addHorseText{
-            
+          .addHorseText {
+            /* mantém seu estilo existente */
             font-family: 'UpheavalPro';
+            font-size: 2.2vw;
+            text-align: center;
+            /* ... etc ... */
+          
+            .addHorseLink {
+              color: #fff;                // branco puro
+              text-decoration: none;      // remove sublinhado
+              display: inline-block;      // para poder ajustar padding/margin se quiser
+              &:hover,
+              &:focus {
+                color: #fff;              // garante que no hover fique branco também
+                text-decoration: none;
+              }
+            }
           }
         }
   

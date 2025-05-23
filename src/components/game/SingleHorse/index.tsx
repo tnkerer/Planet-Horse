@@ -8,8 +8,30 @@ interface Props {
     openModal: (modalType: string, horseId?: number) => void
 }
 
+const rarityColorMap: Record<string, string> = {
+    common: '#00aa00',  // verde
+    uncommon: '#2F35A8',  // azul
+    rare: '#800080',  // púrpura
+    epic: '#ff69b4',  // rosa
+    legendary: '#a78e06',  // dourado
+    mythic: '#E21C21'   // vermelho
+}
+
+const sexColorMap: Record<string, string> = {
+    male: '#2F35A8', // azul
+    female: '#dc207e'  // rosa
+}
+
+const defaultColor = '#919191'  // cinza fallback
+
 const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
     const { loading, image } = getHorseImage(horse)
+
+    const slug = horse.profile.type_horse_slug
+    const labelColor = rarityColorMap[slug] ?? defaultColor
+
+    const sexSlug = horse.profile.sex.toLowerCase()
+    const sexColor = sexColorMap[sexSlug] ?? defaultColor
     return (
         <>
             <div className={styles.singleHorse + ' type-' + horse.profile.type_horse_slug}>
@@ -27,11 +49,21 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                                         NAME: <span>{horse.profile.name}</span>
                                     </div>
                                     <div className={styles.horseItemDescription}>
-                                        SEX: <span className={styles.horseItemDescriptionBlue}>{horse.profile.sex}</span>
+                                        SEX:        <span
+                                            className={styles.horseItemDynamic}
+                                            style={{ color: sexColor }}
+                                        >
+                                            {horse.profile.sex}
+                                        </span>
                                     </div>
                                 </div>
                                 <div className={styles.horseItemDescription}>
-                                    HORSE TYPE: <span className={styles.horseItemDescriptionRed}>{horse.profile.type_horse}</span>
+                                    HORSE TYPE: <span
+                                        className={styles.horseItemDynamic}
+                                        style={{ color: labelColor }}
+                                    >
+                                        {horse.profile.type_horse}
+                                    </span>
                                 </div>
                                 <div className={styles.horseItemDescription}>
                                     STABLE TYPE: <span className={styles.horseItemDescriptionGray}>{horse.profile.type_jockey}</span>
