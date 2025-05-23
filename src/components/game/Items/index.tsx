@@ -1,7 +1,8 @@
 import React from 'react'
 import styles from './styles.module.scss'
 import SingleItem from '../SingleItem'
-import { items } from '@/utils/mocks/game'
+import ShopChestCard from '../ShopChestCard'
+import { mock_items } from '@/utils/mocks/game'
 import Image from 'next/image'
 
 interface Props {
@@ -33,13 +34,11 @@ const Items: React.FC<Props> = ({ changeView }) => {
       </div>
 
       <div className={styles.container}>
-        <span className={styles.title}>CHESTS</span>
+        <span className={styles.title}>SHOP</span>
 
         <div className={styles.cardItems}>
 
-          {items.map((item) => (
-            <SingleItem key={item.id} item={item} />
-          ))}
+          <ShopChestCard />
 
         </div>
       </div>

@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "name": "Item Cest",
+        "src-idle": "chest_idle",
+        "src-drop": "chest_drop",
+        "src-open": "chest_opening",
+        "quantity": "0"
+    }
+]

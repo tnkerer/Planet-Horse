@@ -4,13 +4,13 @@
         "name": "Hay",
         "src": "hay",
         "value": "32",
-        "description" : "A hay bale. Will recover 3 energy instantly."
+        "description" : "A bale of hay. Will recover 3 energy instantly."
     },
     {
         "id": 6,
         "name": "Hay",
         "src": "hay",
         "value": "32",
-        "description" : "A hay bale. Will recover 3 energy instantly."
+        "description" : "A bale of hay. Will recover 3 energy instantly."
     }
 ]
