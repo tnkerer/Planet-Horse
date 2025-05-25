@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Horse } from '@/domain/models/Horse'
+import { StaticImageData } from 'next/image'
 
 interface Props {
   loading: boolean

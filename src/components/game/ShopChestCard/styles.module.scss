@@ -1,3 +1,61 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,0);
+  z-index: 100;
+  animation: fadeInOverlay 0.5s forwards;
+
+  .modalContent {
+    width: 290px;
+    height: 375px;
+    background-color: #f2e3c4;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-end;
+    transform-origin: center;
+    transform: none;
+    opacity: 1;
+
+    .closeButton {
+      z-index: 10;
+      margin: 15px 15px 0 0;
+      width: 30px;
+      height: 30px;
+      background-image: url('/assets/game/pop-up/fechar.png');
+      background-size: cover;
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes fadeInOverlay {
+  from { background-color: rgba(0,0,0,0) }
+  to   { background-color: #0000004c }
+}
+
+.grow {
+  animation: growModal 0.75s ease-out forwards;
+}
+
+@keyframes growModal {
+  0%   { transform: scale(0); opacity: 0 }
+  70%  { opacity: 1 }
+  100% { transform: scale(1); opacity: 1 }
+}
+
+.gif {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -6,7 +64,6 @@
   }
   
   .card {
-      position: relative;
       width: 200px;
       height: 300px;              // defina uma altura fixa que caiba o GIF
       margin-bottom: 1vw 0;
@@ -17,7 +74,7 @@
       flex-direction: column;
       justify-content: space-between;   // empurra badge lá em cima e botões lá embaixo
       align-items: center;
-      padding-top: 10rem;    /* mais espaço acima da badge */
+          /* mais espaço acima da badge */
       padding-bottom: 1rem; /* menos espaço abaixo, se necessário */
   }
   
@@ -36,8 +93,8 @@
     color: white;
     font-family: 'SpaceHorse';
     position: absolute;
-    top: 8px;
-    right: 8px;
+    margin-top: 35px;
+    margin-left: 130px;
     width: 36px;
     height: 36px;
     display: flex;
@@ -45,6 +102,8 @@
     justify-content: center;
     font-size: 1rem;
     line-height: 1;
+    padding-left: 4px;
+    padding-bottom: 3px;
   }
   
   /* linha de botões */
@@ -53,8 +112,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.5vw;
-    margin-top: 0;                     // eliminamos o gap em cima, agora o flex cuida
-    margin-bottom: 1rem;               // um espacinho embaixo do card
+    padding-top: 230px;
+    margin-bottom: 1rem;
+    transform: scale(0.7);
   }
   
   /* estilo comum a ambos os botões */

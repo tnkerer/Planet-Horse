@@ -64,7 +64,7 @@ const GamePlay: React.FC = () => {
 
             <ul className={styles.gameplay_topics}>
               {Object.entries(CHANNELS).map(([key , channel]) => (
-                <li key={key} about={channel.title} className={styles.toggle}>
+                <li key={key} data-about={channel.title} className={styles.toggle}>
                   <button onClick={() => changeTvChannel(key as ChannelName)}>
                     {channel.title}
                   </button>
