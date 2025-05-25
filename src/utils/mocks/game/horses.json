@@ -1,1858 +1,4526 @@
 [
     {
-        "id": 93,
-        "profile": {
-            "name": "Red Eyed Blue",
-            "name_slug": "red-eyed-blue",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 1,
+      "profile": {
+        "name": "Blue Roan",
+        "name_slug": "blue-roan",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 94,
-        "profile": {
-            "name": "Red Eyed Blue",
-            "name_slug": "red-eyed-blue",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 2,
+      "profile": {
+        "name": "Blue Roan",
+        "name_slug": "blue-roan",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 95,
-        "profile": {
-            "name": "Red Eyed Blue",
-            "name_slug": "red-eyed-blue",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 3,
+      "profile": {
+        "name": "Blue Roan",
+        "name_slug": "blue-roan",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 96,
-        "profile": {
-            "name": "Red Eyed Blue",
-            "name_slug": "red-eyed-blue",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 4,
+      "profile": {
+        "name": "Blue Roan",
+        "name_slug": "blue-roan",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 97,
-        "profile": {
-            "name": "Red Eyed Crimson",
-            "name_slug": "red-eyed-crimson",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 5,
+      "profile": {
+        "name": "Brown",
+        "name_slug": "brown",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 98,
-        "profile": {
-            "name": "Red Eyed Crimson",
-            "name_slug": "red-eyed-crimson",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 6,
+      "profile": {
+        "name": "Brown",
+        "name_slug": "brown",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 99,
-        "profile": {
-            "name": "Red Eyed Crimson",
-            "name_slug": "red-eyed-crimson",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 7,
+      "profile": {
+        "name": "Brown",
+        "name_slug": "brown",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 100,
-        "profile": {
-            "name": "Red Eyed Crimson",
-            "name_slug": "red-eyed-crimson",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 8,
+      "profile": {
+        "name": "Brown",
+        "name_slug": "brown",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 101,
-        "profile": {
-            "name": "Red Eyed Green",
-            "name_slug": "red-eyed-green",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 9,
+      "profile": {
+        "name": "Chestnut",
+        "name_slug": "chestnut",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 102,
-        "profile": {
-            "name": "Red Eyed Green",
-            "name_slug": "red-eyed-green",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 10,
+      "profile": {
+        "name": "Chestnut",
+        "name_slug": "chestnut",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 103,
-        "profile": {
-            "name": "Red Eyed Green",
-            "name_slug": "red-eyed-green",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 11,
+      "profile": {
+        "name": "Chestnut",
+        "name_slug": "chestnut",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 104,
-        "profile": {
-            "name": "Red Eyed Green",
-            "name_slug": "red-eyed-green",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 12,
+      "profile": {
+        "name": "Chestnut",
+        "name_slug": "chestnut",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 105,
-        "profile": {
-            "name": "Red Eyed Purple",
-            "name_slug": "red-eyed-purple",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 13,
+      "profile": {
+        "name": "Dark Bay",
+        "name_slug": "dark-bay",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 106,
-        "profile": {
-            "name": "Red Eyed Purple",
-            "name_slug": "red-eyed-purple",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 14,
+      "profile": {
+        "name": "Dark Bay",
+        "name_slug": "dark-bay",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 107,
-        "profile": {
-            "name": "Red Eyed Purple",
-            "name_slug": "red-eyed-purple",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 15,
+      "profile": {
+        "name": "Dark Bay",
+        "name_slug": "dark-bay",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 108,
-        "profile": {
-            "name": "Red Eyed Purple",
-            "name_slug": "red-eyed-purple",
-            "sex": "Male",
-            "type_horse": "RARE",
-            "type_horse_slug": "rare",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 16,
+      "profile": {
+        "name": "Dark Bay",
+        "name_slug": "dark-bay",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 109,
-        "profile": {
-            "name": "Black Gypsy",
-            "name_slug": "black-gypsy",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 17,
+      "profile": {
+        "name": "Gray",
+        "name_slug": "gray",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 110,
-        "profile": {
-            "name": "Black Gypsy",
-            "name_slug": "black-gypsy",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 18,
+      "profile": {
+        "name": "Gray",
+        "name_slug": "gray",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 111,
-        "profile": {
-            "name": "Black Gypsy",
-            "name_slug": "black-gypsy",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 19,
+      "profile": {
+        "name": "Gray",
+        "name_slug": "gray",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 112,
-        "profile": {
-            "name": "Black Gypsy",
-            "name_slug": "black-gypsy",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 20,
+      "profile": {
+        "name": "Gray",
+        "name_slug": "gray",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 113,
-        "profile": {
-            "name": "Nightmare",
-            "name_slug": "nightmare",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 21,
+      "profile": {
+        "name": "Light Bay",
+        "name_slug": "light-bay",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 114,
-        "profile": {
-            "name": "Nightmare",
-            "name_slug": "nightmare",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 22,
+      "profile": {
+        "name": "Light Bay",
+        "name_slug": "light-bay",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 115,
-        "profile": {
-            "name": "Nightmare",
-            "name_slug": "nightmare",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 23,
+      "profile": {
+        "name": "Light Bay",
+        "name_slug": "light-bay",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 116,
-        "profile": {
-            "name": "Nightmare",
-            "name_slug": "nightmare",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 24,
+      "profile": {
+        "name": "Light Bay",
+        "name_slug": "light-bay",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 117,
-        "profile": {
-            "name": "Rainbow",
-            "name_slug": "rainbow",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 25,
+      "profile": {
+        "name": "Liver Chestnut",
+        "name_slug": "liver-chestnut",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 118,
-        "profile": {
-            "name": "Rainbow",
-            "name_slug": "rainbow",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 26,
+      "profile": {
+        "name": "Liver Chestnut",
+        "name_slug": "liver-chestnut",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 119,
-        "profile": {
-            "name": "Rainbow",
-            "name_slug": "rainbow",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 27,
+      "profile": {
+        "name": "Liver Chestnut",
+        "name_slug": "liver-chestnut",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 120,
-        "profile": {
-            "name": "Rainbow",
-            "name_slug": "rainbow",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 28,
+      "profile": {
+        "name": "Liver Chestnut",
+        "name_slug": "liver-chestnut",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 121,
-        "profile": {
-            "name": "White Gypsy",
-            "name_slug": "white-gypsy",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 29,
+      "profile": {
+        "name": "Palamino",
+        "name_slug": "palamino",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 122,
-        "profile": {
-            "name": "White Gypsy",
-            "name_slug": "white-gypsy",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 30,
+      "profile": {
+        "name": "Palamino",
+        "name_slug": "palamino",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 123,
-        "profile": {
-            "name": "White Gypsy",
-            "name_slug": "white-gypsy",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 31,
+      "profile": {
+        "name": "Palamino",
+        "name_slug": "palamino",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 124,
-        "profile": {
-            "name": "White Gypsy",
-            "name_slug": "white-gypsy",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 32,
+      "profile": {
+        "name": "Palamino",
+        "name_slug": "palamino",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 125,
-        "profile": {
-            "name": "Wooden Horse",
-            "name_slug": "wooden-horse",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 33,
+      "profile": {
+        "name": "Strawberry Roan",
+        "name_slug": "strawberry-roan",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 126,
-        "profile": {
-            "name": "Wooden Horse",
-            "name_slug": "wooden-horse",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 34,
+      "profile": {
+        "name": "Strawberry Roan",
+        "name_slug": "strawberry-roan",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 127,
-        "profile": {
-            "name": "Wooden Horse",
-            "name_slug": "wooden-horse",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 35,
+      "profile": {
+        "name": "Strawberry Roan",
+        "name_slug": "strawberry-roan",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 128,
-        "profile": {
-            "name": "Wooden Horse",
-            "name_slug": "wooden-horse",
-            "sex": "Male",
-            "type_horse": "EPIC",
-            "type_horse_slug": "epic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 36,
+      "profile": {
+        "name": "Strawberry Roan",
+        "name_slug": "strawberry-roan",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 129,
-        "profile": {
-            "name": "Bones",
-            "name_slug": "bones",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 37,
+      "profile": {
+        "name": "White",
+        "name_slug": "white",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 130,
-        "profile": {
-            "name": "Bones",
-            "name_slug": "bones",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 38,
+      "profile": {
+        "name": "White",
+        "name_slug": "white",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 131,
-        "profile": {
-            "name": "Bones",
-            "name_slug": "bones",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 39,
+      "profile": {
+        "name": "White",
+        "name_slug": "white",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 132,
-        "profile": {
-            "name": "Bones",
-            "name_slug": "bones",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 40,
+      "profile": {
+        "name": "White",
+        "name_slug": "white",
+        "sex": "Male",
+        "type_horse": "COMMON",
+        "type_horse_slug": "common",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 133,
-        "profile": {
-            "name": "Ghost",
-            "name_slug": "ghost",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 41,
+      "profile": {
+        "name": "Aquamarine",
+        "name_slug": "aquamarine",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 134,
-        "profile": {
-            "name": "Ghost",
-            "name_slug": "ghost",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 42,
+      "profile": {
+        "name": "Aquamarine",
+        "name_slug": "aquamarine",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 135,
-        "profile": {
-            "name": "Ghost",
-            "name_slug": "ghost",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 43,
+      "profile": {
+        "name": "Aquamarine",
+        "name_slug": "aquamarine",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 136,
-        "profile": {
-            "name": "Ghost",
-            "name_slug": "ghost",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 44,
+      "profile": {
+        "name": "Aquamarine",
+        "name_slug": "aquamarine",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 137,
-        "profile": {
-            "name": "Hologram",
-            "name_slug": "hologram",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 45,
+      "profile": {
+        "name": "Blue",
+        "name_slug": "blue",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 138,
-        "profile": {
-            "name": "Hologram",
-            "name_slug": "hologram",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 46,
+      "profile": {
+        "name": "Blue",
+        "name_slug": "blue",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 139,
-        "profile": {
-            "name": "Hologram",
-            "name_slug": "hologram",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 47,
+      "profile": {
+        "name": "Blue",
+        "name_slug": "blue",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 140,
-        "profile": {
-            "name": "Hologram",
-            "name_slug": "hologram",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 48,
+      "profile": {
+        "name": "Blue",
+        "name_slug": "blue",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 141,
-        "profile": {
-            "name": "Hypothetical",
-            "name_slug": "hypothetical",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 49,
+      "profile": {
+        "name": "Cyan",
+        "name_slug": "cyan",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 142,
-        "profile": {
-            "name": "Hypothetical",
-            "name_slug": "hypothetical",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 50,
+      "profile": {
+        "name": "Cyan",
+        "name_slug": "cyan",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 143,
-        "profile": {
-            "name": "Hypothetical",
-            "name_slug": "hypothetical",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 51,
+      "profile": {
+        "name": "Cyan",
+        "name_slug": "cyan",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 144,
-        "profile": {
-            "name": "Hypothetical",
-            "name_slug": "hypothetical",
-            "sex": "Male",
-            "type_horse": "LEGENDARY",
-            "type_horse_slug": "legendary",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 52,
+      "profile": {
+        "name": "Cyan",
+        "name_slug": "cyan",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 145,
-        "profile": {
-            "name": "Deathcharger",
-            "name_slug": "deathcharger",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 53,
+      "profile": {
+        "name": "Dark Green",
+        "name_slug": "dark-green",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 146,
-        "profile": {
-            "name": "Deathcharger",
-            "name_slug": "deathcharger",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 54,
+      "profile": {
+        "name": "Dark Green",
+        "name_slug": "dark-green",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 147,
-        "profile": {
-            "name": "Deathcharger",
-            "name_slug": "deathcharger",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 55,
+      "profile": {
+        "name": "Dark Green",
+        "name_slug": "dark-green",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 148,
-        "profile": {
-            "name": "Deathcharger",
-            "name_slug": "deathcharger",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 56,
+      "profile": {
+        "name": "Dark Green",
+        "name_slug": "dark-green",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 149,
-        "profile": {
-            "name": "Glitch",
-            "name_slug": "glitch",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 57,
+      "profile": {
+        "name": "Green",
+        "name_slug": "green",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 150,
-        "profile": {
-            "name": "Glitch",
-            "name_slug": "glitch",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 58,
+      "profile": {
+        "name": "Green",
+        "name_slug": "green",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 151,
-        "profile": {
-            "name": "Glitch",
-            "name_slug": "glitch",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 59,
+      "profile": {
+        "name": "Green",
+        "name_slug": "green",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 152,
-        "profile": {
-            "name": "Glitch",
-            "name_slug": "glitch",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 60,
+      "profile": {
+        "name": "Green",
+        "name_slug": "green",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 153,
-        "profile": {
-            "name": "Wildfire",
-            "name_slug": "wildfire",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 61,
+      "profile": {
+        "name": "Orange",
+        "name_slug": "orange",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "running",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 154,
-        "profile": {
-            "name": "Wildfire",
-            "name_slug": "wildfire",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 62,
+      "profile": {
+        "name": "Orange",
+        "name_slug": "orange",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "idle",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 155,
-        "profile": {
-            "name": "Wildfire",
-            "name_slug": "wildfire",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 63,
+      "profile": {
+        "name": "Orange",
+        "name_slug": "orange",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "bruised",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
-        },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
     },
     {
-        "id": 156,
-        "profile": {
-            "name": "Wildfire",
-            "name_slug": "wildfire",
-            "sex": "Male",
-            "type_horse": "MYTHIC",
-            "type_horse_slug": "mythic",
-            "type_jockey": "NONE",
-            "time": "120 DAY"
+      "id": 64,
+      "profile": {
+        "name": "Orange",
+        "name_slug": "orange",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "staty": {
-            "status": "sleep",
-            "level": "1",
-            "exp": "5/99",
-            "power": "10",
-            "sprint": "15",
-            "speed": "50",
-            "energy": "2/9"
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "profile": {
+        "name": "Pink",
+        "name_slug": "pink",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
         },
-        "items": [
-            {
-                "id": 1
-            },
-            {
-                "id": 2
-            }
-        ]
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "profile": {
+        "name": "Pink",
+        "name_slug": "pink",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "profile": {
+        "name": "Pink",
+        "name_slug": "pink",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "profile": {
+        "name": "Pink",
+        "name_slug": "pink",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "profile": {
+        "name": "Purple",
+        "name_slug": "purple",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "profile": {
+        "name": "Purple",
+        "name_slug": "purple",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "profile": {
+        "name": "Purple",
+        "name_slug": "purple",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "profile": {
+        "name": "Purple",
+        "name_slug": "purple",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "profile": {
+        "name": "Red",
+        "name_slug": "red",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "profile": {
+        "name": "Red",
+        "name_slug": "red",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "profile": {
+        "name": "Red",
+        "name_slug": "red",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "profile": {
+        "name": "Red",
+        "name_slug": "red",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "profile": {
+        "name": "Yellow",
+        "name_slug": "yellow",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "profile": {
+        "name": "Yellow",
+        "name_slug": "yellow",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "profile": {
+        "name": "Yellow",
+        "name_slug": "yellow",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "profile": {
+        "name": "Yellow",
+        "name_slug": "yellow",
+        "sex": "Male",
+        "type_horse": "UNCOMMON",
+        "type_horse_slug": "uncommon",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "profile": {
+        "name": "Daisy",
+        "name_slug": "daisy",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "profile": {
+        "name": "Daisy",
+        "name_slug": "daisy",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "profile": {
+        "name": "Daisy",
+        "name_slug": "daisy",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "profile": {
+        "name": "Daisy",
+        "name_slug": "daisy",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "profile": {
+        "name": "Love",
+        "name_slug": "love",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "profile": {
+        "name": "Love",
+        "name_slug": "love",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "profile": {
+        "name": "Love",
+        "name_slug": "love",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "profile": {
+        "name": "Love",
+        "name_slug": "love",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "profile": {
+        "name": "Red Eyed Black",
+        "name_slug": "red-eyed-black",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "profile": {
+        "name": "Red Eyed Black",
+        "name_slug": "red-eyed-black",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "profile": {
+        "name": "Red Eyed Black",
+        "name_slug": "red-eyed-black",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "profile": {
+        "name": "Red Eyed Black",
+        "name_slug": "red-eyed-black",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "profile": {
+        "name": "Red Eyed Blue",
+        "name_slug": "red-eyed-blue",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 94,
+      "profile": {
+        "name": "Red Eyed Blue",
+        "name_slug": "red-eyed-blue",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "profile": {
+        "name": "Red Eyed Blue",
+        "name_slug": "red-eyed-blue",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "profile": {
+        "name": "Red Eyed Blue",
+        "name_slug": "red-eyed-blue",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "profile": {
+        "name": "Red Eyed Crimson",
+        "name_slug": "red-eyed-crimson",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 98,
+      "profile": {
+        "name": "Red Eyed Crimson",
+        "name_slug": "red-eyed-crimson",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 99,
+      "profile": {
+        "name": "Red Eyed Crimson",
+        "name_slug": "red-eyed-crimson",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "profile": {
+        "name": "Red Eyed Crimson",
+        "name_slug": "red-eyed-crimson",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "profile": {
+        "name": "Red Eyed Green",
+        "name_slug": "red-eyed-green",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "profile": {
+        "name": "Red Eyed Green",
+        "name_slug": "red-eyed-green",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "profile": {
+        "name": "Red Eyed Green",
+        "name_slug": "red-eyed-green",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 104,
+      "profile": {
+        "name": "Red Eyed Green",
+        "name_slug": "red-eyed-green",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "profile": {
+        "name": "Red Eyed Purple",
+        "name_slug": "red-eyed-purple",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "profile": {
+        "name": "Red Eyed Purple",
+        "name_slug": "red-eyed-purple",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "profile": {
+        "name": "Red Eyed Purple",
+        "name_slug": "red-eyed-purple",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 108,
+      "profile": {
+        "name": "Red Eyed Purple",
+        "name_slug": "red-eyed-purple",
+        "sex": "Male",
+        "type_horse": "RARE",
+        "type_horse_slug": "rare",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 109,
+      "profile": {
+        "name": "Black Gypsy",
+        "name_slug": "black-gypsy",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "profile": {
+        "name": "Black Gypsy",
+        "name_slug": "black-gypsy",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "profile": {
+        "name": "Black Gypsy",
+        "name_slug": "black-gypsy",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 112,
+      "profile": {
+        "name": "Black Gypsy",
+        "name_slug": "black-gypsy",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 113,
+      "profile": {
+        "name": "Nightmare",
+        "name_slug": "nightmare",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 114,
+      "profile": {
+        "name": "Nightmare",
+        "name_slug": "nightmare",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 115,
+      "profile": {
+        "name": "Nightmare",
+        "name_slug": "nightmare",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 116,
+      "profile": {
+        "name": "Nightmare",
+        "name_slug": "nightmare",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 117,
+      "profile": {
+        "name": "Rainbow",
+        "name_slug": "rainbow",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 118,
+      "profile": {
+        "name": "Rainbow",
+        "name_slug": "rainbow",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 119,
+      "profile": {
+        "name": "Rainbow",
+        "name_slug": "rainbow",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 120,
+      "profile": {
+        "name": "Rainbow",
+        "name_slug": "rainbow",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "profile": {
+        "name": "White Gypsy",
+        "name_slug": "white-gypsy",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 122,
+      "profile": {
+        "name": "White Gypsy",
+        "name_slug": "white-gypsy",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "profile": {
+        "name": "White Gypsy",
+        "name_slug": "white-gypsy",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "profile": {
+        "name": "White Gypsy",
+        "name_slug": "white-gypsy",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 125,
+      "profile": {
+        "name": "Wooden Horse",
+        "name_slug": "wooden-horse",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 126,
+      "profile": {
+        "name": "Wooden Horse",
+        "name_slug": "wooden-horse",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 127,
+      "profile": {
+        "name": "Wooden Horse",
+        "name_slug": "wooden-horse",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 128,
+      "profile": {
+        "name": "Wooden Horse",
+        "name_slug": "wooden-horse",
+        "sex": "Male",
+        "type_horse": "EPIC",
+        "type_horse_slug": "epic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 129,
+      "profile": {
+        "name": "Bones",
+        "name_slug": "bones",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "profile": {
+        "name": "Bones",
+        "name_slug": "bones",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 131,
+      "profile": {
+        "name": "Bones",
+        "name_slug": "bones",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 132,
+      "profile": {
+        "name": "Bones",
+        "name_slug": "bones",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 133,
+      "profile": {
+        "name": "Ghost",
+        "name_slug": "ghost",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 134,
+      "profile": {
+        "name": "Ghost",
+        "name_slug": "ghost",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 135,
+      "profile": {
+        "name": "Ghost",
+        "name_slug": "ghost",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 136,
+      "profile": {
+        "name": "Ghost",
+        "name_slug": "ghost",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 137,
+      "profile": {
+        "name": "Hologram",
+        "name_slug": "hologram",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 138,
+      "profile": {
+        "name": "Hologram",
+        "name_slug": "hologram",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 139,
+      "profile": {
+        "name": "Hologram",
+        "name_slug": "hologram",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 140,
+      "profile": {
+        "name": "Hologram",
+        "name_slug": "hologram",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 141,
+      "profile": {
+        "name": "Hypothetical",
+        "name_slug": "hypothetical",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 142,
+      "profile": {
+        "name": "Hypothetical",
+        "name_slug": "hypothetical",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 143,
+      "profile": {
+        "name": "Hypothetical",
+        "name_slug": "hypothetical",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 144,
+      "profile": {
+        "name": "Hypothetical",
+        "name_slug": "hypothetical",
+        "sex": "Male",
+        "type_horse": "LEGENDARY",
+        "type_horse_slug": "legendary",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 145,
+      "profile": {
+        "name": "Deathcharger",
+        "name_slug": "deathcharger",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 146,
+      "profile": {
+        "name": "Deathcharger",
+        "name_slug": "deathcharger",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 147,
+      "profile": {
+        "name": "Deathcharger",
+        "name_slug": "deathcharger",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 148,
+      "profile": {
+        "name": "Deathcharger",
+        "name_slug": "deathcharger",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 149,
+      "profile": {
+        "name": "Glitch",
+        "name_slug": "glitch",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 150,
+      "profile": {
+        "name": "Glitch",
+        "name_slug": "glitch",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 151,
+      "profile": {
+        "name": "Glitch",
+        "name_slug": "glitch",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 152,
+      "profile": {
+        "name": "Glitch",
+        "name_slug": "glitch",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 153,
+      "profile": {
+        "name": "Wildfire",
+        "name_slug": "wildfire",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "running",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 154,
+      "profile": {
+        "name": "Wildfire",
+        "name_slug": "wildfire",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "idle",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 155,
+      "profile": {
+        "name": "Wildfire",
+        "name_slug": "wildfire",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "bruised",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    },
+    {
+      "id": 156,
+      "profile": {
+        "name": "Wildfire",
+        "name_slug": "wildfire",
+        "sex": "Male",
+        "type_horse": "MYTHIC",
+        "type_horse_slug": "mythic",
+        "type_jockey": "NONE",
+        "time": "120 DAY"
+      },
+      "staty": {
+        "status": "sleep",
+        "level": "1",
+        "exp": "5/99",
+        "power": "10",
+        "sprint": "15",
+        "speed": "50",
+        "energy": "2/9"
+      },
+      "items": [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
     }
-]
+  ]
