@@ -11,27 +11,28 @@ interface ShopItem {
   quantity: string
 }
 
+const DROP_DURATION = 2000
+const OPEN_DURATION = 2500
+const GROW_DURATION = 750
+
 const ShopChestCard: React.FC = () => {
   const [items, setItems] = useState<ShopItem[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [stage, setStage] = useState<'grow'|'drop'|'open'|null>(null)
 
-  const growRef = useRef<NodeJS.Timeout>()
-  const dropRef = useRef<NodeJS.Timeout>()
-  const openRef = useRef<NodeJS.Timeout>()
-
-  const DROP_DURATION = 2000
-  const OPEN_DURATION = 2500
-  const GROW_DURATION = 750
+  // tipagem segura para o retorno de setTimeout no browser
+  const growRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const dropRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const openRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     setItems(shopData)
   }, [])
 
   const clearAll = () => {
-    clearTimeout(growRef.current!)
-    clearTimeout(dropRef.current!)
-    clearTimeout(openRef.current!)
+    if (growRef.current !== null) clearTimeout(growRef.current)
+    if (dropRef.current !== null) clearTimeout(dropRef.current)
+    if (openRef.current !== null) clearTimeout(openRef.current)
   }
 
   const handleOpen = () => {
@@ -46,25 +47,34 @@ const ShopChestCard: React.FC = () => {
     setIsModalOpen(false)
   }
 
+  // transição para 'drop' após finalizar a animação de grow
   useEffect(() => {
     if (stage === 'grow') {
       growRef.current = setTimeout(() => setStage('drop'), GROW_DURATION)
     }
-    return () => { clearTimeout(growRef.current!) }
+    return () => {
+      if (growRef.current !== null) clearTimeout(growRef.current)
+    }
   }, [stage])
 
+  // transição para 'open' após a animação de drop
   useEffect(() => {
     if (stage === 'drop') {
       dropRef.current = setTimeout(() => setStage('open'), DROP_DURATION)
     }
-    return () => { clearTimeout(dropRef.current!) }
+    return () => {
+      if (dropRef.current !== null) clearTimeout(dropRef.current)
+    }
   }, [stage])
 
+  // fecha o modal quando a animação de open terminar
   useEffect(() => {
     if (stage === 'open') {
       openRef.current = setTimeout(handleClose, OPEN_DURATION)
     }
-    return () => { clearTimeout(openRef.current!) }
+    return () => {
+      if (openRef.current !== null) clearTimeout(openRef.current)
+    }
   }, [stage])
 
   return (

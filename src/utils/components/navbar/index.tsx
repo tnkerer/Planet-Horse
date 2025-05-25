@@ -52,9 +52,11 @@ const Navbar: React.FC = () => {
             <Link href='https://opensea.io/0x96ca93ac0d9e26179dcd11db08af88a3506e8f03/created'>
               <a target="_blank">MARKETPLACE</a>
             </Link>
-            {/*<Link href='/staking'>
+            {/*
+            <Link href='/staking'>
               <a>STAKING</a>
-            </Link> */}
+            </Link> 
+            */}
           </div>
           <div
             className={styles.account}
