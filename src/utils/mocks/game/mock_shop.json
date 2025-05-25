@@ -5,6 +5,6 @@
         "src-idle": "chest_idle",
         "src-drop": "chest_drop",
         "src-open": "chest_opening",
-        "quantity": "0"
+        "quantity": "1"
     }
 ]
