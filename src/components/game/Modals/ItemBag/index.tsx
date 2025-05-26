@@ -64,7 +64,7 @@ const ItemBag: React.FC<Props> = ({ status, closeModal }) => {
                   <>
                     <div className={styles.imageWrapper}>
                       <Image
-                        src={`/assets/items/${item.src}.png`}
+                        src={`/assets/items/${item.src}.webp`}
                         alt={item.name}
                         layout="fill"
                         objectFit="contain"
