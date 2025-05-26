@@ -1,0 +1,155 @@
+/* OVERLAY */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+/* MODAL BASE */
+.modal {
+    position: relative;
+    /* 1. bump the container ~1.4× so everything fits inside the paper */
+    width: 560px;
+    /* 400px × 1.4 */
+    max-width: 90vw;
+    background-image: url('/assets/game/bridge/paper.gif');
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 2rem;
+    box-sizing: border-box;
+    text-align: left;
+    font-family: 'SpaceHorse';
+    /* ensure nothing pokes outside the paper edges */
+    overflow: hidden;
+}
+
+/* 3. CLOSE BUTTON */
+.closeBtn {
+    position: absolute;
+    /* push outside the top-right corner, like other modals */
+    top: -1px;
+    right: -1px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* 2. TITLE */
+.title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 0 0 2.5rem 0;
+    /* remove top margin entirely */
+    padding-top: 0.5rem;
+    /* add a bit of padding instead */
+}
+
+/* ROW */
+.row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+/* INPUT + MAX */
+.inputGroup {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /* small gap between input/max and available text */
+    flex: 1;
+}
+
+.input {
+    width: 100%;
+    padding: 0.5rem 4rem 0.5rem 1rem;
+    border: 1px solid #c4b584;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #000;
+}
+
+.maxBtn {
+    position: absolute;
+    top: 30%;
+    right: 1rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    color: #000;
+    cursor: pointer;
+}
+
+/* DEPOSIT / WITHDRAW BUTTON */
+.bridgeBtn {
+    margin-left: 1rem;
+    font-size: 1rem;
+    width: 100px;
+    height: 2.5rem;
+    background-image: url('/assets/game/buttons/button.svg');
+    background-color: transparent;
+    /* no white fill */
+    /* size to exactly match the SVG's native dimensions */
+    width: 159px;
+    /* ← replace 200px with your button.svg actual width */
+    height: 33px;
+    /* ← replace 50px with your button.svg actual height */
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.bridgeBtn:hover {
+    background-image: url('/assets/game/buttons/button-mouse.svg');
+}
+
+.bridgeBtn:active {
+    background-image: url('/assets/game/buttons/button-click.svg');
+}
+
+/* AVAILABLE TEXT */
+.available {
+    margin-left: 0rem;
+    font-size: 0.9rem;
+    color: #000;
+}
+
+@media (max-width: 560px) {
+    .modal {
+        width: 90vw;
+        padding: 1rem;
+        overflow-y: auto;
+        background-image: url('/assets/game/bridge/paper_mobile.gif');
+    }
+
+    .title {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .closeBtn {
+        top: -1px;
+        right: 10px;
+    }
+
+    .bridgeBtn {
+        margin: 0.5rem 0;
+    }
+}

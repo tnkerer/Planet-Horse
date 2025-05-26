@@ -6,13 +6,16 @@ import depositPhorse from '@/assets/profile/deposit-phorse.png'
 import depositPhorseOver from '@/assets/profile/deposit-horse-mouse.gif'
 import withdrawHorse from '@/assets/profile/with-horse.png'
 import withdrawHorseOver from '@/assets/profile/with-horse-mouse.gif'
+import TokenBridge from '@/components/game/Modals/TokenBridge'
 
 const Papers: React.FC = () => {
   const [depositPhorseOver1, setDepositPhorseOver] = useState(false)
   const [withdrawHorseOver1, setWithdrawHorseOver] = useState(false)
+  const [showBridge, setShowBridge] = useState(false)
 
   return (
     <div className={styles.container}>
+      {showBridge && <TokenBridge onClose={() => setShowBridge(false)} />}
       <div className={styles.panel}>
         <span className={styles.slot}>
           <span className={styles.profile}>
@@ -62,6 +65,7 @@ const Papers: React.FC = () => {
               className={styles.depositPhorse}
               onMouseOver={() => setDepositPhorseOver(true)}
               onMouseLeave={() => setDepositPhorseOver(false)}
+              onClick={() => setShowBridge(true)}
             >
               {depositPhorseOver1
                 ? <Image
@@ -77,6 +81,7 @@ const Papers: React.FC = () => {
               className={styles.withdrawPhorse}
               onMouseOver={() => setWithdrawHorseOver(true)}
               onMouseLeave={() => setWithdrawHorseOver(false)}
+              onClick={() => setShowBridge(true)}
             >
               {withdrawHorseOver1
                 ? <Image

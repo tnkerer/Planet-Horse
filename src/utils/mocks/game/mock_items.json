@@ -15,9 +15,16 @@
     },
     {
         "id": 8,
-        "name": "Double XP Potion",
+        "name": "Superior XP Potion",
         "src": "xp",
         "value": "1",
-        "description" : "Double XP Potion, it doubles the XP earned from racing during the course of 10 races."
+        "description" : "Superior XP Potion, it doubles the XP earned from racing during the course of 15 races."
+    },
+    {
+        "id": 9,
+        "name": "Common XP Potion",
+        "src": "common_xp",
+        "value": "4",
+        "description" : "Common XP Potion, it grants +50% XP from racing during the course of 5 races."
     }
 ]
