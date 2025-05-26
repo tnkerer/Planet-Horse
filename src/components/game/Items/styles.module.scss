@@ -74,15 +74,15 @@
 
   .countCurrency {
     display: flex;
+    align-items: center;   // vertical‐centers everything
+    gap: 8px;  
 
     img {
       width: 50px;
       height: 50px;
-      margin-right: 5px;
     }
 
     span {
-      align-self: center;
       max-width: 180px;
       background: #582c25;
       padding: 4px 8px;
@@ -90,6 +90,7 @@
       font-family: 'SpaceHorse';
       font-size: 20px;
       color: #fff;
+      margin-right: 8px;
     }
   }
 }
