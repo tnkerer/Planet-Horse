@@ -1,0 +1,115 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.modal {
+    position: relative;
+    width: 350px;
+    max-width: 90vw;
+    background-image: url('/assets/confirm_background.webp');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 2rem 1rem 1.5rem;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+
+
+@media (max-width: 700px) {
+    .modal {
+        width: 90vw;
+        padding: 1.5rem 0.75rem 1rem;
+    }
+}
+
+/* 5. Close “X” button */
+.closeBtn {
+    position: absolute;
+    /* push outside the top-right corner, like other modals */
+    top: -15px;
+    right: -15px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* 4. Question text */
+.text {
+    font-family: 'SpaceHorse';
+    font-size: 1.1rem;
+    color: #000;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 700px) {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* 2. Button row */
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+/* common button styles */
+.buttons button {
+    font-family: 'SpaceHorse';
+    color: white;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+    width: 120px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    justify-content: center;
+    /* ensure no white fill */
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    padding: 0;
+}
+
+@media (max-width: 700px) {
+    .buttons button {
+        width: 40vw;
+        height: 8vw;
+        font-size: 3vw;
+    }
+}
+
+/* 2A. YES button states */
+.yesBtn {
+    background-image: url('/assets/buttons/yes.webp');
+}
+
+.yesBtn:hover {
+    background-image: url('/assets/buttons/yes_hover.webp');
+}
+
+.yesBtn:active {
+    background-image: url('/assets/buttons/yes_click.webp');
+}
+
+/* 2B. NO button states */
+.noBtn {
+    background-image: url('/assets/buttons/no.webp');
+}
+
+.noBtn:hover {
+    background-image: url('/assets/buttons/no_hover.webp');
+}
+
+.noBtn:active {
+    background-image: url('/assets/buttons/no_click.webp');
+}

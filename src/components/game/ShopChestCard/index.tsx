@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import shopData from '@/utils/mocks/game/mock_shop.json'
+import ConfirmModal from '../Modals/ConfirmModal'
 
 interface ShopItem {
   id: number
@@ -18,7 +19,8 @@ const GROW_DURATION = 750
 const ShopChestCard: React.FC = () => {
   const [items, setItems] = useState<ShopItem[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [stage, setStage] = useState<'grow'|'drop'|'open'|null>(null)
+  const [stage, setStage] = useState<'grow' | 'drop' | 'open' | 'opened' | null>(null)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   // tipagem segura para o retorno de setTimeout no browser
   const growRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -67,10 +69,11 @@ const ShopChestCard: React.FC = () => {
     }
   }, [stage])
 
-  // fecha o modal quando a animação de open terminar
   useEffect(() => {
     if (stage === 'open') {
-      openRef.current = setTimeout(handleClose, OPEN_DURATION)
+      openRef.current = setTimeout(() => {
+        setStage('opened')
+      }, OPEN_DURATION)
     }
     return () => {
       if (openRef.current !== null) clearTimeout(openRef.current)
@@ -97,6 +100,13 @@ const ShopChestCard: React.FC = () => {
                 className={styles.gif}
               />
             )}
+            {stage === 'opened' && (
+              <img
+                src="/assets/items/chest_opened.gif"
+                alt="Chest Opened"
+                className={styles.gif}
+              />
+            )}
           </div>
         </div>
       )}
@@ -110,7 +120,7 @@ const ShopChestCard: React.FC = () => {
           >
             <div className={styles.itemBadge}>{item.quantity}</div>
             <div className={styles.buttonRow}>
-              <button className={styles.buyButton} onClick={() => console.log('BUY CHEST')}>
+              <button className={styles.buyButton} onClick={() => setShowConfirm(true)}>
                 BUY CHEST
               </button>
               <button
@@ -128,6 +138,13 @@ const ShopChestCard: React.FC = () => {
           </div>
         ))}
       </div>
+      {showConfirm && (
+        <ConfirmModal
+          text="Do you wish to buy a chest for 250 PHORSE?"
+          onClose={() => setShowConfirm(false)}
+          onConfirm={() => console.log("Confirmed on Modal!")}
+        />
+      )}
     </>
   )
 }

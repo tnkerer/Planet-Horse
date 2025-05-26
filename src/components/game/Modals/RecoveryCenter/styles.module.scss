@@ -87,15 +87,15 @@
           width: 140px;
           height: 73px;
           border: none;
-          background: url('/assets/normal.webp') no-repeat center/contain;
+          background: url('/assets/buttons/yes.webp') no-repeat center/contain;
           cursor: pointer;
           z-index: 2;
   
           &:hover {
-            background-image: url('/assets/hovering.webp');
+            background-image: url('/assets/buttons/yes_hover.webp');
           }
           &:active {
-            background-image: url('/assets/clicked.webp');
+            background-image: url('/assets/buttons/yes_click.webp');
           }
         }
       }
