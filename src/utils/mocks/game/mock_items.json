@@ -7,10 +7,17 @@
         "description" : "A bale of hay. Will recover 3 energy instantly."
     },
     {
-        "id": 6,
-        "name": "Hay",
-        "src": "hay",
-        "value": "32",
-        "description" : "A bale of hay. Will recover 3 energy instantly."
+        "id": 7,
+        "name": "Common Saddle",
+        "src": "saddle",
+        "value": "1",
+        "description" : "A common saddle, it will decrease the chance of a horse getting hurt by 20% during the course of 10 races."
+    },
+    {
+        "id": 8,
+        "name": "Double XP Potion",
+        "src": "xp",
+        "value": "1",
+        "description" : "Double XP Potion, it doubles the XP earned from racing during the course of 10 races."
     }
 ]

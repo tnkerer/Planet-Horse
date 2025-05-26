@@ -8,6 +8,8 @@ import SingleHorse from '../SingleHorse'
 import { horses } from '@/utils/mocks/game'
 import Image from 'next/image'
 import Link from 'next/link'
+import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
+import medal from '@/assets/icons/medal.gif'
 
 interface Props {
   changeView: (view: string) => void
@@ -77,8 +79,10 @@ const Horses: React.FC<Props> = ({ changeView }) => {
             </div>
           </div>
           <div className={styles.countCurrency}>
-            <Image width={50} height={50} src='/assets/icons/coin.webp' alt="phorse coin" />
-            <span>100000.00</span>
+            <Image width={50} height={50} src={phorseToken} alt="phorse coin" />
+            <span>3000</span>
+            <Image width={29} height={40} src={medal} alt="medals" />
+            <span>10</span>
           </div>
         </div>
       </div>

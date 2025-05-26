@@ -75,8 +75,17 @@ const ItemBag: React.FC<Props> = ({ status, closeModal }) => {
                     </span>
                     {/* Tooltip com description */}
                     <div className={styles.tooltip}>
-                      {item.description}
-                    </div>
+  {item.description
+    .split(' ')
+    .reduce<(string|JSX.Element)[]>((acc, word, i) => {
+      // every 8 words, inject a <br/>
+      if (i > 0 && i % 8 === 0) {
+        acc.push(<br key={`br-${i}`} />)
+      }
+      acc.push(`${word} `)
+      return acc
+    }, [])}
+</div>
                   </>
                 )}
               </button>

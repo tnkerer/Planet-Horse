@@ -36,6 +36,7 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
         <>
             <div className={styles.singleHorse + ' type-' + horse.profile.type_horse_slug}>
                 <div className={styles.maskCard}>
+                <div className={styles.horseId}>{horse.id}</div>
                     <div className={styles.horseGif}>
                         {loading
                             ? (null)
@@ -114,12 +115,14 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                             <div className={styles.singleButton}>
                                 <button className={styles.restoreButton}
                                     onClick={() => openModal('restore', horse.id)}
+                                    disabled={horse.staty.status !== 'bruised'}
                                 /* onClick={() => openModal('quickRace', horse.id)} */
                                 ></button>
                             </div>
                             <div className={styles.singleButton}>
                                 <button className={styles.startButton}
                                     onClick={() => openModal('raceStart', horse.id)}
+                                    disabled={horse.staty.status !== 'idle'}
                                 ></button>
                             </div>
                         </div>
