@@ -147,7 +147,7 @@
       &::before {
         content: 'Connect to wallet';
         
-        @media screen and (max-width: 490px) {
+        @media screen and (max-width: 560px) {
           font-size: 16px;
           content: 'Connect';
         }
