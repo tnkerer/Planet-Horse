@@ -54,7 +54,7 @@
 
       @media screen and (max-width: 490px) {
         position: absolute;
-        left: 40%;
+        left: 50%;
         transform: translateX(-50%);       
         margin-left: 0; 
       }
@@ -137,7 +137,7 @@
       background-color: transparent;
       color: #fff;
       font-family: 'UpheavalPro';
-      font-size: 20px;
+      font-size: 24px;
       outline: 0;
       border: 0;
       margin-bottom: 3px;
@@ -148,6 +148,7 @@
         content: 'Connect to wallet';
         
         @media screen and (max-width: 490px) {
+          font-size: 16px;
           content: 'Connect';
         }
       }
