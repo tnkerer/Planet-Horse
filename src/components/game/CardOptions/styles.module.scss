@@ -66,11 +66,9 @@
 
         &.fusionButton {
           font-family: 'SpaceHorse';
-          /* background-image: url('../../../assets/game/buttons/button.svg'); */
           background-image: url('../../../assets/game/buttons/button-click.svg');
 
           &:hover {
-            /* background-image: url('../../../assets/game/buttons/button-mouse.svg'); */
             background-image: url('../../../assets/game/buttons/button-click.svg');
           }
 
@@ -81,11 +79,9 @@
 
         &.upgradeButton {
           font-family: 'SpaceHorse';
-          /* background-image: url('../../../assets/game/buttons/button.svg'); */
           background-image: url('../../../assets/game/buttons/button-click.svg');
 
           &:hover {
-            /* background-image: url('../../../assets/game/buttons/button-mouse.svg'); */
             background-image: url('../../../assets/game/buttons/button-click.svg');
           }
 
@@ -94,6 +90,37 @@
           }
         }
       }
+    }
+  }
+
+  @media (max-width: 560px) {
+    .cards {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      gap: 1rem;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      padding-left: 1rem;
+      scroll-padding-left: 1rem;
+      scrollbar-width: none;
+    }
+
+    .card {
+      scroll-snap-align: start; 
+      margin: 2px;
+      flex: 0 0 auto;
+      width: 200px;
+      height: auto;
+    }
+
+    .card button {
+      bottom: 5%;
     }
   }
 }
