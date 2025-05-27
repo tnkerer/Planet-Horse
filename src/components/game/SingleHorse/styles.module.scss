@@ -11,7 +11,7 @@ $default-color: #919191; // cinza fallback
         width: 46vw;
         height: 29vw;
         display: flex;
-        z-index: 1;
+        z-index: 0;
         position: relative;
 
         @media screen and (max-width: 920px) {

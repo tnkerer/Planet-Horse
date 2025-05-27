@@ -13,6 +13,7 @@ interface Props {
 const CardOptions: React.FC<Props> = ({ changeView }) => {
   return (
     <div className={styles.container}>
+      <div className={styles.cardsWrapper}>
         <div className={styles.cards}>
           <div className={styles.card}>
             <Image layout="fill" src={levelGif} alt="card-level" width={200} height={200} />
@@ -43,6 +44,12 @@ const CardOptions: React.FC<Props> = ({ changeView }) => {
             >Coming Soon...</button>
           </div>
         </div>
+        <img
+          src="/cursor/clickable.png"
+          alt="Swipe to see more"
+          className={styles.swipeHint}
+        />
+      </div>
     </div>
   )
 }
