@@ -45,7 +45,7 @@ const CardOptions: React.FC<Props> = ({ changeView }) => {
           </div>
         </div>
         <img
-          src="/cursor/clickable.png"
+          src="/cursor/luva.png"
           alt="Swipe to see more"
           className={styles.swipeHint}
         />
