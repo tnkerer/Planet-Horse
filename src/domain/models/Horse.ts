@@ -13,6 +13,7 @@ export interface Horse {
       status: string
       level: string
       exp: string
+      upgradable: boolean
       power: string
       sprint: string
       speed: string
