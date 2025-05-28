@@ -5,10 +5,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import exampleUserPic from '@/assets/user-profiles/example-user.gif'
 import noUserPic from '@/assets/user-profiles/no-user.gif'
+import { useWallet } from '@/contexts/WalletContext'
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
-  const [isConnected, setIsConnected] = useState(false)
+  const { address, isConnected, connect, disconnect } = useWallet()
 
   return (
     <>
@@ -53,21 +54,16 @@ const Navbar: React.FC = () => {
             <Link href='https://opensea.io/0x96ca93ac0d9e26179dcd11db08af88a3506e8f03/created'>
               <a target="_blank">MARKETPLACE</a>
             </Link>
-            {/*
-            <Link href='/staking'>
-              <a>STAKING</a>
-            </Link> 
-            */}
           </div>
           <div
             className={styles.account}
-            onClick={() => setIsConnected(!isConnected)}
+            onClick={() => (isConnected ? disconnect() : connect())}
           >
             <Link href={'#'}>
               {isConnected
                 ? (
                   <div id={styles.userProfileButton}>
-                    <span className={styles.address}>{'0x4431fadc0694ba'.slice(0, 9)}</span>
+                    <span className={styles.address}>{address!.slice(0, 9)}</span>
                     <div className={styles.userPicture}>
                       <Image src={exampleUserPic} />
                     </div>
