@@ -26,5 +26,12 @@
         "src": "common_xp",
         "value": "4",
         "description" : "Common XP Potion, it grants +50% XP from racing during the course of 5 races."
+    },
+    {
+        "id": 10,
+        "name": "Common Horseshoe",
+        "src": "horseshoe",
+        "value": "7",
+        "description" : "A horseshoe. Improve the odds of a horse scoring a better position by 10% during the course of 30 races."
     }
 ]

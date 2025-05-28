@@ -4,6 +4,7 @@ import Burger from '@/utils/components/burger'
 import Image from 'next/image'
 import Link from 'next/link'
 import exampleUserPic from '@/assets/user-profiles/example-user.gif'
+import noUserPic from '@/assets/user-profiles/no-user.gif'
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
@@ -72,7 +73,13 @@ const Navbar: React.FC = () => {
                     </div>
                   </div>
                 )
-                : <button />}
+                : (<div id={styles.userProfileButton}>
+                  <span className={styles.address}>{'Connect Wallet'}</span>
+                  <div className={styles.userPicture}>
+                    <Image src={noUserPic} />
+                  </div>
+                </div>)
+              }
             </Link>
           </div>
         </div>
