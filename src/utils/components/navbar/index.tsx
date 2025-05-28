@@ -11,6 +11,11 @@ const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
   const { address, isConnected, connect, disconnect } = useWallet()
 
+  const handleAccountClick = (): void => {
+    if (isConnected) disconnect()
+    else connect()
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -57,13 +62,13 @@ const Navbar: React.FC = () => {
           </div>
           <div
             className={styles.account}
-            onClick={() => (isConnected ? disconnect() : connect())}
+            onClick={handleAccountClick}
           >
             <Link href={'#'}>
               {isConnected
                 ? (
                   <div id={styles.userProfileButton}>
-                    <span className={styles.address}>{address!.slice(0, 9)}</span>
+                    <span className={styles.address}>{(address || '').slice(0, 9)}</span>
                     <div className={styles.userPicture}>
                       <Image src={exampleUserPic} />
                     </div>

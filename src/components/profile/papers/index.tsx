@@ -7,11 +7,13 @@ import depositPhorseOver from '@/assets/profile/deposit-horse-mouse.gif'
 import withdrawHorse from '@/assets/profile/with-horse.png'
 import withdrawHorseOver from '@/assets/profile/with-horse-mouse.gif'
 import TokenBridge from '@/components/game/Modals/TokenBridge'
+import { useWallet } from '@/contexts/WalletContext'
 
 const Papers: React.FC = () => {
   const [depositPhorseOver1, setDepositPhorseOver] = useState(false)
   const [withdrawHorseOver1, setWithdrawHorseOver] = useState(false)
   const [showBridge, setShowBridge] = useState(false)
+  const { address, isConnected } = useWallet()
 
   return (
     <div className={styles.container}>
@@ -49,7 +51,7 @@ const Papers: React.FC = () => {
               </span>
             </span>
             <span className={styles.walletAddress}>
-              0X268515615489723164987618311
+              { isConnected ? `${(address || '').slice(0, 32)}...` : 'Please Connect Your Wallet!'}
             </span>
           </span>
         </span>
