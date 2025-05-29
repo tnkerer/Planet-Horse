@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from './styles.module.scss'
 import ConfirmModal from '../ConfirmModal'
 import closeIcon from '@/assets/game/pop-up/fechar.png'
+import { useUser } from '@/contexts/UserContext'
 
 interface TokenBridgeProps {
     onClose: () => void
@@ -11,19 +12,19 @@ interface TokenBridgeProps {
 const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
     // valores disponíveis; ajuste conforme sua lógica
     const availableDeposit = 1000
-    const availableWithdraw = 500
 
     const [depositAmount, setDepositAmount] = useState('')
     const [withdrawAmount, setWithdrawAmount] = useState('')
     const [showConfirm, setShowConfirm] = useState(false)
     const [confirmText, setConfirmText] = useState('')
     const [confirmAction, setConfirmAction] = useState<() => void>(() => () => { })
+    const { phorse, updateBalance } = useUser()
 
     const handleMaxDeposit = () =>
         setDepositAmount(availableDeposit.toString())
 
     const handleMaxWithdraw = () =>
-        setWithdrawAmount(availableWithdraw.toString())
+        setWithdrawAmount(phorse.toString())
 
     const openDepositConfirm = () => {
         setConfirmText(
@@ -121,7 +122,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
                                 max
                             </button>
                             <div className={styles.available}>
-                            Available: {availableWithdraw}
+                            Available: {phorse}
                         </div>
                         </div>
                         <button

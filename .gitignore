@@ -3,3 +3,4 @@ dist
 .next
 package-lock.json
 yarn.lock
+.env

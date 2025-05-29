@@ -8,12 +8,14 @@ import withdrawHorse from '@/assets/profile/with-horse.png'
 import withdrawHorseOver from '@/assets/profile/with-horse-mouse.gif'
 import TokenBridge from '@/components/game/Modals/TokenBridge'
 import { useWallet } from '@/contexts/WalletContext'
+import { useUser } from '@/contexts/UserContext'
 
 const Papers: React.FC = () => {
   const [depositPhorseOver1, setDepositPhorseOver] = useState(false)
   const [withdrawHorseOver1, setWithdrawHorseOver] = useState(false)
   const [showBridge, setShowBridge] = useState(false)
   const { address, isConnected } = useWallet()
+  const { phorse, updateBalance } = useUser()
 
   return (
     <div className={styles.container}>
@@ -42,16 +44,16 @@ const Papers: React.FC = () => {
               <span className={styles.slot}>
                 <span className={styles.phorseCoins}>
                   <span className={styles.icon}>
-                    <Image src='/assets/profile/phorse token.svg' width={250} height={250} />
+                    <Image src='/assets/icons/phorse-animation.gif' width={250} height={250} />
                   </span>
                   <span className={styles.amount}>
-                    0 phorse
+                    {phorse ? phorse : 0} phorse
                   </span>
                 </span>
               </span>
             </span>
             <span className={styles.walletAddress}>
-              { isConnected ? `${(address || '').slice(0, 32)}...` : 'Please Connect Your Wallet!'}
+              {isConnected ? `${(address || '').slice(0, 32)}...` : 'Please Connect Your Wallet!'}
             </span>
           </span>
         </span>
@@ -71,13 +73,13 @@ const Papers: React.FC = () => {
             >
               {depositPhorseOver1
                 ? <Image
-                    src={depositPhorseOver}
-                    layout='responsive'
-                  />
+                  src={depositPhorseOver}
+                  layout='responsive'
+                />
                 : <Image
-                    src={depositPhorse}
-                    layout='responsive'
-                  />}
+                  src={depositPhorse}
+                  layout='responsive'
+                />}
             </span>
             <span
               className={styles.withdrawPhorse}
@@ -87,13 +89,13 @@ const Papers: React.FC = () => {
             >
               {withdrawHorseOver1
                 ? <Image
-                    src={withdrawHorseOver}
-                    layout='responsive'
-                  />
+                  src={withdrawHorseOver}
+                  layout='responsive'
+                />
                 : <Image
-                    src={withdrawHorse}
-                    layout='responsive'
-                  />}
+                  src={withdrawHorse}
+                  layout='responsive'
+                />}
             </span>
           </span>
         </span>

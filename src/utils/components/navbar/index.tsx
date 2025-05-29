@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import Burger from '@/utils/components/burger'
 import Image from 'next/image'
@@ -6,18 +6,39 @@ import Link from 'next/link'
 import exampleUserPic from '@/assets/user-profiles/example-user.gif'
 import noUserPic from '@/assets/user-profiles/no-user.gif'
 import { useWallet } from '@/contexts/WalletContext'
+import ConfirmModal from '@/components/game/Modals/ConfirmModal'
+import { useUser } from '@/contexts/UserContext'
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
-  const { address, isConnected, connect, disconnect } = useWallet()
+  const { address, isConnected, connect, disconnect, signIn } = useWallet()
+  const { updateBalance } = useUser()
+  const [showConfirm, setShowConfirm] = useState(false)
 
-  const handleAccountClick = (): void => {
-    if (isConnected) disconnect()
-    else connect()
+  const closeConfirm = () => setShowConfirm(false)
+  const handleConfirm = () => {
+    disconnect()
+    setShowConfirm(false)
+  }
+
+  const handleAccountClick = async (): Promise<void> => {
+    if (isConnected) {
+      setShowConfirm(true)
+    }
+    else {
+      await connect()
+    }
   }
 
   return (
     <>
+      {showConfirm && (
+        <ConfirmModal
+          text='You sure you want to disconnect?'
+          onClose={closeConfirm}
+          onConfirm={handleConfirm}
+        />
+      )}
       <div className={styles.container}>
         <svg width='100%' height='90px'>
           <rect y='75' fill='#582c25' width='100%' height='4' />
@@ -68,7 +89,7 @@ const Navbar: React.FC = () => {
               {isConnected
                 ? (
                   <div id={styles.userProfileButton}>
-                    <span className={styles.address}>{(address || '').slice(0, 9)}</span>
+                    <span className={styles.address}>{`${(address || '').slice(0, 9)}...`}</span>
                     <div className={styles.userPicture}>
                       <Image src={exampleUserPic} />
                     </div>

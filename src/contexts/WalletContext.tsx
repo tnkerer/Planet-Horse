@@ -1,129 +1,170 @@
-// src/contexts/WalletContext.tsx
 import React, {
   createContext,
   useContext,
   useEffect,
   useState,
   ReactNode,
-  useRef
+  useRef,
 } from 'react'
+import { BrowserProvider } from 'ethers'
 import {
   ConnectorEvent,
   requestRoninWalletConnector,
   IBaseConnector,
-  IConnectResult
+  IConnectResult,
 } from '@sky-mavis/tanto-connect'
+
+/** Helpers to inspect the JWT cookie */
+function getJwtFromCookie(): string | null {
+  const match = document.cookie.match(/(?:^|; )jid=([^;]*)/)
+  return match ? match[1] : null
+}
+
+function isJwtExpired(token: string): boolean {
+  try {
+    const [, payload] = token.split('.')
+    const { exp } = JSON.parse(atob(payload)) as { exp: number }
+    return Date.now() >= exp * 1000
+  } catch {
+    return true
+  }
+}
 
 interface WalletContextValue {
   address: string | null
-  chainId: number | null
   isConnected: boolean
+  isAuthorized: boolean
   connect: () => Promise<void>
   disconnect: () => Promise<void>
+  /** Pass in an address to override state if needed */
+  signIn: (overrideAddress?: string) => Promise<void>
 }
 
 const WalletContext = createContext<WalletContextValue | undefined>(undefined)
 
-export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const WalletProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [address, setAddress] = useState<string | null>(null)
-  const [chainId, setChainId] = useState<number | null>(null)
+  const [ isAuthorized, setIsAuthorized ] = useState<boolean>(false)
   const connectorRef = useRef<IBaseConnector | null>(null)
 
-  const isConnected = Boolean(address)
-
+  // Initialize the Ronin connector
   useEffect(() => {
     let mounted = true
-
-    async function initConnector() {
-      try {
-        const connector = await requestRoninWalletConnector()
+    requestRoninWalletConnector()
+      .then((connector) => {
         connectorRef.current = connector
-
-        // CONNECT event delivers an object with .account:string and .chainId:number
         connector.on(
           ConnectorEvent.CONNECT,
-          (res: IConnectResult) => {
-            if (!mounted) return
-            setAddress(res.account)
-            setChainId(res.chainId)               // now number
-            console.log('Tanto CONNECT', res)
-          }
+          (res: IConnectResult) => mounted && setAddress(res.account)
         )
-
-        // ACCOUNTS_CHANGED delivers string[]
-        connector.on(
-          ConnectorEvent.ACCOUNTS_CHANGED,
-          (accounts: string[]) => {
-            if (!mounted) return
-            setAddress(accounts[0] || null)
-            console.log('Tanto ACCOUNTS_CHANGED', accounts)
-          }
-        )
-
-        // CHAIN_CHANGED now delivers a number
-        connector.on(
-          ConnectorEvent.CHAIN_CHANGED,
-          (newChain: number) => {
-            if (!mounted) return
-            setChainId(newChain)                 // now number
-            console.log('Tanto CHAIN_CHANGED', newChain)
-          }
-        )
-
-        // DISCONNECT
         connector.on(
           ConnectorEvent.DISCONNECT,
-          () => {
-            if (!mounted) return
-            setAddress(null)
-            setChainId(null)
-            console.log('Tanto DISCONNECT')
-          }
+          () => mounted && setAddress(null)
         )
+        connector.autoConnect().catch(() => { })
+      })
+      .catch(console.error)
 
-        // auto‐reconnect if possible
-        await connector.autoConnect()
-      } catch (err) {
-        console.error('Tanto init error', err)
-      }
-    }
-
-    initConnector()
     return () => {
       mounted = false
-      // no removeAllListeners — if needed, call connector.off(event, handler)
     }
   }, [])
 
-  const connect = async () => {
+  // Connect and optionally trigger SIWE if no valid JWT
+  const connect = async (): Promise<void> => {
     const conn = connectorRef.current
-    if (!conn) {
-      console.error('Connector not initialized')
-      return
-    }
-    try {
-      await conn.connect()
-    } catch (err) {
-      console.error('Tanto connect error', err)
+    if (!conn) alert('Ronin connector not initialized. Make sure you have Ronin Wallet installed!')
+    const { account } = await conn.connect()
+    setAddress(account)
+
+    // Only sign in if the JWT is missing or expired
+    const jwt = getJwtFromCookie()
+    if (!jwt || isJwtExpired(jwt)) {
+      await signIn(account)
     }
   }
 
-  const disconnect = async () => {
+  // Disconnect from Ronin
+  const disconnect = async (): Promise<void> => {
     const conn = connectorRef.current
-    if (!conn) {
-      console.error('Connector not initialized')
-      return
-    }
-    try {
-      await conn.disconnect()
-    } catch (err) {
-      console.error('Tanto disconnect error', err)
-    }
+    if (!conn) throw new Error('Ronin connector not initialized')
+
+    // 2) hit your logout endpoint *with* that header
+    await fetch(`${process.env.API_URL}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+
+    // 2) then disconnect the wallet and clear local state
+    await conn.disconnect()
+    setAddress(null)
+    setIsAuthorized(false)
   }
+
+  // SIWE sign-in flow with optional overrideAddress
+  const signIn = async (overrideAddress?: string): Promise<void> => {
+    const conn = connectorRef.current
+    const addr = overrideAddress ?? address
+    if (!conn || !addr) throw new Error('Connect wallet first')
+
+    // 1. Fetch the nonce/message
+    const res0 = await fetch(
+      `${process.env.API_URL}/auth/nonce?address=${addr}`
+    )
+    if (!res0.ok) throw new Error('Failed to fetch nonce')
+    const { message } = (await res0.json()) as { message: string }
+
+    // 2. Sign the message
+    const provider = new BrowserProvider((conn as any).provider)
+    const signer = await provider.getSigner()
+    const signature = await signer.signMessage(message)
+
+    // 3. Send to backend to verify & set cookie
+    const res1 = await fetch(`${process.env.API_URL}/auth/verify`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, signature }),
+    })
+    if (!res1.ok) {
+      throw new Error('Sign-in failed')
+    }
+    setIsAuthorized(true)
+    console.log('🛡️ Signed in successfully')
+  }
+
+  // Auto-refresh ~5 minutes before expiry
+  useEffect(() => {
+    const jwt = getJwtFromCookie()
+    if (!jwt) return
+
+    try {
+      const [, payload] = jwt.split('.')
+      const { exp } = JSON.parse(atob(payload)) as { exp: number }
+      const msUntil = exp * 1000 - Date.now() - 5 * 60 * 1000
+      if (msUntil > 0) {
+        const id = setTimeout(() => {
+          void signIn()
+        }, msUntil)
+        return () => clearTimeout(id)
+      }
+    } catch (e) {
+      console.error('Failed to decode JWT payload', e)
+    }
+  }, [address])
 
   return (
     <WalletContext.Provider
-      value={{ address, chainId, isConnected, connect, disconnect }}
+      value={{
+        address,
+        isConnected: Boolean(address),
+        isAuthorized,
+        connect,
+        disconnect,
+        signIn,
+      }}
     >
       {children}
     </WalletContext.Provider>
@@ -132,6 +173,8 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
 export function useWallet(): WalletContextValue {
   const ctx = useContext(WalletContext)
-  if (!ctx) throw new Error('useWallet must be used within <WalletProvider>')
+  if (!ctx) {
+    throw new Error('useWallet must be used within WalletProvider')
+  }
   return ctx
 }
