@@ -22,7 +22,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalRestore, setToogleModalRestore] = useState(false)
   const [modalItems, setModalItems] = useState(false)
   const [horseId, sethorseId] = useState(0)
-  const { phorse, updateBalance } = useUser();
+  const { phorse, medals } = useUser();
 
   const toogleModal = (modalType: string, horseId?: number) => {
     if (horseId) {
@@ -82,9 +82,9 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           </div>
           <div className={styles.countCurrency}>
             <Image width={50} height={50} src={phorseToken} alt="phorse coin" />
-            <span>{phorse ? phorse : 0}</span>
+            <span>{phorse | 0}</span>
             <Image width={29} height={40} src={medal} alt="medals" />
-            <span>10</span>
+            <span>{medals | 0}</span>
           </div>
         </div>
       </div>

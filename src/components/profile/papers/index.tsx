@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import Image from 'next/image'
 import profilePicture from '@/assets/profile/horse.gif'
+import noUserPic from '@/assets/user-profiles/no-user.gif'
 import depositPhorse from '@/assets/profile/deposit-phorse.png'
 import depositPhorseOver from '@/assets/profile/deposit-horse-mouse.gif'
 import withdrawHorse from '@/assets/profile/with-horse.png'
@@ -35,10 +36,17 @@ const Papers: React.FC = () => {
             <span className={styles.about}>
               <span className={styles.slot}>
                 <span className={styles.profilePicture}>
-                  <Image
-                    src={profilePicture}
-                    layout='responsive'
-                  />
+                  {isConnected ? (
+                    <Image
+                      src={profilePicture}
+                      layout='responsive'
+                    />
+                  ) : (
+                    <Image
+                      src={noUserPic}
+                      layout='responsive'
+                    />
+                  )}
                 </span>
               </span>
               <span className={styles.slot}>
@@ -47,7 +55,7 @@ const Papers: React.FC = () => {
                     <Image src='/assets/icons/phorse-animation.gif' width={250} height={250} />
                   </span>
                   <span className={styles.amount}>
-                    {phorse ? phorse : 0} phorse
+                    {phorse | 0} phorse
                   </span>
                 </span>
               </span>

@@ -7,12 +7,10 @@ import exampleUserPic from '@/assets/user-profiles/example-user.gif'
 import noUserPic from '@/assets/user-profiles/no-user.gif'
 import { useWallet } from '@/contexts/WalletContext'
 import ConfirmModal from '@/components/game/Modals/ConfirmModal'
-import { useUser } from '@/contexts/UserContext'
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
-  const { address, isConnected, connect, disconnect, signIn } = useWallet()
-  const { updateBalance } = useUser()
+  const { address, isConnected, connect, disconnect } = useWallet()
   const [showConfirm, setShowConfirm] = useState(false)
 
   const closeConfirm = () => setShowConfirm(false)

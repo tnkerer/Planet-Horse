@@ -3,9 +3,22 @@ import styles from './styles.module.scss'
 import Image from 'next/image'
 import logoHorseware from '@/assets/profile/logo-horseware.png'
 import keyboard from '@/assets/profile/keyboard.gif'
+import { useWallet } from '@/contexts/WalletContext'
 
-const Horseware = () => {
+type Tx = {
+  type: string;
+  status: string;
+  value: number;
+  txId: string | null;
+  note: string | null;
+  createdAt: string;
+};
+
+const Horseware: React.FC = () => {
   const [light, setLight] = useState(false)
+  const [txs, setTxs] = useState<Tx[]>([]);
+  const [loading, setLoading] = useState(false);
+  const { isAuthorized, address } = useWallet();
 
   useEffect(() => {
     function interval() {
@@ -21,6 +34,27 @@ const Horseware = () => {
   useEffect(() => {
     console.log(light)
   }, [light])
+
+  // fetch transaction history
+  useEffect(() => {
+    setLoading(true);
+    fetch(`${process.env.API_URL}/user/transactions`, {
+      credentials: 'include',
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json() as Promise<Tx[]>;
+      })
+      .then(data => setTxs(data))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthorized) {
+      setTxs([])
+    }
+  }, [isAuthorized, address]) 
 
   return (
     <div className={styles.container}>
@@ -40,130 +74,27 @@ const Horseware = () => {
           <div className={styles.tableContainer}>
             <span className={styles.tableTitle}>transactions</span>
             <div className={styles.columns}>
-              <span>
-                <span>type</span>
-              </span>
-              <span>
-                <span>status</span>
-              </span>
-              <span>
-                <span>value</span>
-              </span>
-              <span>
-                <span>note</span>
-              </span>
-              <span>
-                <span>data</span>
-              </span>
-              <span>
-                <span>view</span>
-              </span>
+              {['type', 'status', 'value', 'note', 'date', 'view'].map(col => (
+                <span key={col}><span>{col}</span></span>
+              ))}
             </div>
             <table>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
-              <tr>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-                <td>value</td>
-              </tr>
+              {loading ? (
+                <tr><td colSpan={6}>Loading…</td></tr>
+              ) : txs.length === 0 ? (
+                <tr><td colSpan={6}>No transactions yet</td></tr>
+              ) : (
+                txs.map((tx, i) => (
+                  <tr key={i}>
+                    <td>{tx.type}</td>
+                    <td>{tx.status}</td>
+                    <td>{tx.value}</td>
+                    <td>{tx.note ?? 'No note'}</td>
+                    <td>{new Date(tx.createdAt).toLocaleString()}</td>
+                    <td>{tx.txId ?? 'internal'}</td>
+                  </tr>
+                ))
+              )}
             </table>
           </div>
         </div>
