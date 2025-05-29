@@ -125,6 +125,9 @@ const ShopChestCard: React.FC = () => {
     }
   }
 
+  const price = chests[selectedChestType]?.price
+  const priceStr = String(price)
+
   return (
     <>
       {isModalOpen && (
@@ -174,7 +177,7 @@ const ShopChestCard: React.FC = () => {
 
       {showConfirm && selectedChestType != null && (
         <ConfirmModal
-          text={`Do you wish to buy a chest for ${chests[selectedChestType]?.price} PHORSE?`}
+          text={`Do you wish to buy a chest for ${priceStr} PHORSE?`}
           onClose={() => setShowConfirm(false)}
           onConfirm={handleConfirm}
         />
