@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   z-index: 100;
   animation: fadeInOverlay 0.5s forwards;
 
@@ -31,11 +31,85 @@
       cursor: pointer;
     }
   }
+
+  .resultOverlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: auto;
+    /* allow inner clicks */
+    z-index: 20;
+    /* above the GIF but below the close icon */
+
+    /* remove full blackout so you still see the game around the beam */
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  .lightRay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 300px;
+    /* narrow vertical beam */
+    height: 100%;
+    transform: translateX(-50%);
+    z-index: 21;
+    /* behind the item & text */
+    pointer-events: none;
+    /* let clicks pass through */
+  }
+
+  .resultTitle {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 23;
+    font-family: 'SpaceHorse';
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    /* heavy shadow */
+  }
+
+  .itemPreview {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* center of screen */
+    z-index: 23;
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+
+    .dropItem {
+      width: 100%;
+      height: 100%;
+      animation: float 3s ease-in-out infinite;
+    }
+  }
 }
 
 @keyframes fadeInOverlay {
-  from { background-color: rgba(0,0,0,0) }
-  to   { background-color: #0000004c }
+  from {
+    background-color: rgba(0, 0, 0, 0)
+  }
+
+  to {
+    background-color: #0000004c
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .grow {
@@ -43,106 +117,118 @@
 }
 
 @keyframes growModal {
-  0%   { transform: scale(0); opacity: 0 }
-  70%  { opacity: 1 }
-  100% { transform: scale(1); opacity: 1 }
+  0% {
+    transform: scale(0);
+    opacity: 0
+  }
+
+  70% {
+    opacity: 1
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1
+  }
 }
 
 .gif {
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 2vw;
-    justify-items: center;
-  }
-  
-  .card {
-      width: 200px;
-      height: 300px;              // defina uma altura fixa que caiba o GIF
-      margin-bottom: 1vw 0;
-      background-repeat: no-repeat;
-      background-position: center 20px;  // ajuste vertical do chest
-      background-size: contain;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;   // empurra badge lá em cima e botões lá embaixo
-      align-items: center;
-          /* mais espaço acima da badge */
-      padding-bottom: 1rem; /* menos espaço abaixo, se necessário */
-  }
-  
-  /* imagem do chest */
-  .imageWrapper {
-    position: relative;
-    width: 100%;
-    height: 140px;
-  }
-  
-  /* badge de quantidade */
-  .itemBadge {
-    background-image: url('/assets/game/Items/notification-badge.webp');
-    background-repeat: no-repeat;
-    background-size: contain;
-    color: white;
-    font-family: 'SpaceHorse';
-    position: absolute;
-    margin-top: 35px;
-    margin-left: 130px;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    line-height: 1;
-    padding-left: 4px;
-    padding-bottom: 3px;
-  }
-  
-  /* linha de botões */
-  .buttonRow {
-    width: 95%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5vw;
-    padding-top: 180px;
-    margin-bottom: 1rem;
-    transform: scale(0.95);
-  }
-  
-  /* estilo comum a ambos os botões */
-  .buttonRow button {
-    position: relative;
-    font-family: 'SpaceHorse';
-    width: 100%;
-    height: 2.5rem;
-    background-image: url('/assets/game/buttons/button.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    color: #000000;
-    text-align: center;
-    line-height: 2.5rem;
-    outline: none;
-  }
-  
-  .buttonRow button:hover {
-    background-image: url('/assets/game/buttons/button-mouse.svg');
-  }
-  
-  .buttonRow button:active {
-    background-image: url('/assets/game/buttons/button-click.svg');
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2vw;
+  justify-items: center;
+}
+
+.card {
+  width: 200px;
+  height: 300px; // defina uma altura fixa que caiba o GIF
+  margin-bottom: 1vw 0;
+  background-repeat: no-repeat;
+  background-position: center 20px; // ajuste vertical do chest
+  background-size: contain;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; // empurra badge lá em cima e botões lá embaixo
+  align-items: center;
+  /* mais espaço acima da badge */
+  padding-bottom: 1rem;
+  /* menos espaço abaixo, se necessário */
+}
+
+/* imagem do chest */
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 140px;
+}
+
+/* badge de quantidade */
+.itemBadge {
+  background-image: url('/assets/game/Items/notification-badge.webp');
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: white;
+  font-family: 'SpaceHorse';
+  position: absolute;
+  margin-top: 35px;
+  margin-left: 130px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  line-height: 1;
+  padding-left: 4px;
+  padding-bottom: 3px;
+}
+
+/* linha de botões */
+.buttonRow {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5vw;
+  padding-top: 180px;
+  margin-bottom: 1rem;
+  transform: scale(0.95);
+}
+
+/* estilo comum a ambos os botões */
+.buttonRow button {
+  position: relative;
+  font-family: 'SpaceHorse';
+  width: 100%;
+  height: 2.5rem;
+  background-image: url('/assets/game/buttons/button.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #000000;
+  text-align: center;
+  line-height: 2.5rem;
+  outline: none;
+}
+
+.buttonRow button:hover {
+  background-image: url('/assets/game/buttons/button-mouse.svg');
+}
+
+.buttonRow button:active {
+  background-image: url('/assets/game/buttons/button-click.svg');
+}
+
 /*   @media (max-width: 920px) {
     .card {
       width: 45vw;
@@ -163,4 +249,3 @@
       font-size: 3vw;
     }
   } */
-  

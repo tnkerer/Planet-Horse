@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import styles from './styles.module.scss'
 import shopData from '@/utils/mocks/game/mock_shop.json'
 import ConfirmModal from '../Modals/ConfirmModal'
-import { chests } from '@/utils/constants/items'
+import MultipleConfirmModal from '../Modals/MultipleConfirmModal'
+import ErrorModal from '../Modals/ErrorModal'
+import { chests, items as itemDefs } from '@/utils/constants/items'
 import { useUser } from '@/contexts/UserContext'
 import { useWallet } from '@/contexts/WalletContext'
 
@@ -28,27 +30,19 @@ const ShopChestCard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [stage, setStage] = useState<'grow' | 'drop' | 'open' | 'opened' | null>(null)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showError, setShowError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [buying, setBuying] = useState(false)
+  const [resultName, setResultName] = useState<string | null>(null)
   const { address, isAuthorized } = useWallet()
   const { updateBalance } = useUser()
+  const [showMultipleConfirm, setShowMultipleConfirm] = useState(false)
+  const [quantityToBuy, setQuantityToBuy] = useState(1)
 
   // safe typing for setTimeout IDs
   const growRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const dropRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const openRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  // load mock items and then override quantities from backend
-  useEffect(() => {
-    setItems(shopData)
-    fetch(`${process.env.API_URL}/user/chests`, { credentials: 'include' })
-      .then(res => res.ok ? res.json() as Promise<ChestRecord[]> : [])
-      .then(data => {
-        const map: Record<number, number> = {}
-        data.forEach(c => { map[c.chestType] = c.quantity })
-        setChestQuantities(map)
-      })
-      .catch(console.error)
-  }, [ isAuthorized , address ])
 
   const clearAll = () => {
     if (growRef.current) clearTimeout(growRef.current)
@@ -77,21 +71,84 @@ const ShopChestCard: React.FC = () => {
 
   useEffect(() => {
     if (stage === 'drop') {
-      dropRef.current = setTimeout(() => setStage('open'), DROP_DURATION)
+      dropRef.current = setTimeout(() => {
+        setStage('open')
+      }, DROP_DURATION)
     }
     return () => { if (dropRef.current) clearTimeout(dropRef.current) }
   }, [stage])
 
   useEffect(() => {
     if (stage === 'open') {
+      // first: fire the openChest API
+      (async () => {
+        if (selectedChestType == null) return
+        try {
+          const res = await fetch(
+            `${process.env.API_URL}/user/chests/open`,
+            {
+              method: 'POST',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chestType: selectedChestType,
+                chestQuantity: 1,
+              })
+            }
+          )
+          if (!res.ok) throw new Error(`Open failed (${res.status})`)
+          const { drops } = await res.json() as { drops: string[] }
+          setResultName(drops[0])
+        } catch (err: any) {
+          console.error(err)
+          setErrorMessage(err.message)
+          setShowError(true)
+        }
+      })()
+      // then schedule the "opened" stage
       openRef.current = setTimeout(() => setStage('opened'), OPEN_DURATION)
     }
-    return () => { if (openRef.current) clearTimeout(openRef.current) }
-  }, [stage])
+    return () => {
+      if (openRef.current) clearTimeout(openRef.current)
+    }
+  }, [stage, selectedChestType])
 
   const handleBuyClick = (chestType: number) => {
     setSelectedChestType(chestType)
-    setShowConfirm(true)
+    setQuantityToBuy(1)
+    setShowMultipleConfirm(true)
+  }
+
+  const handleMultipleConfirm = async () => {
+    if (selectedChestType == null) return
+    setBuying(true)
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/user/chests/buy`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chestType: selectedChestType,
+            chestQuantity: quantityToBuy,
+          }),
+        }
+      )
+      if (!res.ok) throw new Error(`Buy failed (${res.status})`)
+      setChestQuantities(prev => ({
+        ...prev,
+        [selectedChestType]: (prev[selectedChestType] || 0) + quantityToBuy,
+      }))
+      updateBalance()
+    } catch (e) {
+      const error : string = e.message.toString()
+      setErrorMessage(`Purchase error: ${error}`)
+      setShowError(true)
+    } finally {
+      setBuying(false)
+      setShowMultipleConfirm(false)
+    }
   }
 
   const handleConfirm = async () => {
@@ -118,6 +175,9 @@ const ShopChestCard: React.FC = () => {
       updateBalance()
     } catch (e) {
       console.error(e)
+      const error: string = e.message;
+      setErrorMessage(`Purchase failed with error: ${error}`)
+      setShowError(true)
       // optionally show error
     } finally {
       setBuying(false)
@@ -125,8 +185,37 @@ const ShopChestCard: React.FC = () => {
     }
   }
 
+  const fetchChestQuantities = useCallback(async () => {
+    try {
+      const res = await fetch(`${process.env.API_URL}/user/chests`, {
+        credentials: 'include',
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = (await res.json()) as ChestRecord[]
+      const map: Record<number, number> = {}
+      data.forEach(c => { map[c.chestType] = c.quantity })
+      setChestQuantities(map)
+    } catch (err) {
+      console.error('Failed to fetch chest quantities:', err)
+    }
+  }, [isAuthorized, address])
+
+  // load mock items and then override quantities from backend
+  useEffect(() => {
+    setItems(shopData)
+    fetchChestQuantities()
+  }, [fetchChestQuantities])
+
+  const handleResultClose = () => {
+    handleClose()         // hides the chest modal + resets stage
+    setResultName(null)   // clear the drop
+    setStage(null)
+    fetchChestQuantities() // refresh the chest count
+  }
+
   const price = chests[selectedChestType]?.price
   const priceStr = String(price)
+  const itemImage : string = itemDefs[resultName]?.src.toString()
 
   return (
     <>
@@ -138,6 +227,35 @@ const ShopChestCard: React.FC = () => {
             {stage === 'open' && <img src="/assets/items/chest_opening.gif" alt="Chest Opening" className={styles.gif} />}
             {stage === 'opened' && <img src="/assets/items/chest_opened.gif" alt="Chest Opened" className={styles.gif} />}
           </div>
+          {stage === 'opened' && resultName && (
+            <div className={styles.resultOverlay} onClick={handleResultClose}>
+              {/* 1) Beam: full-height, centered */}
+              <img
+                src="/assets/items/light_ray.webp"
+                alt="Spotlight"
+                className={styles.lightRay}
+                onClick={e => e.stopPropagation()}
+              />
+
+              {/* 2) Title */}
+              <h2 className={styles.resultTitle} onClick={e => e.stopPropagation()}>
+                You received {resultName}!
+              </h2>
+
+              {/* 3) Item floating */}
+              <div className={styles.itemPreview} onClick={e => e.stopPropagation()}>
+                <img
+                  src={
+                    resultName.toLowerCase().endsWith('phorse')
+                      ? '/assets/items/phorse.webp'
+                      : `/assets/items/${itemImage}.webp`
+                  }
+                  alt={resultName}
+                  className={styles.dropItem}
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -180,6 +298,25 @@ const ShopChestCard: React.FC = () => {
           text={`Do you wish to buy a chest for ${priceStr} PHORSE?`}
           onClose={() => setShowConfirm(false)}
           onConfirm={handleConfirm}
+        />
+      )}
+
+      {/* multiple‐chest slider confirm */}
+      {showMultipleConfirm && selectedChestType != null && (
+        <MultipleConfirmModal
+          quantity={quantityToBuy}
+          max={10}
+          price={chests[selectedChestType].price}
+          onQuantityChange={setQuantityToBuy}
+          onClose={() => setShowMultipleConfirm(false)}
+          onConfirm={handleMultipleConfirm}
+        />
+      )}
+
+      {showError && (
+        <ErrorModal
+          text={errorMessage}
+          onClose={() => setShowError(false)}
         />
       )}
     </>

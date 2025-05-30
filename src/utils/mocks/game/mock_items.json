@@ -33,5 +33,12 @@
         "src": "horseshoe",
         "value": "7",
         "description" : "A horseshoe. Improve the odds of a horse scoring a better position by 10% during the course of 30 races."
+    },
+    {
+        "id": 11,
+        "name": "Pumpers",
+        "src": "bump",
+        "value": "14",
+        "description" : "A performance enhancing drug that greatly increases your chances of securing a better position, but also raises the risk of injury. Enough for 10 uses."
     }
 ]

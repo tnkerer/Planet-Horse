@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
               <a>HOME</a>
             </Link>
             <Link href='/game'>
-              <a>GAME</a>
+              <a>RACE</a>
             </Link>
             <Link href='/profile'>
               <a>PROFILE</a>

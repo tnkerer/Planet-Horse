@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.scss'
-import getHorseImage from '@/utils/hooks/single-horse-image'
 import { Horse } from '@/domain/models/Horse'
+import { xpProgression } from '@/utils/constants/xp-progression'
 
 interface Props {
     horse: Horse
@@ -25,29 +25,28 @@ const sexColorMap: Record<string, string> = {
 const defaultColor = '#919191'  // cinza fallback
 
 const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
-    const { loading, image } = getHorseImage(horse)
-
     const slug = horse.profile.type_horse_slug
     const labelColor = rarityColorMap[slug] ?? defaultColor
 
     const sexSlug = horse.profile.sex.toLowerCase()
     const sexColor = sexColorMap[sexSlug] ?? defaultColor
+    const maxXp : string = (xpProgression[Number(horse.staty.level)] ?? 0).toString();
+    const xp = `${horse.staty.exp.toString()}/${maxXp}`
+
     return (
         <>
             <div className={styles.singleHorse + ' type-' + horse.profile.type_horse_slug}>
                 <div className={styles.maskCard}>
                 <div className={styles.horseId}>{horse.id}</div>
                     <div className={styles.horseGif}>
-                        {loading
-                            ? (null)
-                            : (<img src={image?.src} />)}
+                        <img src={`/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status}.gif`} />
                     </div>
                     <div className={styles.horseInfo}>
                         <div className={styles.horseWrapper}>
                             <div className={styles.horseProfile}>
                                 <div className={styles.horseItemDescriptionBox}>
                                     <div className={styles.horseItemDescription}>
-                                        NAME: <span>{horse.profile.name}</span>
+                                        NAME: <span>{horse.profile.name.slice(0,12)}</span>
                                     </div>
                                     <div className={styles.horseItemDescription}>
                                         SEX:        <span
@@ -78,7 +77,7 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                                     LEVEL: <span>{horse.staty.level}</span>
                                 </div>
                                 <div className={styles.horseItemDescription}>
-                                    EXP: <span>{horse.staty.exp}</span>
+                                    EXP: <span>{xp}</span>
                                 </div>
                                 <div className={styles.horseItemDescription}>
                                     POWER: <span>{horse.staty.power}</span>
