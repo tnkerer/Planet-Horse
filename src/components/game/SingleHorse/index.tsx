@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './styles.module.scss'
 import { Horse } from '@/domain/models/Horse'
 import { xpProgression } from '@/utils/constants/xp-progression'
+import ModalRaceStart from '../Modals/RaceStart'
+import RecoveryCenter from '../Modals/RecoveryCenter'
 
 interface Props {
     horse: Horse
-    openModal: (modalType: string, horseId?: number) => void
+    reloadHorses: () => Promise<void>
 }
 
 const rarityColorMap: Record<string, string> = {
@@ -24,20 +26,31 @@ const sexColorMap: Record<string, string> = {
 
 const defaultColor = '#919191'  // cinza fallback
 
-const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
+const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
+    const [modalRecovery, setModalRecovery] = useState(false)
+    const [modalRaceStart, setModalRaceStart] = useState(false)
     const slug = horse.profile.type_horse_slug
     const labelColor = rarityColorMap[slug] ?? defaultColor
 
     const sexSlug = horse.profile.sex.toLowerCase()
     const sexColor = sexColorMap[sexSlug] ?? defaultColor
-    const maxXp : string = (xpProgression[Number(horse.staty.level)] ?? 0).toString();
+    const maxXp: string = (xpProgression[Number(horse.staty.level)] ?? 0).toString()
     const xp = `${horse.staty.exp.toString()}/${maxXp}`
+    const recoveryCost = parseInt(horse.staty.level) * 50
 
     return (
         <>
+            {modalRaceStart ? (<ModalRaceStart setVisible={setModalRaceStart} status={modalRaceStart} horse={horse} />) : (null)}
+            {modalRecovery ? (<RecoveryCenter
+                status={modalRecovery}
+                horseId={horse.id}
+                cost={recoveryCost}
+                setVisible={setModalRecovery}
+                onRestored={reloadHorses}
+            />) : (null)}
             <div className={styles.singleHorse + ' type-' + horse.profile.type_horse_slug}>
                 <div className={styles.maskCard}>
-                <div className={styles.horseId}>{horse.id}</div>
+                    <div className={styles.horseId}>{horse.id}</div>
                     <div className={styles.horseGif}>
                         <img src={`/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status}.gif`} />
                     </div>
@@ -46,7 +59,7 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                             <div className={styles.horseProfile}>
                                 <div className={styles.horseItemDescriptionBox}>
                                     <div className={styles.horseItemDescription}>
-                                        NAME: <span>{horse.profile.name.slice(0,12)}</span>
+                                        NAME: <span>{horse.profile.name.slice(0, 12)}</span>
                                     </div>
                                     <div className={styles.horseItemDescription}>
                                         SEX:        <span
@@ -101,11 +114,11 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                             </div>
                         </div>
                         <div className={styles.horseButtons}>
-                            <div className={styles.singleButton}>
+                            {/* <div className={styles.singleButton}>
                                 <button className={styles.buyButton}
                                     onClick={() => openModal('reward', horse.id)}
                                 ></button>
-                            </div>
+                            </div> */}
                             <div className={styles.singleButton}>
                                 <button className={styles.itemsButton}
                                 /* onClick={setPopUp('chest')} */
@@ -113,15 +126,15 @@ const SingleHorse: React.FC<Props> = ({ horse, openModal }) => {
                             </div>
                             <div className={styles.singleButton}>
                                 <button className={styles.restoreButton}
-                                    onClick={() => openModal('restore', horse.id)}
-                                    disabled={horse.staty.status !== 'bruised'}
+                                    onClick={() => { setModalRecovery(true) }}
+                                    disabled={horse.staty.status !== 'BRUISED'}
                                 /* onClick={() => openModal('quickRace', horse.id)} */
                                 ></button>
                             </div>
                             <div className={styles.singleButton}>
                                 <button className={styles.startButton}
-                                    onClick={() => openModal('raceStart', horse.id)}
-                                    disabled={horse.staty.status !== 'idle'}
+                                    onClick={() => { setModalRaceStart(true) }}
+                                    disabled={horse.staty.status !== 'IDLE'}
                                 ></button>
                             </div>
                         </div>

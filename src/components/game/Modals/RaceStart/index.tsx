@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import close from '@/assets/game/pop-up/fechar.png'
-import { horses } from '@/utils/mocks/game'
 import HorseRace from '../../HorseRacing'
 import RaceFinish from '../../RaceFinish'
+import { Horse } from '@/domain/models/Horse'
 
 import Image from 'next/image'
 
 interface Props {
-  closeModal: (modalType: string, horseId?: number) => void
+  setVisible: Dispatch<SetStateAction<boolean>>
   status: boolean
-  horseId: number
+  horse: Horse
 }
 
-const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
-  const [horse, setHorse] = useState(null)
+const ModalRaceStart: React.FC<Props> = ({ setVisible, status, horse }) => {
   const [startRace, setStartRace] = useState(null)
   const [racing, setRacing] = useState(null)
   const [raceFinish, setRaceFinish] = useState(null)
   const [horseResult, setHorseResult] = useState(getRandomNumber(1, 10))
 
-  function getHorseData (): void {
-    const horse = horses.find(horse => horse.id === horseId)
-    if (horse  && horse !== undefined) {
-      setHorse(horse)
+  function triggerRace (): void {
       setHorseResult(getRandomNumber(1, 10))
       startingRace()
-    }
   }
 
   function startingRace (): void {
@@ -59,14 +54,14 @@ const ModalRaceStart: React.FC<Props> = ({ closeModal, status, horseId }) => {
   }
 
   useEffect((): void => {
-    getHorseData()
-  }, [horseId])
+    triggerRace()
+  }, [horse])
 
   return (
         <div className={`${styles.modalRaceStart} ${status ? styles.modalActive : styles.modalInactive}`}>
             <div className={styles.modalFull}>
                 <div className={styles.modalContent}>
-                    <div className={styles.modalClose} onClick={() => closeModal('raceStart')}>
+                    <div className={styles.modalClose} onClick={() => setVisible(false)}>
                         <Image width={'30px'} height={'30px'} src={close} />
                     </div>
                     <div className={styles.modalContainer}>

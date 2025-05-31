@@ -52,13 +52,11 @@ const HorseRace: React.FC<Props> = ({ horse, horseResult, horseRacingFinish }) =
             <div className={styles.racingPlacar}>
               #<CountUp start={lastResult} end={result} onEnd={() => setCounterQtd(counterQtd + 1)} />/10
             </div>
-            {!loading &&
+            
               <div className={styles.racingHorseGif}>
-                {image &&
-                  <img src={image.src} />
-                }
+                  <img src={`/assets/game/horses/race/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-race.gif`} />
               </div>
-            }
+            
         </div>
         </>
   )

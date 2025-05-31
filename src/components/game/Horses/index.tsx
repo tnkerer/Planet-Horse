@@ -1,9 +1,6 @@
 // src/components/Horses/index.tsx
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
-import ModalReward from '../Modals/Reward'
-import ModalRaceStart from '../Modals/RaceStart'
-import RecoveryCenter from '../Modals/RecoveryCenter'
 import ItemBag from '../Modals/ItemBag'
 import SingleHorse from '../SingleHorse'
 import Image from 'next/image'
@@ -59,99 +56,82 @@ interface Props {
 }
 
 const Horses: React.FC<Props> = ({ changeView }) => {
-  const [modalReward, setModalReward] = useState(false)
-  const [modalRaceStart, setModalRaceStart] = useState(false)
-  const [modalRestore, setModalRestore] = useState(false)
   const [modalItems, setModalItems] = useState(false)
-  const [horseId, setHorseId] = useState<number | null>(null)
-
-  const { phorse, medals } = useUser()
+  const { phorse, medals, updateBalance } = useUser()
   const { isAuthorized, address } = useWallet()
 
-  const [horseList, setHorseList] = useState<Horse[]>([])
+  const [horseList, setHorseList] = useState<Horse[]>([]);
 
   // load live horses once authorized
-  useEffect(() => {
+  const loadHorses = useCallback(async () => {
     /* if (!isAuthorized) {
-      setHorseList([])
-      return
+      setHorseList([]);
+      return;
     } */
-    ; (async () => {
-      try {
-        const res = await fetch(`${process.env.API_URL}/horses`, {
-          credentials: 'include',
-        })
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const data = (await res.json()) as BackendHorse[]
-        const mapped: Horse[] = data.map(h => {
-          const idNum = Number(h.tokenId)
-          const raritySlug = h.rarity.toLowerCase()
-          return {
-            id: idNum,
-            profile: {
-              name: h.name,
-              name_slug: h.name.toLowerCase().replace(/\s+/g, '-'),
-              sex: h.sex.toLowerCase(),
-              type_horse: h.rarity.toUpperCase(),
-              type_horse_slug: raritySlug,
-              type_jockey: 'NONE',
-              time: '120 Days',
-            },
-            staty: {
-              status: h.status,
-              level: String(h.level),
-              exp: `${String(h.exp)}`,
-              upgradable: h.upgradable,
-              power: String(h.currentPower),
-              sprint: String(h.currentSprint),
-              speed: String(h.currentSpeed),
-              energy: `${h.currentEnergy}/${h.maxEnergy}`,
-            },
-            items: h.equipments.length > 0
-              ? h.equipments.map(e => ({ id: Number(e.id) }))
+    updateBalance()
+    try {
+      const res = await fetch(`${process.env.API_URL}/horses`, {
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as BackendHorse[];
+      const mapped: Horse[] = data.map((h) => {
+        const idNum = Number(h.tokenId);
+        const raritySlug = h.rarity.toLowerCase();
+        return {
+          id: idNum,
+          profile: {
+            name: h.name,
+            name_slug: h.name.toLowerCase().replace(/\s+/g, '-'),
+            sex: h.sex.toLowerCase(),
+            type_horse: h.rarity.toUpperCase(),
+            type_horse_slug: raritySlug,
+            type_jockey: 'NONE',
+            time: '120 Days',
+          },
+          staty: {
+            status: h.status,
+            level: String(h.level),
+            exp: `${String(h.exp)}`,
+            upgradable: h.upgradable,
+            power: String(h.currentPower),
+            sprint: String(h.currentSprint),
+            speed: String(h.currentSpeed),
+            energy: `${h.currentEnergy}/${h.maxEnergy}`,
+          },
+          items:
+            h.equipments.length > 0
+              ? h.equipments.map((e) => ({ id: Number(e.id) }))
               : [{ id: 1 }, { id: 2 }, { id: 3 }],
-          }
-        })
-        setHorseList(mapped)
-        // console.log(mapped)
-      } catch (err) {
-        console.error('Failed to load horses:', err)
-        setHorseList([])
-      }
-    })()
+        };
+      });
+
+      setHorseList(mapped);
+    } catch (err) {
+      console.error('Failed to load horses:', err);
+      setHorseList([]);
+    }
   }, [isAuthorized, address])
 
-  const toogleModal = (modalType: string, id?: number) => {
-    if (id != null) setHorseId(id)
+  useEffect(() => {
+    loadHorses();
+  }, [loadHorses])
 
+  const toogleModal = (modalType: string) => {
     switch (modalType) {
-      case 'reward': return setModalReward(r => !r)
-      case 'raceStart': return setModalRaceStart(r => !r)
-      case 'restore': return setModalRestore(r => !r)
       case 'items': return setModalItems(r => !r)
     }
   }
 
   return (
     <>
-      <ModalReward closeModal={toogleModal} status={modalReward} horseId={horseId} />
-      <ModalRaceStart closeModal={toogleModal} status={modalRaceStart} horseId={horseId} />
       <ItemBag status={modalItems} closeModal={toogleModal} />
-      {modalRestore && (
-        <RecoveryCenter
-          status={modalRestore}
-          horseId={horseId}
-          cost={1000}
-          closeModal={toogleModal}
-        />
-      )}
-
       <div className={styles.secondBar}>
         <div className={styles.containerBar}>
           <div className={styles.actionContainer}>
             <div className={styles.actionOptions}>
               <button
-                className={`${styles.bagButton} ${ modalItems ? styles.bagOpened : '' }`}
+                className={`${styles.bagButton} ${modalItems ? styles.bagOpened : ''}`}
                 onClick={() => toogleModal('items')}
                 aria-label="Open Bag"
               >
@@ -176,9 +156,9 @@ const Horses: React.FC<Props> = ({ changeView }) => {
         <div className={styles.cardHorses}>
           {horseList.map(h => (
             <SingleHorse
-              openModal={toogleModal}
               key={h.id}
               horse={h}
+              reloadHorses={loadHorses}
             />
           ))}
 

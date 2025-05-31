@@ -141,23 +141,7 @@ $default-color: #919191; // cinza fallback
 
                         @media screen and (max-width: 920px) {
                             height: 5.5vw;
-                        }
-
-                        &.buyButton {
-                            width: 5.7vw;
-                            background-image: url('../../../assets/game/horses/rewards.png');
-
-                            @media screen and (max-width: 920px) {
-                                width: 13vw;
-                            }
-
-                            &:hover {
-                                background-image: url('../../../assets/game/horses/rewards-mouse.png');
-                            }
-
-                            &:active {
-                                background-image: url('../../../assets/game/horses/rewards-clicado.png');
-                            }
+                            margin-top: 1vw;
                         }
 
                         &.itemsButton {
@@ -174,23 +158,6 @@ $default-color: #919191; // cinza fallback
 
                             &:active {
                                 background-image: url('../../../assets/game/horses/items.png');
-                            }
-                        }
-
-                        &.quickraceButton {
-                            width: 5.8vw;
-                            background-image: url('../../../assets/game/horses/quickrace.png');
-
-                            @media screen and (max-width: 920px) {
-                                width: 13vw;
-                            }
-
-                            &:hover {
-                                background-image: url('../../../assets/game/horses/quickrace-mouse.png');
-                            }
-
-                            &:active {
-                                background-image: url('../../../assets/game/horses/quickrace-clicado.png');
                             }
                         }
 

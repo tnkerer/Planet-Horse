@@ -50,8 +50,10 @@ const ShopChestCard: React.FC = () => {
     if (openRef.current) clearTimeout(openRef.current)
   }
 
-  const handleOpen = () => {
+  const handleOpen = (chestType: number) => {
     clearAll()
+    setSelectedChestType(chestType)
+    setResultName(null)
     setIsModalOpen(true)
     setStage('grow')
   }
@@ -79,39 +81,46 @@ const ShopChestCard: React.FC = () => {
   }, [stage])
 
   useEffect(() => {
-    if (stage === 'open') {
-      // first: fire the openChest API
-      (async () => {
-        if (selectedChestType == null) return
-        try {
-          const res = await fetch(
-            `${process.env.API_URL}/user/chests/open`,
-            {
-              method: 'POST',
-              credentials: 'include',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chestType: selectedChestType,
-                chestQuantity: 1,
-              })
-            }
-          )
-          if (!res.ok) throw new Error(`Open failed (${res.status})`)
-          const { drops } = await res.json() as { drops: string[] }
-          setResultName(drops[0])
-        } catch (err: any) {
-          console.error(err)
-          setErrorMessage(err.message)
-          setShowError(true)
-        }
-      })()
-      // then schedule the "opened" stage
-      openRef.current = setTimeout(() => setStage('opened'), OPEN_DURATION)
-    }
-    return () => {
-      if (openRef.current) clearTimeout(openRef.current)
-    }
+    if (stage !== 'open') return
+
+    (async () => {
+      if (selectedChestType == null) return
+
+      try {
+        // 1) call openChest API
+        const res = await fetch(
+          `${process.env.API_URL}/user/chests/open`,
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chestType: selectedChestType,
+              chestQuantity: 1,
+            }),
+          }
+        )
+        if (!res.ok) throw new Error(`Open failed (${res.status})`)
+        const { drops } = (await res.json()) as { drops: string[] }
+
+        // 2) stash the result
+        setResultName(drops[0])
+
+        // 3) wait for the animation to finish
+        await new Promise((resolve) => setTimeout(resolve, OPEN_DURATION));
+
+        // 4) show the “opened” overlay
+        setStage('opened')
+      } catch (err: any) {
+        console.error(err)
+        setErrorMessage(err.message)
+        setShowError(true)
+        // bail out: close the chest modal entirely
+        handleClose()
+      }
+    })()
   }, [stage, selectedChestType])
+
 
   const handleBuyClick = (chestType: number) => {
     setSelectedChestType(chestType)
@@ -142,7 +151,7 @@ const ShopChestCard: React.FC = () => {
       }))
       updateBalance()
     } catch (e) {
-      const error : string = e.message.toString()
+      const error: string = e.message.toString()
       setErrorMessage(`Purchase error: ${error}`)
       setShowError(true)
     } finally {
@@ -186,6 +195,10 @@ const ShopChestCard: React.FC = () => {
   }
 
   const fetchChestQuantities = useCallback(async () => {
+    if(!address) {
+      setChestQuantities([])
+      return
+    }
     try {
       const res = await fetch(`${process.env.API_URL}/user/chests`, {
         credentials: 'include',
@@ -215,7 +228,7 @@ const ShopChestCard: React.FC = () => {
 
   const price = chests[selectedChestType]?.price
   const priceStr = String(price)
-  const itemImage : string = itemDefs[resultName]?.src.toString()
+  const itemImage: string = itemDefs[resultName]?.src.toString()
 
   return (
     <>
@@ -227,23 +240,17 @@ const ShopChestCard: React.FC = () => {
             {stage === 'open' && <img src="/assets/items/chest_opening.gif" alt="Chest Opening" className={styles.gif} />}
             {stage === 'opened' && <img src="/assets/items/chest_opened.gif" alt="Chest Opened" className={styles.gif} />}
           </div>
-          {stage === 'opened' && resultName && (
+          {stage === 'opened' && (
             <div className={styles.resultOverlay} onClick={handleResultClose}>
-              {/* 1) Beam: full-height, centered */}
               <img
                 src="/assets/items/light_ray.webp"
-                alt="Spotlight"
                 className={styles.lightRay}
-                onClick={e => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
               />
-
-              {/* 2) Title */}
-              <h2 className={styles.resultTitle} onClick={e => e.stopPropagation()}>
+              <h2 className={styles.resultTitle} onClick={(e) => e.stopPropagation()}>
                 You received {resultName}!
               </h2>
-
-              {/* 3) Item floating */}
-              <div className={styles.itemPreview} onClick={e => e.stopPropagation()}>
+              <div className={styles.itemPreview} onClick={(e) => e.stopPropagation()}>
                 <img
                   src={
                     resultName.toLowerCase().endsWith('phorse')
@@ -282,8 +289,7 @@ const ShopChestCard: React.FC = () => {
                 </button>
                 <button
                   className={styles.openButton}
-                  style={qty === 0 ? { cursor: 'not-allowed', backgroundImage: 'url("/assets/game/buttons/button-click.svg")' } : {}}
-                  onClick={qty === 0 ? undefined : handleOpen}
+                  onClick={qty === 0 ? undefined : () => handleOpen(item.id)}
                 >
                   OPEN CHEST
                 </button>
