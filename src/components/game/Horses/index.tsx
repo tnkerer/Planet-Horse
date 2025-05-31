@@ -1,4 +1,3 @@
-// src/components/Horses/index.tsx
 import React, { useState, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
 import ItemBag from '../Modals/ItemBag'
@@ -51,11 +50,7 @@ export interface Horse {
   items: Array<{ id: number }>
 }
 
-interface Props {
-  changeView: (view: string) => void
-}
-
-const Horses: React.FC<Props> = ({ changeView }) => {
+const Horses: React.FC = ({ }) => {
   const [modalItems, setModalItems] = useState(false)
   const { phorse, medals, updateBalance } = useUser()
   const { isAuthorized, address } = useWallet()
@@ -64,10 +59,10 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
   // load live horses once authorized
   const loadHorses = useCallback(async () => {
-    /* if (!isAuthorized) {
+    if (!address) {
       setHorseList([]);
       return;
-    } */
+    }
     updateBalance()
     try {
       const res = await fetch(`${process.env.API_URL}/horses`, {

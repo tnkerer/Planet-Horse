@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
-import getHorseRacingImage from '@/utils/hooks/horse-racing-image'
 import { Horse } from '@/domain/models/Horse'
 import CountUp from 'react-countup'
+import { HorseResults } from '../Modals/RaceStart'
 
 interface Props {
   horse: Horse
-  horseResult: number
+  horseResult: HorseResults
   horseRacingFinish: () => void
 }
 
 const HorseRace: React.FC<Props> = ({ horse, horseResult, horseRacingFinish }) => {
-  const { loading, image } = getHorseRacingImage(horse)
   const [isRuning, setIsRuning] = useState(true)
   const [result, setResult] = useState(0)
   const [lastResult, setlastResult] = useState(0)
   const [counterQtd, setCounterQtd] = useState(0)
+  const raceSpeed = 2;
 
   function randomizeHorsePlacar (): void {
     const randomNumber = getRandomNumber(1, 10)
     let lastResult = result
 
-    /* FOI NECESSÁRIO ESSA CONDICIONAL PARA NÃO CAIR COM NUMEROS IGUAL POIS BUGAVA O CountUp */
+    /* Condition to keep CountUp from failing */
     if (randomNumber === lastResult) {
       lastResult = lastResult - 1
     }
@@ -34,21 +34,21 @@ const HorseRace: React.FC<Props> = ({ horse, horseResult, horseRacingFinish }) =
   }
 
   useEffect((): void => {
-    if (counterQtd < 5) {
+    if (counterQtd < raceSpeed) {
       randomizeHorsePlacar()
-    } else if (counterQtd === 5) {
+    } else if (counterQtd === raceSpeed) {
       setlastResult(result)
-      setResult(horseResult)
+      setResult(horseResult.position)
       setIsRuning(false)
       setTimeout(function () {
         horseRacingFinish()
-      }, 3000)
+      }, raceSpeed * 1000)
     }
   }, [counterQtd])
 
   return (
         <>
-        <div className={`${styles.racingContent} ${counterQtd < 5 ? styles.raceActive : styles.raceInactive}`}>
+        <div className={`${styles.racingContent} ${counterQtd < raceSpeed ? styles.raceActive : styles.raceInactive}`}>
             <div className={styles.racingPlacar}>
               #<CountUp start={lastResult} end={result} onEnd={() => setCounterQtd(counterQtd + 1)} />/10
             </div>

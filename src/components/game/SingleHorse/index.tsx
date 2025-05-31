@@ -11,20 +11,20 @@ interface Props {
 }
 
 const rarityColorMap: Record<string, string> = {
-    common: '#00aa00',  // verde
-    uncommon: '#2F35A8',  // azul
-    rare: '#800080',  // púrpura
-    epic: '#ff69b4',  // rosa
-    legendary: '#a78e06',  // dourado
-    mythic: '#E21C21'   // vermelho
+    common: '#00aa00',
+    uncommon: '#2F35A8',
+    rare: '#800080',
+    epic: '#ff69b4',
+    legendary: '#a78e06',
+    mythic: '#E21C21'
 }
 
 const sexColorMap: Record<string, string> = {
-    male: '#2F35A8', // azul
-    female: '#dc207e'  // rosa
+    male: '#2F35A8',
+    female: '#dc207e'
 }
 
-const defaultColor = '#919191'  // cinza fallback
+const defaultColor = '#919191'
 
 const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
     const [modalRecovery, setModalRecovery] = useState(false)
@@ -40,7 +40,12 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
     return (
         <>
-            {modalRaceStart ? (<ModalRaceStart setVisible={setModalRaceStart} status={modalRaceStart} horse={horse} />) : (null)}
+            {modalRaceStart ? (<ModalRaceStart 
+                status={modalRaceStart} 
+                horse={horse}
+                setVisible={setModalRaceStart}
+                onRaceEnd={reloadHorses}
+            />) : (null)}
             {modalRecovery ? (<RecoveryCenter
                 status={modalRecovery}
                 horseId={horse.id}

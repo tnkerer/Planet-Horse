@@ -1,4 +1,3 @@
-// src/components/game/Modals/RecoveryCenter/index.tsx
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './styles.module.scss';

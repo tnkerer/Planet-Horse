@@ -1,4 +1,3 @@
-// src/components/Modals/ItemBag.tsx
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styles from './styles.module.scss'
