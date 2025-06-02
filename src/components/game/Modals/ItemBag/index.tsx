@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from './styles.module.scss'
 import closeIcon from '@/assets/game/pop-up/fechar.png'
 import { items as itemsConst } from '@/utils/constants/items'
+import { Horse } from '@/domain/models/Horse'
 
 interface LocalItemDef {
   name:        string
@@ -28,9 +29,10 @@ interface DisplayItem {
 interface Props {
   status:     boolean
   closeModal: (modalType: string) => void
+  horse?: Horse
 }
 
-const ItemBag: React.FC<Props> = ({ status, closeModal }) => {
+const ItemBag: React.FC<Props> = ({ status, closeModal, horse }) => {
   const [serverItems, setServerItems] = useState<ServerItem[]>([])
   const [loading, setLoading]         = useState(false)
 

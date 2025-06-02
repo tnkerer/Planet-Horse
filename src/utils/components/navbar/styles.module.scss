@@ -5,7 +5,7 @@
   background-color: #7d4d45;
   z-index: 3;
 
-  & > svg {
+  &>svg {
     position: absolute;
   }
 
@@ -26,7 +26,7 @@
     @media screen and (max-width: 1273px) {
       width: 100%;
     }
-    
+
     .burgerIcon {
       margin: 0 25px;
       width: 38px;
@@ -47,7 +47,12 @@
       flex-direction: column;
       justify-content: center;
       width: 140px;
-      
+      transition: transform .3s;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
       @media screen and (max-width: 1260px) {
         margin-left: 5%;
       }
@@ -55,8 +60,8 @@
       @media screen and (max-width: 490px) {
         position: absolute;
         left: 50%;
-        transform: translateX(-50%);       
-        margin-left: 0; 
+        transform: translateX(-50%);
+        margin-left: 0;
       }
 
       @media screen and (max-width: 350px) {
@@ -65,7 +70,7 @@
       }
     }
   }
-  
+
   .options {
     display: flex;
     flex-direction: row;
@@ -83,6 +88,11 @@
       font-family: 'UpheavalPro';
       font-size: 24px;
       text-decoration: none;
+      transition: transform .3s;
+
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 
@@ -99,7 +109,7 @@
       bottom: 8px;
       display: flex;
       align-items: center;
-      
+
       .address {
         font-family: 'UpheavalPro';
         font-size: 24px;
@@ -146,7 +156,7 @@
 
       &::before {
         content: 'Connect wallet';
-        
+
         @media screen and (max-width: 560px) {
           font-size: 16px;
           content: 'Connect';

@@ -11,7 +11,7 @@ interface TokenBridgeProps {
 
 const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
     // valores disponíveis; ajuste conforme sua lógica
-    const availableDeposit = 1000
+    const availableDeposit = 0
 
     const [depositAmount, setDepositAmount] = useState('')
     const [withdrawAmount, setWithdrawAmount] = useState('')
@@ -24,7 +24,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
         setDepositAmount(availableDeposit.toString())
 
     const handleMaxWithdraw = () =>
-        setWithdrawAmount(phorse.toString())
+        setWithdrawAmount(phorse?.toString())
 
     const openDepositConfirm = () => {
         setConfirmText(

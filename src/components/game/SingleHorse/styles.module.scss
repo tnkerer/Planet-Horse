@@ -35,6 +35,32 @@ $default-color: #919191; // cinza fallback
             }
         }
 
+        .levelUpButton {
+            position: absolute;
+            top: 2vw;
+            left: 1vw;
+            width: 5vw; // adjust as needed
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s;
+
+            img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+
+            &:hover {
+                transform: scale(1.05);
+            }
+
+            @media screen and (max-width: 920px) {
+                top: 4vw;
+                left: 2vw;
+                width: 14vw; // slightly larger on mobile
+            }
+        }
+
         .horseInfo {
             .horseWrapper {
                 padding: 5.25vw 3.93vw 2.1vw 3.93vw;
@@ -153,11 +179,11 @@ $default-color: #919191; // cinza fallback
                             }
 
                             &:hover {
-                                background-image: url('../../../assets/game/horses/items.png');
+                                background-image: url('../../../assets/game/horses/items-mouse.png');
                             }
 
                             &:active {
-                                background-image: url('../../../assets/game/horses/items.png');
+                                background-image: url('../../../assets/game/horses/items-clicado.png');
                             }
                         }
 
@@ -210,21 +236,20 @@ $default-color: #919191; // cinza fallback
             }
         }
 
-          .horseId {
-                position: absolute;
-                top: 0.1vw;
-                right: 10vw;
-                font-family: 'SpaceHorse';
-                font-size: 1.2vw;
-                color: #7D6B55;       // mesmo tom usado em horseItemDescription
-                line-height: 1.4;
-            
-                @media screen and (max-width: 920px) {
-                  top: 0.4vw;
-                  right: 20vw;
-                  font-size: 2.4vw;
-                }
-              }
-    }
+        .horseId {
+            position: absolute;
+            top: 0.1vw;
+            right: 10vw;
+            font-family: 'SpaceHorse';
+            font-size: 1.2vw;
+            color: #7D6B55; // mesmo tom usado em horseItemDescription
+            line-height: 1.4;
 
+            @media screen and (max-width: 920px) {
+                top: 0.4vw;
+                right: 20vw;
+                font-size: 2.4vw;
+            }
+        }
+    }
 }

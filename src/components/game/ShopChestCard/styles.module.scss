@@ -61,14 +61,36 @@
 
   .resultTitle {
     position: absolute;
-    top: 30%;
+    top: 25%; /* move it up/down if needed */
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 23;
+
+    /* ➤ Use our new background image: */
+    background-image: url('/assets/items/text_container.webp');
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    /* ➤ Set a “base” width/height that matches the 1096×164 asset’s aspect ratio.
+       For example, if you want the desktop version to be 600px wide: */
+    width: 600px;
+    height: 600px * 164 / 1096; /* 600px × (164/1096) ≈ 89.8px */
+
+    /* Center the text vertically/horizontally within the container: */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Text styling */
     font-family: 'SpaceHorse';
-    color: #fff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    /* heavy shadow */
+    font-size: 1.10rem;      /* adjust as needed so it fits inside */
+    color: #000000;
+    text-shadow: 2px 2px 4px rgba(255, 174, 0, 0.8);
+    text-align: center;
+    padding: 0 1rem;         /* small horizontal padding if your text is long */
+
+    /* Prevent clicks on the text from closing the overlay: */
+    pointer-events: auto;
   }
 
   .itemPreview {

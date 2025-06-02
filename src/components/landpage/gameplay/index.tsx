@@ -90,7 +90,7 @@ const GamePlay: React.FC = () => {
             </div>
 
             <div className={styles.link}>
-              <Link href='https://whitepaper.planethorse.me/'>
+              <Link href='https://docs.planethorse.io/'>
                 <a target='_blank' />
               </Link>
             </div>

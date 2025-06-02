@@ -50,7 +50,11 @@ export interface Horse {
   items: Array<{ id: number }>
 }
 
-const Horses: React.FC = ({ }) => {
+interface Props {
+  changeView: (view: string) => void
+}
+
+const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalItems, setModalItems] = useState(false)
   const { phorse, medals, updateBalance } = useUser()
   const { isAuthorized, address } = useWallet()

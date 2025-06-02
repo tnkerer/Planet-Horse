@@ -69,12 +69,15 @@ const Navbar: React.FC = () => {
             <Link href='/'>
               <a>HOME</a>
             </Link>
+            {/* <a>|</a> */}
             <Link href='/game'>
-              <a>RACE</a>
+              <a>GAME</a>
             </Link>
+            {/* <a>|</a> */}
             <Link href='/profile'>
               <a>PROFILE</a>
             </Link>
+            {/* <a>|</a> */}
             <Link href='https://opensea.io/0x96ca93ac0d9e26179dcd11db08af88a3506e8f03/created'>
               <a target="_blank">MARKETPLACE</a>
             </Link>

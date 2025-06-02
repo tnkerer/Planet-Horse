@@ -14,7 +14,7 @@
       justify-content: space-between;
       align-items: center;
 
-      @media screen and (max-width: 1330px) {
+      @media screen and (max-width: 1400px) {
         justify-content: space-around;
         width: 100%;
       }
@@ -96,7 +96,7 @@
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 1120px) {
       display: flex;
       flex-wrap: nowrap !important; // now overrides at equal specificity
       overflow-x: auto;
@@ -128,7 +128,7 @@
 
 
 
-  @media (max-width: 560px) {
+  @media (max-width: 1120px) {
     .cards {
       display: flex;
       flex-wrap: nowrap !important;
