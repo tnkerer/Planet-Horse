@@ -65,8 +65,8 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   //   phorseFee = lvlUpFree.phorse[levelStr]
   //   medalFee  = lvlUpFree.medals[levelStr]
   const levelStr = horse.staty.level;
-  const phorseFee : string = (lvlUpFee.phorse[levelStr] ?? 0).toString();
-  const medalFee : string = (lvlUpFee.medals[levelStr] ?? 0).toString();
+  const phorseFee: string = (lvlUpFee.phorse[levelStr] ?? 0).toString();
+  const medalFee: string = (lvlUpFee.medals[levelStr] ?? 0).toString();
 
   const handleLevelUpClick = () => {
     // Build the question text:
@@ -168,11 +168,13 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
           onRestored={reloadHorses}
         />
       )}
+      {/* ─────────── ITEM‐BAG MODAL ─────────── */}
       {showItems && (
         <ItemBag
           status={showItems}
           closeModal={() => setShowItems(false)}
           horse={horse}
+          reloadHorses={reloadHorses}
         />
       )}
 

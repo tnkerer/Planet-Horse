@@ -77,7 +77,7 @@
                 grid-template-columns: repeat(4, 1fr);
                 grid-template-rows: repeat(3, 1fr);
                 gap: 1%;
-                padding: 50px;
+                padding: 40px;
 
                 @media (max-width: 1200px) {
                     top: 50%;
@@ -90,84 +90,134 @@
                 }
             }
 
-            .gridItem {
+            .gridItemWrapper {
                 position: relative;
-                background: transparent;
-                border: none;
-                cursor: pointer;
 
-                /* SLOT POR BAIXO DO ITEM */
-                &::before {
-                    content: '';
-                    position: absolute;
-                    inset: 0;
-                    background: #49413d;
-                    border-radius: 6px;
-                    z-index: 0;
+                width: 72px;
+                height: 72px;
+
+                @media (max-width: 700px) {
+                    width: 52px;
+                    height: 52px;
                 }
 
-                
-
-                /* tooltips */
-                .tooltip {
-                    display: none;
-                    position: absolute;
-                    bottom: 100%; // aparece acima do ícone
-                    left: 50%;
-                    transform: translateX(-50%);
-                    margin-bottom: 6px;
-                    background: rgba(149, 174, 189, 0.8); // #95aebd @ 80%
-                    border: 1px solid #3e3631;
-                    border-radius: 4px;
-                    padding: 4px 8px;
-                    font-family: 'SpaceHorse';
-                    font-size: 0.8vw;
-                    white-space: nowrap;
-                    z-index: 3;
-
-                    @media (max-width: 700px) {
-                        font-size: 2vw;
-                        padding: 2px 6px;
-                    }
-                }
-
-                /* ao passar o mouse, exibe o tooltip */
-                &:hover .tooltip {
-                    display: block;
-                }
-
-                /* destaque no hover */
-                &:hover {
-                    outline: 2px solid rgba(255, 255, 255, 0.8);
-                    border-radius: 6px;
-                }
-
-                .imageWrapper {
+                .gridItem {
                     position: relative;
                     width: 100%;
                     height: 100%;
-                    z-index: 1;
-                    /* acima do slot */
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        inset: 0;
+                        background: #49413d;
+                        border-radius: 6px;
+                        z-index: 0;
+                    }
+
+
+                    /* tooltips */
+                    .tooltip {
+                        display: none;
+                        position: absolute;
+                        bottom: 100%; // aparece acima do ícone
+                        left: 50%;
+                        transform: translateX(-50%);
+                        margin-bottom: 6px;
+                        background: rgba(149, 174, 189, 0.8); // #95aebd @ 80%
+                        border: 1px solid #3e3631;
+                        border-radius: 4px;
+                        padding: 4px 8px;
+                        font-family: 'SpaceHorse';
+                        font-size: 0.8vw;
+                        white-space: nowrap;
+                        z-index: 3;
+
+                        @media (max-width: 700px) {
+                            font-size: 2vw;
+                            padding: 2px 6px;
+                        }
+                    }
+
+                    /* ao passar o mouse, exibe o tooltip */
+                    &:hover .tooltip {
+                        display: block;
+                    }
+
+                    /* destaque no hover */
+                    &:hover {
+                        outline: 2px solid rgba(255, 255, 255, 0.8);
+                        border-radius: 6px;
+                    }
+
+                    .imageWrapper {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 1;
+                        /* acima do slot */
+                    }
+
+                    .itemCount {
+                        position: absolute;
+                        top: 4%;
+                        right: 4%;
+                        font-family: 'SpaceHorse';
+                        font-size: 0.8vw;
+                        color: #fff;
+                        text-shadow: -2px 1px 0px #000;
+                        z-index: 2;
+
+                        /* acima de tudo */
+                        @media (max-width: 700px) {
+                            font-size: 2vw;
+                        }
+                    }
+
+
                 }
 
-                .itemCount {
+                /* ─────────── DROPDOWN MENU ─────────── */
+                .dropdown {
                     position: absolute;
-                    top: 4%;
-                    right: 4%;
-                    font-family: 'SpaceHorse';
-                    font-size: 0.8vw;
-                    color: #fff;
-                    text-shadow: -2px 1px 0px #000;
-                    z-index: 2;
+                    top: 100%; // right below the gridItem
+                    left: 0; // align left edge
+                    background-color: #be9c7f;
+                    border: 1px solid #7d4d45;
+                    border-radius: 4px;
+                    margin-top: 4px;
+                    z-index: 4;
+                    min-width: 6rem;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 
-                    /* acima de tudo */
                     @media (max-width: 700px) {
-                        font-size: 2vw;
+                        min-width: 8rem;
+                    }
+
+                    .dropdownOption {
+                        font-family: 'SpaceHorse';
+                        font-size: 0.9rem;
+                        padding: 0.5rem 1rem;
+                        color: #333;
+                        cursor: pointer;
+                        background-color: transparent;
+
+                        &:hover {
+                            background-color: #7d4d45;
+                            color: #fff;
+                        }
+
+                        @media (max-width: 700px) {
+                            font-size: 2vw;
+                            padding: 1vw 2vw;
+                        }
                     }
                 }
-
-
             }
+
         }
     }
 }
