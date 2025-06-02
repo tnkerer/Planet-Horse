@@ -16,10 +16,8 @@ type SocialMediaType = keyof typeof socialMediaIcons;
 
 const Footer: React.FC = () => {
   const socialMediaLinks = {
-    discord: 'https://discord.com/invite/ronen',
-/*     telegram: 'https://www.t.me/planethorse',
-    instagram: 'https://twitter.com/PlanetHorseNFT', */
-    twitter: 'https://twitter.com/',
+    discord: 'https://discord.gg/dTcrcUHczS',
+    twitter: 'https://x.com/PlanetHorseGame',
   }
 
   const renderSocialMediaElements = () =>

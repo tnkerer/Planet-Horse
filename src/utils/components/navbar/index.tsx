@@ -78,7 +78,7 @@ const Navbar: React.FC = () => {
               <a>PROFILE</a>
             </Link>
             {/* <a>|</a> */}
-            <Link href='https://opensea.io/0x96ca93ac0d9e26179dcd11db08af88a3506e8f03/created'>
+            <Link href='https://opensea.io/'>
               <a target="_blank">MARKETPLACE</a>
             </Link>
           </div>

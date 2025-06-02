@@ -28,17 +28,7 @@ const SocialMidia: React.FC = () => {
         ${isMobileScreen && isScrolled && styles.hide}
       `}>
         <div className={styles.container_socials}>
-          <Link href='https://discord.gg/wg3gtRmh'>
-            <a className={styles.slot}>
-              <Image src={discord} width={65} height={65} />
-            </a>
-          </Link>
-          <Link href='https://instagram.com/planethorse_nft'>
-            <a className={styles.container_slot}>
-              <Image src={instagram} width={65} height={65} />
-            </a>
-          </Link>
-          <Link href='https://twitter.com/PlanetHorseNFT'>
+          <Link href='https://x.com/PlanetHorseGame'>
             <a className={styles.container_slot}>
               <Image src={twitter} width={65} height={65} />
             </a>

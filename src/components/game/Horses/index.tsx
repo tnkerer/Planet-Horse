@@ -166,7 +166,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
               <div className={styles.plusHorse}>+</div>
               <div className={styles.addHorseText}>
                 <Link
-                  href="https://opensea.io/0x96ca93ac0d9e26179dcd11db08af88a3506e8f03/created"
+                  href="https://opensea.io/"
                   passHref
                 >
                   <a

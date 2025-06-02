@@ -20,7 +20,7 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
         </div>
         <div className={styles.socials}>
           <div className={styles.slot}>
-          <Link href={'https://discord.com/invite/ronen'}>
+          <Link href={'https://discord.gg/dTcrcUHczS'}>
           <a target="_blank" rel="noreferrer">
             <Image
               src='/assets/icons/socials/discord.webp'
@@ -31,7 +31,7 @@ const Footer: React.FC<Props> = ({ copyrightTextColor }) => {
             </Link>
           </div>
           <div className={styles.slot}>
-          <Link href={'https://twitter.com/'}>
+          <Link href={'https://x.com/PlanetHorseGame'}>
           <a target="_blank" rel="noreferrer">
             <Image
               src='/assets/icons/socials/twitter.webp'
