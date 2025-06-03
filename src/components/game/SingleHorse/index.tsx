@@ -185,8 +185,8 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
           <div className={styles.horseGif}>
             <img
-              src={`/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status}.gif`}
-              alt={`${horse.profile.name} (${horse.staty.status})`}
+              src={`/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status.toLowerCase()}.gif`}
+              alt={`${horse.profile.name} (${horse.staty.status.toLowerCase()})`}
             />
           </div>
 

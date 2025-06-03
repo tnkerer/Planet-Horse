@@ -16,7 +16,7 @@ const useImage = (horse: Horse): Props => {
   useEffect((): void => {
     const fetchImage = async (): Promise<void> => {
       try {
-        const response = await import(`@/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status}.gif`)
+        const response = await import(`@/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status.toLowerCase()}.gif`)
         setImage(response.default)
       } catch (err) {
         setError(err)
