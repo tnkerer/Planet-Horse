@@ -134,6 +134,10 @@ $default-color: #919191; // cinza fallback
                             font-size: 1.7vw;
                         }
 
+                         @media screen and (max-width: 360px) {
+                            font-size: 1vw;
+                        }
+
                         &.horseItemDescriptionGray {
                             color: #919191;
                         }
