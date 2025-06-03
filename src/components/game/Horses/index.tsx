@@ -1,3 +1,4 @@
+// src/components/Horses/index.tsx
 import React, { useState, useEffect, useCallback } from 'react'
 import styles from './styles.module.scss'
 import ItemBag from '../Modals/ItemBag'
@@ -8,6 +9,10 @@ import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
 import medal from '@/assets/icons/medal.gif'
 import { useUser } from '@/contexts/UserContext'
 import { useWallet } from '@/contexts/WalletContext'
+
+// New imports:
+import ConfirmModal from '../Modals/ConfirmModal'
+import ErrorModal from '../Modals/ErrorModal'
 
 interface BackendHorse {
   tokenId: string
@@ -59,24 +64,29 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   const { phorse, medals, updateBalance } = useUser()
   const { isAuthorized, address } = useWallet()
 
-  const [horseList, setHorseList] = useState<Horse[]>([]);
+  const [horseList, setHorseList] = useState<Horse[]>([])
 
-  // load live horses once authorized
+  // ─── Claim‐horse states ──────────────────────────────────────────────────────
+  const [showClaimConfirm, setShowClaimConfirm] = useState(false)
+  const [claiming, setClaiming] = useState(false)
+  const [claimError, setClaimError] = useState<string | null>(null)
+
+  // ─── loadHorses ─────────────────────────────────────────────────────────────
   const loadHorses = useCallback(async () => {
     if (!address) {
-      setHorseList([]);
-      return;
+      setHorseList([])
+      return
     }
     updateBalance()
     try {
       const res = await fetch(`${process.env.API_URL}/horses`, {
         credentials: 'include',
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as BackendHorse[];
-      const mapped: Horse[] = data.map((h) => {
-        const idNum = Number(h.tokenId);
-        const raritySlug = h.rarity.toLowerCase();
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = (await res.json()) as BackendHorse[]
+      const mapped: Horse[] = data.map(h => {
+        const idNum = Number(h.tokenId)
+        const raritySlug = h.rarity.toLowerCase()
         return {
           id: idNum,
           profile: {
@@ -100,38 +110,72 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           },
           items:
             h.equipments.length > 0
-              ? h.equipments.map((e) => ({ id: Number(e.id) }))
+              ? h.equipments.map(e => ({ id: Number(e.id) }))
               : [{ id: 1 }, { id: 2 }, { id: 3 }],
-        };
-      });
-
-      setHorseList(mapped);
+        }
+      })
+      setHorseList(mapped)
     } catch (err) {
-      console.error('Failed to load horses:', err);
-      setHorseList([]);
+      console.error('Failed to load horses:', err)
+      setHorseList([])
     }
-  }, [isAuthorized, address])
+  }, [isAuthorized, address, updateBalance])
 
   useEffect(() => {
-    loadHorses();
+    loadHorses()
   }, [loadHorses])
 
-  const toogleModal = (modalType: string) => {
+  // ─── Handlers to open/close ItemBag ─────────────────────────────────────────
+  const toggleModal = (modalType: string) => {
     switch (modalType) {
-      case 'items': return setModalItems(r => !r)
+      case 'items':
+        return setModalItems(r => !r)
+    }
+  }
+
+  // ─── Handler when user clicks “Yes” on ClaimConfirm ─────────────────────────
+  const handleDoClaim = async () => {
+    setShowClaimConfirm(false)
+    setClaimError(null)
+    setClaiming(true)
+    try {
+      const res = await fetch(`${process.env.API_URL}/horses/claim-horse`, {
+        method: 'PUT',
+        credentials: 'include',
+      })
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`
+        try {
+          const errJson = await res.json()
+          if (errJson?.message) msg = errJson.message
+        } catch {
+          // ignore JSON parse
+        }
+        throw new Error(msg)
+      }
+      // success → reload list
+      await loadHorses()
+    } catch (e: any) {
+      console.error(e)
+      setClaimError(e.message || 'Failed to claim a horse')
+    } finally {
+      setClaiming(false)
     }
   }
 
   return (
     <>
-      <ItemBag status={modalItems} closeModal={toogleModal} />
+      {/* ─────────────────── ItemBag Modal ─────────────────────────────────── */}
+      <ItemBag status={modalItems} closeModal={toggleModal} />
+
+      {/* ─────────────────── Top Status Bar ─────────────────────────────────── */}
       <div className={styles.secondBar}>
         <div className={styles.containerBar}>
           <div className={styles.actionContainer}>
             <div className={styles.actionOptions}>
               <button
                 className={`${styles.bagButton} ${modalItems ? styles.bagOpened : ''}`}
-                onClick={() => toogleModal('items')}
+                onClick={() => toggleModal('items')}
                 aria-label="Open Bag"
               >
                 <span className={styles.notificationBadge}></span>
@@ -147,6 +191,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
         </div>
       </div>
 
+      {/* ─────────────────── Horse Grid ──────────────────────────────────────── */}
       <div className={styles.container}>
         <span className={styles.countHorses}>
           {horseList.length} Horses
@@ -154,35 +199,50 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
         <div className={styles.cardHorses}>
           {horseList.map(h => (
-            <SingleHorse
-              key={h.id}
-              horse={h}
-              reloadHorses={loadHorses}
-            />
+            <SingleHorse key={h.id} horse={h} reloadHorses={loadHorses} />
           ))}
 
+          {/* ─────────────── “Grab Some Horses” Link ───────────────────────── */}
           <div className={styles.addHorse}>
             <div className={styles.addHorseWrapper}>
-              <div className={styles.plusHorse}>+</div>
+              <div className={styles.plusHorse} onClick={e => {
+                    e.preventDefault()
+                    setShowClaimConfirm(true)
+                  }}>+</div>
               <div className={styles.addHorseText}>
-                <Link
-                  href="https://opensea.io/"
-                  passHref
+                {/* Prevent default navigation; open ConfirmModal instead */}
+                <a
+                  href="#"
+                  className={styles.addHorseLink}
+                  onClick={e => {
+                    e.preventDefault()
+                    setShowClaimConfirm(true)
+                  }}
                 >
-                  <a
-                    className={styles.addHorseLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GRAB SOME HORSES AND YOU WILL BE ON YOUR WAY TO RUNNING LIKE A PRO!
-                  </a>
-                </Link>
+                  GRAB SOME HORSES AND YOU WILL BE ON YOUR WAY TO RUNNING LIKE A PRO!
+                </a>
               </div>
             </div>
           </div>
-
         </div>
       </div>
+
+      {/* ─────────────── Confirm “Claim a horse?” ───────────────────────────── */}
+      {showClaimConfirm && (
+        <ConfirmModal
+          text={`Claim a new horse for 1000 PHORSE?`}
+          onClose={() => setShowClaimConfirm(false)}
+          onConfirm={handleDoClaim}
+        />
+      )}
+
+      {/* ─────────────── Error if claim failed ──────────────────────────────── */}
+      {claimError && (
+        <ErrorModal
+          text={claimError}
+          onClose={() => setClaimError(null)}
+        />
+      )}
     </>
   )
 }
