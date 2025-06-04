@@ -228,7 +228,7 @@ const ItemBag: React.FC<Props> = ({ status, closeModal, horse, reloadHorses }) =
                 </button>
 
                 {/* dropdown menu */}
-                {item && activeDropdownIndex === idx && (
+                {horse && item && activeDropdownIndex === idx && (
                   <div className={styles.dropdown}>
                     {item.consumable ? (
                       <div

@@ -60,7 +60,7 @@ interface Props {
 }
 
 const Horses: React.FC<Props> = ({ changeView }) => {
-  const [modalItems, setModalItems] = useState(false)
+  const [ modalItems, setModalItems ] = useState(false)
   const { phorse, medals, updateBalance } = useUser()
   const { isAuthorized, address } = useWallet()
 
