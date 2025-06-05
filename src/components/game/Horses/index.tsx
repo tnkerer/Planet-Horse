@@ -6,6 +6,7 @@ import RecoveryCenter from '../Modals/RecoveryCenter'
 import ItemBag from '../Modals/ItemBag'
 import SingleHorse from '../SingleHorse'
 import { horses } from '@/utils/mocks/game'
+import { Items } from '@/domain/models/Item'
 import Image from 'next/image'
 import Link from 'next/link'
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
@@ -22,7 +23,8 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalRestore, setToogleModalRestore] = useState(false)
   const [modalItems, setModalItems] = useState(false)
   const [horseId, sethorseId] = useState(0)
-  const { phorse, medals } = useUser();
+  const [horsesData, setHorsesData] = useState(horses)
+  const { phorse, medals } = useUser()
 
   const toogleModal = (modalType: string, horseId?: number) => {
     if (horseId) {
@@ -48,6 +50,25 @@ const Horses: React.FC<Props> = ({ changeView }) => {
     }
   }
 
+  const handleEquipItem = (item: Items): void => {
+    if (!horseId) return
+    setHorsesData(prev =>
+      prev.map(h => {
+        if (h.id === horseId) {
+          const items = h.items ? [...h.items] : []
+          const slot = items.findIndex(it => it == null)
+          if (slot !== -1) {
+            items[slot] = { id: item.id }
+          } else if (items.length < 3) {
+            items.push({ id: item.id })
+          }
+          return { ...h, items }
+        }
+        return h
+      })
+    )
+  }
+
   return (
     <>
       <ModalReward closeModal={toogleModal} status={modalReward} horseId={horseId} />
@@ -55,6 +76,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       <ItemBag
         status={modalItems}
         closeModal={toogleModal}
+        onEquipItem={handleEquipItem}
       />
       {modalRestore && (
         <RecoveryCenter
@@ -90,19 +112,16 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       </div>
 
       <div className={styles.container}>
-        <span className={styles.countHorses}>{horses.length} Horses</span>
+        <span className={styles.countHorses}>{horsesData.length} Horses</span>
 
         <div className={styles.cardHorses}>
-
-          {horses.map((horse) => (
+          {horsesData.map(horse => (
             <SingleHorse openModal={toogleModal} key={horse.id} horse={horse} />
           ))}
 
           <div className={styles.addHorse}>
             <div className={styles.addHorseWrapper}>
-              <div className={styles.plusHorse}>
-                +
-              </div>
+              <div className={styles.plusHorse}>+</div>
               <div className={styles.addHorseText}>
                 <Link href="https://opensea.io/0x96ca93ac0d9e26179dcd11db08af88a3506e8f03/created">
                   <a
@@ -116,7 +135,6 @@ const Horses: React.FC<Props> = ({ changeView }) => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </>

@@ -56,10 +56,22 @@ table {
 }
 
 button {
-	cursor: pointer;
+	cursor: inherit;
 }
 
 ol,
 ul {
 	list-style: none;
+}
+
+html, body {
+        cursor: none;
+}
+
+*, html, body:hover {
+        cursor: none;
+}
+
+html, body:active {
+        cursor: none;
 }

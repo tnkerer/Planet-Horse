@@ -1,9 +1,6 @@
-$default-color: #919191; // cinza fallback
+$default-color: #919191;
 
 .singleHorse {
-
-    padding: 1vw;
-
     .maskCard {
         background-image: url('../../../assets/game/horses/pasta-horses.png');
         background-repeat: no-repeat;
@@ -15,8 +12,13 @@ $default-color: #919191; // cinza fallback
         position: relative;
 
         @media screen and (max-width: 920px) {
-            width: 97vw;
-            height: 60vw;
+            transform: scale(1.6);
+            margin-bottom: 160px;
+        }
+
+        @media screen and (max-width: 500px) {
+            transform: scale(2);
+            margin-bottom: 160px;
         }
 
         .horseGif {
@@ -25,14 +27,6 @@ $default-color: #919191; // cinza fallback
             img {
                 width: 19.2vw;
             }
-
-            @media screen and (max-width: 920px) {
-                padding: 7.3vw 3.8vw;
-
-                img {
-                    width: 40.2vw;
-                }
-            }
         }
 
         .horseInfo {
@@ -40,45 +34,34 @@ $default-color: #919191; // cinza fallback
                 padding: 5.25vw 3.93vw 2.1vw 3.93vw;
                 font-family: 'SpaceHorse';
 
-                @media screen and (max-width: 920px) {
-                    width: 100%;
-                    padding: 11.7vw 8.5vw 2.2vw 8.5vw;
-                }
-
                 .horseItems {
                     display: flex;
-                    margin-top: 3vw;
-                    padding: 0 1.3vw;
+                    flex-direction: row-reverse;
+                    margin-top: 22px;
+                    padding: 0;
+                    position: absolute;
+                    margin-top: 2.2vw;
 
                     .singleItem {
-                        min-width: 3vw;
+                        position: relative;
+                        width: 3vw;
+                        height: 3vw;
                         margin-left: 1.2vw;
-                        text-align: center;
-                        font-size: 1.3vw;
+                        border-radius: 6px;
 
                         &:first-child {
-                            margin-left: 0vw;
-                        }
-
-                        @media screen and (max-width: 920px) {
-                            min-width: 5.9vw;
-                            margin-left: 2.7vw;
-                            font-size: 2vw;
+                            margin-left: 0;
                         }
                     }
 
-                    @media screen and (max-width: 920px) {
-                        margin-top: 7vw;
-                        padding: 0 3vw;
+                    img {
+                        object-fit: contain;
                     }
                 }
 
                 .horseStaty {
                     margin-top: 1vw;
 
-                    @media screen and (max-width: 920px) {
-                        margin-top: 2vw;
-                    }
                 }
 
                 .horseItemDescriptionBox {
@@ -91,18 +74,14 @@ $default-color: #919191; // cinza fallback
                     color: #b79b74;
                     line-height: 1.4;
 
-                    @media screen and (max-width: 920px) {
-                        font-size: 1.7vw;
-                    }
+
 
                     span {
                         color: #7d6b55;
                         font-weight: bold;
                         font-size: 0.8vw;
 
-                        @media screen and (max-width: 920px) {
-                            font-size: 1.7vw;
-                        }
+
 
                         &.horseItemDescriptionGray {
                             color: #919191;
@@ -128,6 +107,20 @@ $default-color: #919191; // cinza fallback
             .horseButtons {
                 display: flex;
                 gap: 0.5vw;
+                margin-top: 4.2vw;
+                margin-left: 1px;
+
+                @media screen and (max-width: 500px) {
+                    margin-top: 3.8vw;
+                }
+
+                @media screen and (max-width: 420px) {
+                    margin-top: 3.4vw;
+                }
+
+                @media screen and (max-width: 350px) {
+                    margin-top: 2.8vw;
+                }
 
                 .singleButton {
 
@@ -139,17 +132,13 @@ $default-color: #919191; // cinza fallback
                         cursor: pointer;
                         height: 2.5vw;
 
-                        @media screen and (max-width: 920px) {
-                            height: 5.5vw;
-                        }
+
 
                         &.buyButton {
                             width: 5.7vw;
                             background-image: url('../../../assets/game/horses/rewards.png');
 
-                            @media screen and (max-width: 920px) {
-                                width: 13vw;
-                            }
+
 
                             &:hover {
                                 background-image: url('../../../assets/game/horses/rewards-mouse.png');
@@ -164,9 +153,7 @@ $default-color: #919191; // cinza fallback
                             width: 4.4vw;
                             background-image: url('../../../assets/game/horses/items.png');
 
-                            @media screen and (max-width: 920px) {
-                                width: 10vw;
-                            }
+
 
                             &:hover {
                                 background-image: url('../../../assets/game/horses/items.png');
@@ -181,9 +168,7 @@ $default-color: #919191; // cinza fallback
                             width: 5.8vw;
                             background-image: url('../../../assets/game/horses/quickrace.png');
 
-                            @media screen and (max-width: 920px) {
-                                width: 13vw;
-                            }
+
 
                             &:hover {
                                 background-image: url('../../../assets/game/horses/quickrace-mouse.png');
@@ -198,9 +183,7 @@ $default-color: #919191; // cinza fallback
                             width: 5.8vw;
                             background-image: url('../../../assets/game/horses/restore.png');
 
-                            @media screen and (max-width: 920px) {
-                                width: 13vw;
-                            }
+
 
                             &:hover {
                                 background-image: url('../../../assets/game/horses/restore-mouse.png');
@@ -220,9 +203,7 @@ $default-color: #919191; // cinza fallback
                             width: 3.6vw;
                             background-image: url('../../../assets/game/horses/start.png');
 
-                            @media screen and (max-width: 920px) {
-                                width: 8vw;
-                            }
+
 
                             &:hover {
                                 background-image: url('../../../assets/game/horses/start-mouse.png');
@@ -233,7 +214,6 @@ $default-color: #919191; // cinza fallback
                             }
 
                             &:disabled {
-                                /* use the “clicked” sprite when disabled */
                                 background-image: url('../../../assets/game/horses/start-clicado.png');
                                 cursor: not-allowed;
                             }
@@ -243,21 +223,15 @@ $default-color: #919191; // cinza fallback
             }
         }
 
-          .horseId {
-                position: absolute;
-                top: 0.1vw;
-                right: 10vw;
-                font-family: 'SpaceHorse';
-                font-size: 1.2vw;
-                color: #7D6B55;       // mesmo tom usado em horseItemDescription
-                line-height: 1.4;
-            
-                @media screen and (max-width: 920px) {
-                  top: 0.4vw;
-                  right: 20vw;
-                  font-size: 2.4vw;
-                }
-              }
+        .horseId {
+            position: absolute;
+            top: 0.1vw;
+            right: 10vw;
+            font-family: 'SpaceHorse';
+            font-size: 1.2vw;
+            color: #7D6B55;
+            line-height: 1.4;
+        }
     }
 
 }

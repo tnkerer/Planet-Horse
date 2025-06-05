@@ -15,12 +15,12 @@ interface Item {
 interface Props {
   status: boolean
   closeModal: (modalType: string) => void
+  onEquipItem?: (item: Item) => void
+
 }
 
-const ItemBag: React.FC<Props> = ({ status, closeModal }) => {
-  // quantos slots tem o grid (4x4 = 16)
+const ItemBag: React.FC<Props> = ({ status, closeModal, onEquipItem }) => {
   const totalSlots = 12
-  // completa com null para os slots vazios
   const displayItems: Array<Item | null> = [
     ...items,
     ...Array(totalSlots - items.length).fill(null)
@@ -32,7 +32,6 @@ const ItemBag: React.FC<Props> = ({ status, closeModal }) => {
     <div className={styles.modalBag}>
       <div className={styles.modalFull}>
         <div className={styles.modalContent}>
-          {/* fechar */}
           <button
             className={styles.modalClose}
             onClick={() => closeModal('items')}
@@ -45,18 +44,17 @@ const ItemBag: React.FC<Props> = ({ status, closeModal }) => {
             />
           </button>
 
-          {/* título */}
           <h2 className={styles.title}>BAG</h2>
 
-          {/* grid de itens */}
           <div className={styles.gridContainer}>
             {displayItems.map((item, idx) => (
               <button
                 key={idx}
                 className={styles.gridItem}
                 onClick={() => {
-                  if (item) {
-                    console.log(`${item.name} x${item.value}`)
+                  if (item && onEquipItem) {
+                    onEquipItem(item)
+                    closeModal('items')
                   }
                 }}
               >
@@ -73,12 +71,10 @@ const ItemBag: React.FC<Props> = ({ status, closeModal }) => {
                     <span className={styles.itemCount}>
                       {item.value}
                     </span>
-                    {/* Tooltip com description */}
                     <div className={styles.tooltip}>
                       {item.description
                         .split(' ')
                         .reduce<Array<(string | JSX.Element)>>((acc, word, i) => {
-                          // every 8 words, inject a <br/>
                           if (i > 0 && i % 8 === 0) {
                             acc.push(<br key={`br-${i}`} />)
                           }

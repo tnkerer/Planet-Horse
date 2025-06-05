@@ -55,7 +55,6 @@
             background-image: url('/assets/icons/bag_hover.png');
           }
         
-          // badge de notificação, se você quiser posicionar o span dentro dele
           .notificationBadge {
             position: absolute;
             top: 0;
@@ -73,7 +72,7 @@
   
     .countCurrency {
       display: flex;
-      align-items: center;   // vertical‐centers everything
+      align-items: center;
       gap: 8px;  
   
       img {
@@ -102,6 +101,7 @@
   
     .countHorses {
       margin-top: 50px;
+      margin-bottom: 80px;
       font-family: 'SpaceHorse';
       font-size: 30px;
       color: #fff;
@@ -155,19 +155,17 @@
             margin-bottom: 5px;
           }
           .addHorseText {
-            /* mantém seu estilo existente */
             font-family: 'UpheavalPro';
             font-size: 2.2vw;
             text-align: center;
-            /* ... etc ... */
           
             .addHorseLink {
-              color: #fff;                // branco puro
-              text-decoration: none;      // remove sublinhado
-              display: inline-block;      // para poder ajustar padding/margin se quiser
+              color: #fff;
+              text-decoration: none;
+              display: inline-block;
               &:hover,
               &:focus {
-                color: #fff;              // garante que no hover fique branco também
+                color: #fff;
                 text-decoration: none;
               }
             }
