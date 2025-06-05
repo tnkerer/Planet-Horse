@@ -64,9 +64,6 @@ const ItemBag: React.FC<Props> = ({
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
 
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
-
   // Touch/swipe tracking
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
@@ -302,16 +299,6 @@ const ItemBag: React.FC<Props> = ({
                           <div key={idx} className={styles.gridItemWrapper}>
                             <button
                               className={styles.gridItem}
-                              onMouseEnter={(e) => {
-                                if (!item) return
-                                // record both which index and its bounding box
-                                setHoveredIndex(idx)
-                                setAnchorRect((e.currentTarget as HTMLElement).getBoundingClientRect())
-                              }}
-                              onMouseLeave={() => {
-                                setHoveredIndex(null)
-                                setAnchorRect(null)
-                              }}
                               onClick={() => {
                                 setActiveDropdownIndex(
                                   prev =>
@@ -332,25 +319,27 @@ const ItemBag: React.FC<Props> = ({
                               <span className={styles.itemCount}>
                                 x{item.quantity}
                               </span>
-                            </button>
-
-                            {item && hoveredIndex === idx && anchorRect && (
-                              <Tooltip anchorRect={anchorRect}>
+                              <div className={styles.tooltip}>
                                 {item.description
                                   .split(' ')
-                                  .reduce<React.ReactNode[]>((acc, word, i) => {
-                                    if (i > 0 && i % 8 === 0) {
-                                      acc.push(<br key={`br-${i}`} />)
-                                    }
-                                    acc.push(word + ' ')
-                                    return acc
-                                  }, [])
-                                }
-                                <span style={{ color: 'red' }}>
+                                  .reduce<Array<string | JSX.Element>>(
+                                    (acc, word, i) => {
+                                      if (i > 0 && i % 8 === 0) {
+                                        acc.push(<br key={`br-${i}`} />);
+                                      }
+                                      acc.push(word + ' ');
+                                      return acc;
+                                    },
+                                    []
+                                  )}
+                                <br />
+                                <span className={styles.usesLeft}>
                                   ({item.usesLeft} uses left)
                                 </span>
-                              </Tooltip>
-                            )}
+                              </div>
+                            </button>
+
+                            
 
                             {horse &&
                               activeDropdownIndex === pageIdx * totalSlotsPerPage + idx && (
