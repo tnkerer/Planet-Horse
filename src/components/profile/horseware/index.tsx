@@ -84,7 +84,7 @@ const Horseware: React.FC = () => {
               ) : txs.length === 0 ? (
                 <tr><td colSpan={6}>No transactions yet</td></tr>
               ) : (
-                txs.map((tx, i) => (
+                txs.slice( 0 , 99 ).map((tx, i) => (
                   <tr key={i}>
                     <td>{tx.type}</td>
                     <td>{tx.status}</td>

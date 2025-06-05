@@ -246,7 +246,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
               <div className={styles.horseItems}>
                 {horse.items.map((item) => (
                   <div key={item.id} className={styles.singleItem}>
-                    {item.id}
+                    <img src='/assets/items/locked.webp' height={32}/>
                   </div>
                 ))}
               </div>

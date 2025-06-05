@@ -1,128 +1,166 @@
 // src/components/game/Modals/ItemBag/index.tsx
-import React, { useEffect, useState, useCallback, useRef } from 'react'
-import Image from 'next/image'
-import styles from './styles.module.scss'
-import closeIcon from '@/assets/game/pop-up/fechar.png'
-import { items as itemsConst } from '@/utils/constants/items'
-import { Horse } from '@/domain/models/Horse'
-import ErrorModal from '../ErrorModal'
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  TouchEvent,
+} from 'react';
+import Image from 'next/image';
+import styles from './styles.module.scss';
+import closeIcon from '@/assets/game/pop-up/fechar.png';
+import { items as itemsConst } from '@/utils/constants/items';
+import { Horse } from '@/domain/models/Horse';
+import ErrorModal from '../ErrorModal';
+import Tooltip from '../../Tooltip';
 
 interface LocalItemDef {
-  name:        string
-  src:         string
-  description: string
-  breakable:   boolean
-  consumable:  boolean
-  uses:        number
-  property?:   Record<string, number>
+  name: string;
+  src: string;
+  description: string;
+  breakable: boolean;
+  consumable: boolean;
+  uses: number;
+  property?: Record<string, number>;
 }
 
+// Now each ServerItem includes “usesLeft”
 interface ServerItem {
-  name:     string
-  quantity: number
+  name: string;
+  quantity: number;
+  usesLeft: number;
 }
 
 interface DisplayItem {
-  id:          number
-  name:        string
-  src:         string
-  value:       string
-  description: string
-  consumable:  boolean
+  id: number;
+  name: string;
+  src: string;
+  quantity: number;
+  description: string;
+  consumable: boolean;
+  usesLeft: number;
 }
 
 interface Props {
-  status:          boolean
-  closeModal:      (modalType: string) => void
-  horse?:          Horse
-  reloadHorses?:    () => Promise<void>
+  status: boolean;
+  closeModal: (modalType: string) => void;
+  horse?: Horse;
+  reloadHorses?: () => Promise<void>;
 }
 
-const ItemBag: React.FC<Props> = ({ status, closeModal, horse, reloadHorses }) => {
-  const [serverItems, setServerItems] = useState<ServerItem[]>([])
-  const [loading, setLoading]         = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+const ItemBag: React.FC<Props> = ({
+  status,
+  closeModal,
+  horse,
+  reloadHorses,
+}) => {
+  const [serverItems, setServerItems] = useState<ServerItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // index of the item whose dropdown is currently open
-  const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(null)
+  // Which slot’s dropdown is open
+  const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(null);
 
-  // total grid slots
-  const totalSlots = 12
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
 
-  // fetch from API
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
+
+  // Touch/swipe tracking
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  const totalSlotsPerPage = 12;
+
+  // Fetch from API
   const fetchItems = useCallback(() => {
-    if (!status) return
-    setLoading(true)
+    if (!status) return;
+    setLoading(true);
     fetch(`${process.env.API_URL}/user/items`, {
       credentials: 'include',
     })
       .then(async (res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json() as Promise<ServerItem[]>
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json() as Promise<ServerItem[]>;
       })
-      .then(data => setServerItems(data))
+      .then(data => {
+        setServerItems(data);
+        setCurrentPage(0); // reset to first page whenever data changes
+      })
       .catch(err => {
-        console.error(err)
-        setErrorMessage(err.message || 'Failed to load items')
+        console.error(err);
+        setErrorMessage(err.message || 'Failed to load items');
       })
-      .finally(() => setLoading(false))
-  }, [status])
+      .finally(() => setLoading(false));
+  }, [status]);
 
   useEffect(() => {
-    fetchItems()
-  }, [fetchItems])
+    fetchItems();
+  }, [fetchItems]);
 
-  // close dropdown if clicked outside
-  const containerRef = useRef<HTMLDivElement>(null)
+  // Close dropdown if clicked outside
+  const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
       if (!containerRef.current?.contains(e.target as Node)) {
-        setActiveDropdownIndex(null)
+        setActiveDropdownIndex(null);
       }
     }
     if (activeDropdownIndex !== null) {
-      document.addEventListener('mousedown', onClickOutside)
-      return () => document.removeEventListener('mousedown', onClickOutside)
+      document.addEventListener('mousedown', onClickOutside);
+      return () => document.removeEventListener('mousedown', onClickOutside);
     }
-  }, [activeDropdownIndex])
+  }, [activeDropdownIndex]);
 
-  // build displayItems from serverItems
+  // Build displayItems from serverItems (already grouped by backend)
   const displayItems: Array<DisplayItem | null> = React.useMemo(() => {
     const mapped: DisplayItem[] = serverItems.map((srv, idx) => {
-      const def = itemsConst[srv.name] as LocalItemDef | undefined
+      const def = itemsConst[srv.name] as LocalItemDef | undefined;
       if (!def) {
-        console.warn(`No local definition for item "${srv.name}"`)
+        console.warn(`No local definition for item "${srv.name}"`);
         return {
-          id:          idx,
-          name:        srv.name,
-          src:         '',
-          value:       String(srv.quantity),
+          id: idx,
+          name: srv.name,
+          src: '',
+          quantity: srv.quantity,
           description: '',
-          consumable:  false,
-        }
+          consumable: false,
+          usesLeft: srv.usesLeft,
+        };
       }
       return {
-        id:          idx,
-        name:        def.name,
-        src:         def.src,
-        value:       String(srv.quantity),
+        id: idx,
+        name: def.name,
+        src: def.src,
+        quantity: srv.quantity,
         description: def.description,
-        consumable:  Boolean(def.consumable),
-      }
-    })
+        consumable: Boolean(def.consumable),
+        usesLeft: srv.usesLeft,
+      };
+    });
 
-    // fill up to totalSlots
+    // Pad to totalSlotsPerPage, but only for the *very last page* (to keep grid structure)
     return mapped.concat(
-      Array(Math.max(0, totalSlots - mapped.length)).fill(null)
-    )
-  }, [serverItems])
+      Array(Math.max(0, totalSlotsPerPage - (mapped.length % totalSlotsPerPage)) % totalSlotsPerPage).fill(null)
+    );
+  }, [serverItems]);
 
-  if (!status) return null
+  if (!status) return null;
+
+  // How many pages do we need?
+  const pageCount = Math.ceil(displayItems.length / totalSlotsPerPage);
+
+  // Slice out the items for the current page:
+  const itemsOnThisPage = displayItems.slice(
+    currentPage * totalSlotsPerPage,
+    (currentPage + 1) * totalSlotsPerPage
+  );
 
   // “Use” handler
-  const handleUse = async (itemName: string) => {
-    if (!horse) return
-    setErrorMessage(null)
+  const handleUse = async (itemName: string, usesLeft: number) => {
+    if (!horse) return;
+    setErrorMessage(null);
     try {
       const res = await fetch(
         `${process.env.API_URL}/horses/${horse.id}/consume`,
@@ -130,144 +168,253 @@ const ItemBag: React.FC<Props> = ({ status, closeModal, horse, reloadHorses }) =
           method: 'PUT',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ itemName }),
+          body: JSON.stringify({ itemName, usesLeft }),
         }
-      )
+      );
       if (!res.ok) {
-        let msg = `HTTP ${res.status}`
+        let msg = `HTTP ${res.status}`;
         try {
-          const errJson = await res.json()
-          if (errJson?.message) msg = errJson.message
-        } catch {}
-        throw new Error(msg)
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
       }
-      // on success: refresh horses & items
-      await reloadHorses()
-      fetchItems()
+      if (reloadHorses) await reloadHorses();
+      fetchItems();
     } catch (err: any) {
-      console.error(err)
-      setErrorMessage(err.message || 'Failed to use item')
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to use item');
     } finally {
-      setActiveDropdownIndex(null)
+      setActiveDropdownIndex(null);
     }
-  }
+  };
 
   // “Equip” handler (stub for now)
   const handleEquip = (itemName: string, slot: number) => {
-    console.log(`Equipped ${itemName} in slot ${slot}`)
-    setActiveDropdownIndex(null)
-  }
+    console.log(`Equipped ${itemName} in slot ${slot}`);
+    setActiveDropdownIndex(null);
+  };
+
+  // Swipe handlers
+  const onTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = null;
+  };
+  const onTouchMove = (e: TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+    const diff = touchStartX.current - touchEndX.current;
+    if (Math.abs(diff) > 50) {
+      // swipe left → go to next page
+      if (diff > 0 && currentPage < pageCount - 1) {
+        setCurrentPage(currentPage + 1);
+      }
+      // swipe right → go to prev page
+      else if (diff < 0 && currentPage > 0) {
+        setCurrentPage(currentPage - 1);
+      }
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
 
   return (
     <div className={styles.modalBag} ref={containerRef}>
       <div className={styles.modalFull}>
         <div className={styles.modalContent}>
-          {/* close */}
+          {/* Close button */}
           <button
             className={styles.modalClose}
             onClick={() => {
-              closeModal('items')
-              setActiveDropdownIndex(null)
+              closeModal('items');
+              setActiveDropdownIndex(null);
             }}
           >
             <Image src={closeIcon} alt="Close" width={30} height={30} />
           </button>
 
-          {/* title */}
+          {/* Title */}
           <h2 className={styles.title}>BAG</h2>
 
-          {/* loading */}
+          {/* Loading state */}
           {loading && <p>Loading items…</p>}
 
+          {/* Error modal */}
           {errorMessage && (
-            <ErrorModal
-              text={errorMessage}
-              onClose={() => setErrorMessage(null)}
-            />
+            <ErrorModal text={errorMessage} onClose={() => setErrorMessage(null)} />
           )}
 
-          {/* grid of items */}
-          <div className={styles.gridContainer}>
-            {displayItems.map((item, idx) => (
-              <div key={idx} className={styles.gridItemWrapper}>
-                <button
-                  className={styles.gridItem}
-                  onClick={() => {
-                    if (!item) return
-                    setActiveDropdownIndex((prev) =>
-                      prev === idx ? null : idx
-                    )
-                  }}
-                >
-                  {item && (
-                    <>
-                      <div className={styles.imageWrapper}>
-                        <Image
-                          src={`/assets/items/${item.src}.webp`}
-                          alt={item.name}
-                          layout="fill"
-                          objectFit="contain"
-                        />
-                      </div>
-                      <span className={styles.itemCount}>
-                        {item.value}
-                      </span>
-                      <div className={styles.tooltip}>
-                        {item.description
-                          .split(' ')
-                          .reduce<Array<string | JSX.Element>>((acc, word, i) => {
-                            if (i > 0 && i % 8 === 0) {
-                              acc.push(<br key={`br-${i}`} />)
-                            }
-                            acc.push(word + ' ')
-                            return acc
-                          }, [])}
-                      </div>
-                    </>
-                  )}
-                </button>
+          {/* Carousel arrows (only if more than one page) */}
+          {pageCount > 1 && (
+            <>
+              <button
+                className={`${styles.arrow} ${styles.prev}`}
+                onClick={() => currentPage > 0 && setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 0}
+                aria-label="Previous page"
+              >
+                ‹
+              </button>
+              <button
+                className={`${styles.arrow} ${styles.next}`}
+                onClick={() => currentPage < pageCount - 1 && setCurrentPage(currentPage + 1)}
+                disabled={currentPage === pageCount - 1}
+                aria-label="Next page"
+              >
+                ›
+              </button>
+            </>
+          )}
 
-                {/* dropdown menu */}
-                {horse && item && activeDropdownIndex === idx && (
-                  <div className={styles.dropdown}>
-                    {item.consumable ? (
-                      <div
-                        className={styles.dropdownOption}
-                        onClick={async () => handleUse(item.name)}
-                      >
-                        Use
-                      </div>
-                    ) : (
-                      <>
-                        <div
-                          className={styles.dropdownOption}
-                          onClick={() => handleEquip(item.name, 1)}
-                        >
-                          Equip 1
-                        </div>
-                        <div
-                          className={styles.dropdownOption}
-                          onClick={() => handleEquip(item.name, 2)}
-                        >
-                          Equip 2
-                        </div>
-                        <div
-                          className={styles.dropdownOption}
-                          onClick={() => handleEquip(item.name, 3)}
-                        >
-                          Equip 3
-                        </div>
-                      </>
-                    )}
+          {/* The “viewport” that can be swiped */}
+          <div
+            className={styles.carouselViewport}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            {/* Inner flex‐container that slides left/right */}
+            <div
+              className={styles.carouselTrack}
+              style={{ transform: `translateX(-${currentPage * 100}%)` }}
+            >
+              {/** Render each page’s 12 “slots” in a .gridContainer **/}
+              {Array.from({ length: pageCount }).map((_, pageIdx) => {
+                const start = pageIdx * totalSlotsPerPage;
+                const slice = displayItems.slice(
+                  start,
+                  start + totalSlotsPerPage
+                );
+                return (
+                  <div key={pageIdx} className={styles.page}>
+                    <div className={styles.gridContainer}>
+                      {slice.map((item, idx) => {
+                        if (!item) {
+                          return (
+                            <div key={idx} className={styles.gridItemWrapper}>
+                              <div className={styles.gridItemEmpty} />
+                            </div>
+                          );
+                        }
+                        return (
+                          <div key={idx} className={styles.gridItemWrapper}>
+                            <button
+                              className={styles.gridItem}
+                              onMouseEnter={(e) => {
+                                if (!item) return
+                                // record both which index and its bounding box
+                                setHoveredIndex(idx)
+                                setAnchorRect((e.currentTarget as HTMLElement).getBoundingClientRect())
+                              }}
+                              onMouseLeave={() => {
+                                setHoveredIndex(null)
+                                setAnchorRect(null)
+                              }}
+                              onClick={() => {
+                                setActiveDropdownIndex(
+                                  prev =>
+                                    prev === pageIdx * totalSlotsPerPage + idx
+                                      ? null
+                                      : pageIdx * totalSlotsPerPage + idx
+                                );
+                              }}
+                            >
+                              <div className={styles.imageWrapper}>
+                                <Image
+                                  src={`/assets/items/${item.src}.webp`}
+                                  alt={item.name}
+                                  layout="fill"
+                                  objectFit="contain"
+                                />
+                              </div>
+                              <span className={styles.itemCount}>
+                                x{item.quantity}
+                              </span>
+                            </button>
+
+                            {item && hoveredIndex === idx && anchorRect && (
+                              <Tooltip anchorRect={anchorRect}>
+                                {item.description
+                                  .split(' ')
+                                  .reduce<React.ReactNode[]>((acc, word, i) => {
+                                    if (i > 0 && i % 8 === 0) {
+                                      acc.push(<br key={`br-${i}`} />)
+                                    }
+                                    acc.push(word + ' ')
+                                    return acc
+                                  }, [])
+                                }
+                                <span style={{ color: 'red' }}>
+                                  ({item.usesLeft} uses left)
+                                </span>
+                              </Tooltip>
+                            )}
+
+                            {horse &&
+                              activeDropdownIndex === pageIdx * totalSlotsPerPage + idx && (
+                                <div className={styles.dropdown}>
+                                  {item.consumable ? (
+                                    <div
+                                      className={styles.dropdownOption}
+                                      onClick={() =>
+                                        handleUse(item.name, item.usesLeft)
+                                      }
+                                    >
+                                      Use
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={() => handleEquip(item.name, 1)}
+                                      >
+                                        Equip 1
+                                      </div>
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={() => handleEquip(item.name, 2)}
+                                      >
+                                        Equip 2
+                                      </div>
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={() => handleEquip(item.name, 3)}
+                                      >
+                                        Equip 3
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                )}
-              </div>
-            ))}
+                );
+              })}
+            </div>
           </div>
+
+          {/* Page‐indicator dots (optional) */}
+          {pageCount > 1 && (
+            <div className={styles.dotsContainer}>
+              {Array.from({ length: pageCount }).map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`${styles.dot} ${idx === currentPage ? styles.activeDot : ''
+                    }`}
+                  onClick={() => setCurrentPage(idx)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ItemBag
+export default ItemBag;

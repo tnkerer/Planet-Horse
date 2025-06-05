@@ -1,223 +1,296 @@
+// src/components/game/Modals/ItemBag/styles.module.scss
+
 .modalBag {
-    .modalFull {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.3);
+  .modalFull {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+
+    .modalContent {
+      position: relative;
+      width: 480px;
+      max-width: 60vw;
+      aspect-ratio: 1 / 1;
+      background-image: url('/assets/bag_raw.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+
+      @media (max-width: 700px) {
+        width: 360px;
+        aspect-ratio: 1 / 1;
+        max-width: none;
+      }
+
+      /* Close “X” */
+      .modalClose {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 2;
+      }
+      @media (min-width: 1200px) {
+        .modalClose {
+          top: -50px;
+          right: -50px;
+        }
+      }
+      @media (min-width: 700px) {
+        .modalClose {
+          top: 50px;
+          right: 50px;
+        }
+      }
+
+      /* Title “BAG” */
+      .title {
+        position: absolute;
+        top: 8%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'SpaceHorse';
+        font-size: 1.2vw;
+        color: #e0e0e0;
+
+        @media (max-width: 920px) {
+          font-size: 3vw;
+        }
+      }
+
+      /* ─── Carousel arrows ─── */
+      .arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        text-align: center;
+        cursor: pointer;
+        z-index: 10;
+        user-select: none;
+
+        &:disabled {
+          opacity: 0.3;
+          cursor: default;
+        }
+      }
+      .prev {
+        left: 8px;
+      }
+      .next {
+        right: 8px;
+      }
+
+      /* ─── Carousel viewport ─── */
+      .carouselViewport {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        width: 90%;
+        height: 65%;
+        transform: translateX(-50%);
+        overflow-y: visible !important;
+        overflow-x: hidden;
+        touch-action: pan-y; /* allow vertical scroll but intercept horizontal swipe */
+      }
+
+      .carouselTrack {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.3s ease;
+      }
+
+      .page {
+        flex: 0 0 100%;
+        /* each page is exactly 100% of viewport width */
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 20;
+      }
 
-        .modalContent {
-            position: relative;
-            width: 480px;
-            max-width: 60vw;
-            aspect-ratio: 1 / 1;
-            background-image: url('/assets/bag_raw.png');
-            background-size: contain;
-            background-repeat: no-repeat;
+      /* ─── Grid of 12 slots ─── */
+      .gridContainer {
+        width: 80%;
+        height: 90%;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 1%;
+        padding: 40px 20px; /* adjust as desired */
+
+        @media (max-width: 1200px) {
+          gap: 2%;
+          padding: 30px 15px;
+        }
+      }
+
+      .gridItemWrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        /* Each slot’s empty background “slot” */
+        .gridItemEmpty {
+          width: 100%;
+          height: 100%;
+          background: #49413d;
+          border-radius: 6px;
+        }
+
+        .gridItem {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          z-index: 1; /* above the slot background */
+
+          /* Dark “slot” background via ::before */
+          &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #49413d;
+            border-radius: 6px;
+            z-index: 0;
+          }
+
+          /* Tooltip */
+          .tooltip {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 6px;
+            background: rgba(149, 174, 189, 0.8);
+            border: 1px solid #3e3631;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-family: 'SpaceHorse';
+            font-size: 0.8vw;
+            white-space: nowrap;
+            z-index: 4;
 
             @media (max-width: 700px) {
-                width: 360px;
-                aspect-ratio: 1 / 1;
-                max-width: none;
+              font-size: 2vw;
+              padding: 2px 6px;
             }
+          }
+          &:hover .tooltip {
+            display: block;
+          }
+          &:hover {
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+          }
 
-            /* botão fechar */
-            .modalClose {
-                position: absolute;
-                top: 20px; // desce mais
-                right: 20px; // afasta mais da borda para a esquerda
-                background: none;
-                border: none;
-                cursor: pointer;
-                z-index: 2;
+          .imageWrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+          }
+
+          .itemCount {
+            position: absolute;
+            top: 4%;
+            right: 4%;
+            font-family: 'SpaceHorse';
+            font-size: 0.8vw;
+            color: #fff;
+            text-shadow: -2px 1px 0px #000;
+            z-index: 2;
+
+            @media (max-width: 700px) {
+              font-size: 2vw;
             }
-
-            // em telas acima de 700px, movemos o “X” um pouco mais pra baixo e pra esquerda
-            @media (min-width: 1200px) {
-                .modalClose {
-                    top: -50px; // desce mais
-                    right: -50px; // afasta mais da borda para a esquerda
-                }
-            }
-
-            // em telas acima de 700px, movemos o “X” um pouco mais pra baixo e pra esquerda
-            @media (min-width: 700px) {
-                .modalClose {
-                    top: 50px; // desce mais
-                    right: 50px; // afasta mais da borda para a esquerda
-                }
-            }
-
-            /* título “BAG” */
-            .title {
-                position: absolute;
-                top: 8%;
-                left: 50%;
-                transform: translateX(-50%);
-                font-family: 'SpaceHorse';
-                font-size: 1.2vw;
-                color: #e0e0e0;
-
-                @media (max-width: 920px) {
-                    font-size: 3vw;
-                }
-            }
-
-            /* grid de itens: 4 colunas × 3 linhas */
-            .gridContainer {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -45%);
-                width: 80%;
-                height: 65%;
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                grid-template-rows: repeat(3, 1fr);
-                gap: 1%;
-                padding: 40px;
-
-                @media (max-width: 1200px) {
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -45%);
-                    width: 84%;
-                    height: 65%;
-                    gap: 2%;
-                    padding: 30px;
-                }
-            }
-
-            .gridItemWrapper {
-                position: relative;
-
-                width: 72px;
-                height: 72px;
-
-                @media (max-width: 700px) {
-                    width: 52px;
-                    height: 52px;
-                }
-
-                .gridItem {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    background: transparent;
-                    border: none;
-                    cursor: pointer;
-
-                    &::before {
-                        content: '';
-                        position: absolute;
-                        inset: 0;
-                        background: #49413d;
-                        border-radius: 6px;
-                        z-index: 0;
-                    }
-
-
-                    /* tooltips */
-                    .tooltip {
-                        display: none;
-                        position: absolute;
-                        bottom: 100%; // aparece acima do ícone
-                        left: 50%;
-                        transform: translateX(-50%);
-                        margin-bottom: 6px;
-                        background: rgba(149, 174, 189, 0.8); // #95aebd @ 80%
-                        border: 1px solid #3e3631;
-                        border-radius: 4px;
-                        padding: 4px 8px;
-                        font-family: 'SpaceHorse';
-                        font-size: 0.8vw;
-                        white-space: nowrap;
-                        z-index: 3;
-
-                        @media (max-width: 700px) {
-                            font-size: 2vw;
-                            padding: 2px 6px;
-                        }
-                    }
-
-                    /* ao passar o mouse, exibe o tooltip */
-                    &:hover .tooltip {
-                        display: block;
-                    }
-
-                    /* destaque no hover */
-                    &:hover {
-                        outline: 2px solid rgba(255, 255, 255, 0.8);
-                        border-radius: 6px;
-                    }
-
-                    .imageWrapper {
-                        position: relative;
-                        width: 100%;
-                        height: 100%;
-                        z-index: 1;
-                        /* acima do slot */
-                    }
-
-                    .itemCount {
-                        position: absolute;
-                        top: 4%;
-                        right: 4%;
-                        font-family: 'SpaceHorse';
-                        font-size: 0.8vw;
-                        color: #fff;
-                        text-shadow: -2px 1px 0px #000;
-                        z-index: 2;
-
-                        /* acima de tudo */
-                        @media (max-width: 700px) {
-                            font-size: 2vw;
-                        }
-                    }
-
-
-                }
-
-                /* ─────────── DROPDOWN MENU ─────────── */
-                .dropdown {
-                    position: absolute;
-                    top: 100%; // right below the gridItem
-                    left: 0; // align left edge
-                    background-color: #be9c7f;
-                    border: 1px solid #7d4d45;
-                    border-radius: 4px;
-                    margin-top: 4px;
-                    z-index: 4;
-                    min-width: 6rem;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-
-                    @media (max-width: 700px) {
-                        min-width: 8rem;
-                    }
-
-                    .dropdownOption {
-                        font-family: 'SpaceHorse';
-                        font-size: 0.9rem;
-                        padding: 0.5rem 1rem;
-                        color: #333;
-                        cursor: pointer;
-                        background-color: transparent;
-
-                        &:hover {
-                            background-color: #7d4d45;
-                            color: #fff;
-                        }
-
-                        @media (max-width: 700px) {
-                            font-size: 2vw;
-                            padding: 1vw 2vw;
-                        }
-                    }
-                }
-            }
-
+          }
         }
+
+        /* ─── Dropdown Menu ─── */
+        .dropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          background-color: #be9c7f;
+          border: 1px solid #7d4d45;
+          border-radius: 4px;
+          margin-top: 4px;
+          z-index: 5;
+          min-width: 6rem;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+          @media (max-width: 700px) {
+            min-width: 8rem;
+          }
+
+          .dropdownOption {
+            font-family: 'SpaceHorse';
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            color: #333;
+            cursor: pointer;
+            background-color: transparent;
+            &:hover {
+              background-color: #7d4d45;
+              color: #fff;
+            }
+            @media (max-width: 700px) {
+              font-size: 2vw;
+              padding: 1vw 2vw;
+            }
+          }
+        }
+      }
+
+      /* “(X uses left)” in red at bottom of tooltip */
+      .usesLeft {
+        display: block;
+        margin-top: 0.25rem;
+        color: #800606;
+        font-family: 'SpaceHorse';
+        font-size: 0.8vw;
+        @media (max-width: 700px) {
+          font-size: 1.8vw;
+        }
+      }
+
+      /* Page‐indicator dots below carousel */
+      .dotsContainer {
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.5rem;
+        z-index: 5;
+      }
+      .dot {
+        width: 0.8rem;
+        height: 0.8rem;
+        background: #bbb;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .activeDot {
+        background: #7d4d45;
+      }
     }
+  }
 }

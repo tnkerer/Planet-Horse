@@ -1,0 +1,16 @@
+.tooltip {
+  background: rgba(149, 174, 189, 0.8); // #95aebd @ 80%
+  border: 1px solid #3e3631;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: 'SpaceHorse';
+  font-size: 0.8vw;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none; // tooltip itself should not capture clicks
+
+  @media (max-width: 700px) {
+    font-size: 2vw;
+    padding: 2px 6px;
+  }
+}
