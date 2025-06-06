@@ -187,7 +187,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
         } catch { }
         throw new Error(msg);
       }
-      setInfoMessage(`Removed ${item.name} from horse #${horse.id}.`);
+      // setInfoMessage(`Removed ${item.name} from horse #${horse.id}.`);
       await reloadHorses();
     } catch (err: any) {
       console.error(err);

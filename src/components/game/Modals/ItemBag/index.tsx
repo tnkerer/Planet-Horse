@@ -178,7 +178,7 @@ const ItemBag: React.FC<Props> = ({
         try {
           const errJson = await res.json();
           if (errJson?.message) msg = errJson.message;
-        } catch {}
+        } catch { }
         throw new Error(msg);
       }
       setInfoMessage(`Used one ${itemName}.`);
@@ -211,7 +211,7 @@ const ItemBag: React.FC<Props> = ({
         try {
           const errJson = await res.json();
           if (errJson?.message) msg = errJson.message;
-        } catch {}
+        } catch { }
         throw new Error(msg);
       }
       setInfoMessage(`Equipped ${itemName} to horse #${horse.id}.`);
@@ -376,22 +376,31 @@ const ItemBag: React.FC<Props> = ({
 
                             {horse &&
                               activeDropdownIndex ===
-                                pageIdx * totalSlotsPerPage + idx && (
+                              pageIdx * totalSlotsPerPage + idx && (
                                 <div
-                                  className={`${styles.dropdown} ${
-                                    idx >= 8 ? styles.dropdownAbove : ''
-                                  }`}
+                                  className={`${styles.dropdown} ${idx >= 8 ? styles.dropdownAbove : ''
+                                    }`}
                                 >
                                   {item.consumable ? (
-                                    <div
+                                    <><div
                                       className={styles.dropdownOption}
-                                      onClick={async () =>
-                                        {handleUse(item.name, item.usesLeft)
-                                        setTooltip(null)}
+                                      onClick={async () => {
+                                        handleUse(item.name, item.usesLeft)
+                                        setTooltip(null)
+                                      }
                                       }
                                     >
                                       Use
                                     </div>
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={async () =>
+                                          console.log(`Minting ${item.name}`)
+                                        }
+                                      >
+                                        Mint
+                                      </div>
+                                    </>
                                   ) : (
                                     <>
                                       <div
@@ -400,9 +409,17 @@ const ItemBag: React.FC<Props> = ({
                                           handleEquip(item.name, item.usesLeft)
                                         }
                                       >
-                                        Equip 1
+                                        Equip
                                       </div>
                                       <div
+                                        className={styles.dropdownOption}
+                                        onClick={async () =>
+                                          console.log(`Minting ${item.name}`)
+                                        }
+                                      >
+                                        Mint
+                                      </div>
+                                      {/* <div
                                         className={styles.dropdownOption}
                                         onClick={async () =>
                                           handleEquip(item.name, item.usesLeft)
@@ -417,7 +434,7 @@ const ItemBag: React.FC<Props> = ({
                                         }
                                       >
                                         Equip 3
-                                      </div>
+                                      </div> */}
                                     </>
                                   )}
                                 </div>
@@ -438,9 +455,8 @@ const ItemBag: React.FC<Props> = ({
               {Array.from({ length: pageCount }).map((_, idx) => (
                 <span
                   key={idx}
-                  className={`${styles.dot} ${
-                    idx === currentPage ? styles.activeDot : ''
-                  }`}
+                  className={`${styles.dot} ${idx === currentPage ? styles.activeDot : ''
+                    }`}
                   onClick={() => setCurrentPage(idx)}
                 />
               ))}
