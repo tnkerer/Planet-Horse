@@ -375,7 +375,7 @@ const ItemBag: React.FC<Props> = ({
                                   objectFit="contain"
                                 />
                               </div>
-                              <span className={styles.itemCount}>x{item.quantity}</span>
+                              <span className={styles.itemCount}>{item.quantity}</span>
                             </button>
 
                             {horse &&

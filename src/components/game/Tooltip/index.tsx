@@ -20,20 +20,20 @@ const Tooltip: React.FC<Props> = ({ children, x, y, visible }) => {
 
   if (!visible) return null;
 
-  return ReactDOM.createPortal(
-    <div
-      style={{
-        position: 'fixed',
-        left: x,
-        top: y,
-        zIndex: 9999,
-        pointerEvents: 'none',
-      }}
-    >
-      {children}
-    </div>,
-    container
-  );
+return ReactDOM.createPortal(
+  <div
+    style={{
+      position: 'fixed',
+      left: x,
+      top: y,
+      zIndex: 9999,
+      pointerEvents: 'none',
+    }}
+  >
+    {children}
+  </div>,
+  container
+);
 };
 
 export default Tooltip;
