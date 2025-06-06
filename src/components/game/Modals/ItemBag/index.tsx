@@ -12,6 +12,7 @@ import closeIcon from '@/assets/game/pop-up/fechar.png';
 import { items as itemsConst } from '@/utils/constants/items';
 import { Horse } from '@/domain/models/Horse';
 import ErrorModal from '../ErrorModal';
+import InfoModal from '../InfoModal';
 import Tooltip from '../../Tooltip';
 
 interface LocalItemDef {
@@ -24,7 +25,6 @@ interface LocalItemDef {
   property?: Record<string, number>;
 }
 
-// Now each ServerItem includes “usesLeft”
 interface ServerItem {
   name: string;
   quantity: number;
@@ -56,7 +56,10 @@ const ItemBag: React.FC<Props> = ({
 }) => {
   const [serverItems, setServerItems] = useState<ServerItem[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // For error / info messages
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   // Which slot’s dropdown is open
   const [activeDropdownIndex, setActiveDropdownIndex] = useState<number | null>(null);
@@ -70,6 +73,7 @@ const ItemBag: React.FC<Props> = ({
 
   const totalSlotsPerPage = 12;
 
+  // Tooltip state
   const [tooltip, setTooltip] = useState<{
     x: number;
     y: number;
@@ -88,11 +92,11 @@ const ItemBag: React.FC<Props> = ({
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json() as Promise<ServerItem[]>;
       })
-      .then(data => {
+      .then((data) => {
         setServerItems(data);
         setCurrentPage(0); // reset to first page whenever data changes
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setErrorMessage(err.message || 'Failed to load items');
       })
@@ -144,22 +148,16 @@ const ItemBag: React.FC<Props> = ({
       };
     });
 
-    // Pad to totalSlotsPerPage, but only for the *very last page* (to keep grid structure)
-    return mapped.concat(
-      Array(Math.max(0, totalSlotsPerPage - (mapped.length % totalSlotsPerPage)) % totalSlotsPerPage).fill(null)
-    );
+    // Pad to totalSlotsPerPage, but only for the very last page (to keep grid structure)
+    const remainder = mapped.length % totalSlotsPerPage;
+    const padCount = remainder === 0 ? 0 : totalSlotsPerPage - remainder;
+    return mapped.concat(Array(padCount).fill(null));
   }, [serverItems]);
 
   if (!status) return null;
 
   // How many pages do we need?
   const pageCount = Math.ceil(displayItems.length / totalSlotsPerPage);
-
-  // Slice out the items for the current page:
-  const itemsOnThisPage = displayItems.slice(
-    currentPage * totalSlotsPerPage,
-    (currentPage + 1) * totalSlotsPerPage
-  );
 
   // “Use” handler
   const handleUse = async (itemName: string, usesLeft: number) => {
@@ -172,7 +170,7 @@ const ItemBag: React.FC<Props> = ({
           method: 'PUT',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ itemName, usesLeft }),
+          body: JSON.stringify({ itemName: itemName }),
         }
       );
       if (!res.ok) {
@@ -180,9 +178,10 @@ const ItemBag: React.FC<Props> = ({
         try {
           const errJson = await res.json();
           if (errJson?.message) msg = errJson.message;
-        } catch { }
+        } catch {}
         throw new Error(msg);
       }
+      setInfoMessage(`Used one ${itemName}.`);
       if (reloadHorses) await reloadHorses();
       fetchItems();
     } catch (err: any) {
@@ -193,10 +192,37 @@ const ItemBag: React.FC<Props> = ({
     }
   };
 
-  // “Equip” handler (stub for now)
-  const handleEquip = (itemName: string, slot: number) => {
-    console.log(`Equipped ${itemName} in slot ${slot}`);
-    setActiveDropdownIndex(null);
+  // “Equip” handler (calls backend /horses/:id/equip-item)
+  const handleEquip = async (itemName: string, usesLeft: number) => {
+    if (!horse) return;
+    setErrorMessage(null);
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/horses/${horse.id}/equip-item`,
+        {
+          method: 'PUT',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: itemName, usesLeft }),
+        }
+      );
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch {}
+        throw new Error(msg);
+      }
+      setInfoMessage(`Equipped ${itemName} to horse #${horse.id}.`);
+      if (reloadHorses) await reloadHorses();
+      fetchItems();
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to equip item');
+    } finally {
+      setActiveDropdownIndex(null);
+    }
   };
 
   // Swipe handlers
@@ -211,18 +237,24 @@ const ItemBag: React.FC<Props> = ({
     if (touchStartX.current === null || touchEndX.current === null) return;
     const diff = touchStartX.current - touchEndX.current;
     if (Math.abs(diff) > 50) {
-      // swipe left → go to next page
+      // swipe left → next page
       if (diff > 0 && currentPage < pageCount - 1) {
-        setCurrentPage(currentPage + 1);
+        setCurrentPage((p) => p + 1);
       }
-      // swipe right → go to prev page
+      // swipe right → prev page
       else if (diff < 0 && currentPage > 0) {
-        setCurrentPage(currentPage - 1);
+        setCurrentPage((p) => p - 1);
       }
     }
     touchStartX.current = null;
     touchEndX.current = null;
   };
+
+  // Items on current page
+  const itemsOnThisPage = displayItems.slice(
+    currentPage * totalSlotsPerPage,
+    (currentPage + 1) * totalSlotsPerPage
+  );
 
   return (
     <div className={styles.modalBag} ref={containerRef}>
@@ -250,12 +282,17 @@ const ItemBag: React.FC<Props> = ({
             <ErrorModal text={errorMessage} onClose={() => setErrorMessage(null)} />
           )}
 
+          {/* Info modal */}
+          {infoMessage && (
+            <InfoModal text={infoMessage} onClose={() => setInfoMessage(null)} />
+          )}
+
           {/* Carousel arrows (only if more than one page) */}
           {pageCount > 1 && (
             <>
               <button
                 className={`${styles.arrow} ${styles.prev}`}
-                onClick={() => currentPage > 0 && setCurrentPage(currentPage - 1)}
+                onClick={() => currentPage > 0 && setCurrentPage((p) => p - 1)}
                 disabled={currentPage === 0}
                 aria-label="Previous page"
               >
@@ -263,7 +300,9 @@ const ItemBag: React.FC<Props> = ({
               </button>
               <button
                 className={`${styles.arrow} ${styles.next}`}
-                onClick={() => currentPage < pageCount - 1 && setCurrentPage(currentPage + 1)}
+                onClick={() =>
+                  currentPage < pageCount - 1 && setCurrentPage((p) => p + 1)
+                }
                 disabled={currentPage === pageCount - 1}
                 aria-label="Next page"
               >
@@ -284,7 +323,6 @@ const ItemBag: React.FC<Props> = ({
               className={styles.carouselTrack}
               style={{ transform: `translateX(-${currentPage * 100}%)` }}
             >
-              {/** Render each page’s 12 “slots” in a .gridContainer **/}
               {Array.from({ length: pageCount }).map((_, pageIdx) => {
                 const start = pageIdx * totalSlotsPerPage;
                 const slice = displayItems.slice(
@@ -307,11 +345,11 @@ const ItemBag: React.FC<Props> = ({
                             <button
                               className={styles.gridItem}
                               onClick={() => {
-                                setActiveDropdownIndex(
-                                  prev =>
-                                    prev === pageIdx * totalSlotsPerPage + idx
-                                      ? null
-                                      : pageIdx * totalSlotsPerPage + idx
+                                setTooltip(null)
+                                setActiveDropdownIndex((prev) =>
+                                  prev === pageIdx * totalSlotsPerPage + idx
+                                    ? null
+                                    : pageIdx * totalSlotsPerPage + idx
                                 );
                               }}
                               onMouseEnter={(e) => {
@@ -337,15 +375,20 @@ const ItemBag: React.FC<Props> = ({
                             </button>
 
                             {horse &&
-                              activeDropdownIndex === pageIdx * totalSlotsPerPage + idx && (
+                              activeDropdownIndex ===
+                                pageIdx * totalSlotsPerPage + idx && (
                                 <div
-                                  className={`${styles.dropdown} ${idx >= 8 ? styles.dropdownAbove : ''
-                                    }`}
+                                  className={`${styles.dropdown} ${
+                                    idx >= 8 ? styles.dropdownAbove : ''
+                                  }`}
                                 >
                                   {item.consumable ? (
                                     <div
                                       className={styles.dropdownOption}
-                                      onClick={async () => handleUse(item.name, item.usesLeft)}
+                                      onClick={async () =>
+                                        {handleUse(item.name, item.usesLeft)
+                                        setTooltip(null)}
+                                      }
                                     >
                                       Use
                                     </div>
@@ -353,19 +396,25 @@ const ItemBag: React.FC<Props> = ({
                                     <>
                                       <div
                                         className={styles.dropdownOption}
-                                        onClick={() => handleEquip(item.name, 1)}
+                                        onClick={async () =>
+                                          handleEquip(item.name, item.usesLeft)
+                                        }
                                       >
                                         Equip 1
                                       </div>
                                       <div
                                         className={styles.dropdownOption}
-                                        onClick={() => handleEquip(item.name, 2)}
+                                        onClick={async () =>
+                                          handleEquip(item.name, item.usesLeft)
+                                        }
                                       >
                                         Equip 2
                                       </div>
                                       <div
                                         className={styles.dropdownOption}
-                                        onClick={() => handleEquip(item.name, 3)}
+                                        onClick={async () =>
+                                          handleEquip(item.name, item.usesLeft)
+                                        }
                                       >
                                         Equip 3
                                       </div>
@@ -389,8 +438,9 @@ const ItemBag: React.FC<Props> = ({
               {Array.from({ length: pageCount }).map((_, idx) => (
                 <span
                   key={idx}
-                  className={`${styles.dot} ${idx === currentPage ? styles.activeDot : ''
-                    }`}
+                  className={`${styles.dot} ${
+                    idx === currentPage ? styles.activeDot : ''
+                  }`}
                   onClick={() => setCurrentPage(idx)}
                 />
               ))}

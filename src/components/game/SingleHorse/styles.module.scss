@@ -136,6 +136,9 @@
                             border-radius: 2px;
                         } */
 
+                        &:hover {
+                            cursor: pointer
+                        }
                         // Make sure the image itself is on top and contained:
                         img {
                             position: relative;
@@ -147,7 +150,7 @@
                             transition: transform .3s;
 
                             &:hover {
-                                transform: scale(1.1);
+                                transform: scale(1.05);
                             }
                         }
                     }

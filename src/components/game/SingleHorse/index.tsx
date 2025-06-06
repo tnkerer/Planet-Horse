@@ -1,6 +1,7 @@
+// src/components/SingleHorse/index.tsx
 import React, { useState } from 'react';
 import styles from './styles.module.scss';
-import { Horse } from '@/domain/models/Horse';
+import { Horse, Item } from '@/domain/models/Horse';
 import { xpProgression } from '@/utils/constants/xp-progression';
 import { lvlUpFee } from '@/utils/constants/level-up-fee';
 import ModalRaceStart from '../Modals/RaceStart';
@@ -9,6 +10,7 @@ import ItemBag from '../Modals/ItemBag';
 import UpgradeResults, { Upgrades } from '../Modals/UpgradeResults';
 import ConfirmModal from '../Modals/ConfirmModal';
 import ErrorModal from '../Modals/ErrorModal';
+import InfoModal from '../Modals/InfoModal';
 
 interface Props {
   horse: Horse;
@@ -31,6 +33,16 @@ const sexColorMap: Record<string, string> = {
 
 const defaultColor = '#919191';
 
+// Map from “item.name” → the filename‐slug for `<slug>_equiped.webp`
+const ITEM_SLUG_MAP: Record<string, string> = {
+  'Hay': 'hay',
+  'Common Saddle': 'saddle',
+  'Superior XP Potion': 'xp',
+  'Common XP Potion': 'common_xp',
+  'Common Horseshoe': 'horseshoe',
+  'Pumpers': 'bump',
+};
+
 const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const [modalRecovery, setModalRecovery] = useState(false);
   const [modalRaceStart, setModalRaceStart] = useState(false);
@@ -44,9 +56,14 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const [upgradesData, setUpgradesData] = useState<Upgrades | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
-  // Loading & error for API call
+  // Loading & error/info for API calls
   const [upgrading, setUpgrading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+
+  // Unequip‐item dialog
+  const [unequipIndex, setUnequipIndex] = useState<number | null>(null);
+  const [unequipText, setUnequipText] = useState('');
 
   const slug = horse.profile.type_horse_slug;
   const labelColor = rarityColorMap[slug] ?? defaultColor;
@@ -54,7 +71,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const sexSlug = horse.profile.sex.toLowerCase();
   const sexColor = sexColorMap[sexSlug] ?? defaultColor;
 
-  // Exp Utils
+  // Exp utils
   const maxXp: string = (xpProgression[Number(horse.staty.level)] ?? 0).toString();
   const xp = `${horse.staty.exp.toString()}/${maxXp}`;
 
@@ -62,14 +79,11 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const recoveryCost = parseInt(horse.staty.level) * 100;
 
   // Calculate level‐up fees:
-  //   phorseFee = lvlUpFree.phorse[levelStr]
-  //   medalFee  = lvlUpFree.medals[levelStr]
   const levelStr = horse.staty.level;
-  const phorseFee: string = (lvlUpFee.phorse[levelStr] ?? 0).toString();
-  const medalFee: string = (lvlUpFee.medals[levelStr] ?? 0).toString();
+  const phorseFee : string = (lvlUpFee.phorse[levelStr] ?? 0).toString();
+  const medalFee : string = (lvlUpFee.medals[levelStr] ?? 0).toString();
 
   const handleLevelUpClick = () => {
-    // Build the question text:
     const text = `Do you want to level up your horse for ${phorseFee} Phorse and ${medalFee} Medal?`;
     setConfirmText(text);
     setShowConfirm(true);
@@ -86,25 +100,19 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
         `${process.env.API_URL}/horses/${horse.id}/level-up`,
         {
           method: 'PUT',
-          credentials: 'include'
+          credentials: 'include',
         }
       );
 
-      // If non‐200, attempt to extract { message } from JSON
       if (!res.ok) {
         let msg = `HTTP ${res.status}`;
         try {
           const errJson = await res.json();
-          if (errJson?.message) {
-            msg = errJson.message;
-          }
-        } catch {
-          /* ignore parse error */
-        }
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
         throw new Error(msg);
       }
 
-      // Parse the Upgrades object
       const data = (await res.json()) as Upgrades;
       setUpgradesData(data);
       setShowUpgrade(true);
@@ -122,6 +130,73 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
     reloadHorses().catch(console.error);
   };
 
+  //
+  // ────────────────────────────────────────────────────────────────────────────
+  //   Rendering: The “3 slot” area where we show locked / empty / equipped
+  // ────────────────────────────────────────────────────────────────────────────
+  //
+  //  1) Always show exactly 3 “slots.”
+  //  2) Which slots are “locked” depends on level:
+  //     • level <  2  → all 3 locked
+  //     • 2 ≤ level <  7 → only slot index 0 is unlocked; index 1 & 2 locked
+  //     • 7 ≤ level < 15 → slots 0 & 1 unlocked; index 2 locked
+  //     • level ≥ 15 → all unlocked
+  //
+  //  3) For each “unlocked” slot:
+  //     – If horse.items has an element at that index, display the
+  //       corresponding `<slug>_equiped.webp`, and clicking it opens ConfirmModal.
+  //     – Otherwise display `empty.webp`.
+  //
+  const levelNum = Number(horse.staty.level);
+  const MAX_SLOTS = 3;
+
+  function slotState(index: number): 'locked' | 'unlocked' {
+    if (levelNum < 2) return 'locked';
+    if (levelNum < 7) return index === 0 ? 'unlocked' : 'locked';
+    if (levelNum < 15) return index <= 1 ? 'unlocked' : 'locked';
+    return 'unlocked';
+  }
+
+  // horse.items is now Array<Item>
+  const equippedItems: Item[] = horse.items;
+
+  // Unequip handler invoked after confirmation
+  const handleDoUnequip = async () => {
+    if (unequipIndex === null) return;
+    const item = equippedItems[unequipIndex];
+    if (!item) return;
+
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/horses/${horse.id}/unequip-item`,
+        {
+          method: 'PUT',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: item.name, usesLeft: item.uses }),
+        }
+      );
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
+      }
+      setInfoMessage(`Removed ${item.name} from horse #${horse.id}.`);
+      await reloadHorses();
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to remove item');
+    } finally {
+      setUnequipIndex(null);
+    }
+  };
+
   return (
     <>
       {/* ─────────── 1) UpgradeResults Modal ─────────── */}
@@ -135,13 +210,15 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
       {/* ─────────── 2) ErrorModal on API failure ─────────── */}
       {errorMessage && (
-        <ErrorModal
-          text={errorMessage}
-          onClose={() => setErrorMessage(null)}
-        />
+        <ErrorModal text={errorMessage} onClose={() => setErrorMessage(null)} />
       )}
 
-      {/* ─────────── 3) Confirm Modal for “Level Up?” ─────────── */}
+      {/* ─────────── 3) InfoModal on success ─────────── */}
+      {infoMessage && (
+        <InfoModal text={infoMessage} onClose={() => setInfoMessage(null)} />
+      )}
+
+      {/* ─────────── 4) Confirm Modal for “Level Up?” ─────────── */}
       {showConfirm && (
         <ConfirmModal
           text={confirmText}
@@ -150,7 +227,16 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
         />
       )}
 
-      {/* ─────────── 4) Race / Recovery / ItemBag Modals ─────────── */}
+      {/* ─────────── 5) Confirm Modal for “Unequip Item?” ─────────── */}
+      {unequipIndex !== null && equippedItems[unequipIndex] && (
+        <ConfirmModal
+          text={`Remove ${equippedItems[unequipIndex].name} from horse #${horse.id}?`}
+          onClose={() => setUnequipIndex(null)}
+          onConfirm={handleDoUnequip}
+        />
+      )}
+
+      {/* ─────────── 6) Race / Recovery / ItemBag Modals ─────────── */}
       {modalRaceStart && (
         <ModalRaceStart
           status={modalRaceStart}
@@ -168,7 +254,6 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
           onRestored={reloadHorses}
         />
       )}
-      {/* ─────────── ITEM‐BAG MODAL ─────────── */}
       {showItems && (
         <ItemBag
           status={showItems}
@@ -178,7 +263,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
         />
       )}
 
-      {/* ─────────── 5) Main Horse Card with Level‐Up Button ─────────── */}
+      {/* ─────────── 7) Main Horse Card with Level‐Up Button ─────────── */}
       <div className={`${styles.singleHorse} type-${horse.profile.type_horse_slug}`}>
         <div className={styles.maskCard}>
           <div className={styles.horseId}>{horse.id}</div>
@@ -243,12 +328,42 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                 </div>
               </div>
 
+              {/* ─────────── HORSE ITEMS / SLOT RENDERING ─────────── */}
               <div className={styles.horseItems}>
-                {horse.items.map((item) => (
-                  <div key={item.id} className={styles.singleItem}>
-                    <img src='/assets/items/locked.webp' height={32}/>
-                  </div>
-                ))}
+                {Array.from({ length: MAX_SLOTS }).map((_, idx) => {
+                  const state = slotState(idx);
+                  if (state === 'locked') {
+                    return (
+                      <div key={idx} className={styles.singleItem}>
+                        <img src="/assets/items/locked.webp" alt="Locked" />
+                      </div>
+                    );
+                  }
+
+                  // unlocked slot
+                  const equipped = equippedItems[idx];
+                  if (!equipped) {
+                    return (
+                      <div key={idx} className={styles.singleItem}>
+                        <img src="/assets/items/empty.webp" alt="Empty slot" />
+                      </div>
+                    );
+                  }
+
+                  // slot unlocked & item present → show equipped image, clickable to unequip
+                  const slugName = ITEM_SLUG_MAP[equipped.name] || '';
+                  return (
+                    <div key={idx} className={styles.singleItem}>
+                      <img
+                        src={`/assets/items/${slugName}_equiped.webp`}
+                        alt={equipped.name}
+                        onClick={() => {
+                          setUnequipIndex(idx);
+                        }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -284,7 +399,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
             </div>
           </div>
 
-          {/* ─────────── 6) LEVEL UP BUTTON (only if upgradable) ─────────── */}
+          {/* ─────────── LEVEL UP BUTTON (only if upgradable) ─────────── */}
           {horse.staty.upgradable && (
             <div className={styles.levelUpButton} onClick={handleLevelUpClick}>
               <img src="/assets/game/horses/level-up.gif" alt="Level Up" />
