@@ -25,6 +25,21 @@
                 max-width: none;
             }
 
+            .loadingWrapper {
+                position: absolute;
+                top: 25%; // or adjust to suit your design
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 10;
+            }
+
+            .loadingText {
+                color: white;
+                font-family: 'SpaceHorse';
+                font-size: 1.2vw;
+                display: inline-block;
+            }
+
             /* Close “X” */
             .modalClose {
                 position: absolute;

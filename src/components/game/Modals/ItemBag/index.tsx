@@ -275,7 +275,11 @@ const ItemBag: React.FC<Props> = ({
           <h2 className={styles.title}>BAG</h2>
 
           {/* Loading state */}
-          {loading && <p>Loading items…</p>}
+          {loading && (
+            <div className={styles.loadingWrapper}>
+              <p className={styles.loadingText}>Loading items…</p>
+            </div>
+          )}
 
           {/* Error modal */}
           {errorMessage && (
