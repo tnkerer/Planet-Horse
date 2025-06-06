@@ -345,7 +345,7 @@ const ItemBag: React.FC<Props> = ({
                                   {item.consumable ? (
                                     <div
                                       className={styles.dropdownOption}
-                                      onClick={() => handleUse(item.name, item.usesLeft)}
+                                      onClick={async () => handleUse(item.name, item.usesLeft)}
                                     >
                                       Use
                                     </div>
