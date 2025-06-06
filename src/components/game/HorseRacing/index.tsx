@@ -17,7 +17,7 @@ const HorseRace: React.FC<Props> = ({ horse, horseResult, horseRacingFinish }) =
   const [counterQtd, setCounterQtd] = useState(0)
   const raceSpeed = 2;
 
-  function randomizeHorsePlacar (): void {
+  function randomizeHorsePlacar(): void {
     const randomNumber = getRandomNumber(1, 10)
     let lastResult = result
 
@@ -29,36 +29,49 @@ const HorseRace: React.FC<Props> = ({ horse, horseResult, horseRacingFinish }) =
     setResult(randomNumber)
   }
 
-  function getRandomNumber (min, max): number {
+  function getRandomNumber(min, max): number {
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
 
-  useEffect((): void => {
+  useEffect(() => {
     if (counterQtd < raceSpeed) {
       randomizeHorsePlacar()
     } else if (counterQtd === raceSpeed) {
       setlastResult(result)
       setResult(horseResult.position)
       setIsRuning(false)
-      setTimeout(function () {
-        horseRacingFinish()
-      }, raceSpeed * 1000)
     }
   }, [counterQtd])
 
+  useEffect(() => {
+    if (!isRuning) {
+      const timeout = setTimeout(() => {
+        horseRacingFinish()
+      }, raceSpeed * 1000)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [isRuning])
+
   return (
-        <>
-        <div className={`${styles.racingContent} ${counterQtd < raceSpeed ? styles.raceActive : styles.raceInactive}`}>
-            <div className={styles.racingPlacar}>
-              #<CountUp start={lastResult} end={result} onEnd={() => setCounterQtd(counterQtd + 1)} />/10
-            </div>
-            
-              <div className={styles.racingHorseGif}>
-                  <img src={`/assets/game/horses/race/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-race.gif`} />
-              </div>
-            
+    <>
+      <div className={`${styles.racingContent} ${counterQtd < raceSpeed ? styles.raceActive : styles.raceInactive}`}>
+        <div className={styles.racingPlacar}>
+          #<CountUp
+            key={counterQtd}
+            start={lastResult}
+            end={result}
+            duration={1}
+            onEnd={() => setCounterQtd((prev) => prev + 1)}
+          />/10
         </div>
-        </>
+
+        <div className={styles.racingHorseGif}>
+          <img src={`/assets/game/horses/race/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-race.gif`} />
+        </div>
+
+      </div>
+    </>
   )
 }
 

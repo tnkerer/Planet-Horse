@@ -70,6 +70,13 @@ const ItemBag: React.FC<Props> = ({
 
   const totalSlotsPerPage = 12;
 
+  const [tooltip, setTooltip] = useState<{
+    x: number;
+    y: number;
+    content: string;
+    usesLeft: number;
+  } | null>(null);
+
   // Fetch from API
   const fetchItems = useCallback(() => {
     if (!status) return;
@@ -307,6 +314,16 @@ const ItemBag: React.FC<Props> = ({
                                       : pageIdx * totalSlotsPerPage + idx
                                 );
                               }}
+                              onMouseEnter={(e) => {
+                                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                                setTooltip({
+                                  x: rect.left + rect.width / 2,
+                                  y: rect.top - 8,
+                                  content: item.description,
+                                  usesLeft: item.usesLeft,
+                                });
+                              }}
+                              onMouseLeave={() => setTooltip(null)}
                             >
                               <div className={styles.imageWrapper}>
                                 <Image
@@ -316,40 +333,19 @@ const ItemBag: React.FC<Props> = ({
                                   objectFit="contain"
                                 />
                               </div>
-                              <span className={styles.itemCount}>
-                                x{item.quantity}
-                              </span>
-                              <div className={styles.tooltip}>
-                                {item.description
-                                  .split(' ')
-                                  .reduce<Array<string | JSX.Element>>(
-                                    (acc, word, i) => {
-                                      if (i > 0 && i % 8 === 0) {
-                                        acc.push(<br key={`br-${i}`} />);
-                                      }
-                                      acc.push(word + ' ');
-                                      return acc;
-                                    },
-                                    []
-                                  )}
-                                <br />
-                                <span className={styles.usesLeft}>
-                                  ({item.usesLeft} uses left)
-                                </span>
-                              </div>
+                              <span className={styles.itemCount}>x{item.quantity}</span>
                             </button>
-
-                            
 
                             {horse &&
                               activeDropdownIndex === pageIdx * totalSlotsPerPage + idx && (
-                                <div className={styles.dropdown}>
+                                <div
+                                  className={`${styles.dropdown} ${idx >= 8 ? styles.dropdownAbove : ''
+                                    }`}
+                                >
                                   {item.consumable ? (
                                     <div
                                       className={styles.dropdownOption}
-                                      onClick={() =>
-                                        handleUse(item.name, item.usesLeft)
-                                      }
+                                      onClick={() => handleUse(item.name, item.usesLeft)}
                                     >
                                       Use
                                     </div>
@@ -399,6 +395,26 @@ const ItemBag: React.FC<Props> = ({
                 />
               ))}
             </div>
+          )}
+
+          {tooltip && (
+            <Tooltip x={tooltip.x} y={tooltip.y} visible={true}>
+              <div className={styles.tooltipPortal}>
+                {tooltip.content
+                  .split(' ')
+                  .reduce<Array<string | JSX.Element>>((acc, word, i) => {
+                    if (i > 0 && i % 8 === 0) {
+                      acc.push(<br key={`br-${i}`} />);
+                    }
+                    acc.push(word + ' ');
+                    return acc;
+                  }, [])}
+                <br />
+                <span className={styles.usesLeft}>
+                  ({tooltip.usesLeft} uses left)
+                </span>
+              </div>
+            </Tooltip>
           )}
         </div>
       </div>
