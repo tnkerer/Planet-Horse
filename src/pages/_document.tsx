@@ -2,7 +2,7 @@ import React from 'react'
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
 
 class MyDocument extends Document {
-  static async getInitialProps (ctx: DocumentContext) {
+  static async getInitialProps(ctx: DocumentContext) {
     const originalRenderPage = ctx.renderPage
 
     // Run the React rendering logic synchronously
@@ -20,12 +20,25 @@ class MyDocument extends Document {
     return initialProps
   }
 
-  render () {
+  render() {
     return (
       <Html>
         <title>PlanetHorse</title>
         <Head>
           <link rel="icon" href="/favicon.ico"></link>
+
+          <style>{`
+          :where(html, body, *, *::before, *::after) {
+            cursor: none !important;
+          }
+          input[type="text"],
+          input[type="email"],
+          input[type="search"],
+          textarea,
+          [contenteditable="true"] {
+            cursor: text !important;        
+          }
+        `}</style>
         </Head>
         <body>
           <Main />
