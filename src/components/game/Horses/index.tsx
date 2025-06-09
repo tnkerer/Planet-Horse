@@ -11,6 +11,14 @@ import { useWallet } from '@/contexts/WalletContext';
 import ConfirmModal from '../Modals/ConfirmModal';
 import ErrorModal from '../Modals/ErrorModal';
 
+type OrderByType = 'level' | 'rarity' | 'energy';
+const ORDER_OPTIONS: Array<{ value: OrderByType; label: string }> = [
+  { value: 'level', label: 'Highest Level' },
+  { value: 'rarity', label: 'Highest Rarity' },
+  { value: 'energy', label: 'Most Energy' },
+];
+
+
 // Backend response shape for each horse
 interface BackendHorse {
   tokenId: string;
@@ -93,29 +101,32 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   const [claiming, setClaiming] = useState(false)
   const [claimError, setClaimError] = useState<string | null>(null)
 
+  const [rawHorseList, setRawHorseList] = useState<Horse[]>([]);
   const [horseList, setHorseList] = useState<Horse[]>([]);
   const [nextRecoveryTs, setNextRecoveryTs] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>('—:—:—');
 
+  const [orderBy, setOrderBy] = useState<OrderByType>('level');
+
   // Fetch and map horses from backend
   const loadHorses = useCallback(async () => {
     if (!address) {
-      setHorseList([]);
+      setRawHorseList([]);
       setNextRecoveryTs(null);
       return;
     }
     updateBalance();
 
     try {
-      const [horsesRes, recoveryRes] = await Promise.all([
+      const [hRes, rRes] = await Promise.all([
         fetch(`${process.env.API_URL}/horses`, { credentials: 'include' }),
         fetch(`${process.env.API_URL}/horses/next-energy-recovery`, { credentials: 'include' }),
       ]);
-      if (!horsesRes.ok) throw new Error(`Horses HTTP ${horsesRes.status}`);
-      if (!recoveryRes.ok) throw new Error(`Recovery HTTP ${recoveryRes.status}`);
+      if (!hRes.ok) throw new Error(`Horses ${hRes.status}`);
+      if (!rRes.ok) throw new Error(`Recovery ${rRes.status}`);
 
-      const data = (await horsesRes.json()) as BackendHorse[];
-      const recJson = await recoveryRes.json() as { nextTimestamp: number };
+      const data = (await hRes.json()) as BackendHorse[];
+      const { nextTimestamp } = (await rRes.json()) as { nextTimestamp: number };
 
       const mapped: Horse[] = data.map((h) => {
         const idNum = Number(h.tokenId);
@@ -159,11 +170,11 @@ const Horses: React.FC<Props> = ({ changeView }) => {
         };
       });
 
-      setHorseList(mapped);
-      setNextRecoveryTs(recJson.nextTimestamp);
+      setRawHorseList(mapped);
+      setNextRecoveryTs(nextTimestamp);
     } catch (err) {
       console.error('Failed to load horses:', err);
-      setHorseList([]);
+      setRawHorseList([]);
       setNextRecoveryTs(null);
     }
   }, [address, updateBalance]);
@@ -171,6 +182,14 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   useEffect(() => {
     loadHorses();
   }, [loadHorses]);
+
+  useEffect(() => {
+    setHorseList(sortHorses(rawHorseList, orderBy));
+  }, [rawHorseList, orderBy]);
+
+  const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOrderBy(e.target.value as OrderByType);
+  };
 
   const toggleItemBag = () => setModalItems((prev) => !prev);
 
@@ -227,6 +246,43 @@ const Horses: React.FC<Props> = ({ changeView }) => {
     }
   }
 
+  function sortHorses(list: Horse[], orderBy: OrderByType): Horse[] {
+    const arr = [...list];
+    // for rarity order
+    const rarityOrder = [
+      'mythic',
+      'legendary',
+      'epic',
+      'rare',
+      'uncommon',
+      'common',
+    ];
+
+    switch (orderBy) {
+      case 'level':
+        arr.sort((a, b) => parseInt(b.staty.level) - parseInt(a.staty.level));
+        break;
+
+      case 'energy':
+        arr.sort((a, b) => {
+          const aE = parseInt(a.staty.energy.split('/')[0], 10);
+          const bE = parseInt(b.staty.energy.split('/')[0], 10);
+          return bE - aE;
+        });
+        break;
+
+      case 'rarity':
+        arr.sort((a, b) => {
+          const aIdx = rarityOrder.indexOf(a.profile.type_horse_slug);
+          const bIdx = rarityOrder.indexOf(b.profile.type_horse_slug);
+          return aIdx - bIdx;
+        });
+        break;
+    }
+
+    return arr;
+  }
+
   return (
     <>
       {/* Item‐Bag Modal */}
@@ -269,14 +325,30 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
       <div className={styles.container}>
         <div className={styles.countRow}>
-          <span className={styles.nextRecovery}>
+          {nextRecoveryTs ? (<span className={styles.nextRecovery}>
             <span className={styles.fullLabel}>Next Energy recovery in ‎  </span>
             <span className={styles.shortLabel}>⚡ ‎  </span>
             {timeLeft}
-          </span>
+          </span>) : null}
           <span className={styles.countHorses}>
             {horseList.length} Horses
           </span>
+          <div className={styles.orderBy}>
+            <label htmlFor="orderBySelect">
+              Order By:{" "}
+            </label>
+            <select
+              id="orderBySelect"
+              value={orderBy}
+              onChange={handleOrderChange}
+            >
+              {ORDER_OPTIONS.map(o => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className={styles.cardHorses}>

@@ -145,6 +145,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 20px; // horizontal gutters
+    margin-bottom: 20px;
 
     .nextRecovery {
       font-family: 'SpaceHorse';
@@ -157,41 +158,88 @@
       font-size: 20px;
       color: #fff;
     }
+
+    .orderBy {
+      display: flex;
+      align-items: center;
+      font-family: 'SpaceHorse';
+      color: #ffffff;
+      margin: 0 20px; // spacing between timer and count
+
+      label {
+        margin-right: 8px;
+        font-size: 18px;
+      }
+
+      select {
+        appearance: none;
+        font-family: 'SpaceHorse';
+        padding: 6px 12px;
+        font-size: 16px;
+        border: 2px solid #7d4d45;
+        border-radius: 4px;
+        background-color: #be9c7f;
+        color: #7d4d45;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover,
+        &:focus {
+          background-color: darken(#be9c7f, 5%);
+          outline: none;
+        }
+      }
+    }
+
+    /* for very small screens you already have the 560px query; if you want to tweak dropdown there you can: */
+    @media (max-width: 590px) {
+      .orderBy {
+        label {
+          display: none; // maybe hide "Order By:" text
+        }
+
+        select {
+          font-size: 14px;
+          padding: 4px 8px;
+        }
+      }
+    }
   }
 
   .nextRecovery {
-  /* make sure the two inner spans line up */
-  display: inline-flex;
-  align-items: center;
+    /* make sure the two inner spans line up */
+    display: inline-flex;
+    align-items: center;
 
-  .shortLabel {
-    /* use a fallback font just for the ⚡ */
-    font-family: sans-serif;
-    display: none;     // hide by default
-  }
+    .shortLabel {
+      /* use a fallback font just for the ⚡ */
+      font-family: sans-serif;
+      display: none; // hide by default
+    }
 
-  .fullLabel {
-    display: inline;   // show by default
-  }
-
-  @media (max-width: 560px) {
     .fullLabel {
+      display: inline; // show by default
+    }
+
+    @media (max-width: 920px) {
+      .fullLabel {
+        display: none;
+      }
+
+      .shortLabel {
+        display: inline;
+      }
+    }
+  }
+
+  .countHorses {
+    font-family: 'SpaceHorse';
+    font-size: 30px; // your default
+
+    @media (max-width: 590px) {
       display: none;
     }
-    .shortLabel {
-      display: inline;
-    }
   }
-}
-
-.countHorses {
-  font-family: 'SpaceHorse';
-  font-size: 30px;     // your default
-
-  @media (max-width: 560px) {
-    font-size: 8px;   // smaller on small screens
-  }
-}
 
 
   .cardHorses {
