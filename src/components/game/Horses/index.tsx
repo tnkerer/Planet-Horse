@@ -214,6 +214,8 @@ const Horses: React.FC<Props> = ({ changeView }) => {
               >
                 <span className={styles.notificationBadge}></span>
               </button>
+
+              <button className={styles.breedButton} onClick={() => changeView('breed')} aria-label='Breeding' />
             </div>
           </div>
           <div className={styles.countCurrency}>

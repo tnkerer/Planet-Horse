@@ -1,0 +1,24 @@
+.cursor {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  background: url('/cursor/cursor.png') center / contain no-repeat;
+  margin-top: 13px;
+  margin-left: 13px;
+  transition:
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.hovered {
+  background: url('/cursor/luva.png') center / contain no-repeat;
+  cursor: none;
+}
+
+.clicked {
+  background: url('/cursor/luva-clicada.png') center / contain no-repeat;
+  transform: translate(-50%, -50%) scale(0.9);
+}
