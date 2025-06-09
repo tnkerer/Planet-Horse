@@ -61,11 +61,11 @@ const ModalRaceStart: React.FC<Props> = ({
   }
 
   // 3) Final step: show finish UI, then notify parent to reload data
-  async function finishRace(): Promise<void> {
+  function finishRace() {
     setStartRace(false);
     setRacing(false);
     setRaceFinish(true);
-    await onRaceEnd();
+    onRaceEnd();
   }
 
   // 4) When `status` becomes true and `horseResult` is still null, call API once
