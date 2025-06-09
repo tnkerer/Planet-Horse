@@ -94,21 +94,28 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   const [claimError, setClaimError] = useState<string | null>(null)
 
   const [horseList, setHorseList] = useState<Horse[]>([]);
+  const [nextRecoveryTs, setNextRecoveryTs] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState<string>('—:—:—');
 
   // Fetch and map horses from backend
   const loadHorses = useCallback(async () => {
     if (!address) {
       setHorseList([]);
+      setNextRecoveryTs(null);
       return;
     }
     updateBalance();
 
     try {
-      const res = await fetch(`${process.env.API_URL}/horses`, {
-        credentials: 'include',
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as BackendHorse[];
+      const [horsesRes, recoveryRes] = await Promise.all([
+        fetch(`${process.env.API_URL}/horses`, { credentials: 'include' }),
+        fetch(`${process.env.API_URL}/horses/next-energy-recovery`, { credentials: 'include' }),
+      ]);
+      if (!horsesRes.ok) throw new Error(`Horses HTTP ${horsesRes.status}`);
+      if (!recoveryRes.ok) throw new Error(`Recovery HTTP ${recoveryRes.status}`);
+
+      const data = (await horsesRes.json()) as BackendHorse[];
+      const recJson = await recoveryRes.json() as { nextTimestamp: number };
 
       const mapped: Horse[] = data.map((h) => {
         const idNum = Number(h.tokenId);
@@ -153,9 +160,11 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       });
 
       setHorseList(mapped);
+      setNextRecoveryTs(recJson.nextTimestamp);
     } catch (err) {
       console.error('Failed to load horses:', err);
       setHorseList([]);
+      setNextRecoveryTs(null);
     }
   }, [address, updateBalance]);
 
@@ -164,6 +173,29 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   }, [loadHorses]);
 
   const toggleItemBag = () => setModalItems((prev) => !prev);
+
+  // ─── countdown timer ────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (nextRecoveryTs == null) return;
+    const tick = () => {
+      const diff = nextRecoveryTs - Date.now();
+      if (diff <= 0) {
+        setTimeLeft('00:00:00');
+        return clearInterval(id);
+      }
+      const h = Math.floor(diff / 3600_000);
+      const m = Math.floor((diff % 3600_000) / 60_000);
+      const s = Math.floor((diff % 60_000) / 1000);
+      setTimeLeft(
+        String(h).padStart(2, '0') + ':' +
+        String(m).padStart(2, '0') + ':' +
+        String(s).padStart(2, '0')
+      );
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [nextRecoveryTs]);
 
   // ─── Handler when user clicks “Yes” on ClaimConfirm ─────────────────────────
   const handleDoClaim = async () => {
@@ -214,6 +246,16 @@ const Horses: React.FC<Props> = ({ changeView }) => {
               >
                 <span className={styles.notificationBadge}></span>
               </button>
+              <button
+                className={styles.refreshButton}
+                onClick={async () => {
+                  await loadHorses();
+                  setClaimError('Stable reloaded!')
+                }}
+                aria-label="refresh"
+              >
+                <span className={styles.notificationBadge}></span>
+              </button>
             </div>
           </div>
           <div className={styles.countCurrency}>
@@ -226,9 +268,14 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       </div>
 
       <div className={styles.container}>
-        <span className={styles.countHorses}>
-          {horseList.length} Horses
-        </span>
+        <div className={styles.countRow}>
+          <span className={styles.countHorses}>
+            {horseList.length} Horses
+          </span>
+          {nextRecoveryTs ? (<span className={styles.nextRecovery}>
+            Next Energy recovery in {timeLeft}
+          </span>) : null}
+        </div>
 
         <div className={styles.cardHorses}>
           {horseList.map((h) => (

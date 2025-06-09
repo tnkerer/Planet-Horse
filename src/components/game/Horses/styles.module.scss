@@ -77,6 +77,33 @@
           height: 68px;
         }
       }
+
+      .refreshButton {
+        position: relative;
+        width: 96px;
+        height: 96px;
+        background: url('/assets/icons/refresh.png') no-repeat center/contain;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+
+        &:hover {
+          background-image: url('/assets/icons/refresh_hover.png');
+        }
+
+        // badge de notificação, se você quiser posicionar o span dentro dele
+        .notificationBadge {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+        @media (max-width: 700px) {
+          width: 68px;
+          height: 68px;
+        }
+      }
     }
 
   }
@@ -108,13 +135,28 @@
   min-height: 850px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 
-  .countHorses {
-    margin-top: 50px;
-    font-family: 'SpaceHorse';
-    font-size: 30px;
-    color: #fff;
+  .countRow {
+    width: 100%;
+    max-width: 1400px; // match your layout
+    margin: 50px auto 0; // push it down from the top
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; // horizontal gutters
+
+    .nextRecovery {
+      font-family: 'SpaceHorse';
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .countHorses {
+      font-family: 'SpaceHorse';
+      font-size: 30px;
+      color: #fff;
+    }
   }
 
   .cardHorses {

@@ -76,7 +76,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const xp = `${horse.staty.exp.toString()}/${maxXp}`;
 
   // Cost to recover depends on level:
-  const recoveryCost = parseInt(horse.staty.level) * 100;
+  const recoveryCost = (parseInt(horse.staty.level) - 1) * 100;
 
   // Calculate level‐up fees:
   const levelStr = horse.staty.level;
