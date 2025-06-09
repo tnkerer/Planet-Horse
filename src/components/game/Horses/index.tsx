@@ -269,12 +269,14 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
       <div className={styles.container}>
         <div className={styles.countRow}>
+          <span className={styles.nextRecovery}>
+            <span className={styles.fullLabel}>Next Energy recovery in ‎  </span>
+            <span className={styles.shortLabel}>⚡ ‎  </span>
+            {timeLeft}
+          </span>
           <span className={styles.countHorses}>
             {horseList.length} Horses
           </span>
-          {nextRecoveryTs ? (<span className={styles.nextRecovery}>
-            Next Energy recovery in {timeLeft}
-          </span>) : null}
         </div>
 
         <div className={styles.cardHorses}>

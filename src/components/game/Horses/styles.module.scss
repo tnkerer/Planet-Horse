@@ -159,6 +159,41 @@
     }
   }
 
+  .nextRecovery {
+  /* make sure the two inner spans line up */
+  display: inline-flex;
+  align-items: center;
+
+  .shortLabel {
+    /* use a fallback font just for the ⚡ */
+    font-family: sans-serif;
+    display: none;     // hide by default
+  }
+
+  .fullLabel {
+    display: inline;   // show by default
+  }
+
+  @media (max-width: 560px) {
+    .fullLabel {
+      display: none;
+    }
+    .shortLabel {
+      display: inline;
+    }
+  }
+}
+
+.countHorses {
+  font-family: 'SpaceHorse';
+  font-size: 30px;     // your default
+
+  @media (max-width: 560px) {
+    font-size: 8px;   // smaller on small screens
+  }
+}
+
+
   .cardHorses {
     display: flex;
     flex-direction: row;
