@@ -91,7 +91,7 @@ const UpgradeResults: React.FC<Props> = ({ horse, upgrades, onClose }) => {
               <span className={styles.statValueEnergy}>{upgrades.maxEnergy}</span>
             </div>
               <div className={styles.bonusText}>
-                You got 3 Energy Bonus!
+                You got 4 Energy Bonus!
               </div>
           </div>
         </div>
