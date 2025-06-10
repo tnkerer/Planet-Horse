@@ -184,8 +184,8 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   }, [loadHorses]);
 
   useEffect(() => {
-    setRawHorseList(sortHorses(rawHorseList, orderBy));
-  }, [ orderBy ]);
+    setHorseList(sortHorses(rawHorseList, orderBy));
+  }, [rawHorseList, orderBy]);
 
   const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setOrderBy(e.target.value as OrderByType);
@@ -331,7 +331,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
             {timeLeft}
           </span>) : null}
           <span className={styles.countHorses}>
-            {rawHorseList.length} Horses
+            {horseList.length} Horses
           </span>
           <div className={styles.orderBy}>
             <label htmlFor="orderBySelect">
@@ -352,7 +352,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
         </div>
 
         <div className={styles.cardHorses}>
-          {rawHorseList.map((h) => (
+          {horseList.map((h) => (
             <SingleHorse
               key={h.id}
               horse={h}
