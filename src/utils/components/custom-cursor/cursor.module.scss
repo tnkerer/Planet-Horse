@@ -22,3 +22,12 @@
   background: url('/cursor/luva-clicada.png') center / contain no-repeat;
   transform: translate(-50%, -50%) scale(0.9);
 }
+
+/* hide it on narrow viewports */
+@media (max-width: 560px) {
+  .cursor,
+  .cursor.hovered,
+  .cursor.clicked {
+    display: none !important;
+  }
+}
