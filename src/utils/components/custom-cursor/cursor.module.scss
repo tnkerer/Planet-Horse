@@ -1,7 +1,7 @@
 .cursor {
   position: fixed;
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 9999;
@@ -9,8 +9,8 @@
   margin-top: 13px;
   margin-left: 13px;
   transition:
-    background 150ms ease,
-    transform 150ms ease;
+    background 50ms ease,
+    transform 50ms ease;
 }
 
 .hovered {
