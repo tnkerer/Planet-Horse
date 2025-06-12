@@ -34,6 +34,7 @@ class MyDocument extends Document {
           input[type="text"],
           input[type="email"],
           input[type="search"],
+          input[type="range"],
           textarea,
           [contenteditable="true"] {
             cursor: text !important;        
