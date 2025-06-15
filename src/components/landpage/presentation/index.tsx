@@ -12,7 +12,7 @@ const Presentation: React.FC = () => {
       <div className={styles.container_icon}/>
       <div className={styles.container_button}>
         <span>•</span>
-        <a href='/game'>Start</a>
+        <a href='/'>Maintenance Ongoing!</a>
         <span>•</span>
       </div>
     </section>
