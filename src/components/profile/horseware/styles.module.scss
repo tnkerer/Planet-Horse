@@ -32,6 +32,15 @@
         margin: 0 auto;
         overflow: auto;
 
+        a {
+          color: #ffe25c; // bright yellow
+          text-decoration: underline;
+
+          &:hover {
+            color: #fff178; // lighter yellow on hover
+          }
+        }
+
         .tableTitle {
           display: block;
           /* full width of parent */

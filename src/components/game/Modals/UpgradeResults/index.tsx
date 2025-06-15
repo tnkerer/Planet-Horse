@@ -76,15 +76,15 @@ const UpgradeResults: React.FC<Props> = ({ horse, upgrades, onClose }) => {
             </div>
             <div className={styles.statsRow}>
               <span className={styles.statLabel}>New Power:</span>
-              <span className={styles.statValueHighlight}>{Math.floor(upgrades.currentPower)}</span>
+              <span className={styles.statValueHighlight}>{Math.ceil(upgrades.currentPower)}</span>
             </div>
             <div className={styles.statsRow}>
               <span className={styles.statLabel}>New Sprint:</span>
-              <span className={styles.statValueHighlight}>{Math.floor(upgrades.currentSprint)}</span>
+              <span className={styles.statValueHighlight}>{Math.ceil(upgrades.currentSprint)}</span>
             </div>
             <div className={styles.statsRow}>
               <span className={styles.statLabel}>New Speed:</span>
-              <span className={styles.statValueHighlight}>{Math.floor(upgrades.currentSpeed)}</span>
+              <span className={styles.statValueHighlight}>{Math.ceil(upgrades.currentSpeed)}</span>
             </div>
             <div className={styles.statsRow}>
               <span className={styles.statLabel}>Max Energy:</span>
