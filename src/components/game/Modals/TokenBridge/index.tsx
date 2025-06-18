@@ -161,7 +161,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
   const openWithdrawConfirm = async () => {
     const amount = Number(withdrawAmount)
     if (isNaN(amount) || amount <= 1) {
-      setErrorMessage('Please enter a valid amount greater than zero.')
+      setErrorMessage('Please enter a valid amount greater than 1.')
       return
     }
 
