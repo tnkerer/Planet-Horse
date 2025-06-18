@@ -196,7 +196,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
           const { transactionId } = await res.json()
 
           setInfoMessage(
-            `Withdrawal initiated. This might take up to 5 minutes. Check your Profile page for more info.`
+            `Withdrawal initiated. This might take a few minutes. Check your Profile page for more info.`
           )
 
           updateBalance()
