@@ -39,7 +39,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
   const [showConfirm, setShowConfirm] = useState(false)
   const [confirmText, setConfirmText] = useState<React.ReactNode>('')
   const [confirmAction, setConfirmAction] = useState<() => Promise<void>>(
-    async () => {}
+    async () => { }
   )
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -160,8 +160,8 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
 
   const openWithdrawConfirm = async () => {
     const amount = Number(withdrawAmount)
-    if (isNaN(amount) || amount <= 1) {
-      setErrorMessage('Please enter a valid amount greater than 1.')
+    if (isNaN(amount) || amount <= 999) {
+      setErrorMessage('Please enter a valid amount greater than 999.')
       return
     }
 
@@ -189,7 +189,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
             try {
               const errJson = await res.json()
               if (errJson?.message) msg = errJson.message
-            } catch {}
+            } catch { }
             throw new Error(msg)
           }
 
@@ -284,7 +284,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
                 type="text"
                 value={withdrawAmount}
                 onChange={(e) => setWithdrawAmount(e.target.value)}
-                placeholder="0"
+                placeholder="1000"
               />
               <button
                 className={styles.maxBtn}
@@ -295,6 +295,10 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
               </button>
               <div className={styles.available}>
                 Available: {phorse?.toFixed(0) ?? 0}
+                <br />Min. Withdraw:
+                <span style={{ color: '#E21C21' }}>
+                  1000
+                </span>
               </div>
             </div>
             <button
