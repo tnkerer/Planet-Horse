@@ -3,23 +3,22 @@ import styles from './styles.module.scss';
 import ItemBag from '../Modals/ItemBag';
 import SingleHorse from '../SingleHorse';
 import Image from 'next/image';
-import Link from 'next/link';
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif';
 import medalIcon from '@/assets/icons/medal.gif';
 import { useUser } from '@/contexts/UserContext';
 import { useWallet } from '@/contexts/WalletContext';
 import ConfirmModal from '../Modals/ConfirmModal';
 import ErrorModal from '../Modals/ErrorModal';
+import { BrowserProvider, Contract } from 'ethers';
 
 type OrderByType = 'level' | 'rarity' | 'energy';
-const ORDER_OPTIONS: Array<{ value: OrderByType; label: string }> = [
+const ORDER_OPTIONS = [
   { value: 'level', label: 'Highest Level' },
   { value: 'rarity', label: 'Highest Rarity' },
   { value: 'energy', label: 'Most Energy' },
 ];
 
-
-// Backend response shape for each horse
+// Backend response shape
 interface BackendHorse {
   tokenId: string;
   name: string;
@@ -37,7 +36,6 @@ interface BackendHorse {
   lastRace: string | null;
   createdAt: string;
   updatedAt: string;
-  // "equipments" is now an array of full Item objects
   equipments: Array<{
     id: string;
     ownerId: string;
@@ -51,7 +49,6 @@ interface BackendHorse {
   }>;
 }
 
-// Front-end’s Horse interface (imported by SingleHorse)
 export interface Horse {
   id: number;
   profile: {
@@ -73,7 +70,6 @@ export interface Horse {
     speed: string;
     energy: string;
   };
-  // Now: an array of full Item objects
   items: Array<{
     id: string;
     ownerId: string;
@@ -91,15 +87,21 @@ interface Props {
   changeView: (view: string) => void;
 }
 
+// Contract Info
+const CONTRACT_ADDRESS = '0xC15878E61fc284ff83cf0dBA532226387A7E083e';
+const CONTRACT_ABI = [
+  'function safeMint(address to, string uri) public returns (uint256)'
+];
+const MINT_URI = 'https://gateway.pinata.cloud/ipfs/bafkreifbrfgg7imhbwziffvw43mavfnu2ndapnpauldxrbaqntkdsp67qa';
+
 const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalItems, setModalItems] = useState(false);
   const { phorse, medals, updateBalance } = useUser();
   const { isAuthorized, address } = useWallet();
 
-  // ─── Claim‐horse states ──────────────────────────────────────────────────────
-  const [showClaimConfirm, setShowClaimConfirm] = useState(false)
-  const [claiming, setClaiming] = useState(false)
-  const [claimError, setClaimError] = useState<string | null>(null)
+  const [showClaimConfirm, setShowClaimConfirm] = useState(false);
+  const [claiming, setClaiming] = useState(false);
+  const [claimError, setClaimError] = useState<string | null>(null);
 
   const [rawHorseList, setRawHorseList] = useState<Horse[]>([]);
   const [horseList, setHorseList] = useState<Horse[]>([]);
@@ -108,7 +110,47 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
   const [orderBy, setOrderBy] = useState<OrderByType>('level');
 
-  // Fetch and map horses from backend
+  // Provider helpers
+  const getRoninProvider = () => {
+    const ronin = (window as any).ronin;
+    if (!ronin?.provider) {
+      throw new Error('Ronin wallet not detected.');
+    }
+    return new BrowserProvider(ronin.provider);
+  };
+
+  const ensureCorrectNetwork = async () => {
+    const provider = (window as any).ronin.provider;
+    const chainId = await provider.request({ method: 'eth_chainId' });
+    const saigonChainId = '0x7e5'; // 2021 in hex
+
+    if (chainId !== saigonChainId) {
+      try {
+        await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: saigonChainId }],
+        });
+      } catch (switchError: any) {
+        if (switchError.code === 4902) {
+          await provider.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: saigonChainId,
+                chainName: 'Saigon Testnet',
+                rpcUrls: ['https://saigon-testnet.roninchain.com/rpc'],
+                nativeCurrency: { name: 'RON', symbol: 'RON', decimals: 18 },
+                blockExplorerUrls: ['https://saigon-explorer.roninchain.com/'],
+              },
+            ],
+          });
+        } else {
+          throw switchError;
+        }
+      }
+    }
+  };
+
   const loadHorses = useCallback(async () => {
     if (!address) {
       setRawHorseList([]);
@@ -119,56 +161,39 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
     try {
       const [hRes, rRes] = await Promise.all([
-        fetch(`${process.env.API_URL}/horses`, { credentials: 'include' }),
+        fetch(`${process.env.API_URL}/horses/blockchain`, { credentials: 'include' }),
         fetch(`${process.env.API_URL}/horses/next-energy-recovery`, { credentials: 'include' }),
       ]);
+
       if (!hRes.ok) throw new Error(`Horses ${hRes.status}`);
       if (!rRes.ok) throw new Error(`Recovery ${rRes.status}`);
 
       const data = (await hRes.json()) as BackendHorse[];
       const { nextTimestamp } = (await rRes.json()) as { nextTimestamp: number };
 
-      const mapped: Horse[] = data.map((h) => {
-        const idNum = Number(h.tokenId);
-        const raritySlug = h.rarity.toLowerCase();
-
-        return {
-          id: idNum,
-          profile: {
-            name: h.name,
-            name_slug: h.name.toLowerCase().replace(/\s+/g, '-'),
-            sex: h.sex.toLowerCase(),
-            type_horse: h.rarity.toUpperCase(),
-            type_horse_slug: raritySlug,
-            type_jockey: 'NONE',
-            time: '120 Days',
-          },
-          staty: {
-            status: h.status,
-            level: String(h.level),
-            exp: String(h.exp),
-            upgradable: h.upgradable,
-            power: String(h.currentPower),
-            sprint: String(h.currentSprint),
-            speed: String(h.currentSpeed),
-            energy: `${h.currentEnergy}/${h.maxEnergy}`,
-          },
-          // Pass the full Item objects through to the front-end
-          items: h.equipments.length > 0
-            ? h.equipments.map(e => ({
-              id: e.id,
-              ownerId: e.ownerId,
-              horseId: e.horseId,
-              name: e.name,
-              value: e.value,
-              breakable: e.breakable,
-              uses: e.uses,
-              createdAt: e.createdAt,
-              updatedAt: e.updatedAt,
-            }))
-            : [],
-        };
-      });
+      const mapped: Horse[] = data.map(h => ({
+        id: Number(h.tokenId),
+        profile: {
+          name: h.name,
+          name_slug: h.name.toLowerCase().replace(/\s+/g, '-'),
+          sex: h.sex.toLowerCase(),
+          type_horse: h.rarity.toUpperCase(),
+          type_horse_slug: h.rarity.toLowerCase(),
+          type_jockey: 'NONE',
+          time: '120 Days',
+        },
+        staty: {
+          status: h.status,
+          level: String(h.level),
+          exp: String(h.exp),
+          upgradable: h.upgradable,
+          power: String(h.currentPower),
+          sprint: String(h.currentSprint),
+          speed: String(h.currentSpeed),
+          energy: `${h.currentEnergy}/${h.maxEnergy}`,
+        },
+        items: h.equipments,
+      }));
 
       setRawHorseList(mapped);
       setNextRecoveryTs(nextTimestamp);
@@ -191,9 +216,8 @@ const Horses: React.FC<Props> = ({ changeView }) => {
     setOrderBy(e.target.value as OrderByType);
   };
 
-  const toggleItemBag = () => setModalItems((prev) => !prev);
+  const toggleItemBag = () => setModalItems(prev => !prev);
 
-  // ─── countdown timer ────────────────────────────────────────────────────────
   useEffect(() => {
     if (nextRecoveryTs == null) return;
     const tick = () => {
@@ -216,53 +240,47 @@ const Horses: React.FC<Props> = ({ changeView }) => {
     return () => clearInterval(id);
   }, [nextRecoveryTs]);
 
-  // ─── Handler when user clicks “Yes” on ClaimConfirm ─────────────────────────
+  // 🔥 MINT Handler
   const handleDoClaim = async () => {
-    setShowClaimConfirm(false)
-    setClaimError(null)
-    setClaiming(true)
+    setShowClaimConfirm(false);
+    setClaimError(null);
+    setClaiming(true);
+
     try {
-      const res = await fetch(`${process.env.API_URL}/horses/claim-horse`, {
-        method: 'PUT',
-        credentials: 'include',
-      })
-      if (!res.ok) {
-        let msg = `HTTP ${res.status}`
-        try {
-          const errJson = await res.json()
-          if (errJson?.message) msg = errJson.message
-        } catch {
-          // ignore JSON parse
-        }
-        throw new Error(msg)
-      }
-      // success → reload list
-      await loadHorses()
-    } catch (e: any) {
-      console.error(e)
-      setClaimError(e.message || 'Failed to claim a horse')
+      if (!address) throw new Error('Wallet not connected');
+
+      await ensureCorrectNetwork();
+
+      const provider = getRoninProvider();
+      const signer = await provider.getSigner();
+
+      const contract = new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+      const tx = await contract.safeMint(address, MINT_URI);
+      console.log('Transaction submitted:', tx.hash);
+
+      const receipt = await tx.wait();
+      console.log('Transaction confirmed:', receipt);
+
+      await loadHorses();
+    } catch (err: any) {
+      console.error(err);
+      setClaimError(
+        'Transaction failed, maybe you have already claimed a horse in the last 2 hours?'
+      );
     } finally {
-      setClaiming(false)
+      setClaiming(false);
     }
-  }
+  };
 
   function sortHorses(list: Horse[], orderBy: OrderByType): Horse[] {
     const arr = [...list];
-    // for rarity order
-    const rarityOrder = [
-      'mythic',
-      'legendary',
-      'epic',
-      'rare',
-      'uncommon',
-      'common',
-    ];
+    const rarityOrder = ['mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
 
     switch (orderBy) {
       case 'level':
         arr.sort((a, b) => parseInt(b.staty.level) - parseInt(a.staty.level));
         break;
-
       case 'energy':
         arr.sort((a, b) => {
           const aE = parseInt(a.staty.energy.split('/')[0], 10);
@@ -270,7 +288,6 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           return bE - aE;
         });
         break;
-
       case 'rarity':
         arr.sort((a, b) => {
           const aIdx = rarityOrder.indexOf(a.profile.type_horse_slug);
@@ -285,11 +302,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
   return (
     <>
-      {/* Item‐Bag Modal */}
-      <ItemBag
-        status={modalItems}
-        closeModal={toggleItemBag}
-      />
+      <ItemBag status={modalItems} closeModal={toggleItemBag} />
 
       <div className={styles.secondBar}>
         <div className={styles.containerBar}>
@@ -298,20 +311,14 @@ const Horses: React.FC<Props> = ({ changeView }) => {
               <button
                 className={`${styles.bagButton} ${modalItems ? styles.bagOpened : ''}`}
                 onClick={toggleItemBag}
-                aria-label="Open Bag"
-              >
-                <span className={styles.notificationBadge}></span>
-              </button>
+              />
               <button
                 className={styles.refreshButton}
                 onClick={async () => {
                   await loadHorses();
-                  setClaimError('Stable reloaded!')
+                  setClaimError('Stable reloaded!');
                 }}
-                aria-label="refresh"
-              >
-                <span className={styles.notificationBadge}></span>
-              </button>
+              />
             </div>
           </div>
           <div className={styles.countCurrency}>
@@ -325,18 +332,18 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
       <div className={styles.container}>
         <div className={styles.countRow}>
-          {nextRecoveryTs ? (<span className={styles.nextRecovery}>
-            <span className={styles.fullLabel}>Next Energy recovery in ‎  </span>
-            <span className={styles.shortLabel}>⚡ ‎  </span>
-            {timeLeft}
-          </span>) : null}
+          {nextRecoveryTs && (
+            <span className={styles.nextRecovery}>
+              <span className={styles.fullLabel}>Next Energy recovery in ‎ </span>
+              <span className={styles.shortLabel}>⚡ ‎ </span>
+              {timeLeft}
+            </span>
+          )}
           <span className={styles.countHorses}>
             {horseList.length} Horses
           </span>
           <div className={styles.orderBy}>
-            <label htmlFor="orderBySelect">
-              Order By:{" "}
-            </label>
+            <label htmlFor="orderBySelect">Order By:{" "}</label>
             <select
               id="orderBySelect"
               value={orderBy}
@@ -363,17 +370,16 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           <div className={styles.addHorse}>
             <div className={styles.addHorseWrapper}>
               <div className={styles.plusHorse} onClick={e => {
-                e.preventDefault()
-                setShowClaimConfirm(true)
+                e.preventDefault();
+                if (!claiming) setShowClaimConfirm(true);
               }}>+</div>
               <div className={styles.addHorseText}>
-                {/* Prevent default navigation; open ConfirmModal instead */}
                 <a
                   href="#"
                   className={styles.addHorseLink}
                   onClick={e => {
-                    e.preventDefault()
-                    setShowClaimConfirm(true)
+                    e.preventDefault();
+                    if (!claiming) setShowClaimConfirm(true);
                   }}
                 >
                   GRAB SOME HORSES AND YOU WILL BE ON YOUR WAY TO RUNNING LIKE A PRO!
@@ -383,16 +389,15 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           </div>
         </div>
       </div>
-      {/* ─────────────── Confirm “Claim a horse?” ───────────────────────────── */}
+
       {showClaimConfirm && (
         <ConfirmModal
-          text={`Claim a new horse for 1000 PHORSE?`}
+          text={`Mint a new horse! You are limited to 1 mint each 2 hours otherwise this operation will fail.`}
           onClose={() => setShowClaimConfirm(false)}
           onConfirm={handleDoClaim}
         />
       )}
 
-      {/* ─────────────── Error if claim failed ──────────────────────────────── */}
       {claimError && (
         <ErrorModal
           text={claimError}

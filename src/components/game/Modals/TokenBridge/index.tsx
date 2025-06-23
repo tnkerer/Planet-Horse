@@ -14,7 +14,7 @@ import ErrorModal from '../ErrorModal'
 import InfoModal from '../InfoModal'
 
 // Contract constants
-const tokenAddress = '0x8fe17eee040ed66c6dc6efb3adea9af475dde00f'
+const tokenAddress = '0xed204e2d4a81e6f45512a0f3d03914735f9cee6a'
 const treasuryAddress = '0xf293628f6669Cb443148d877F022d62B7b7093D2'
 
 // Minimal ERC20 ABI

@@ -48,7 +48,7 @@ const Horseware: React.FC = () => {
       .then(data => setTxs(data))
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, []);
+  }, [isAuthorized, address]);
 
   useEffect(() => {
     if (!address) {
