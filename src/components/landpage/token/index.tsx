@@ -10,7 +10,7 @@ const Token: React.FC = () => {
   const myRef = useRef()
   const isVisible = useIsVisible(myRef)
 
-  const CONTRACT_HASH = 'Soon'
+  const CONTRACT_HASH = '0x7f8e304eb2894e57f8b930000f396319729bd1f1'
 
   return (
     <section className={styles.container} ref={myRef}>
