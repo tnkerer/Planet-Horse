@@ -1,75 +1,92 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import close from '@/assets/game/pop-up/fechar.png'
-
-import { rewards } from '@/utils/mocks/game'
 import Image from 'next/image'
 
 interface Props {
-  closeModal: (modalType: string, horseId?: number) => void
-  status: boolean
-  horseId: number
+    closeModal: () => void
+    status: boolean
+    horseId: number
+}
+
+interface RaceReward {
+    id: string
+    createdAt: string
+    phorseEarned: number
+    xpEarned: number
+    position: number
+    horseId: string
 }
 
 const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
-  // const [horseId, setHorseId] = useState(horse)
-  // const [horseData, setHorseData] = useState(null)
+    const [rewards, setRewards] = useState<RaceReward[] | null>(null)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
 
-  const horseMock = rewards
-  /*
-    loadHorseRewards()
-    function loadHorseRewards(){
-        if(!horseData){
-            setHorseData(horseMock)
+    useEffect(() => {
+        if (!horseId || !status) return
+
+        const fetchRewards = async () => {
+            setLoading(true)
+            setError(null)
+
+            try {
+                const res = await fetch(`${process.env.API_URL}/horses/${horseId}/races`, {
+                    credentials: 'include',
+                })
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                const data = await res.json()
+                setRewards(data)
+            } catch (err: any) {
+                console.error(err)
+                setError('Failed to fetch race rewards.')
+            } finally {
+                setLoading(false)
+            }
         }
-    }
-    */
 
-  return (
+        fetchRewards()
+    }, [horseId, status])
+
+    return (
         <div className={`${styles.modalReward} ${status ? styles.modalActive : styles.modalInactive}`}>
             <div className={styles.modalFull}>
                 <div className={styles.modalContent}>
-                    <div className={styles.modalClose} onClick={() => closeModal('reward')}>
-                        <Image width={'30px'} height={'30px'} src={close} />
-                    </div>
-                    <div className={styles.tableInfo}>
-                        <div className={styles.tableInfoRewards}>
-
-                            <div>Total Rewards: 2 PHORSE</div>
-                            <div>Jan 02, 2025 (UTC+0)</div>
-                        </div>
-                        <div className={styles.tableInfoFee}>
-                            <div>(claim) fee 10% phorse</div>
-                        </div>
+                    <div className={styles.modalClose} onClick={closeModal}>
+                        <Image width={30} height={30} src={close} alt="Close" />
                     </div>
                     <div className={styles.tableContent}>
-                        <table>
-
-                            {!horseMock
-                              ? (
-                                <div>
-                                    Getting horse data...
-                                </div>
-                                )
-                              : (
+                        {loading ? (
+                            <div>Loading rewards...</div>
+                        ) : error ? (
+                            <div>{error}</div>
+                        ) : rewards && rewards.length > 0 ? (
+                            <table>
                                 <tbody>
-
-                                    {horseMock.map((reward) => (
+                                    <tr>
+                                        <td>Position</td>
+                                        <td>PHORSE</td>
+                                        <td>XP</td>
+                                        <td>Date</td>
+                                    </tr>
+                                    {rewards.map((reward) => (
                                         <tr key={reward.id}>
-                                            <td> {reward.dado_1} </td>
-                                            <td> {reward.dado_2} </td>
-                                            <td> {reward.dado_3} </td>
-                                            <td> {reward.dado_4} </td>
+                                            <td>{reward.position}</td>
+                                            <td>{reward.phorseEarned.toFixed(2)}</td>
+                                            <td>{reward.xpEarned}</td>
+                                            <td>{new Date(reward.createdAt).toLocaleDateString()}</td>
                                         </tr>
                                     ))}
                                 </tbody>
-                                )}
-                        </table>
+                            </table>
+                        ) : (
+                            <div>No race data available.</div>
+                        )}
                     </div>
                 </div>
             </div>
         </div>
-  )
+    )
 }
 
 export default ModalReward

@@ -9,13 +9,11 @@ import { useWallet } from '@/contexts/WalletContext'
 
 import { BrowserProvider, Contract, parseUnits, formatUnits } from 'ethers'
 
+import { contracts, wallets } from '@/utils/constants/contracts'
+
 import ConfirmModal from '../ConfirmModal'
 import ErrorModal from '../ErrorModal'
 import InfoModal from '../InfoModal'
-
-// Contract constants
-const tokenAddress = '0xed204e2d4a81e6f45512a0f3d03914735f9cee6a'
-const treasuryAddress = '0xf293628f6669Cb443148d877F022d62B7b7093D2'
 
 // Minimal ERC20 ABI
 const ERC20_ABI = [
@@ -65,7 +63,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
       const provider = getRoninProvider()
       const signer = await provider.getSigner()
 
-      const tokenContract = new Contract(tokenAddress, ERC20_ABI, signer)
+      const tokenContract = new Contract(contracts.phorse, ERC20_ABI, signer)
 
       const rawBalance = await tokenContract.balanceOf(address)
       const formatted = formatUnits(rawBalance, 18)
@@ -116,11 +114,11 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
         const provider = getRoninProvider()
         const signer = await provider.getSigner()
 
-        const tokenContract = new Contract(tokenAddress, ERC20_ABI, signer)
+        const tokenContract = new Contract(contracts.phorse, ERC20_ABI, signer)
 
         const value = parseUnits(depositAmount, 18)
 
-        const tx = await tokenContract.transfer(treasuryAddress, value)
+        const tx = await tokenContract.transfer(wallets.treasury, value)
         console.log('Transaction submitted:', tx)
 
         const receipt = await tx.wait()

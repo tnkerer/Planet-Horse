@@ -4,13 +4,12 @@ import TitleLayer from '@/components/landpage/title-layer'
 import { useIsVisible } from '@/utils/hooks/is-visible'
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
 import styles from './styles.module.scss'
+import { contracts } from '@/utils/constants/contracts'
 
 
 const Token: React.FC = () => {
   const myRef = useRef()
   const isVisible = useIsVisible(myRef)
-
-  const CONTRACT_HASH = 'Soon'
 
   return (
     <section className={styles.container} ref={myRef}>
@@ -40,7 +39,7 @@ const Token: React.FC = () => {
         </div>
 
         <div className={styles.contract_info}>
-          <p>Contract: <span>{CONTRACT_HASH}</span></p>
+          <p>Contract: <span>{contracts.phorse}</span></p>
         </div>
       </div>
     </section>

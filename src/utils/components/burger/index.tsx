@@ -23,7 +23,7 @@ const Burger: React.FC<Props> = ({ close = false }) => {
       <Link href='/profile'>
         <a>Profile</a>
       </Link>
-      <Link href='https://opensea.io/'>
+      <Link href='https://opensea.io/collection/origin-horses'>
         <a target="_blank">Marketplace</a>
       </Link>
     </div>

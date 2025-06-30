@@ -6,6 +6,7 @@ import { xpProgression } from '@/utils/constants/xp-progression';
 import { lvlUpFee } from '@/utils/constants/level-up-fee';
 import ModalRaceStart from '../Modals/RaceStart';
 import RecoveryCenter from '../Modals/RecoveryCenter';
+import ModalReward from '../Modals/Reward';
 import ItemBag from '../Modals/ItemBag';
 import UpgradeResults, { Upgrades } from '../Modals/UpgradeResults';
 import ConfirmModal from '../Modals/ConfirmModal';
@@ -46,6 +47,7 @@ const ITEM_SLUG_MAP: Record<string, string> = {
 const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const [modalRecovery, setModalRecovery] = useState(false);
   const [modalRaceStart, setModalRaceStart] = useState(false);
+  const [modalRewards, setModalRewards] = useState(false);
   const [showItems, setShowItems] = useState(false);
 
   // “Confirm level‐up?” dialog
@@ -63,7 +65,6 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   // Unequip‐item dialog
   const [unequipIndex, setUnequipIndex] = useState<number | null>(null);
-  const [unequipText, setUnequipText] = useState('');
 
   const slug = horse.profile.type_horse_slug;
   const labelColor = rarityColorMap[slug] ?? defaultColor;
@@ -80,8 +81,8 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   // Calculate level‐up fees:
   const levelStr = horse.staty.level;
-  const phorseFee : string = (lvlUpFee.phorse[levelStr] ?? 0).toString();
-  const medalFee : string = (lvlUpFee.medals[levelStr] ?? 0).toString();
+  const phorseFee: string = (lvlUpFee.phorse[levelStr] ?? 0).toString();
+  const medalFee: string = (lvlUpFee.medals[levelStr] ?? 0).toString();
 
   const handleLevelUpClick = () => {
     const text = `Do you want to level up your horse for ${phorseFee} Phorse and ${medalFee} Medal?`;
@@ -262,6 +263,13 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
           reloadHorses={reloadHorses}
         />
       )}
+      {modalRewards && (
+        <ModalReward
+          closeModal={() => setModalRewards(false)}
+          horseId={horse.id}
+          status={true}
+        />
+      )}
 
       {/* ─────────── 7) Main Horse Card with Level‐Up Button ─────────── */}
       <div className={`${styles.singleHorse} type-${horse.profile.type_horse_slug}`}>
@@ -385,6 +393,14 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   className={styles.restoreButton}
                   onClick={() => setModalRecovery(true)}
                   disabled={horse.staty.status !== 'BRUISED'}
+                />
+              </div>
+
+              {/* REWARDS BUTTON */}
+              <div className={styles.singleButton}>
+                <button
+                  className={styles.rewardsButton}
+                  onClick={() => setModalRewards(true)}
                 />
               </div>
 

@@ -318,6 +318,29 @@
                                 cursor: not-allowed;
                             }
                         }
+
+                        &.rewardsButton {
+                            width: 5.8vw;
+                            background-image: url('../../../assets/game/horses/rewards.png');
+
+                            @media screen and (max-width: 920px) {
+                                width: 13vw;
+                            }
+
+                            &:hover {
+                                background-image: url('../../../assets/game/horses/rewards-mouse.png');
+                            }
+
+                            &:active {
+                                background-image: url('../../../assets/game/horses/rewards-clicado.png');
+                            }
+
+                            &:disabled {
+                                /* use the “clicked” sprite when disabled */
+                                background-image: url('../../../assets/game/horses/rewards-clicado.png');
+                                cursor: not-allowed;
+                            }
+                        }
                     }
                 }
             }

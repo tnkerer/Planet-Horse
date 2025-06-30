@@ -396,14 +396,14 @@ const ItemBag: React.FC<Props> = ({
                                     >
                                       Use
                                     </div>
-                                      <div
+{/*                                       <div
                                         className={styles.dropdownOption}
                                         onClick={async () =>
                                           console.log(`Minting ${item.name}`)
                                         }
                                       >
                                         Mint
-                                      </div>
+                                      </div> */}
                                     </>
                                   ) : (
                                     <>
@@ -415,14 +415,14 @@ const ItemBag: React.FC<Props> = ({
                                       >
                                         Equip
                                       </div>
-                                      <div
+{/*                                       <div
                                         className={styles.dropdownOption}
                                         onClick={async () =>
                                           console.log(`Minting ${item.name}`)
                                         }
                                       >
                                         Mint
-                                      </div>
+                                      </div> */}
                                       {/* <div
                                         className={styles.dropdownOption}
                                         onClick={async () =>
