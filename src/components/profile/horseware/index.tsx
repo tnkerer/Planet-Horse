@@ -91,7 +91,7 @@ const Horseware: React.FC = () => {
                     <td>{tx.value}</td>
                     <td>{tx.note ?? 'No note'}</td>
                     <td>{new Date(tx.createdAt).toLocaleString()}</td>
-                    <td>{tx.txId ? (<a target="_blank" rel="noreferrer" href={`https://saigon-app.roninchain.com/tx/${tx.txId}`}>View</a>) : 'internal'}</td>
+                    <td>{tx.txId ? (<a target="_blank" rel="noreferrer" href={`https://app.roninchain.com/tx/${tx.txId}`}>View</a>) : 'internal'}</td>
                   </tr>
                 ))
               )}
