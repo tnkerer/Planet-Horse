@@ -148,11 +148,11 @@
   .cardItems {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     max-width: 1050px;
-    gap: 5%;
+    gap: 2%;
 
     @media screen and (max-width: 920px) {
       flex-direction: column;

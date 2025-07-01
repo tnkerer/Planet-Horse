@@ -6,6 +6,7 @@ import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
 import medal from '@/assets/icons/medal.gif'
 import { useUser } from '@/contexts/UserContext'
 import ItemBag from '../Modals/ItemBag'
+import PresaleCard from '../PresaleCard'
 
 interface Props {
   changeView: (view: string) => void
@@ -59,6 +60,7 @@ const Items: React.FC<Props> = ({ changeView }) => {
         <div className={styles.cardItems}>
 
           <ShopChestCard />
+          <PresaleCard />
 
         </div>
       </div>
