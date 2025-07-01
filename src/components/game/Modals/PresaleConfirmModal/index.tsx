@@ -100,14 +100,14 @@ const PresaleConfirmModal: React.FC<Props> = ({ max, price, quantity, onClose })
           </button>
 
           <div className={styles.text}>
-            Do you want to buy <b>{quantity}</b> PHORSE for <b>{amount}</b> PHORSE tokens?
+            Do you want to buy <b>{amount}</b> PHORSE for <b>{quantity*1.6}</b> RON?
           </div>
 
           <div className={styles.sliderContainer}>
             <input
               type="range"
               min={price}
-              max={max}
+              max={Math.min(max, 30000)}
               step={price}
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
