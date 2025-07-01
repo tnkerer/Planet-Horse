@@ -39,7 +39,7 @@ const PresaleCard: React.FC = () => {
       {showModal && (
         <PresaleConfirmModal
           quantity={horseCount}
-          max={horseCount * 1000}
+          max={Math.min(horseCount * 1000, 30000)}
           price={1000}
           onClose={() => setShowModal(false)}
         />
