@@ -288,7 +288,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
               <div className={styles.horseProfile}>
                 <div className={styles.horseItemDescriptionBox}>
                   <div className={styles.horseItemDescription}>
-                    NAME: <span>{horse.profile.name.slice(0, 12)}</span>
+                    NAME: <span>{horse.profile.name.slice(0, 16)}</span>
                   </div>
                   <div className={styles.horseItemDescription}>
                     SEX:{' '}
