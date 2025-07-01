@@ -100,7 +100,7 @@ const PresaleConfirmModal: React.FC<Props> = ({ max, price, quantity, onClose })
           </button>
 
           <div className={styles.text}>
-            Do you want to buy <b>{amount}</b> PHORSE for <b>{(amount/1000)*1.6}</b> RON?
+            Do you want to buy <b>{amount}</b> PHORSE for <b>{((amount/1000)*1.6).toFixed(2)}</b> RON?
           </div>
 
           <div className={styles.sliderContainer}>
