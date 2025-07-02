@@ -284,10 +284,10 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
           <div className={styles.addHorse}>
             <div className={styles.addHorseWrapper}>
-              <div className={styles.plusHorse} onClick={() => { window.open("https://opensea.io/collection/origin-horses", "_blank") }}>+</div>
+              <div className={styles.plusHorse} onClick={() => { window.open("https://marketplace.roninchain.com/collections/origin-horses", "_blank") }}>+</div>
               <div className={styles.addHorseText}>
                 <a
-                  href="https://opensea.io/collection/origin-horses"
+                  href="https://marketplace.roninchain.com/collections/origin-horses"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.addHorseLink}
