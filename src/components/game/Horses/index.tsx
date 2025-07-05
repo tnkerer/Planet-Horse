@@ -248,15 +248,19 @@ const Horses: React.FC<Props> = ({ changeView }) => {
               />
               <button
                 className={styles.raceAllButton}
-                onClick={() => {setModalRaces(true); console.log(horseList)}}
+                onClick={() => { setModalRaces(true); console.log(horseList) }}
               />
             </div>
           </div>
           <div className={styles.countCurrency}>
-            <Image width={50} height={50} src={phorseToken} alt="phorse coin" />
-            <span>{phorse?.toFixed(0) || 0}</span>
-            <Image width={29} height={40} src={medalIcon} alt="medals" />
-            <span>{medals?.toFixed(0) || 0}</span>
+            <div className={styles.currencyGroup}>
+              <Image src={phorseToken} width={30} height={30} alt="phorse" />
+              <span>{phorse?.toFixed(0) || 0}</span>
+            </div>
+            <div className={styles.currencyGroup}>
+              <Image src={medalIcon} width={18} height={24} alt="medal" />
+              <span>{medals?.toFixed(0) || 0}</span>
+            </div>
           </div>
         </div>
       </div>
