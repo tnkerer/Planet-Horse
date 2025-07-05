@@ -20,7 +20,7 @@ const RacesModal: React.FC<Props> = ({
   reloadHorses,
 }) => {
   const cost = totalHorses * 50
-  const fullText = `Do you want our jockeys to run your ${totalHorses} IDLE horses for a ${cost} fee?`
+  const fullText = `Do you want to run your ${totalHorses} IDLE horses for a ${cost} fee?`
   const [displayedText, setDisplayedText] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
