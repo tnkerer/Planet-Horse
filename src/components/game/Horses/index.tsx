@@ -8,6 +8,7 @@ import medalIcon from '@/assets/icons/medal.gif';
 import { useUser } from '@/contexts/UserContext';
 import { useWallet } from '@/contexts/WalletContext';
 import InfoModal from '../Modals/InfoModal';
+import RacesModal from '../Modals/RacesModal';
 
 type OrderByType = 'level' | 'rarity' | 'energy';
 const ORDER_OPTIONS = [
@@ -86,6 +87,7 @@ interface Props {
 }
 
 const Horses: React.FC<Props> = ({ changeView }) => {
+  const [modalRaces, setModalRaces] = useState(false);
   const [modalItems, setModalItems] = useState(false);
   const { phorse, medals, updateBalance } = useUser();
   const { isAuthorized, address } = useWallet();
@@ -217,6 +219,16 @@ const Horses: React.FC<Props> = ({ changeView }) => {
 
   return (
     <>
+
+      {modalRaces && (
+        <RacesModal
+          setVisible={setModalRaces}
+          status={modalRaces}
+          totalHorses={horseList.filter(h => h.staty.status === 'IDLE').length}
+          horses={horseList.filter(h => h.staty.status === 'IDLE')}
+          reloadHorses={loadHorses}
+        />
+      )}
       <ItemBag status={modalItems} closeModal={toggleItemBag} />
 
       <div className={styles.secondBar}>
@@ -233,6 +245,10 @@ const Horses: React.FC<Props> = ({ changeView }) => {
                   await loadHorses();
                   setInformational('Stable reloaded!');
                 }}
+              />
+              <button
+                className={styles.raceAllButton}
+                onClick={() => {setModalRaces(true); console.log(horseList)}}
               />
             </div>
           </div>
