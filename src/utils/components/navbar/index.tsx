@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import Burger from '@/utils/components/burger'
 import Image from 'next/image'
@@ -12,20 +12,46 @@ const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
   const { address, isConnected, connect, disconnect } = useWallet()
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [discordInfo, setDiscordInfo] = useState<{ discordId: string | null, discordTag: string | null } | null>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   const closeConfirm = () => setShowConfirm(false)
   const handleConfirm = () => {
     disconnect()
     setShowConfirm(false)
+    setShowDropdown(false)
   }
 
   const handleAccountClick = async (): Promise<void> => {
     if (isConnected) {
-      setShowConfirm(true)
-    }
-    else {
+      setShowDropdown(prev => !prev)
+    } else {
       await connect()
     }
+  }
+
+  useEffect(() => {
+    if (isConnected) {
+      fetch(`${process.env.API_URL}/user/get-discord`, { credentials: 'include' })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data) setDiscordInfo(data)
+          else setDiscordInfo(null)
+        })
+        .catch(() => setDiscordInfo(null))
+    }
+  }, [isConnected])
+
+  const handleConnectDiscord = async () => {
+    const res = await fetch(`${process.env.API_URL}/auth/discord-token`, {
+      credentials: 'include',
+      method: 'POST',
+    });
+    const { token } = await res.json();
+
+    const authURL = `https://discord.com/oauth2/authorize?client_id=1386572129507610664&response_type=code&redirect_uri=https%3A%2F%2Fapi.planethorse.io%2Fauth%2Fdiscord%2Fcallback&scope=identify+guilds+guilds.members.read&state=${token}`
+    window.location.href = authURL
   }
 
   return (
@@ -43,15 +69,14 @@ const Navbar: React.FC = () => {
           <rect y='83' fill='#582c25' width='100%' height='7' />
         </svg>
         <div className={styles.content}>
-          <button className={styles.burgerIcon} onClick={() => {
-            setBurger(!burger)
-          }}>
+          <button className={styles.burgerIcon} onClick={() => setBurger(!burger)}>
             <svg width='100%' height='100%'>
               <rect y='10' fill='#fff' width='30' height='3' />
               <rect y='21' fill='#fff' width='30' height='3' />
               <rect y='32' fill='#fff' width='30' height='3' />
             </svg>
           </button>
+
           <div className={styles.logo}>
             <Link href='/'>
               <a>
@@ -65,45 +90,47 @@ const Navbar: React.FC = () => {
               </a>
             </Link>
           </div>
+
           <div className={styles.options}>
             <Link href='/'>
               <a>HOME</a>
             </Link>
-            {/* <a>|</a> */}
             <Link href='/game'>
               <a>GAME</a>
             </Link>
-            {/* <a>|</a> */}
             <Link href='/profile'>
               <a>PROFILE</a>
             </Link>
-            {/* <a>|</a> */}
             <Link href='https://marketplace.roninchain.com/collections/origin-horses'>
-              <a target="_blank">MARKETPLACE</a>
+              <a target='_blank'>MARKETPLACE</a>
             </Link>
           </div>
-          <div
-            className={styles.account}
-            onClick={handleAccountClick}
-          >
-            <Link href={'#'}>
-              {isConnected
-                ? (
-                  <div id={styles.userProfileButton}>
-                    <span className={styles.address}>{`${(address || '').slice(0, 9)}...`}</span>
-                    <div className={styles.userPicture}>
-                      <Image src={exampleUserPic} />
-                    </div>
-                  </div>
-                )
-                : (<div id={styles.userProfileButton}>
-                  <span className={styles.address}>{'Connect Wallet'}</span>
-                  <div className={styles.userPicture}>
-                    <Image src={noUserPic} />
-                  </div>
-                </div>)
-              }
-            </Link>
+
+          <div className={styles.account} onClick={handleAccountClick}>
+            <div id={styles.userProfileButton}>
+              <span className={styles.address}>
+                {isConnected ? `${address?.slice(0, 9)}...` : 'Connect Wallet'}
+              </span>
+              <div className={styles.userPicture}>
+                <Image src={isConnected ? exampleUserPic : noUserPic} alt='user' />
+              </div>
+            </div>
+
+            {/* ▼ Dropdown when connected */}
+            {isConnected && showDropdown && (
+              <div className={styles.dropdownMenu} ref={dropdownRef}>
+                <div onClick={() => setShowConfirm(true)}>Disconnect</div>
+                {discordInfo?.discordId ? (
+                  <div>{discordInfo.discordTag}<Image
+                    src='/assets/icons/socials/discord.webp'
+                    width={16}
+                    height={16}
+                  /></div>
+                ) : (
+                  <div onClick={handleConnectDiscord}>Connect Discord</div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

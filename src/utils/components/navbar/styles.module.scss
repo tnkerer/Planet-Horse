@@ -163,5 +163,37 @@
         }
       }
     }
+
+    .dropdownMenu {
+      position: absolute;
+      top: 90px;
+      right: 10px;
+      z-index: 5;
+      background-image: url('/assets/game/horses/options-bar.png');
+      background-color: #582c25;
+      background-size: cover;
+      background-repeat: no-repeat;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: 'UpheavalPro';
+      font-size: 18px;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      width: 200px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+      
+
+      div {
+        padding: 10px 14px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #7d4d45
+        }
+      }
+    }
+
   }
 }
