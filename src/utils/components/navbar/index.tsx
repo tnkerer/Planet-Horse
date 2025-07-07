@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     if (isConnected) {
       fetch(`${process.env.API_URL}/user/get-discord`, { credentials: 'include' })
-        .then(res => res.ok ? res.json() : null)
+        .then(async (res) => res.ok ? res.json() : null)
         .then(data => {
           if (data) setDiscordInfo(data)
           else setDiscordInfo(null)
@@ -48,9 +48,9 @@ const Navbar: React.FC = () => {
       credentials: 'include',
       method: 'POST',
     });
-    const { token } = await res.json();
+    const data: { token: string } = await res.json()
 
-    const authURL = `https://discord.com/oauth2/authorize?client_id=1386572129507610664&response_type=code&redirect_uri=https%3A%2F%2Fapi.planethorse.io%2Fauth%2Fdiscord%2Fcallback&scope=identify+guilds+guilds.members.read&state=${token}`
+    const authURL = `https://discord.com/oauth2/authorize?client_id=1386572129507610664&response_type=code&redirect_uri=https%3A%2F%2Fapi.planethorse.io%2Fauth%2Fdiscord%2Fcallback&scope=identify+guilds&state=${data.token}`
     window.location.href = authURL
   }
 
