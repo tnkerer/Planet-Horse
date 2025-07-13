@@ -35,7 +35,8 @@ const Card: React.FC<Props> = ({ title, value = 20000, icon, animate }) => {
       </span>
       <span className={styles.card_title}>{title}</span>
       <span className={styles.card_value}>
-        {ascendingNumber !== value ? ascendingNumber : 'Soon'}
+        {ascendingNumber}
+        {/* {ascendingNumber !== value ? ascendingNumber : 'Soon'} */}
       </span>
     </div>
   )

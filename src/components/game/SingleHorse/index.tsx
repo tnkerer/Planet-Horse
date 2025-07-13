@@ -42,6 +42,7 @@ const ITEM_SLUG_MAP: Record<string, string> = {
   'Common XP Potion': 'common_xp',
   'Common Horseshoe': 'horseshoe',
   'Pumpers': 'bump',
+  'Baby Ronke Trophy' : 'ronke'
 };
 
 const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {

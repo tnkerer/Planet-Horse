@@ -13,6 +13,7 @@ import { items as itemsConst } from '@/utils/constants/items';
 import { Horse } from '@/domain/models/Horse';
 import ErrorModal from '../ErrorModal';
 import InfoModal from '../InfoModal';
+import ConfirmModal from '../ConfirmModal';
 import Tooltip from '../../Tooltip';
 
 interface LocalItemDef {
@@ -39,6 +40,7 @@ interface DisplayItem {
   description: string;
   consumable: boolean;
   usesLeft: number;
+  breakable: boolean;
 }
 
 interface Props {
@@ -56,7 +58,7 @@ const ItemBag: React.FC<Props> = ({
 }) => {
   const [serverItems, setServerItems] = useState<ServerItem[]>([]);
   const [loading, setLoading] = useState(false);
-
+  const [confirmRecycle, setConfirmRecycle] = useState<{ name: string; uses: number } | null>(null);
   // For error / info messages
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
@@ -79,6 +81,7 @@ const ItemBag: React.FC<Props> = ({
     y: number;
     content: string;
     usesLeft: number;
+    breakable: boolean;
   } | null>(null);
 
   // Fetch from API
@@ -135,6 +138,7 @@ const ItemBag: React.FC<Props> = ({
           description: '',
           consumable: false,
           usesLeft: srv.usesLeft,
+          breakable: true
         };
       }
       return {
@@ -145,6 +149,7 @@ const ItemBag: React.FC<Props> = ({
         description: def.description,
         consumable: Boolean(def.consumable),
         usesLeft: srv.usesLeft,
+        breakable: def.breakable
       };
     });
 
@@ -220,6 +225,41 @@ const ItemBag: React.FC<Props> = ({
     } catch (err: any) {
       console.error(err);
       setErrorMessage(err.message || 'Failed to equip item');
+    } finally {
+      setActiveDropdownIndex(null);
+    }
+  };
+
+  const handleRecycle = async (itemName: string, usesLeft: number) => {
+    setErrorMessage(null);
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/user/items/recycle`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: itemName, uses: usesLeft }),
+        }
+      );
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
+      }
+      const { reward } = await res.json() as { reward: string | null };
+      if (reward === null) {
+        setInfoMessage('You got nothing from recycling this item');
+      } else {
+        setInfoMessage(`You got ${reward}`);
+      }
+      fetchItems();
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to recycle item');
     } finally {
       setActiveDropdownIndex(null);
     }
@@ -363,6 +403,7 @@ const ItemBag: React.FC<Props> = ({
                                   y: rect.top - 8,
                                   content: item.description,
                                   usesLeft: item.usesLeft,
+                                  breakable: item.breakable
                                 });
                               }}
                               onMouseLeave={() => setTooltip(null)}
@@ -396,14 +437,15 @@ const ItemBag: React.FC<Props> = ({
                                     >
                                       Use
                                     </div>
-{/*                                       <div
+                                      <div
                                         className={styles.dropdownOption}
-                                        onClick={async () =>
-                                          console.log(`Minting ${item.name}`)
-                                        }
+                                        onClick={() => {
+                                          setTooltip(null);
+                                          setConfirmRecycle({ name: item.name, uses: item.usesLeft });
+                                        }}
                                       >
-                                        Mint
-                                      </div> */}
+                                        Recycle
+                                      </div>
                                     </>
                                   ) : (
                                     <>
@@ -415,30 +457,16 @@ const ItemBag: React.FC<Props> = ({
                                       >
                                         Equip
                                       </div>
-{/*                                       <div
-                                        className={styles.dropdownOption}
-                                        onClick={async () =>
-                                          console.log(`Minting ${item.name}`)
-                                        }
-                                      >
-                                        Mint
-                                      </div> */}
-                                      {/* <div
-                                        className={styles.dropdownOption}
-                                        onClick={async () =>
-                                          handleEquip(item.name, item.usesLeft)
-                                        }
-                                      >
-                                        Equip 2
-                                      </div>
                                       <div
                                         className={styles.dropdownOption}
-                                        onClick={async () =>
-                                          handleEquip(item.name, item.usesLeft)
-                                        }
+                                        onClick={() => {
+                                          setTooltip(null);
+                                          setConfirmRecycle({ name: item.name, uses: item.usesLeft });
+                                        }}
                                       >
-                                        Equip 3
-                                      </div> */}
+                                        Recycle
+                                      </div>
+
                                     </>
                                   )}
                                 </div>
@@ -480,11 +508,23 @@ const ItemBag: React.FC<Props> = ({
                     return acc;
                   }, [])}
                 <br />
-                <span className={styles.usesLeft}>
-                  ({tooltip.usesLeft} uses left)
-                </span>
+                {tooltip.breakable ? (
+                  <span className={styles.usesLeft}>
+                    ({tooltip.usesLeft} uses left)
+                  </span>) : (null)}
               </div>
             </Tooltip>
+          )}
+
+          {confirmRecycle && (
+            <ConfirmModal
+              text={`Recycle "${confirmRecycle.name}"?`}
+              onClose={() => setConfirmRecycle(null)}
+              onConfirm={() => {
+                handleRecycle(confirmRecycle.name, confirmRecycle.uses);
+                setConfirmRecycle(null);
+              }}
+            />
           )}
         </div>
       </div>

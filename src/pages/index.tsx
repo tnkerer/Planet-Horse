@@ -9,7 +9,7 @@ import Footer from '@/components/landpage/footer'
 
 import styles from '@/styles/landpage.module.scss'
 
-function App () {
+const App: React.FC = () => {
   return (
     <>
       <main className={styles.wrapper}>

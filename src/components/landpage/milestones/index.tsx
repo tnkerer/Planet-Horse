@@ -19,7 +19,7 @@ const Milestones: React.FC = () => {
 
   return (
     <section className={styles.container}>
-      <TitleLayer>Milestones</TitleLayer>
+      <TitleLayer>Gameplay</TitleLayer>
       <div
         ref={myRef}
         className={`
@@ -27,7 +27,7 @@ const Milestones: React.FC = () => {
           ${isVisible && styles.animation}
         `}
       >
-       {CARDS.map(card => <Card key={card.id} {...card} animate={isVisible} />)}
+       {/* {CARDS.map(card => <Card key={card.id} {...card} animate={isVisible} />)} */}
       </div>
     </section>
   )
