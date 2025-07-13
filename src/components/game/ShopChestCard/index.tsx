@@ -206,7 +206,7 @@ const ShopChestCard: React.FC = () => {
                     src={
                       resultNames[0].toLowerCase().endsWith('phorse')
                         ? '/assets/items/phorse.webp'
-                        : `/assets/items/${itemDefs[resultNames[0]]?.src || resultNames[0]}.webp`
+                        : `/assets/items/${String(itemDefs[resultNames[0]]?.src || resultNames[0])}.webp`
                     }
                     alt={resultNames[0]}
                     className={styles.dropItem}
@@ -218,7 +218,7 @@ const ShopChestCard: React.FC = () => {
                   {resultNames.map((name, i) => {
                     const src = name.toLowerCase().endsWith('phorse')
                       ? '/assets/items/phorse.webp'
-                      : `/assets/items/${itemDefs[name]?.src || name}.webp`
+                      : `/assets/items/${String(itemDefs[name]?.src || name)}.webp`
                     return (
                       <div className={styles.resultItem} key={i}>
                         <img src={src} alt={name} className={styles.dropGridItem} />
