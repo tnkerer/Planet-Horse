@@ -46,10 +46,14 @@ const Items: React.FC<Props> = ({ changeView }) => {
             </div>
           </div>
           <div className={styles.countCurrency}>
+            <div className={styles.currencyGroup}>
             <Image width={50} height={50} src={phorseToken} alt="phorse coin" />
             <span>{phorse | 0}</span>
+            </div>
+            <div className={styles.currencyGroup}>
             <Image width={29} height={40} src={medal} alt="medals" />
             <span>{medals | 0}</span>
+            </div>
           </div>
         </div>
       </div>

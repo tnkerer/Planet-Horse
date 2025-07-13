@@ -419,7 +419,7 @@ const ItemBag: React.FC<Props> = ({
                               <span className={styles.itemCount}>{item.quantity}</span>
                             </button>
 
-                            {horse &&
+                            {horse ? (
                               activeDropdownIndex ===
                               pageIdx * totalSlotsPerPage + idx && (
                                 <div
@@ -470,7 +470,23 @@ const ItemBag: React.FC<Props> = ({
                                     </>
                                   )}
                                 </div>
-                              )}
+                              )) : (activeDropdownIndex ===
+                                pageIdx * totalSlotsPerPage + idx && (
+                                  <div
+                                    className={`${styles.dropdown} ${idx >= 8 ? styles.dropdownAbove : ''
+                                      }`}
+                                  >
+                                    <div
+                                      className={styles.dropdownOption}
+                                      onClick={() => {
+                                        setTooltip(null);
+                                        setConfirmRecycle({ name: item.name, uses: item.usesLeft });
+                                      }}
+                                    >
+                                      Recycle
+                                    </div>
+                                  </div>
+                                ))}
                           </div>
                         );
                       })}
