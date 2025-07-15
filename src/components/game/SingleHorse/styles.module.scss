@@ -143,6 +143,7 @@
                         &:hover {
                             cursor: pointer
                         }
+
                         // Make sure the image itself is on top and contained:
                         img {
                             position: relative;
@@ -172,6 +173,12 @@
                     display: flex;
                     justify-content: space-between;
                 }
+
+                .horseItemBonus {
+                        color: #1fa050;
+                        font-weight: bold;
+                        margin-left: 4px;
+                    }
 
                 @media screen and (max-width: 435px) {
 

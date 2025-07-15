@@ -5,6 +5,16 @@
         "src-idle": "chest_idle",
         "src-drop": "chest_drop",
         "src-open": "chest_opening",
+        "src-opened": "chest_opened",
+        "quantity": "1"
+    },
+    {
+        "id": 2,
+        "name": "Champions Chest",
+        "src-idle": "chest_idle_2",
+        "src-drop": "chest_drop_2",
+        "src-open": "chest_opening_2",
+        "src-opened": "chest_opened_2",
         "quantity": "1"
     }
 ]

@@ -12,6 +12,7 @@ import UpgradeResults, { Upgrades } from '../Modals/UpgradeResults';
 import ConfirmModal from '../Modals/ConfirmModal';
 import ErrorModal from '../Modals/ErrorModal';
 import InfoModal from '../Modals/InfoModal';
+import { itemModifiers } from '@/utils/constants/items'
 
 interface Props {
   horse: Horse;
@@ -32,6 +33,8 @@ const sexColorMap: Record<string, string> = {
   female: '#dc207e',
 };
 
+const statColor = '#1fa050'
+
 const defaultColor = '#919191';
 
 // Map from “item.name” → the filename‐slug for `<slug>_equiped.webp`
@@ -42,8 +45,22 @@ const ITEM_SLUG_MAP: Record<string, string> = {
   'Common XP Potion': 'common_xp',
   'Common Horseshoe': 'horseshoe',
   'Pumpers': 'bump',
-  'Baby Ronke Trophy' : 'ronke'
+  'Baby Ronke Trophy': 'ronke',
+  'Champion Saddle Pad': 'saddle_pad',
+  'Champion Bridle': 'bridle',
+  'Champion Stirrups': 'stirrups'
 };
+
+const RARITY_MOD: Record<string, number> = {
+  "common": 1,
+  "uncommon": 2,
+  "rare": 3,
+  "epic": 4,
+  "legendary": 5,
+  "mythic": 6
+};
+
+const BASE_DENOM = 24;
 
 const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const [modalRecovery, setModalRecovery] = useState(false);
@@ -78,7 +95,8 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const xp = `${horse.staty.exp.toString()}/${maxXp}`;
 
   // Cost to recover depends on level:
-  const recoveryCost = (parseInt(horse.staty.level) - 1) * 125;
+  const recoveryMod = RARITY_MOD[slug] * (300 / BASE_DENOM);
+  const recoveryCost = parseInt(horse.staty.level) * recoveryMod;
 
   // Calculate level‐up fees:
   const levelStr = horse.staty.level;
@@ -161,6 +179,18 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   // horse.items is now Array<Item>
   const equippedItems: Item[] = horse.items;
+
+  const extraStats = equippedItems.reduce(
+    (acc, item) => {
+      const mod = itemModifiers[item.name];
+      if (!mod) return acc;
+      acc.extraPwr += mod.extraPwr || 0;
+      acc.extraSpt += mod.extraSpt || 0;
+      acc.extraSpd += mod.extraSpd || 0;
+      return acc;
+    },
+    { extraPwr: 0, extraSpt: 0, extraSpd: 0 }
+  );
 
   // Unequip handler invoked after confirmation
   const handleDoUnequip = async () => {
@@ -325,12 +355,22 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                 </div>
                 <div className={styles.horseItemDescription}>
                   POWER: <span>{horse.staty.power}</span>
+                  {extraStats.extraPwr > 0 && (
+                    <span style={{ color: statColor }}> +{extraStats.extraPwr}</span>
+                  )}
                 </div>
                 <div className={styles.horseItemDescription}>
                   SPRINT: <span>{horse.staty.sprint}</span>
+                  {extraStats.extraSpt > 0 && (
+                    <span style={{ color: statColor }}> +{extraStats.extraSpt}</span>
+                  )}
                 </div>
+
                 <div className={styles.horseItemDescription}>
                   SPEED: <span>{horse.staty.speed}</span>
+                  {extraStats.extraSpd > 0 && (
+                    <span style={{ color: statColor }}> +{extraStats.extraSpd}</span>
+                  )}
                 </div>
                 <div className={styles.horseItemDescription}>
                   ENERGY: <span>{horse.staty.energy}</span>

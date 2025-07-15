@@ -172,13 +172,6 @@ const ShopChestCard: React.FC = () => {
   const handleResultClose = () => {
     handleClose()
     setResultNames([])
-    if (selectedChestType != null && quantityToOpen > 0) {
-      setChestQuantities(prev => ({
-        ...prev,
-        [selectedChestType]: Math.max((prev[selectedChestType] ?? 0) - quantityToOpen, 0),
-      }))
-    }
-
     updateBalance()
   }
 
@@ -188,9 +181,9 @@ const ShopChestCard: React.FC = () => {
         <div className={styles.modal}>
           <div className={`${styles.modalContent} ${stage === 'grow' ? styles.grow : ''}`}>
             <div onClick={handleClose} className={styles.closeButton} />
-            {stage === 'drop' && <img src="/assets/items/chest_drop.gif" className={styles.gif} />}
-            {stage === 'open' && <img src="/assets/items/chest_opening.gif" className={styles.gif} />}
-            {stage === 'opened' && <img src="/assets/items/chest_opened.gif" className={styles.gif} />}
+            {stage === 'drop' && <img src={`/assets/items/${shopData[selectedChestType - 1]["src-drop"]}.gif`} className={styles.gif} />}
+            {stage === 'open' && <img src={`/assets/items/${shopData[selectedChestType - 1]["src-open"]}.gif`} className={styles.gif} />}
+            {stage === 'opened' && <img src={`/assets/items/${shopData[selectedChestType - 1]["src-opened"]}.gif`} className={styles.gif} />}
           </div>
           {stage === 'opened' && (
             <div className={styles.resultOverlay} onClick={handleResultClose}>
@@ -206,7 +199,9 @@ const ShopChestCard: React.FC = () => {
                     src={
                       resultNames[0].toLowerCase().endsWith('phorse')
                         ? '/assets/items/phorse.webp'
-                        : `/assets/items/${String(itemDefs[resultNames[0]]?.src || resultNames[0])}.webp`
+                        : resultNames[0].toLowerCase().endsWith('medals')
+                          ? '/assets/items/medal_bag.webp'
+                          : `/assets/items/${String(itemDefs[resultNames[0]]?.src || resultNames[0])}.webp`
                     }
                     alt={resultNames[0]}
                     className={styles.dropItem}
@@ -216,9 +211,16 @@ const ShopChestCard: React.FC = () => {
               ) : (
                 <div className={styles.resultGrid} onClick={(e) => e.stopPropagation()}>
                   {resultNames.map((name, i) => {
-                    const src = name.toLowerCase().endsWith('phorse')
-                      ? '/assets/items/phorse.webp'
-                      : `/assets/items/${String(itemDefs[name]?.src || name)}.webp`
+                    let src: string
+                    const lower = name.toLowerCase()
+
+                    if (lower.endsWith('phorse')) {
+                      src = '/assets/items/phorse.webp'
+                    } else if (lower.endsWith('medals')) {
+                      src = '/assets/items/medal_bag.webp'
+                    } else {
+                      src = `/assets/items/${String(itemDefs[name]?.src || name)}.webp`
+                    }
                     return (
                       <div className={styles.resultItem} key={i}>
                         <img src={src} alt={name} className={styles.dropGridItem} />

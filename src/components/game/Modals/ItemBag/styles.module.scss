@@ -358,6 +358,18 @@
         max-width: 60vw;
     }
 
+    .tooltipTitle {
+        display: block;
+        margin-top: 0.25rem;
+        color: #1b07ce;
+        font-family: 'SpaceHorse';
+        font-size: 1.2 vw;
+
+        @media (max-width: 700px) {
+            font-size: 3.2vw;
+        }
+    }
+
     .usesLeft {
         display: block;
         margin-top: 0.25rem;

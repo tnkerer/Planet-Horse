@@ -123,7 +123,7 @@
   .resultGrid {
 
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 2fr);
     grid-template-rows: repeat(4, auto);
     gap: 12px;
     position: absolute;
@@ -221,10 +221,11 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 2vw;
-  justify-items: center;
+  display: flex;
+  flex-direction: row;    /* lay items out in a row */
+  flex-wrap: wrap;        /* allow wrapping to new “lines” if necessary */
+  gap: 2vw;               /* same gutter you already had */
+  justify-content: center;/* or space-between / space-around, whatever you like */
 }
 
 .card {

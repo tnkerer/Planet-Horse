@@ -79,6 +79,7 @@ const ItemBag: React.FC<Props> = ({
   const [tooltip, setTooltip] = useState<{
     x: number;
     y: number;
+    name: string;
     content: string;
     usesLeft: number;
     breakable: boolean;
@@ -401,6 +402,7 @@ const ItemBag: React.FC<Props> = ({
                                 setTooltip({
                                   x: rect.left + rect.width / 2,
                                   y: rect.top - 8,
+                                  name: item.name,
                                   content: item.description,
                                   usesLeft: item.usesLeft,
                                   breakable: item.breakable
@@ -514,6 +516,9 @@ const ItemBag: React.FC<Props> = ({
           {tooltip && (
             <Tooltip x={tooltip.x} y={tooltip.y} visible={true}>
               <div className={styles.tooltipPortal}>
+                <span className={styles.tooltipTitle}>
+                    {tooltip.name}
+                  </span>
                 {tooltip.content
                   .split(' ')
                   .reduce<Array<string | JSX.Element>>((acc, word, i) => {
