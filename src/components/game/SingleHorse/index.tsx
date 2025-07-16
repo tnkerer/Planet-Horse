@@ -96,7 +96,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   // Cost to recover depends on level:
   const recoveryMod = RARITY_MOD[slug] * (260 / BASE_DENOM);
-  const recoveryCost = parseInt(horse.staty.level) * recoveryMod;
+  const recoveryCost = Number((parseInt(horse.staty.level) * recoveryMod).toFixed(2));
 
   // Calculate level‐up fees:
   const levelStr = horse.staty.level;
