@@ -53,11 +53,11 @@ const ITEM_SLUG_MAP: Record<string, string> = {
 
 const RARITY_MOD: Record<string, number> = {
   "common": 1,
-  "uncommon": 2,
-  "rare": 3,
-  "epic": 4,
-  "legendary": 5,
-  "mythic": 6
+  "uncommon": 1.6,
+  "rare": 2.4,
+  "epic": 3.2,
+  "legendary": 4,
+  "mythic": 4.8
 };
 
 const BASE_DENOM = 18;
