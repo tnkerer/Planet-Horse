@@ -60,7 +60,7 @@ const RARITY_MOD: Record<string, number> = {
   "mythic": 6
 };
 
-const BASE_DENOM = 24;
+const BASE_DENOM = 18;
 
 const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const [modalRecovery, setModalRecovery] = useState(false);
@@ -95,7 +95,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const xp = `${horse.staty.exp.toString()}/${maxXp}`;
 
   // Cost to recover depends on level:
-  const recoveryMod = RARITY_MOD[slug] * (300 / BASE_DENOM);
+  const recoveryMod = RARITY_MOD[slug] * (260 / BASE_DENOM);
   const recoveryCost = parseInt(horse.staty.level) * recoveryMod;
 
   // Calculate level‐up fees:
