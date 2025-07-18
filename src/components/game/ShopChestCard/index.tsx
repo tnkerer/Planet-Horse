@@ -209,25 +209,30 @@ const ShopChestCard: React.FC = () => {
                   <div className={styles.itemLabel}>{resultNames[0]}</div>
                 </div>
               ) : (
-                <div className={styles.resultGrid} onClick={(e) => e.stopPropagation()}>
-                  {resultNames.map((name, i) => {
-                    let src: string
-                    const lower = name.toLowerCase()
+                <div className={styles.resultContainer} onClick={(e) => e.stopPropagation()}>
+                  <button className={styles.resultCloseBtn} onClick={handleResultClose}>
+                    <img src="/assets/game/pop-up/fechar.png" alt="Close" />
+                  </button>
+                  <div className={styles.resultGrid} onClick={(e) => e.stopPropagation()}>
+                    {resultNames.map((name, i) => {
+                      let src: string
+                      const lower = name.toLowerCase()
 
-                    if (lower.endsWith('phorse')) {
-                      src = '/assets/items/phorse.webp'
-                    } else if (lower.endsWith('medals')) {
-                      src = '/assets/items/medal_bag.webp'
-                    } else {
-                      src = `/assets/items/${String(itemDefs[name]?.src || name)}.webp`
-                    }
-                    return (
-                      <div className={styles.resultItem} key={i}>
-                        <img src={src} alt={name} className={styles.dropGridItem} />
-                        <div className={styles.itemLabel}>{name}</div>
-                      </div>
-                    )
-                  })}
+                      if (lower.endsWith('phorse')) {
+                        src = '/assets/items/phorse.webp'
+                      } else if (lower.endsWith('medals')) {
+                        src = '/assets/items/medal_bag.webp'
+                      } else {
+                        src = `/assets/items/${String(itemDefs[name]?.src || name)}.webp`
+                      }
+                      return (
+                        <div className={styles.resultItem} key={i}>
+                          <img src={src} alt={name} className={styles.dropGridItem} />
+                          <div className={styles.itemLabel}>{name}</div>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
               )}
             </div>

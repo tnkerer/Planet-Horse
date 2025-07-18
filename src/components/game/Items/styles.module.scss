@@ -11,6 +11,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    
+    @media (max-width: 700px) {
+      flex-direction: column;
+    } 
   }
 
   .actionContainer {
@@ -28,6 +32,8 @@
         align-items: normal;
       } */
 
+      flex-wrap: wrap;
+
       &>div {
         font-family: 'UpheavalPro';
         text-shadow: 0 3px 2px rgba(0, 0, 0, 0.2);
@@ -43,8 +49,8 @@
 
       .racingButton {
         position: relative;
-        width: 96px;
-        height: 96px;
+        width: 72px;
+        height: 72px;
         background: url('/assets/icons/racing.png') no-repeat center/contain;
         border: none;
         cursor: pointer;
@@ -65,13 +71,17 @@
         @media (max-width: 700px) {
           width: 68px;
           height: 68px;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          grid-gap: 16px;
+          justify-items: center;
         }
       }
 
       .bagButton {
         position: relative;
-        width: 96px;
-        height: 96px;
+        width: 72px;
+        height: 72px;
         background: url('/assets/icons/bag.png') no-repeat center/contain;
         border: none;
         cursor: pointer;
@@ -102,6 +112,41 @@
         @media (max-width: 700px) {
           width: 68px;
           height: 68px;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          grid-gap: 16px;
+          justify-items: center;
+        }
+      }
+
+      .upgradeButton {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        background: url('/assets/icons/upgrade.png') no-repeat center/contain;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+
+        &:hover {
+          background-image: url('/assets/icons/upgrade_hover.png');
+        }
+
+        // badge de notificação, se você quiser posicionar o span dentro dele
+        .notificationBadge {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+        @media (max-width: 700px) {
+          width: 68px;
+          height: 68px;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          grid-gap: 16px;
+          justify-items: center;
         }
       }
 
@@ -113,6 +158,8 @@
     display: flex;
     align-items: center; // vertical‐centers everything
     gap: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 
     img {
       width: 50px;

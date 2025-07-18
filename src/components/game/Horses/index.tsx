@@ -9,6 +9,7 @@ import { useUser } from '@/contexts/UserContext';
 import { useWallet } from '@/contexts/WalletContext';
 import InfoModal from '../Modals/InfoModal';
 import RacesModal from '../Modals/RacesModal';
+import MineModal from '../Modals/MineModal';
 
 type OrderByType = 'level' | 'rarity' | 'energy';
 const ORDER_OPTIONS = [
@@ -88,6 +89,7 @@ interface Props {
 
 const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalRaces, setModalRaces] = useState(false);
+  const [modalMine, setModalMine] = useState(false)
   const [modalItems, setModalItems] = useState(false);
   const { phorse, medals, updateBalance } = useUser();
   const { isAuthorized, address } = useWallet();
@@ -229,6 +231,14 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           reloadHorses={loadHorses}
         />
       )}
+
+      {modalMine && (
+        <MineModal
+          setVisible={setModalMine}
+          status={modalMine}
+        />
+      )}
+
       <ItemBag status={modalItems} closeModal={toggleItemBag} />
 
       <div className={styles.secondBar}>
@@ -248,17 +258,21 @@ const Horses: React.FC<Props> = ({ changeView }) => {
               />
               <button
                 className={styles.raceAllButton}
-                onClick={() => { setModalRaces(true); console.log(horseList) }}
+                onClick={() => { setModalRaces(true); }}
+              />
+              <button
+                className={styles.upgradeButton}
+                onClick={() => { setModalMine(true); }}
               />
             </div>
           </div>
           <div className={styles.countCurrency}>
             <div className={styles.currencyGroup}>
-              <Image src={phorseToken} width={30} height={30} alt="phorse" />
+              <Image src={phorseToken} width={25} height={25} alt="phorse" />
               <span>{phorse?.toFixed(0) || 0}</span>
             </div>
             <div className={styles.currencyGroup}>
-              <Image src={medalIcon} width={18} height={24} alt="medal" />
+              <Image src={medalIcon} width={14} height={20} alt="medal" />
               <span>{medals?.toFixed(0) || 0}</span>
             </div>
           </div>

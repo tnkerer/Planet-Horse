@@ -1,5 +1,5 @@
 // src/components/SingleHorse/index.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import { Horse, Item } from '@/domain/models/Horse';
 import { xpProgression } from '@/utils/constants/xp-progression';
@@ -12,7 +12,7 @@ import UpgradeResults, { Upgrades } from '../Modals/UpgradeResults';
 import ConfirmModal from '../Modals/ConfirmModal';
 import ErrorModal from '../Modals/ErrorModal';
 import InfoModal from '../Modals/InfoModal';
-import { itemModifiers } from '@/utils/constants/items'
+import { itemModifiers, items } from '@/utils/constants/items'
 
 interface Props {
   horse: Horse;
@@ -38,18 +38,9 @@ const statColor = '#1fa050'
 const defaultColor = '#919191';
 
 // Map from “item.name” → the filename‐slug for `<slug>_equiped.webp`
-const ITEM_SLUG_MAP: Record<string, string> = {
-  'Hay': 'hay',
-  'Common Saddle': 'saddle',
-  'Superior XP Potion': 'xp',
-  'Common XP Potion': 'common_xp',
-  'Common Horseshoe': 'horseshoe',
-  'Pumpers': 'bump',
-  'Baby Ronke Trophy': 'ronke',
-  'Champion Saddle Pad': 'saddle_pad',
-  'Champion Bridle': 'bridle',
-  'Champion Stirrups': 'stirrups'
-};
+const ITEM_SLUG_MAP: Record<string, string> = Object.fromEntries(
+  Object.entries(items).map(([name, data]) => [name, data.src])
+);
 
 const RARITY_MOD: Record<string, number> = {
   "common": 1,
@@ -90,9 +81,14 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const sexSlug = horse.profile.sex.toLowerCase();
   const sexColor = sexColorMap[sexSlug] ?? defaultColor;
 
+  const formatXp = (n: number) => {
+    if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
+    if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
+    return n.toString();
+  };
   // Exp utils
   const maxXp: string = (xpProgression[Number(horse.staty.level)] ?? 0).toString();
-  const xp = `${horse.staty.exp.toString()}/${maxXp}`;
+  const xp = `${formatXp(Number(horse.staty.exp))}/${formatXp(Number(maxXp))}`;
 
   // Cost to recover depends on level:
   const recoveryMod = RARITY_MOD[slug] * (260 / BASE_DENOM);
@@ -102,6 +98,8 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const levelStr = horse.staty.level;
   const phorseFee: string = (lvlUpFee.phorse[levelStr] ?? 0).toString();
   const medalFee: string = (lvlUpFee.medals[levelStr] ?? 0).toString();
+
+
 
   const handleLevelUpClick = () => {
     const text = `Do you want to level up your horse for ${phorseFee} Phorse and ${medalFee} Medal?`;
@@ -401,13 +399,18 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
                   // slot unlocked & item present → show equipped image, clickable to unequip
                   const slugName = ITEM_SLUG_MAP[equipped.name] || '';
+
                   return (
                     <div key={idx} className={styles.singleItem}>
                       <img
                         src={`/assets/items/${slugName}_equiped.webp`}
                         alt={equipped.name}
-                        onClick={() => {
-                          setUnequipIndex(idx);
+                        onClick={() => setUnequipIndex(idx)}
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          if (!target.src.endsWith('.gif')) {
+                            target.src = `/assets/items/${slugName}_equiped.gif`;
+                          }
                         }}
                       />
                     </div>

@@ -7,6 +7,7 @@ import medal from '@/assets/icons/medal.gif'
 import { useUser } from '@/contexts/UserContext'
 import ItemBag from '../Modals/ItemBag'
 import PresaleCard from '../PresaleCard'
+import MineModal from '../Modals/MineModal'
 
 interface Props {
   changeView: (view: string) => void
@@ -15,6 +16,7 @@ interface Props {
 const Items: React.FC<Props> = ({ changeView }) => {
   const { phorse, medals } = useUser();
   const [modalItems, setModalItems] = useState(false)
+  const [modalMine, setModalMine] = useState(false)
 
   const toogleModal = (modalType: string, id?: number) => {
     switch (modalType) {
@@ -25,6 +27,12 @@ const Items: React.FC<Props> = ({ changeView }) => {
   return (
     <>
       <ItemBag status={modalItems} closeModal={toogleModal} />
+      {modalMine && (
+        <MineModal
+          setVisible={setModalMine}
+          status={modalMine}
+        />
+      )}
       <div className={styles.secondBar}>
         <div className={styles.containerBar}>
           <div className={styles.actionContainer}>
@@ -43,16 +51,20 @@ const Items: React.FC<Props> = ({ changeView }) => {
               >
                 <span className={styles.notificationBadge}></span>
               </button>
+              <button
+                className={styles.upgradeButton}
+                onClick={() => { setModalMine(true); }}
+              />
             </div>
           </div>
           <div className={styles.countCurrency}>
             <div className={styles.currencyGroup}>
-            <Image width={50} height={50} src={phorseToken} alt="phorse coin" />
-            <span>{phorse | 0}</span>
+              <Image width={25} height={25} src={phorseToken} alt="phorse coin" />
+              <span>{phorse | 0}</span>
             </div>
             <div className={styles.currencyGroup}>
-            <Image width={29} height={40} src={medal} alt="medals" />
-            <span>{medals | 0}</span>
+              <Image width={14} height={20} src={medal} alt="medals" />
+              <span>{medals | 0}</span>
             </div>
           </div>
         </div>
@@ -62,8 +74,8 @@ const Items: React.FC<Props> = ({ changeView }) => {
         <span className={styles.title}>ITEMS SHOP</span>
 
         <div className={styles.cardItems}>
-          <ShopChestCard/>
-          
+          <ShopChestCard />
+
         </div>
       </div>
     </>

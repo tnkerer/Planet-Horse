@@ -411,11 +411,14 @@ const ItemBag: React.FC<Props> = ({
                               onMouseLeave={() => setTooltip(null)}
                             >
                               <div className={styles.imageWrapper}>
-                                <Image
+                                <img
                                   src={`/assets/items/${item.src}.webp`}
                                   alt={item.name}
-                                  layout="fill"
-                                  objectFit="contain"
+                                  onError={(e) => {
+                                    e.currentTarget.onerror = null; // prevent infinite loop
+                                    e.currentTarget.src = `/assets/items/${item.src}.gif`;
+                                  }}
+                                  style={{ width: '80%', height: '100%', objectFit: 'contain', alignSelf: 'center' }}
                                 />
                               </div>
                               <span className={styles.itemCount}>{item.quantity}</span>
@@ -517,8 +520,8 @@ const ItemBag: React.FC<Props> = ({
             <Tooltip x={tooltip.x} y={tooltip.y} visible={true}>
               <div className={styles.tooltipPortal}>
                 <span className={styles.tooltipTitle}>
-                    {tooltip.name}
-                  </span>
+                  {tooltip.name}
+                </span>
                 {tooltip.content
                   .split(' ')
                   .reduce<Array<string | JSX.Element>>((acc, word, i) => {
