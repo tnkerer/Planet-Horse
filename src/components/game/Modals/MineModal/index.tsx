@@ -1,12 +1,21 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import styles from './styles.module.scss'
 import close from '@/assets/game/pop-up/fechar.png'
 import ErrorModal from '../ErrorModal'
+import ItemBag from '../ItemBag'
+import { DisplayItem } from '@/components/game/Modals/ItemBag/index'
+import { interfaceData } from '@/utils/constants/item_progression'
+import { useUser } from '@/contexts/UserContext'
 
 interface Props {
     setVisible: Dispatch<SetStateAction<boolean>>
     status: boolean
+}
+
+interface ServerItem {
+    name: string
+    quantity: number
 }
 
 const MineModal: React.FC<Props> = ({ setVisible, status }) => {
@@ -14,6 +23,13 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
     const [displayedText, setDisplayedText] = useState('')
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [textFinished, setTextFinished] = useState(false)
+    const [itemBagOpen, setItemBagOpen] = useState(false)
+    const [toUpgrade, setToUpgrade] = useState<DisplayItem | null>(null)
+    const [mode, setMode] = useState<'default' | 'upgrade' | 'finalize'>('default')
+    const [serverItems, setServerItems] = useState<ServerItem[]>([])
+    const { medals, updateBalance } = useUser();
+
+
 
     useEffect(() => {
         if (!status) return
@@ -29,14 +45,93 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                 clearInterval(timer)
                 setTextFinished(true)
             }
-        }, 50)
+        }, 25)
         return () => clearInterval(timer)
     }, [status, fullText])
+
+    const fetchItems = useCallback(() => {
+        if (!status) return
+        fetch(`${process.env.API_URL}/user/items`, {
+            credentials: 'include',
+        })
+            .then(async (res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                return res.json() as Promise<ServerItem[]>
+            })
+            .then(setServerItems)
+            .catch((err) => {
+                console.error(err)
+                setErrorMessage(err.message || 'Failed to load items')
+            })
+    }, [status])
+
+    const getItemQty = (itemName: string): number => {
+        return serverItems.find((i) => i.name === itemName)?.quantity || 0
+    }
+
+    useEffect(() => {
+        fetchItems()
+        updateBalance()
+    }, [fetchItems])
+
+    useEffect(() => {
+        if (mode === 'finalize' && !toUpgrade) {
+            setMode('default')
+        }
+    }, [mode, toUpgrade])
+
+    const handleItem = (item: any) => {
+        setToUpgrade(item)
+        setMode('finalize')
+        setItemBagOpen(false)
+        fetchItems()
+    }
+
+    const handleUpgrade = async () => {
+        if (!toUpgrade) return;
+
+        try {
+            const res = await fetch(`${process.env.API_URL}/user/items/upgrade`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: toUpgrade.name }),
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err?.message || `HTTP ${res.status}`);
+            }
+
+            const data = await res.json();
+
+            if (data?.item?.success) {
+                setErrorMessage('Item upgraded successfully!');
+            } else if (!data?.item?.success && data?.item?.broken) {
+                setErrorMessage('❌ The item broke during the upgrade!');
+            } else {
+                setErrorMessage('Upgrade failed, but your item is safe.');
+            }
+
+            // Refresh inventory or reset state as needed
+            fetchItems();
+            setToUpgrade(null);
+            setMode('default');
+            updateBalance();
+        } catch (err: any) {
+            console.error(err);
+            setErrorMessage(err.message || 'Unexpected upgrade error.');
+        }
+    };
+
 
     if (!status) return null
 
     return (
         <>
+            {itemBagOpen && (
+                <ItemBag status={itemBagOpen} handleUpgrade={handleItem} upgrade={true} closeModal={() => setItemBagOpen(false)} />
+            )}
             {errorMessage && (
                 <ErrorModal text={errorMessage} onClose={() => setErrorMessage(null)} />
             )}
@@ -48,6 +143,91 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                         <div className={styles.modalClose} onClick={() => setVisible(false)}>
                             <Image src={close} alt="Close" width={30} height={30} />
                         </div>
+                        {(mode === 'upgrade' || mode === 'finalize') && (
+                            <div className={styles.crossGrid}>
+                                {[...Array(9)].map((_, i) => {
+                                    const showSlot = [1, 3, 4, 5, 7].includes(i)
+
+                                    let imgSrc: string | null = null
+
+                                    if (mode === 'finalize') {
+                                        if (i === 1) imgSrc = '/assets/items/medal_bag.webp'
+                                        else if (i === 3) imgSrc = '/assets/items/metal.webp'
+                                        else if (i === 4 && toUpgrade) imgSrc = `/assets/items/${toUpgrade.src}.webp`
+                                        else if (i === 5) imgSrc = '/assets/items/leather.webp'
+                                        else if (i === 7) imgSrc = '/assets/items/grey-clover.png'
+                                    }
+
+                                    return (
+                                        <div
+                                            key={i}
+                                            className={styles.gridItemWrapper}
+                                            onClick={mode === 'upgrade' && i === 4 ? () => setItemBagOpen(true) : undefined}
+                                            style={{ cursor: mode === 'upgrade' && i === 4 ? 'pointer' : 'default' }}
+                                        >
+                                            {showSlot && (
+                                                <>
+                                                    <div className={styles.gridItemEmpty} />
+
+                                                    {imgSrc && (
+                                                        <div className={styles.imageWrapper}>
+                                                            <img
+                                                                src={imgSrc}
+                                                                alt={`Slot ${i}`}
+                                                                className={styles.slotItemImage}
+                                                                onError={(e) => {
+                                                                    if (i === 4 && toUpgrade) {
+                                                                        e.currentTarget.onerror = null
+                                                                        e.currentTarget.src = `/assets/items/${toUpgrade.src}.gif`
+                                                                    }
+                                                                }}
+                                                            />
+                                                            {/* Conditional cost overlay */}
+                                                            {(i === 1 || i === 3 || i === 5) && toUpgrade && (
+                                                                <span
+                                                                    className={styles.itemCount}
+                                                                    style={{
+                                                                        color: (() => {
+                                                                            const data = interfaceData[toUpgrade.name]
+                                                                            const needed =
+                                                                                i === 1 ? data.medal : i === 3 ? data.metal : data.leather
+                                                                            const has =
+                                                                                i === 1
+                                                                                    ? medals
+                                                                                    : i === 3
+                                                                                        ? getItemQty('Scrap Metal')
+                                                                                        : getItemQty('Scrap Leather')
+                                                                            return has < needed ? '#ff3d3d' : '#fff'
+                                                                        })(),
+                                                                    }}
+                                                                >
+                                                                    {(() => {
+                                                                        const data = interfaceData[toUpgrade.name]
+                                                                        return i === 1
+                                                                            ? `${Number(data.medal)}`
+                                                                            : i === 3
+                                                                                ? `${Number(data.metal)}`
+                                                                                : `${Number(data.leather)}`
+                                                                    })()}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    )}
+
+                                                    {mode === 'upgrade' && i === 4 && (
+                                                        <img
+                                                            src="/assets/icons/click.gif"
+                                                            alt="Click hint"
+                                                            className={styles.clickOverlay}
+                                                        />
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Dialog + Character OUTSIDE modalContent */}
@@ -56,18 +236,48 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
 
                         <div className={styles.rpgDialogBox}>
                             <div className={styles.dialogText}>
-                                {displayedText}
-                                <span className={styles.cursor}>|</span>
+                                {mode === 'finalize' && toUpgrade ? (
+                                    <div>
+                                        <div>
+                                            This upgrade will cost <b>{interfaceData[toUpgrade.name]?.phorse} PHORSE</b> and the items described above. Success chance: <b>{interfaceData[toUpgrade.name]?.success}%</b>. Do you want to proceed with it?
+                                        </div>
+                                        {interfaceData[toUpgrade.name]?.willBreak && (
+                                            <div style={{ color: 'red' }}>
+                                                Warning: This item <b>will break</b> on failure!
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : displayedText}
+                                {mode !== 'finalize' && <span className={styles.cursor}>|</span>}
                             </div>
 
-                            {textFinished && <div className={styles.answerBox}>
-                                <div className={styles.answerOption} onClick={() => console.log('YES CLICKED')}>
-                                    Upgrade Items
+                            {mode === 'default' && textFinished && (
+                                <div className={styles.answerBox}>
+                                    <div
+                                        className={styles.answerOption}
+                                        onClick={() => {
+                                            setMode('upgrade')
+                                            setDisplayedText('Please choose which item you would like to Upgrade. We will need crafting materials, PHORSE and in some cases, medals!')
+                                        }}
+                                    >
+                                        Upgrade Items
+                                    </div>
                                 </div>
-                                <div className={styles.answerOption} onClick={() => console.log('NO CLICKED')}>
-                                    Create Medal Bag
+                            )}
+
+                            {mode === 'finalize' && (
+                                <div className={styles.answerBox}>
+                                    <div className={styles.answerOption} onClick={handleUpgrade}>
+                                        Upgrade!
+                                    </div>
+                                    <div className={styles.answerOption} onClick={() => {
+                                        setToUpgrade(null)
+                                        setMode('upgrade')
+                                    }}>
+                                        Choose other
+                                    </div>
                                 </div>
-                            </div>}
+                            )}
                         </div>
                     </div>
                 </div>

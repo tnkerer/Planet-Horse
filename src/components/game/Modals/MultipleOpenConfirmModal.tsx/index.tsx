@@ -34,7 +34,7 @@ const MultipleOpenConfirmModal: React.FC<Props> = ({
           <input
             type="range"
             min={1}
-            max={Math.min(max, 10)}
+            max={Math.min(max, 12)}
             value={quantity}
             onChange={(e) => onQuantityChange(Number(e.target.value))}
           />

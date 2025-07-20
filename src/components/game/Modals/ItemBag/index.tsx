@@ -14,6 +14,7 @@ import { Horse } from '@/domain/models/Horse';
 import ErrorModal from '../ErrorModal';
 import InfoModal from '../InfoModal';
 import ConfirmModal from '../ConfirmModal';
+import MultipleRecycleConfirmModal from '../MultipleRecycleConfirmModal';
 import Tooltip from '../../Tooltip';
 
 interface LocalItemDef {
@@ -32,7 +33,7 @@ interface ServerItem {
   usesLeft: number;
 }
 
-interface DisplayItem {
+export interface DisplayItem {
   id: number;
   name: string;
   src: string;
@@ -45,20 +46,23 @@ interface DisplayItem {
 
 interface Props {
   status: boolean;
+  upgrade?: boolean;
   closeModal: (modalType: string) => void;
   horse?: Horse;
   reloadHorses?: () => Promise<void>;
+  handleUpgrade?: (item: any) => void;
 }
 
 const ItemBag: React.FC<Props> = ({
   status,
+  upgrade,
   closeModal,
   horse,
   reloadHorses,
+  handleUpgrade
 }) => {
   const [serverItems, setServerItems] = useState<ServerItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [confirmRecycle, setConfirmRecycle] = useState<{ name: string; uses: number } | null>(null);
   // For error / info messages
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
@@ -68,6 +72,13 @@ const ItemBag: React.FC<Props> = ({
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
+
+  const [multiRecycle, setMultiRecycle] = useState<{
+    name: string;
+    uses: number;
+    quantity: number;
+    maxQuantity: number;
+  } | null>(null);
 
   // Touch/swipe tracking
   const touchStartX = useRef<number | null>(null);
@@ -231,7 +242,11 @@ const ItemBag: React.FC<Props> = ({
     }
   };
 
-  const handleRecycle = async (itemName: string, usesLeft: number) => {
+  const handleMultiRecycle = async (
+    itemName: string,
+    usesLeft: number,
+    quantity: number
+  ) => {
     setErrorMessage(null);
     try {
       const res = await fetch(
@@ -240,7 +255,7 @@ const ItemBag: React.FC<Props> = ({
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: itemName, uses: usesLeft }),
+          body: JSON.stringify({ name: itemName, uses: usesLeft, quantity }),
         }
       );
       if (!res.ok) {
@@ -251,20 +266,36 @@ const ItemBag: React.FC<Props> = ({
         } catch { }
         throw new Error(msg);
       }
-      const { reward } = await res.json() as { reward: string | null };
-      if (reward === null) {
-        setInfoMessage('You got nothing from recycling this item');
+      const data = (await res.json()) as { rewards: Array<(string | null)> };
+      // summarize rewards
+      const received = data.rewards.filter((r) => r !== null);
+      if (received.length === 0) {
+        setInfoMessage('You got nothing from recycling these items.');
       } else {
-        setInfoMessage(`You got ${reward}`);
+        const counts = received.reduce<Record<string, number>>(
+          (acc, cur) => {
+            acc[cur] = (acc[cur] ?? 0) + 1;
+            return acc;
+          },
+          {}
+        );
+        const summary = Object.entries(counts)
+          .map(([key, cnt]) => `${cnt}× ${key}`)
+          .join(', ');
+        setInfoMessage(`Recycled ${quantity} item${quantity > 1 ? 's' : ''}: ${summary}`);
       }
       fetchItems();
     } catch (err: any) {
       console.error(err);
-      setErrorMessage(err.message || 'Failed to recycle item');
-    } finally {
-      setActiveDropdownIndex(null);
+      setErrorMessage(err.message || 'Failed to recycle items');
     }
   };
+
+  const checkUpgradable = (name: string): boolean => {
+    const upgradableNames = ["Champion Saddle Pad", "Champion Bridle", "Champion Stirrups"];
+    if (name.endsWith("+15")) return false;
+    return upgradableNames.some(upName => name.startsWith(upName));
+  }
 
   // Swipe handlers
   const onTouchStart = (e: TouchEvent) => {
@@ -446,7 +477,8 @@ const ItemBag: React.FC<Props> = ({
                                         className={styles.dropdownOption}
                                         onClick={() => {
                                           setTooltip(null);
-                                          setConfirmRecycle({ name: item.name, uses: item.usesLeft });
+                                          setMultiRecycle({ name: item.name, uses: item.usesLeft, quantity: 1, maxQuantity: item.quantity });
+                                          setActiveDropdownIndex(null);
                                         }}
                                       >
                                         Recycle
@@ -466,7 +498,8 @@ const ItemBag: React.FC<Props> = ({
                                         className={styles.dropdownOption}
                                         onClick={() => {
                                           setTooltip(null);
-                                          setConfirmRecycle({ name: item.name, uses: item.usesLeft });
+                                          setMultiRecycle({ name: item.name, uses: item.usesLeft, quantity: 1, maxQuantity: item.quantity });
+                                          setActiveDropdownIndex(null);
                                         }}
                                       >
                                         Recycle
@@ -481,11 +514,22 @@ const ItemBag: React.FC<Props> = ({
                                     className={`${styles.dropdown} ${idx >= 8 ? styles.dropdownAbove : ''
                                       }`}
                                   >
+                                    {(upgrade && checkUpgradable(item.name)) ? <div
+                                      className={styles.dropdownOption}
+                                      onClick={() => {
+                                        setTooltip(null);
+                                        handleUpgrade(item)
+                                        setActiveDropdownIndex(null)
+                                      }}
+                                    >
+                                      Upgrade
+                                    </div> : null}
                                     <div
                                       className={styles.dropdownOption}
                                       onClick={() => {
                                         setTooltip(null);
-                                        setConfirmRecycle({ name: item.name, uses: item.usesLeft });
+                                        setMultiRecycle({ name: item.name, uses: item.usesLeft, quantity: 1, maxQuantity: item.quantity });
+                                        setActiveDropdownIndex(null);
                                       }}
                                     >
                                       Recycle
@@ -540,13 +584,22 @@ const ItemBag: React.FC<Props> = ({
             </Tooltip>
           )}
 
-          {confirmRecycle && (
-            <ConfirmModal
-              text={`Recycle "${confirmRecycle.name}"?`}
-              onClose={() => setConfirmRecycle(null)}
+          {multiRecycle && (
+            <MultipleRecycleConfirmModal
+              quantity={multiRecycle.quantity}
+              max={multiRecycle.maxQuantity}
+              itemName={multiRecycle.name}
+              onQuantityChange={(q) =>
+                setMultiRecycle({ ...multiRecycle, quantity: q })
+              }
+              onClose={() => setMultiRecycle(null)}
               onConfirm={() => {
-                handleRecycle(confirmRecycle.name, confirmRecycle.uses);
-                setConfirmRecycle(null);
+                handleMultiRecycle(
+                  multiRecycle.name,
+                  multiRecycle.uses,
+                  multiRecycle.quantity
+                );
+                setMultiRecycle(null);
               }}
             />
           )}

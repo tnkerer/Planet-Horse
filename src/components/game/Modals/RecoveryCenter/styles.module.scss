@@ -112,3 +112,134 @@
     }
   }
 }
+
+
+.dialogWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.character {
+  height: 500px;
+  margin-left: -480px;
+  transform: translateY(60%);
+  pointer-events: none;
+  image-rendering: pixelated;
+  z-index: 1; // behind dialog box
+
+  @media screen and (max-width: 820px) {
+    margin-left: -480px;
+    transform: translateY(60%);
+    height: 350px;
+  }
+
+    @media screen and (max-width: 820px) {
+    margin-left: -280px;
+    transform: translateY(60%);
+    height: 350px;
+  }
+}
+
+.rpgDialogBox {
+  background-image: url('/assets/dialog_box.webp');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: translateY(20%);
+  font-family: 'SpaceHorse';
+  color: #2e1a0f;
+
+  width: 800px;
+  height: 240px;
+  max-width: 95vw; // responsive fallback for small screens
+  padding: 80px 40px 80px 40px; // adjust based on your image's inner padding
+  box-sizing: border-box;
+
+  pointer-events: auto;
+  z-index: 2;
+  text-align: left;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media screen and (max-width: 820px) {
+    width: 95vw;
+    height: auto;
+    background-size: 100% auto;
+    padding: 30px 30px 30px 30px;
+    transform: translateY(10%);
+  }
+
+    @media screen and (max-width: 530px) {
+    width: 95vw;
+    height: auto;
+    background-size: 150%;
+    padding: 30px 30px 30px 30px;
+    transform: translateY(10%);
+  }
+}
+
+
+
+.dialogText {
+  font-size: 16px;
+  white-space: pre-wrap;
+  line-height: 1.4;
+
+  @media screen and (max-width: 420px) {
+    font-size: 12px;
+  }
+
+  .cursor {
+    display: inline-block;
+    margin-left: 2px;
+    animation: blink 1s step-start infinite;
+  }
+}
+
+.answerBox {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 16px;
+
+  @media screen and (max-width: 420px) {
+    font-size: 12px;
+  }
+
+  .answerOption {
+    cursor: pointer;
+    color: #000;
+    background-color: #fff0db;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid #2e1a0f;
+    transition: background-color 0.2s, transform 0.2s;
+
+    &:hover {
+      background-color: #ffeac4;
+      transform: scale(1.05);
+    }
+
+    &:active {
+      background-color: #ffd89c;
+      transform: scale(1);
+    }
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

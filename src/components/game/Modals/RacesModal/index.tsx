@@ -20,22 +20,27 @@ const RacesModal: React.FC<Props> = ({
   reloadHorses,
 }) => {
   const cost = totalHorses * 50
-  const fullText = `Do you want to run your ${totalHorses} IDLE horses for a ${cost} fee?`
+  const fullText = `You can call me Tina. Would you like our Jockeys to run your ${totalHorses} IDLE horses for a ${cost} fee?`
   const [displayedText, setDisplayedText] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [textFinished, setTextFinished] = useState(false)
 
   useEffect(() => {
     if (!status) return
     setDisplayedText('')
     setErrorMessage(null)
+    setTextFinished(false)
 
     let i = 0
     const timer = setInterval(() => {
       i++
       setDisplayedText(fullText.slice(0, i))
-      if (i >= fullText.length) clearInterval(timer)
-    }, 50)
+      if (i >= fullText.length) {
+        clearInterval(timer)
+        setTextFinished(true)
+      }
+    }, 25)
     return () => clearInterval(timer)
   }, [status, fullText])
 
@@ -60,7 +65,7 @@ const RacesModal: React.FC<Props> = ({
         try {
           const err = await res.json()
           if (err?.message) msg = err.message
-        } catch {}
+        } catch { }
         throw new Error(msg)
       }
 
@@ -93,7 +98,7 @@ const RacesModal: React.FC<Props> = ({
               <Image src={close} alt="Close" width={30} height={30} />
             </div>
 
-            <div className={styles.dialogContainer}>
+           {/*  <div className={styles.dialogContainer}>
               <Image src="/assets/dialog_box_2.png" alt="Dialog box" width={300} height={100} />
               <div className={styles.dialogText}>
                 {displayedText}
@@ -102,6 +107,24 @@ const RacesModal: React.FC<Props> = ({
             </div>
 
             <button className={styles.buyButton} onClick={handleRun} disabled={loading} />
+           */}</div>
+
+          {/* Dialog + Character OUTSIDE modalContent */}
+          <div className={styles.dialogWrapper}>
+            <img src="/assets/characters/punter.png" alt="Punter" className={styles.character} />
+
+            <div className={styles.rpgDialogBox}>
+              <div className={styles.dialogText}>
+                {displayedText}
+                <span className={styles.cursor}>|</span>
+              </div>
+
+              {textFinished && <div className={styles.answerBox}>
+                <div className={styles.answerOption} onClick={handleRun}>
+                  Yes
+                </div>
+              </div>}
+            </div>
           </div>
         </div>
       </div>

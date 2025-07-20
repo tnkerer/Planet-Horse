@@ -19,25 +19,28 @@ const RecoveryCenter: React.FC<Props> = ({
   cost,
   onRestored,
 }) => {
-  const fullText = `Do you wish to buy a treatment for ${cost} PHORSE?`;
+  const fullText = `Howdy stranger, I am Ricky! Your horse is not in a good shape. Would you like me to treat it for ${cost} PHORSE?`;
   const [displayedText, setDisplayedText] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [textFinished, setTextFinished] = useState(false)
 
   // Typewriter effect for the prompt
   useEffect(() => {
     if (!status) return;
     setDisplayedText('');
     setErrorMessage(null);
+    setTextFinished(false);
 
     let i = 0;
     const timer = setInterval(() => {
       i++;
       setDisplayedText(fullText.slice(0, i));
       if (i >= fullText.length) {
-        clearInterval(timer);
+        clearInterval(timer)
+        setTextFinished(true)
       }
-    }, 50);
+    }, 25);
     return () => clearInterval(timer);
   }, [status, fullText]);
 
@@ -104,8 +107,7 @@ const RecoveryCenter: React.FC<Props> = ({
               <Image src={close} alt="Close" width={30} height={30} />
             </div>
 
-            {/* Dialog box with typewriter text */}
-            <div className={styles.dialogContainer}>
+{/*             <div className={styles.dialogContainer}>
               <Image
                 src="/assets/dialog_box.png"
                 alt="Dialog box"
@@ -118,13 +120,30 @@ const RecoveryCenter: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* BUY Button */}
             <button
               className={styles.buyButton}
               onClick={handleRestore}
               disabled={loading}
-            />
+            /> */}
           </div>
+          {/* Dialog + Character OUTSIDE modalContent */}
+          <div className={styles.dialogWrapper}>
+            <img src="/assets/characters/horse_handler.png" alt="Horse Handler" className={styles.character} />
+
+            <div className={styles.rpgDialogBox}>
+              <div className={styles.dialogText}>
+                {displayedText}
+                <span className={styles.cursor}>|</span>
+              </div>
+
+              {textFinished && <div className={styles.answerBox}>
+                <div className={styles.answerOption} onClick={handleRestore}>
+                  Yes!
+                </div>
+              </div>}
+            </div>
+          </div>
+
         </div>
       </div>
     </>
