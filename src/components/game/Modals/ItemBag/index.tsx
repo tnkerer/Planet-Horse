@@ -13,8 +13,15 @@ import { items as itemsConst } from '@/utils/constants/items';
 import { Horse } from '@/domain/models/Horse';
 import ErrorModal from '../ErrorModal';
 import InfoModal from '../InfoModal';
-import ConfirmModal from '../ConfirmModal';
+import {
+  BrowserProvider,
+  Contract
+} from 'ethers';
+
+import { contracts, wallets } from '@/utils/constants/contracts';
+import ConfirmMultipleDeposit from '../ConfirmMultipleDeposit';
 import MultipleRecycleConfirmModal from '../MultipleRecycleConfirmModal';
+import ConfirmMultipleMint from '../MultipleMintConfirmModal';
 import Tooltip from '../../Tooltip';
 
 interface LocalItemDef {
@@ -34,7 +41,7 @@ interface ServerItem {
 }
 
 export interface DisplayItem {
-  id: number;
+  id: number | string;       // we’ll give on-chain items string IDs
   name: string;
   src: string;
   quantity: number;
@@ -42,6 +49,10 @@ export interface DisplayItem {
   consumable: boolean;
   usesLeft: number;
   breakable: boolean;
+
+  /** ← new! */
+  onChain?: boolean;
+  chainId?: number;
 }
 
 interface Props {
@@ -80,6 +91,28 @@ const ItemBag: React.FC<Props> = ({
     maxQuantity: number;
   } | null>(null);
 
+  const [multiMint, setMultiMint] = useState<{
+    name: string;
+    quantity: number;
+    maxQuantity: number;
+  } | null>(null);
+
+  // on‐chain items
+  const [onChainItems, setOnChainItems] = useState<Array<{
+    name: string
+    balance: number
+    chainId: number
+  }>>([])
+
+  // multi‐deposit modal
+  const [multiDeposit, setMultiDeposit] = useState<{
+    name: string;
+    chainId: number;
+    quantity: number;
+    maxQuantity: number;
+  } | null>(null);
+
+
   // Touch/swipe tracking
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
@@ -95,6 +128,17 @@ const ItemBag: React.FC<Props> = ({
     usesLeft: number;
     breakable: boolean;
   } | null>(null);
+
+  function getRoninProvider(): BrowserProvider {
+    const ronin = (window as any).ronin;
+    if (!ronin?.provider) {
+      throw new Error(
+        'Ronin wallet not detected. Please install & connect your Ronin wallet.'
+      );
+    }
+    return new BrowserProvider(ronin.provider);
+  }
+
 
   // Fetch from API
   const fetchItems = useCallback(() => {
@@ -121,6 +165,60 @@ const ItemBag: React.FC<Props> = ({
   useEffect(() => {
     fetchItems();
   }, [fetchItems]);
+
+  // 1. define loadOnChain once
+  const loadOnChain = useCallback(async () => {
+    if (!status) return
+    const ERC1155_ABI = [
+      'function balanceOf(address account, uint256 id) view returns (uint256)'
+    ]
+    try {
+      const provider = getRoninProvider()
+      const signer = await provider.getSigner()
+      const me = await signer.getAddress()
+      const contract = new Contract(contracts.items, ERC1155_ABI, provider)
+
+      const raw = await Promise.all(
+        Object.values(itemsConst)
+          .map(d => d.chainId)
+          .filter((id): id is number => !!id)
+          .map(async id => {
+            const balRaw = await contract.balanceOf(me, id)
+            return { chainId: id, balance: Number(balRaw) }
+          })
+      )
+
+      const filtered = raw
+        .filter(r => r.balance > 0)
+        .map(r => {
+          const def = Object.values(itemsConst).find(d => d.chainId === r.chainId)
+          if (!def) {
+            // either skip unknown on-chain IDs, or warn
+            console.warn(`No local definition for chainId ${r.chainId}`)
+            return null
+          }
+          return {
+            name: def.name,
+            chainId: r.chainId,
+            balance: r.balance,
+          }
+        })
+        .filter(
+          (item): item is { name: string; chainId: number; balance: number } =>
+            item !== null
+        )
+
+      setOnChainItems(filtered)
+    } catch (e) {
+      console.error('onChain load failed', e)
+    }
+  }, [status])
+
+  // 2. call it once on mount / status change
+  useEffect(() => {
+    loadOnChain()
+  }, [loadOnChain])
+
 
   // Close dropdown if clicked outside
   const containerRef = useRef<HTMLDivElement>(null);
@@ -171,10 +269,37 @@ const ItemBag: React.FC<Props> = ({
     return mapped.concat(Array(padCount).fill(null));
   }, [serverItems]);
 
+  const combinedItems = React.useMemo<DisplayItem[]>(() => {
+    // 1) map on-chain tokens into the same shape
+    const onChainMapped = onChainItems.map((oc, idx) => ({
+      id: `onchain-${oc.chainId}`,
+      name: oc.name,
+      src: itemsConst[oc.name].src,
+      quantity: oc.balance,
+      description: itemsConst[oc.name].description,
+      consumable: Boolean(itemsConst[oc.name].consumable),
+      usesLeft: itemsConst[oc.name].uses,
+      breakable: itemsConst[oc.name].breakable,
+      onChain: true,
+      chainId: oc.chainId,
+    }));
+
+    // 2) tag your server-loaded items
+    const serverMapped = displayItems
+      .filter((i): i is DisplayItem => i !== null)
+      .map(i => ({ ...i, onChain: false }));
+
+    // 3) concat, then pad exactly as you did for displayItems
+    const all = [...onChainMapped, ...serverMapped];
+    const remainder = all.length % totalSlotsPerPage;
+    const padCount = remainder === 0 ? 0 : totalSlotsPerPage - remainder;
+    return all.concat(Array(padCount).fill(null) as any);
+  }, [onChainItems, displayItems]);
+
   if (!status) return null;
 
   // How many pages do we need?
-  const pageCount = Math.ceil(displayItems.length / totalSlotsPerPage);
+  const pageCount = Math.ceil(combinedItems.length / totalSlotsPerPage);
 
   // “Use” handler
   const handleUse = async (itemName: string, usesLeft: number) => {
@@ -291,6 +416,82 @@ const ItemBag: React.FC<Props> = ({
     }
   };
 
+  const handleMultiWithdraw = async (
+    itemName: string,
+    quantity: number
+  ) => {
+    setErrorMessage(null);
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/user/item-withdraw`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: itemName, quantity }),
+        }
+      );
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
+      }
+      setInfoMessage(`Withdrawal request submitted! It might take a few minutes to reflect in your wallet.`);
+      fetchItems();
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to submit withdrawal request');
+    }
+  };
+
+  const handleMultiDeposit = async (
+    name: string,
+    chainId: number,
+    quantity: number
+  ) => {
+    setErrorMessage(null);
+    try {
+      const provider = getRoninProvider();
+      const signer = await provider.getSigner();
+
+      // ERC-1155 safeTransferFrom ABI snippet
+      const ERC1155_ABI = [
+        'function safeTransferFrom(address,address,uint256,uint256,bytes)'
+      ];
+
+      const token = new Contract(
+        contracts.items,
+        ERC1155_ABI,
+        signer
+      );
+
+      const from = await signer.getAddress();
+
+      const tx = await token.safeTransferFrom(
+        from,
+        wallets.itemMinter,
+        chainId,
+        quantity,
+        '0x'
+      );
+
+      setInfoMessage(`Deposit tx sent: ${String(tx.hash)}`);
+      await tx.wait();
+
+      setInfoMessage('Deposit confirmed! It might take a few minutes to reflect ingame.');
+      // refresh DB items...
+      await fetchItems()
+      // ...and refresh on-chain balances so the deposited token disappears
+      await loadOnChain()
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to deposit items');
+    }
+  };
+
   const checkUpgradable = (name: string): boolean => {
     const upgradableNames = ["Champion Saddle Pad", "Champion Bridle", "Champion Stirrups"];
     if (name.endsWith("+15")) return false;
@@ -322,11 +523,7 @@ const ItemBag: React.FC<Props> = ({
     touchEndX.current = null;
   };
 
-  // Items on current page
-  const itemsOnThisPage = displayItems.slice(
-    currentPage * totalSlotsPerPage,
-    (currentPage + 1) * totalSlotsPerPage
-  );
+  const maxUses = (name: string) => (itemsConst[name]?.uses ?? 0);
 
   return (
     <div className={styles.modalBag} ref={containerRef}>
@@ -401,7 +598,7 @@ const ItemBag: React.FC<Props> = ({
             >
               {Array.from({ length: pageCount }).map((_, pageIdx) => {
                 const start = pageIdx * totalSlotsPerPage;
-                const slice = displayItems.slice(
+                const slice = combinedItems.slice(
                   start,
                   start + totalSlotsPerPage
                 );
@@ -416,8 +613,13 @@ const ItemBag: React.FC<Props> = ({
                             </div>
                           );
                         }
+                        const canMint = !item.breakable || item.usesLeft === maxUses(item.name);
                         return (
-                          <div key={idx} className={styles.gridItemWrapper}>
+                          <div
+                            key={idx}
+                            className={`${styles.gridItemWrapper} ${item.onChain ? styles.onChainItem : ''
+                              }`}
+                          >
                             <button
                               className={styles.gridItem}
                               onClick={() => {
@@ -455,7 +657,27 @@ const ItemBag: React.FC<Props> = ({
                               <span className={styles.itemCount}>{item.quantity}</span>
                             </button>
 
-                            {horse ? (
+                            {item.onChain && activeDropdownIndex === pageIdx * totalSlotsPerPage + idx && (
+                              <div className={styles.dropdown}>
+                                <div
+                                  className={styles.dropdownOption}
+                                  onClick={() => {
+                                    setMultiDeposit({
+                                      name: item.name,
+                                      chainId: (item as any).chainId,
+                                      quantity: 1,
+                                      maxQuantity: item.quantity,
+                                    });
+                                    setActiveDropdownIndex(null);
+                                  }}
+                                >
+                                  Deposit
+                                </div>
+                              </div>
+                            )}
+
+
+                            {!item.onChain && (horse ? (
                               activeDropdownIndex ===
                               pageIdx * totalSlotsPerPage + idx && (
                                 <div
@@ -483,6 +705,23 @@ const ItemBag: React.FC<Props> = ({
                                       >
                                         Recycle
                                       </div>
+                                      {canMint && (
+                                        <div
+                                          className={styles.dropdownOption}
+                                          onClick={() => {
+                                            // kick off the multiple‐mint flow:
+                                            setMultiMint({
+                                              name: item.name,
+                                              quantity: 1,
+                                              maxQuantity: item.quantity,
+                                            });
+                                            // close dropdown
+                                            setActiveDropdownIndex(null);
+                                          }}
+                                        >
+                                          Mint
+                                        </div>
+                                      )}
                                     </>
                                   ) : (
                                     <>
@@ -504,7 +743,23 @@ const ItemBag: React.FC<Props> = ({
                                       >
                                         Recycle
                                       </div>
-
+                                      {canMint && (
+                                        <div
+                                          className={styles.dropdownOption}
+                                          onClick={() => {
+                                            // kick off the multiple‐mint flow:
+                                            setMultiMint({
+                                              name: item.name,
+                                              quantity: 1,
+                                              maxQuantity: item.quantity,
+                                            });
+                                            // close dropdown
+                                            setActiveDropdownIndex(null);
+                                          }}
+                                        >
+                                          Mint
+                                        </div>
+                                      )}
                                     </>
                                   )}
                                 </div>
@@ -534,8 +789,25 @@ const ItemBag: React.FC<Props> = ({
                                     >
                                       Recycle
                                     </div>
+                                    {canMint && (
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={() => {
+                                          // kick off the multiple‐mint flow:
+                                          setMultiMint({
+                                            name: item.name,
+                                            quantity: 1,
+                                            maxQuantity: item.quantity,
+                                          });
+                                          // close dropdown
+                                          setActiveDropdownIndex(null);
+                                        }}
+                                      >
+                                        Mint
+                                      </div>
+                                    )}
                                   </div>
-                                ))}
+                                )))}
                           </div>
                         );
                       })}
@@ -603,6 +875,46 @@ const ItemBag: React.FC<Props> = ({
               }}
             />
           )}
+
+          {multiMint && (
+            <ConfirmMultipleMint
+              quantity={multiMint.quantity}
+              max={multiMint.maxQuantity}
+              itemName={multiMint.name}
+              onQuantityChange={(q) =>
+                setMultiMint({ ...multiMint, quantity: q })
+              }
+              onClose={() => setMultiMint(null)}
+              onConfirm={() => {
+                handleMultiWithdraw(
+                  multiMint.name,
+                  multiMint.quantity
+                );
+                setMultiMint(null);
+              }}
+            />
+          )}
+
+          {multiDeposit && (
+            <ConfirmMultipleDeposit
+              itemName={multiDeposit.name}
+              quantity={multiDeposit.quantity}
+              max={multiDeposit.maxQuantity}
+              onQuantityChange={q =>
+                setMultiDeposit({ ...multiDeposit, quantity: q })
+              }
+              onClose={() => setMultiDeposit(null)}
+              onConfirm={() => {
+                handleMultiDeposit(
+                  multiDeposit.name,
+                  multiDeposit.chainId,
+                  multiDeposit.quantity
+                );
+                setMultiDeposit(null);
+              }}
+            />
+          )}
+
         </div>
       </div>
     </div>
