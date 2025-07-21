@@ -19,7 +19,7 @@ const RecoveryCenter: React.FC<Props> = ({
   cost,
   onRestored,
 }) => {
-  const fullText = `Howdy stranger, I am Ricky! Your horse is not in a good shape. Would you like me to treat it for ${cost} PHORSE?`;
+  const fullText = `Your horse is not in a good shape. Would you like me to treat it for ${cost} PHORSE?`;
   const [displayedText, setDisplayedText] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
