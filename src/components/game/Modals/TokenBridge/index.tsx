@@ -277,25 +277,31 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
 
           <div className={styles.row}>
             <div className={styles.inputGroup}>
-              <input
-                className={styles.input}
-                type="text"
-                value={withdrawAmount}
-                onChange={(e) => setWithdrawAmount(e.target.value)}
-                placeholder="1000"
-              />
-              <button
-                className={styles.maxBtn}
-                onClick={handleMaxWithdraw}
-                type="button"
-              >
-                max
-              </button>
+              <div className={styles.inputSection}>
+                <input
+                  className={styles.input}
+                  type="text"
+                  value={withdrawAmount}
+                  onChange={(e) => setWithdrawAmount(e.target.value)}
+                  placeholder="1000"
+                />
+                <button
+                  className={styles.maxBtn}
+                  onClick={handleMaxWithdraw}
+                  type="button"
+                >
+                  max
+                </button>
+              </div>
               <div className={styles.available}>
                 Available: {phorse?.toFixed(0) ?? 0}
                 <br />Min. Withdraw:
                 <span style={{ color: '#E21C21' }}>
                   1000
+                </span>
+                <br />Max. Withdraw:
+                <span style={{ color: '#E21C21' }}>
+                  100.000
                 </span>
               </div>
             </div>
