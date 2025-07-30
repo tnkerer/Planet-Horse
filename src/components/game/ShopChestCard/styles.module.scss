@@ -301,6 +301,7 @@
   align-items: center;
   /* mais espaço acima da badge */
   padding-bottom: 1rem;
+
   /* menos espaço abaixo, se necessário */
 }
 
@@ -337,10 +338,47 @@
   width: 95%;
   display: flex;
   flex-direction: column;
-  gap: 0.5vw;
-  padding-top: 180px;
+  gap: 0.25vw;
+  padding-top: 170px;
   margin-bottom: 1rem;
   transform: scale(0.95);
+}
+
+.chestPrice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-family: 'SpaceHorse';
+  font-weight: bold;
+  gap: 6px;
+  // background: linear-gradient(90deg, #ffd700 0%, #ffb347 100%);
+  color: #473400;
+  padding: 0.25em 0.7em;
+  border-radius: 1.5em;
+  // box-shadow: 0 0 10px #ffe48488;
+  // animation: price-glow 1.5s infinite alternate;
+
+  .strikethrough {
+    text-decoration: line-through;
+    color: red;
+    font-weight: bold;
+  }
+
+  .discounted {
+    color: #015522;
+    font-weight: bold;
+    font-size: 1.2em;
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
+
+  .phorseIcon {
+    width: 1.3em;
+    height: 1.3em;
+    margin-right: 0.3em;
+    vertical-align: middle;
+  }
 }
 
 /* estilo comum a ambos os botões */
@@ -389,3 +427,13 @@
       font-size: 3vw;
     }
   } */
+
+@keyframes price-glow {
+  0% {
+    box-shadow: 0 0 10px #ffe48488, 0 0 0 transparent;
+  }
+
+  100% {
+    box-shadow: 0 0 24px #ffd70088, 0 0 5px #ffb34744;
+  }
+}

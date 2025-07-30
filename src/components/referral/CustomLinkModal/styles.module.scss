@@ -1,0 +1,230 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 150;
+  padding: 1rem;
+}
+
+.modal {
+  background: #F4E4BC;
+  border: 4px solid #8B4513;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  color: #F4E4BC;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  h2 {
+    margin: 0;
+    font-size: 1.3rem;
+  }
+  
+  .closeButton {
+    background: none;
+    border: none;
+    color: #F4E4BC;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+.content {
+  padding: 2rem;
+  
+  .description {
+    color: #8B4513;
+    margin-bottom: 2rem;
+  }
+  
+  .inputSection {
+    margin-bottom: 2rem;
+    
+    label {
+      display: block;
+      color: #8B4513;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    
+    .inputContainer {
+      display: flex;
+      align-items: center;
+      border: 3px solid #8B4513;
+      border-radius: 8px;
+      background: white;
+      overflow: hidden;
+      
+      .prefix {
+        background: rgba(139, 69, 19, 0.1);
+        padding: 1rem;
+        color: #8B4513;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        border-right: 1px solid #8B4513;
+      }
+      
+      .input {
+        flex: 1;
+        padding: 1rem;
+        border: none;
+        background: transparent;
+        color: #8B4513;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        
+        &:focus {
+          outline: none;
+        }
+        
+        &.available {
+          background: rgba(34, 139, 34, 0.1);
+        }
+        
+        &.unavailable {
+          background: rgba(220, 20, 60, 0.1);
+        }
+      }
+      
+      .status {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        
+        .checking {
+          animation: spin 1s linear infinite;
+        }
+        
+        .available {
+          color: #228B22;
+        }
+        
+        .unavailable {
+          color: #DC143C;
+        }
+      }
+    }
+    
+    .error {
+      color: #DC143C;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+    }
+  }
+  
+  .requirements {
+    background: rgba(139, 69, 19, 0.1);
+    border: 2px solid #8B4513;
+    border-radius: 8px;
+    padding: 1.5rem;
+    
+    h4 {
+      color: #8B4513;
+      margin-bottom: 1rem;
+    }
+    
+    ul {
+      margin: 0;
+      padding-left: 1.5rem;
+      
+      li {
+        color: #A0522D;
+        margin-bottom: 0.5rem;
+        transition: color 0.2s;
+        
+        &.met {
+          color: #228B22;
+          font-weight: bold;
+        }
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.actions {
+  padding: 1.5rem 2rem;
+  border-top: 2px solid #8B4513;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  
+  .cancelButton,
+  .confirmButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .cancelButton {
+    background: transparent;
+    border: 2px solid #8B4513;
+    color: #8B4513;
+    
+    &:hover {
+      background: rgba(139, 69, 19, 0.1);
+    }
+  }
+  
+  .confirmButton {
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+    color: white;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(34, 139, 34, 0.3);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .actions {
+    flex-direction: column;
+  }
+}

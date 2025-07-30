@@ -1,0 +1,151 @@
+.container {
+  background: rgba(244, 228, 188, 0.95);
+  border: 4px solid #8B4513;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  margin-bottom: 2rem;
+  
+  .title {
+    color: #8B4513;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+  
+  .statCard {
+    background: white;
+    border: 3px solid #8B4513;
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.2s;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
+    
+    &.primary {
+      background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.1) 100%);
+    }
+    
+    &.success {
+      background: linear-gradient(135deg, rgba(34, 139, 34, 0.1) 0%, rgba(50, 205, 50, 0.1) 100%);
+    }
+    
+    &.gold {
+      background: linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%);
+    }
+    
+    &.monthly {
+      background: linear-gradient(135deg, rgba(70, 130, 180, 0.1) 0%, rgba(135, 206, 235, 0.1) 100%);
+    }
+    
+    .statIcon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    
+    .statContent {
+      .statNumber {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #8B4513;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
+      
+      .statLabel {
+        color: #A0522D;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+.levelProgress {
+  background: rgba(139, 69, 19, 0.1);
+  border: 2px solid #8B4513;
+  border-radius: 8px;
+  padding: 1.5rem;
+  
+  .levelInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    
+    .currentLevel {
+      color: #8B4513;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    
+    .nextLevel {
+      color: #A0522D;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .progressBar {
+    background: rgba(139, 69, 19, 0.2);
+    border-radius: 10px;
+    height: 20px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    
+    .progressFill {
+      background: linear-gradient(90deg, #DAA520 0%, #FFD700 100%);
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.5s ease-in-out;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+        animation: shimmer 2s infinite;
+      }
+    }
+  }
+  
+  .progressText {
+    text-align: center;
+    color: #8B4513;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .statCard {
+    .statContent .statNumber {
+      font-size: 1.5rem;
+    }
+  }
+}

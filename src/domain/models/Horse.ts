@@ -14,6 +14,7 @@ export interface Item {
 export interface Horse {
   id: number;
   profile: {
+    nickname: string | null;
     name: string;
     name_slug: string;
     sex: string;

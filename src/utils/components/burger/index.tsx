@@ -14,14 +14,14 @@ const Burger: React.FC<Props> = ({ close = false }) => {
         left: close ? '0' : '-300px'
       }}
     >
-      <Link href='/'>
-        <a>Home</a>
-      </Link>
       <Link href='/game'>
         <a>Game</a>
       </Link>
       <Link href='/profile'>
         <a>Profile</a>
+      </Link>
+      <Link href='/referral'>
+        <a>Referral</a>
       </Link>
       <Link href='https://marketplace.roninchain.com/collections/origin-horses'>
         <a target="_blank">Marketplace</a>

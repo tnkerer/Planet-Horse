@@ -96,14 +96,14 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className={styles.options}>
-            <Link href='/'>
-              <a>HOME</a>
-            </Link>
             <Link href='/game'>
               <a>GAME</a>
             </Link>
             <Link href='/profile'>
               <a>PROFILE</a>
+            </Link>
+            <Link href='/referral'>
+              <a>REFERRAL</a>
             </Link>
             <Link href='https://marketplace.roninchain.com/collections/origin-horses'>
               <a target='_blank'>MARKETPLACE</a>

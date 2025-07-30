@@ -40,9 +40,12 @@ const ShopChestCard: React.FC = () => {
   const [showOpenMultipleConfirm, setShowOpenMultipleConfirm] = useState(false)
   const [showBuyMultipleConfirm, setShowBuyMultipleConfirm] = useState(false)
   const [resultNames, setResultNames] = useState<string[]>([])
+  const [referredById, setReferredById] = useState<string | null>(null);
 
   const growRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const dropRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+
 
   const clearAll = () => {
     if (growRef.current) clearTimeout(growRef.current)
@@ -131,6 +134,11 @@ const ShopChestCard: React.FC = () => {
       const map: Record<number, number> = {}
       data.forEach(c => { map[c.chestType] = c.quantity })
       setChestQuantities({ ...map })
+
+      await fetch(`${process.env.API_URL}/user/profile`, { credentials: 'include' })
+        .then(async (res) => res.json())
+        .then((data) => setReferredById(data.referredById))
+        .catch(() => setReferredById(null));
     } catch (err) {
       console.error('Failed to fetch chest quantities:', err)
     }
@@ -269,6 +277,17 @@ const ShopChestCard: React.FC = () => {
                 >
                   OPEN CHEST
                 </button>
+                <div className={styles.chestPrice}>
+                  <img src="/assets/items/phorse.webp" alt="PHORSE" className={styles.phorseIcon} />
+                  {referredById ? (
+                    <>
+                      <span className={styles.strikethrough}>{chests[item.id]?.price ?? "?"}</span>
+                      <span className={styles.discounted}>{`${String(chests[item.id]?.discountedPrice) ?? "?"}`}</span>
+                    </>
+                  ) : (
+                    <span>{chests[item.id]?.price ?? "?"}</span>
+                  )}
+                </div>
               </div>
             </div>
           )
@@ -279,7 +298,7 @@ const ShopChestCard: React.FC = () => {
         <MultipleOpenConfirmModal
           quantity={quantityToOpen}
           max={chestQuantities[selectedChestType] ?? 1}
-          price={chests[selectedChestType].price}
+          price={referredById ? chests[selectedChestType].discountedPrice : chests[selectedChestType].price}
           onQuantityChange={setQuantityToOpen}
           onClose={() => {
             setShowOpenMultipleConfirm(false)
@@ -295,7 +314,7 @@ const ShopChestCard: React.FC = () => {
         <MultipleConfirmModal
           quantity={quantityToBuy}
           max={10}
-          price={chests[selectedChestType].price}
+          price={referredById ? chests[selectedChestType].discountedPrice : chests[selectedChestType].price}
           onQuantityChange={setQuantityToBuy}
           onClose={() => setShowBuyMultipleConfirm(false)}
           onConfirm={handleBuyConfirm}

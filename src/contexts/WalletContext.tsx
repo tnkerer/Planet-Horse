@@ -30,6 +30,11 @@ function isJwtExpired(token: string): boolean {
   }
 }
 
+function getRefFromCookie(): string | null {
+  const match = document.cookie.match(/(?:^|; )ref=([^;]*)/)
+  return match ? decodeURIComponent(match[1]) : null
+}
+
 interface WalletContextValue {
   address: string | null
   isConnected: boolean
@@ -122,11 +127,13 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({
     const signature = await signer.signMessage(message)
 
     // 3. Send to backend to verify & set cookie
+    const refCode = getRefFromCookie()
+
     const res1 = await fetch(`${process.env.API_URL}/auth/verify`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, signature }),
+      body: JSON.stringify({ message, signature, refCode }),
     })
     if (!res1.ok) {
       throw new Error('Sign-in failed')

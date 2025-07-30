@@ -36,6 +36,7 @@ interface BackendHorse {
   lastRace: string | null;
   createdAt: string;
   updatedAt: string;
+  nickname: string | null;
   equipments: Array<{
     id: string;
     ownerId: string;
@@ -52,6 +53,7 @@ interface BackendHorse {
 export interface Horse {
   id: number;
   profile: {
+    nickname: string | null;
     name: string;
     name_slug: string;
     sex: string;
@@ -126,6 +128,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       const mapped: Horse[] = data.map(h => ({
         id: Number(h.tokenId),
         profile: {
+          nickname: h.nickname ? h.nickname : null,
           name: h.name,
           name_slug: h.name.toLowerCase().replace(/\s+/g, '-'),
           sex: h.sex.toLowerCase(),

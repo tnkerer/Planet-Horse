@@ -1,0 +1,93 @@
+.copyButton {
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  border: 2px solid #654321;
+  border-radius: 8px;
+  padding: 1rem;
+  color: #F4E4BC;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
+    transform: translateY(-1px);
+  }
+  
+  &.copied {
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+    border-color: #228B22;
+  }
+  
+  &.animating {
+    animation: pulse 0.3s ease-in-out;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .icon {
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+  }
+  
+  .text {
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+  }
+  
+  .particles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    
+    .particle {
+      position: absolute;
+      font-size: 1rem;
+      animation: particleFloat 2s ease-out forwards;
+      
+      &.particle1 { animation-delay: 0s; }
+      &.particle2 { animation-delay: 0.1s; }
+      &.particle3 { animation-delay: 0.2s; }
+      &.particle4 { animation-delay: 0.3s; }
+      &.particle5 { animation-delay: 0.4s; }
+      &.particle6 { animation-delay: 0.5s; }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes particleFloat {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.2) translateY(-30px);
+  }
+}
+
+.particle1 { transform: translate(-50%, -50%) rotate(0deg) translateX(30px); }
+.particle2 { transform: translate(-50%, -50%) rotate(60deg) translateX(30px); }
+.particle3 { transform: translate(-50%, -50%) rotate(120deg) translateX(30px); }
+.particle4 { transform: translate(-50%, -50%) rotate(180deg) translateX(30px); }
+.particle5 { transform: translate(-50%, -50%) rotate(240deg) translateX(30px); }
+.particle6 { transform: translate(-50%, -50%) rotate(300deg) translateX(30px); }

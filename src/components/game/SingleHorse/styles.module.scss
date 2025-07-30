@@ -159,6 +159,43 @@
                             }
                         }
                     }
+
+                    .itemBadge {
+                        background-image: url('/assets/game/Items/notification-badge.webp');
+                        background-repeat: no-repeat;
+                        background-size: contain;
+                        z-index: 20;
+                        color: white;
+                        font-family: 'SpaceHorse';
+                        position: absolute;
+                        top: -0px; // adjust for best placement
+                        right: -0px; // adjust for best placement
+                        width: 18px;
+                        height: 18px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 0.8vw;
+                        line-height: 1;
+                        padding-left: 4px;
+                        padding-bottom: 3px;
+
+                        @media screen and (max-width: 920px) {
+                            width: 2vw;
+                            height: 2vw;
+                            margin-left: 2.7vw;
+                            font-size: 1.7vw;
+                        }
+
+                        @media screen and (max-width: 480px) {
+                            width: 3vw;
+                            height: 3vw;
+                            margin-left: 3vw;
+                            font-size: 2.5vw;
+                        }
+                    }
+
+
                 }
 
                 .horseStaty {
@@ -175,10 +212,10 @@
                 }
 
                 .horseItemBonus {
-                        color: #1fa050;
-                        font-weight: bold;
-                        margin-left: 4px;
-                    }
+                    color: #1fa050;
+                    font-weight: bold;
+                    margin-left: 4px;
+                }
 
                 @media screen and (max-width: 435px) {
 
@@ -369,4 +406,24 @@
             }
         }
     }
+}
+
+.editButton {
+  background: none;
+  border: none;
+  padding: 0 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+
+  img {
+    width: 14px;
+    height: 14px;
+    filter: invert(41%) sepia(25%) saturate(359%) hue-rotate(17deg)
+      brightness(90%) contrast(86%); /* #7d6b55 color */
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
 }

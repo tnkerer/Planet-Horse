@@ -13,6 +13,7 @@ import ConfirmModal from '../Modals/ConfirmModal';
 import ErrorModal from '../Modals/ErrorModal';
 import InfoModal from '../Modals/InfoModal';
 import { itemModifiers, items } from '@/utils/constants/items'
+import NicknameModal from '../Modals/NicknameModal';
 
 interface Props {
   horse: Horse;
@@ -58,6 +59,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const [modalRaceStart, setModalRaceStart] = useState(false);
   const [modalRewards, setModalRewards] = useState(false);
   const [showItems, setShowItems] = useState(false);
+  const [showNicknameModal, setShowNicknameModal] = useState(false);
 
   // “Confirm level‐up?” dialog
   const [showConfirm, setShowConfirm] = useState(false);
@@ -299,6 +301,32 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
           status={true}
         />
       )}
+      {showNicknameModal && (
+        <NicknameModal
+          currentNickname={horse.profile.nickname}
+          onClose={() => setShowNicknameModal(false)}
+          onConfirm={async (nickname) => {
+            const res = await fetch(`${process.env.API_URL}/horses/${horse.id}/change-nickname`, {
+              method: 'PUT',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ nickname }),
+            });
+
+            if (!res.ok) {
+              let msg = `HTTP ${res.status}`;
+              try {
+                const errJson = await res.json();
+                if (errJson?.message) msg = errJson.message;
+              } catch { }
+              throw new Error(msg); // Let NicknameModal handle it
+            }
+
+            await reloadHorses();
+          }}
+        />
+      )}
+
 
       {/* ─────────── 7) Main Horse Card with Level‐Up Button ─────────── */}
       <div className={`${styles.singleHorse} type-${horse.profile.type_horse_slug}`}>
@@ -317,8 +345,22 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
               <div className={styles.horseProfile}>
                 <div className={styles.horseItemDescriptionBox}>
                   <div className={styles.horseItemDescription}>
-                    NAME: <span>{horse.profile.name.slice(0, 16)}</span>
+                    NAME:{' '}
+                    <span>
+                      {horse.profile.nickname && horse.profile.nickname.trim().length > 0
+                        ? horse.profile.nickname.slice(0, 16)
+                        : horse.profile.name.slice(0, 16)}
+                    </span>
+                    {/* Edit icon button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowNicknameModal(true)}
+                      className={styles.editButton}
+                    >
+                      <img src="/assets/icons/edit.svg" alt="Edit" />
+                    </button>
                   </div>
+
                   <div className={styles.horseItemDescription}>
                     SEX:{' '}
                     <span className={styles.horseItemDynamic} style={{ color: sexColor }}>
@@ -413,6 +455,10 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                           }
                         }}
                       />
+
+                      {(equipped.uses > 0) && equipped.breakable && (
+                        <div className={styles.itemBadge}>{equipped.uses}</div>
+                      )}
                     </div>
                   );
                 })}
