@@ -227,10 +227,54 @@
                     .horseStaty {
                         display: grid;
                         /* force exactly 4 rows per column */
-                        grid-template-rows: repeat(4, auto);
+                        grid-template-rows: repeat(3, auto);
                         /* when more than 4 items, start a new column */
                         grid-auto-flow: column;
                         gap: 0.5vw;
+                    }
+
+                }
+
+                .horseItemDescriptionName {
+                    font-size: 0.8vw;
+                    color: #b79b74;
+                    line-height: 1.4;
+
+                    word-break: break-word;
+                    overflow-wrap: break-word;
+
+                    @media screen and (max-width: 920px) {
+                        font-size: 1.7vw;
+                    }
+
+                    @media screen and (max-width: 360px) {
+                        font-size: 1vw;
+                    }
+
+                    span {
+                        color: #7d6b55;
+                        font-weight: bold;
+                        font-size: 0.8vw;
+
+                        @media screen and (max-width: 920px) {
+                            font-size: 1.7vw;
+                        }
+
+                        &.horseItemDescriptionGray {
+                            color: #919191;
+                        }
+
+                        &.horseItemDescriptionBlue {
+                            color: #2F35A8;
+                        }
+
+                        &.horseItemDescriptionRed {
+                            color: #E21C21;
+                        }
+
+                        &.horseItemDynamic {
+                            font-weight: bold;
+                        }
                     }
 
                 }
@@ -250,6 +294,8 @@
                     @media screen and (max-width: 360px) {
                         font-size: 1vw;
                     }
+
+
 
                     span {
                         color: #7d6b55;
@@ -409,21 +455,26 @@
 }
 
 .editButton {
-  background: none;
-  border: none;
-  padding: 0 4px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
+    background: none;
+    border: none;
+    padding: 0 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
 
-  img {
-    width: 14px;
-    height: 14px;
-    filter: invert(41%) sepia(25%) saturate(359%) hue-rotate(17deg)
-      brightness(90%) contrast(86%); /* #7d6b55 color */
-  }
+    img {
+        width: 14px;
+        height: 14px;
+        filter: invert(41%) sepia(25%) saturate(359%) hue-rotate(17deg) brightness(90%) contrast(86%);
+        /* #7d6b55 color */
 
-  &:hover img {
-    transform: scale(1.1);
-  }
+        @media screen and (max-width: 480px) {
+            width: 8px;
+            height: 8px;
+        }
+    }
+
+    &:hover img {
+        transform: scale(1.1);
+    }
 }

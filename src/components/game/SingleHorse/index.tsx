@@ -343,24 +343,24 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
           <div className={styles.horseInfo}>
             <div className={styles.horseWrapper}>
               <div className={styles.horseProfile}>
-                <div className={styles.horseItemDescriptionBox}>
-                  <div className={styles.horseItemDescription}>
-                    NAME:{' '}
-                    <span>
-                      {horse.profile.nickname && horse.profile.nickname.trim().length > 0
-                        ? horse.profile.nickname.slice(0, 16)
-                        : horse.profile.name.slice(0, 16)}
-                    </span>
-                    {/* Edit icon button */}
-                    <button
-                      type="button"
-                      onClick={() => setShowNicknameModal(true)}
-                      className={styles.editButton}
-                    >
-                      <img src="/assets/icons/edit.svg" alt="Edit" />
-                    </button>
-                  </div>
 
+                <div className={styles.horseItemDescriptionName}>
+                  {' '}
+                  <span>
+                    {horse.profile.nickname && horse.profile.nickname.trim().length > 0
+                      ? horse.profile.nickname.slice(0, 16)
+                      : horse.profile.name.slice(0, 16)}
+                  </span>
+                  {/* Edit icon button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowNicknameModal(true)}
+                    className={styles.editButton}
+                  >
+                    <img src="/assets/icons/edit.svg" alt="Edit" />
+                  </button>
+                </div>
+                <div className={styles.horseItemDescriptionBox}>
                   <div className={styles.horseItemDescription}>
                     SEX:{' '}
                     <span className={styles.horseItemDynamic} style={{ color: sexColor }}>
