@@ -28,9 +28,9 @@ html {
 	scroll-behavior: smooth;
 
 	&::-webkit-scrollbar {
-		width: 10px;
+		width: 5px;
 		height: 0;
-		scrollbar-width: 10px;
+		scrollbar-width: 5px;
 	}
 
 	&::-webkit-scrollbar,
@@ -62,4 +62,11 @@ button {
 ol,
 ul {
 	list-style: none;
+}
+
+@media (max-width: 415px) {
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+  }
 }

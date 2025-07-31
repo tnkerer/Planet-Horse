@@ -3,18 +3,30 @@
   border: 4px solid #8B4513;
   border-radius: 12px;
   padding: 2rem;
+
+
+  @media (max-width: 415px) {
+    padding: 0.5rem;
+    max-width: 95%;
+  }
+
+  @media (max-width: 390px) {
+    padding: 0.5rem;
+    max-width: 360px;
+  }
+
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .header {
   margin-bottom: 2rem;
-  
+
   .title {
     color: #8B4513;
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
   }
-  
+
   .description {
     color: #A0522D;
     margin: 0;
@@ -23,12 +35,12 @@
 
 .linkSection {
   margin-bottom: 2rem;
-  
+
   .inputContainer {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1rem;
-    
+
     .linkInput {
       flex: 1;
       padding: 1rem;
@@ -38,7 +50,7 @@
       color: #8B4513;
       font-family: 'Courier New', monospace;
       font-size: 0.9rem;
-      
+
       &:focus {
         outline: none;
         border-color: #DAA520;
@@ -46,11 +58,11 @@
       }
     }
   }
-  
+
   .actions {
     display: flex;
     gap: 1rem;
-    
+
     .generateButton,
     .customButton {
       flex: 1;
@@ -65,25 +77,25 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      
+
       .icon {
         font-size: 1.2rem;
       }
     }
-    
+
     .generateButton {
       background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
       color: white;
-      
+
       &:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(34, 139, 34, 0.3);
       }
-      
+
       &.loading {
         opacity: 0.7;
         cursor: not-allowed;
-        
+
         .spinner {
           width: 16px;
           height: 16px;
@@ -94,11 +106,11 @@
         }
       }
     }
-    
+
     .customButton {
       background: linear-gradient(135deg, #DAA520 0%, #FFD700 100%);
       color: #8B4513;
-      
+
       &:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(218, 165, 32, 0.3);
@@ -112,20 +124,20 @@
   border: 2px solid #8B4513;
   border-radius: 8px;
   padding: 1.5rem;
-  
+
   h3 {
     color: #8B4513;
     margin-bottom: 1rem;
   }
-  
+
   ul {
     margin: 0;
     padding-left: 1.5rem;
-    
+
     li {
       color: #A0522D;
       margin-bottom: 0.5rem;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
@@ -134,8 +146,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 768px) {
