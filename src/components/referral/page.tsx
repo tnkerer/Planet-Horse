@@ -4,15 +4,12 @@ import styles from "./styles.module.scss";
 import ReferralGenerator from "../../components/referral/ReferralGenerator";
 import ReferralStats from "../../components/referral/ReferralStats";
 import BonusSection from "../../components/referral/BonusSection";
-import MilestonesSection from "../../components/referral/MilestonesSection";
-import RewardModal from "../../components/referral/RewardModal";
-import type { ReferralData, Milestone } from "../../utils/referral/types";
+import ReferralBySection from "../../components/referral/ReferralBySection";
+import type { ReferralData } from "../../utils/referral/types";
 
 const ReferralPage: React.FC = () => {
   const [referralData, setReferralData] = useState<ReferralData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showRewardModal, setShowRewardModal] = useState(false);
-  const [newMilestone, setNewMilestone] = useState<Milestone | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -28,7 +25,7 @@ const ReferralPage: React.FC = () => {
           try {
             const errJson = await res.json();
             if (errJson?.message) msg = errJson.message;
-          } catch {}
+          } catch { }
           throw new Error(msg);
         }
 
@@ -51,51 +48,6 @@ const ReferralPage: React.FC = () => {
     };
   }, []);
 
-/*   useEffect(() => {
-    if (!referralData) return;
-
-    const unlockedMilestones = milestones.filter(
-      (milestone) =>
-        referralData.totalReferrals >= milestone.requiredReferrals &&
-        !milestone.claimed
-    );
-
-    if (unlockedMilestones.length > 0) {
-      const nextMilestone = unlockedMilestones[0];
-      setNewMilestone(nextMilestone);
-      setShowRewardModal(true);
-    }
-  }, [referralData]); */
-
-  const handleClaimReward = async (milestoneId: string) => {
-    try {
-      const res = await fetch(
-        `${process.env.API_URL}/user/referral/milestones/${milestoneId}/claim`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (!res.ok) {
-        let msg = `HTTP ${res.status}`;
-        try {
-          const errJson = await res.json();
-          if (errJson?.message) msg = errJson.message;
-        } catch {}
-        throw new Error(msg);
-      }
-
-      // Update UI state after claiming
-      setShowRewardModal(false);
-      setNewMilestone(null);
-      // Optionally reload referral stats to reflect claimed milestone
-    } catch (err) {
-      console.error("Error claiming milestone:", err);
-    }
-  };
-
   if (loading) return <div className={styles.loading}>Loading...</div>;
 
   if (!referralData)
@@ -113,26 +65,24 @@ const ReferralPage: React.FC = () => {
       <div className={styles.content}>
         <div className={styles.leftColumn}>
           <ReferralGenerator />
+          <ReferralBySection
+            referredByRefCode={referralData.referredByRefCode}
+            onApplied={() => {
+              // reload stats after applying code
+              setLoading(true);
+              fetch(`${process.env.API_URL}/user/referral/stats`, { credentials: "include" })
+                .then(async (res) => res.json())
+                .then((json) => setReferralData(json))
+                .finally(() => setLoading(false));
+            }}
+          />
           <ReferralStats data={referralData} />
         </div>
 
         <div className={styles.rightColumn}>
           <BonusSection referralLevel={referralData.level} xp={referralData.xp} />
-          {/* <MilestonesSection
-            totalReferrals={referralData.totalReferrals}
-            milestones={milestones}
-            onClaimReward={handleClaimReward}
-          /> */}
         </div>
       </div>
-
-{/*       {showRewardModal && newMilestone && (
-        <RewardModal
-          milestone={newMilestone}
-          onClaim={() => handleClaimReward(newMilestone.id)}
-          onClose={() => setShowRewardModal(false)}
-        />
-      )} */}
     </div>
   );
 };

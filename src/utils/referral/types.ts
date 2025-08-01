@@ -33,8 +33,15 @@ export interface ReferralData {
   activeReferrals: number;
   totalEarned: number;
   level: number;
-  xp: number;            // <-- current XP
+  xp: number;             // <-- current XP
   xpForNextLevel: number; // <-- required XP for next level
+  referredByRefCode?: string;
+
+  // 🔹 New field for referred players
+  referredPlayers: Array<{
+    displayName: string; // discordTag, invitation code, or wallet (sliced)
+    active: boolean;     // true if updatedAt < 3 days, false otherwise
+  }>;
 }
 
 export interface Reward {

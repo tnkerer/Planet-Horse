@@ -108,6 +108,27 @@ const ReferralStats: React.FC<ReferralStatsProps> = ({ data }) => {
           {data.xp}/{data.xpForNextLevel} XP to next level
         </div>
       </div>
+
+      {/* Referred Players List */}
+      {data.referredPlayers && data.referredPlayers.length > 0 && (
+        <div className={styles.referredPlayers}>
+          <h3>Referred Players</h3>
+          <ul>
+            {data.referredPlayers.map((player, idx) => (
+              <li key={idx}>
+                <span className={styles.displayName}>{player.displayName}</span>
+                <span
+                  className={`${styles.statusIcon} ${
+                    player.active ? styles.active : styles.inactive
+                  }`}
+                >
+                  ●
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }

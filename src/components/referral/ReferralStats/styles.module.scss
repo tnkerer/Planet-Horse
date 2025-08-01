@@ -166,3 +166,52 @@
     }
   }
 }
+
+.referredPlayers {
+  margin-top: 2rem;
+  background: rgba(139, 69, 19, 0.1);
+  border: 2px solid #8B4513;
+  border-radius: 8px;
+  padding: 1rem;
+
+  h3 {
+    color: #8B4513;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .displayName {
+        font-family: 'Courier New', monospace;
+        color: #A0522D;
+      }
+
+      .statusIcon {
+        font-size: 1.2rem;
+
+        &.active {
+          color: #228B22;
+        }
+
+        &.inactive {
+          color: #808080;
+        }
+      }
+    }
+  }
+}
