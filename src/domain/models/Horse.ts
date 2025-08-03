@@ -22,6 +22,7 @@ export interface Horse {
     type_horse_slug: string;
     type_jockey: string;
     time: string;
+    food_used: number;
   };
   staty: {
     status: string;

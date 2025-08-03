@@ -168,7 +168,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   //     – Otherwise display `empty.webp`.
   //
   const levelNum = Number(horse.staty.level);
-  const MAX_SLOTS = 3;
+  const MAX_SLOTS = 4;
 
   function slotState(index: number): 'locked' | 'unlocked' {
     if (levelNum < 2) return 'locked';
@@ -179,6 +179,10 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   // horse.items is now Array<Item>
   const equippedItems: Item[] = horse.items;
+
+  // Separate trophy and non-trophy items
+  const trophyItem = equippedItems.find((it) => items[it.name]?.trophy);
+  const regularItems = equippedItems.filter((it) => !items[it.name]?.trophy);
 
   const extraStats = equippedItems.reduce(
     (acc, item) => {
@@ -419,9 +423,30 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
               {/* ─────────── HORSE ITEMS / SLOT RENDERING ─────────── */}
               <div className={styles.horseItems}>
-                {Array.from({ length: MAX_SLOTS }).map((_, idx) => {
+                {/* 1) Trophy slot always first */}
+                <div className={styles.singleItem}>
+                  {trophyItem ? (
+                    <>
+                      <img
+                        src={`/assets/items/${ITEM_SLUG_MAP[trophyItem.name]}_equiped.webp`}
+                        alt={trophyItem.name}
+                        onClick={() =>
+                          setUnequipIndex(equippedItems.findIndex((it) => it.id === trophyItem.id))
+                        }
+                      />
+                      {trophyItem.uses > 0 && trophyItem.breakable && (
+                        <div className={styles.itemBadge}>{trophyItem.uses}</div>
+                      )}
+                    </>
+                  ) : (
+                    <img src="/assets/items/empty_trophy.webp" alt="Empty Trophy Slot" />
+                  )}
+                </div>
+
+                {/* 2) Regular 3 slots */}
+                {Array.from({ length: 3 }).map((_, idx) => {
                   const state = slotState(idx);
-                  if (state === 'locked') {
+                  if (state === "locked") {
                     return (
                       <div key={idx} className={styles.singleItem}>
                         <img src="/assets/items/locked.webp" alt="Locked" />
@@ -430,7 +455,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   }
 
                   // unlocked slot
-                  const equipped = equippedItems[idx];
+                  const equipped = regularItems[idx];
                   if (!equipped) {
                     return (
                       <div key={idx} className={styles.singleItem}>
@@ -439,24 +464,24 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                     );
                   }
 
-                  // slot unlocked & item present → show equipped image, clickable to unequip
-                  const slugName = ITEM_SLUG_MAP[equipped.name] || '';
-
+                  // slot unlocked & item present → show equipped image
+                  const slugName = ITEM_SLUG_MAP[equipped.name] || "";
                   return (
                     <div key={idx} className={styles.singleItem}>
                       <img
                         src={`/assets/items/${slugName}_equiped.webp`}
                         alt={equipped.name}
-                        onClick={() => setUnequipIndex(idx)}
+                        onClick={() =>
+                          setUnequipIndex(equippedItems.findIndex((it) => it.id === equipped.id))
+                        }
                         onError={(e) => {
                           const target = e.currentTarget as HTMLImageElement;
-                          if (!target.src.endsWith('.gif')) {
+                          if (!target.src.endsWith(".gif")) {
                             target.src = `/assets/items/${slugName}_equiped.gif`;
                           }
                         }}
                       />
-
-                      {(equipped.uses > 0) && equipped.breakable && (
+                      {equipped.uses > 0 && equipped.breakable && (
                         <div className={styles.itemBadge}>{equipped.uses}</div>
                       )}
                     </div>

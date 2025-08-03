@@ -191,7 +191,7 @@
                         z-index: 0;
                     }
 
-                    
+
                     /* tooltips */
                     .tooltip {
                         display: none;
@@ -381,10 +381,17 @@
             font-size: 1.8vw;
         }
     }
+
+    .foodUsed {
+        font-size: 11px;
+        color: #3b1cee;
+        margin-top: 2px;
+    }
+
 }
 
 .onChainItem {
-  outline: 2px solid red;
-  border-radius: 4px;
-  /* or any “red aura” effect you prefer */
+    outline: 2px solid red;
+    border-radius: 4px;
+    /* or any “red aura” effect you prefer */
 }

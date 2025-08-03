@@ -37,6 +37,7 @@ interface BackendHorse {
   createdAt: string;
   updatedAt: string;
   nickname: string | null;
+  foodUsed: number;
   equipments: Array<{
     id: string;
     ownerId: string;
@@ -61,6 +62,7 @@ export interface Horse {
     type_horse_slug: string;
     type_jockey: string;
     time: string;
+    food_used: number;
   };
   staty: {
     status: string;
@@ -136,6 +138,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           type_horse_slug: h.rarity.toLowerCase(),
           type_jockey: 'NONE',
           time: '120 Days',
+          food_used: h.foodUsed
         },
         staty: {
           status: h.status,

@@ -84,6 +84,9 @@ const ItemBag: React.FC<Props> = ({
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
 
+  const [foodUsed, setFoodUsed] = useState<number>(horse?.profile.food_used ?? 0);
+
+
   const [multiRecycle, setMultiRecycle] = useState<{
     name: string;
     uses: number;
@@ -315,6 +318,7 @@ const ItemBag: React.FC<Props> = ({
           body: JSON.stringify({ itemName: itemName }),
         }
       );
+
       if (!res.ok) {
         let msg = `HTTP ${res.status}`;
         try {
@@ -323,7 +327,13 @@ const ItemBag: React.FC<Props> = ({
         } catch { }
         throw new Error(msg);
       }
+
+      const data = await res.json();
       setInfoMessage(`Used one ${itemName}.`);
+      if (data.foodUsed !== undefined) {
+        setFoodUsed(data.foodUsed);
+      }
+
       if (reloadHorses) await reloadHorses();
       fetchItems();
     } catch (err: any) {
@@ -333,6 +343,7 @@ const ItemBag: React.FC<Props> = ({
       setActiveDropdownIndex(null);
     }
   };
+
 
   // “Equip” handler (calls backend /horses/:id/equip-item)
   const handleEquip = async (itemName: string, usesLeft: number) => {
@@ -852,6 +863,11 @@ const ItemBag: React.FC<Props> = ({
                   <span className={styles.usesLeft}>
                     ({tooltip.usesLeft} uses left)
                   </span>) : (null)}
+                {itemsConst[tooltip.name]?.property?.currentEnergy !== undefined && foodUsed !== null && horse && (
+                  <div className={styles.foodUsed}>
+                    You can still use <strong>{3 - foodUsed}</strong> food item(s) for this horse!
+                  </div>
+                )}
               </div>
             </Tooltip>
           )}

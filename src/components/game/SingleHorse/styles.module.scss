@@ -67,11 +67,11 @@
 
         .horseInfo {
             .horseWrapper {
-                padding: 5.25vw 3.93vw 1.7vw 3.93vw;
+                padding: 5.25vw 3.93vw 1.7vw 2.53vw;
                 font-family: 'SpaceHorse';
 
                 @media screen and (max-width: 1280px) {
-                    padding: 5.25vw 3.93vw 1.4vw 3.93vw;
+                    padding: 5.25vw 3.93vw 1.4vw 2.53vw;
                 }
 
                 @media screen and (max-width: 920px) {
@@ -81,14 +81,13 @@
 
                 @media screen and (max-width: 680px) {
                     width: 100%;
-                    padding: 11.7vw 8.5vw 0vw 8.5vw;
+                    padding: 11.7vw 8.5vw 0vw 5.5vw;
                 }
 
                 .horseItems {
                     display: flex;
                     margin-top: 1.8vw;
                     margin-bottom: -0.6vw;
-                    padding: 0 1.3vw;
 
                     @media screen and (max-width: 920px) {
                         margin-top: 3.8vw;
@@ -122,7 +121,7 @@
                         @media screen and (max-width: 480px) {
                             width: 8vw;
                             height: 8vw;
-                            margin-left: 3vw;
+                            margin-left: 2vw;
                         }
 
                         // Dark “slot” background:
