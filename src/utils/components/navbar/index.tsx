@@ -121,8 +121,8 @@ const Navbar: React.FC = () => {
               </div>
               {showMarketplaceDropdown && (
                 <div className={styles.marketplaceDropdown}>
-                  <a href="https://marketplace.roninchain.com/collections/origin-horses" target="_blank">Horses</a>
-                  <a href="https://marketplace.roninchain.com/collections/planet-horse-items" target="_blank">Items</a>
+                  <a href="https://marketplace.roninchain.com/collections/origin-horses" rel="noreferrer" target="_blank">Horses</a>
+                  <a href="https://marketplace.roninchain.com/collections/planet-horse-items" rel="noreferrer" target="_blank">Items</a>
                 </div>
               )}
             </div>
