@@ -16,9 +16,11 @@ const Navbar: React.FC = () => {
   const { address, isConnected, connect, disconnect } = useWallet()
   const [showConfirm, setShowConfirm] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
+  const [showMarketplaceDropdown, setShowMarketplaceDropdown] = useState(false) // NEW
   const [discordInfo, setDiscordInfo] = useState<{ discordId: string | null, discordTag: string | null } | null>(null)
   const { phorse, medals } = useUser()
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const marketplaceDropdownRef = useRef<HTMLDivElement>(null) // NEW
 
   const closeConfirm = () => setShowConfirm(false)
   const handleConfirm = () => {
@@ -34,6 +36,17 @@ const Navbar: React.FC = () => {
       await connect()
     }
   }
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (marketplaceDropdownRef.current && !marketplaceDropdownRef.current.contains(event.target as Node)) {
+        setShowMarketplaceDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   useEffect(() => {
     if (isConnected) {
@@ -82,32 +95,37 @@ const Navbar: React.FC = () => {
           </button>
 
           <div className={styles.logo}>
-            <Link href='/'>
-              <a>
-                <Image
-                  layout='intrinsic'
-                  src='/assets/utils/logos/planet-horse.webp'
-                  alt='PlanetHorse'
-                  width={136}
-                  height={55}
-                />
-              </a>
-            </Link>
+            <Link href='/'><a>
+              <Image
+                layout='intrinsic'
+                src='/assets/utils/logos/planet-horse.webp'
+                alt='PlanetHorse'
+                width={136}
+                height={55}
+              />
+            </a></Link>
           </div>
 
           <div className={styles.options}>
-            <Link href='/game'>
-              <a>GAME</a>
-            </Link>
-            <Link href='/profile'>
-              <a>PROFILE</a>
-            </Link>
-            <Link href='/referral'>
-              <a>REFERRAL</a>
-            </Link>
-            <Link href='https://marketplace.roninchain.com/collections/origin-horses'>
-              <a target='_blank'>MARKETPLACE</a>
-            </Link>
+            <Link href='/game'><a>GAME</a></Link>
+            <Link href='/profile'><a>PROFILE</a></Link>
+            <Link href='/referral'><a>REFERRAL</a></Link>
+            
+            {/* Marketplace with dropdown */}
+            <div className={styles.marketplaceWrapper} ref={marketplaceDropdownRef}>
+              <div
+                className={styles.marketplaceButton}
+                onClick={() => setShowMarketplaceDropdown(prev => !prev)}
+              >
+                MARKETPLACE
+              </div>
+              {showMarketplaceDropdown && (
+                <div className={styles.marketplaceDropdown}>
+                  <a href="https://marketplace.roninchain.com/collections/origin-horses" target="_blank">Horses</a>
+                  <a href="https://marketplace.roninchain.com/collections/planet-horse-items" target="_blank">Items</a>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className={styles.account} onClick={handleAccountClick}>
@@ -120,20 +138,20 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* ▼ Dropdown when connected */}
             {isConnected && showDropdown && (
               <div className={styles.dropdownMenu} ref={dropdownRef}>
                 <div onClick={() => setShowConfirm(true)}>Disconnect</div>
                 {discordInfo?.discordId ? (
-                  <div>{discordInfo.discordTag}<Image
-                    src='/assets/icons/socials/discord.webp'
-                    width={16}
-                    height={16}
-                  /></div>
+                  <div>{discordInfo.discordTag}
+                    <Image
+                      src='/assets/icons/socials/discord.webp'
+                      width={16}
+                      height={16}
+                    />
+                  </div>
                 ) : (
                   <div onClick={handleConnectDiscord}>Connect Discord</div>
                 )}
-                {/* Currency display */}
                 <div>
                   <span>{phorse | 0}  </span>
                   <Image width={25} height={25} src={phorseToken} alt="phorse coin" />
@@ -147,7 +165,6 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
-
       <Burger close={burger} />
     </>
   )

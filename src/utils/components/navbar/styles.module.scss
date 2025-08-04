@@ -94,6 +94,51 @@
         transform: scale(1.05);
       }
     }
+
+      .marketplaceWrapper {
+    position: relative;
+
+    .marketplaceButton {
+      color: #fff;
+      font-family: 'UpheavalPro';
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 10px;
+      transition: transform .3s;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    .marketplaceDropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #582c25;
+      border-radius: 8px;
+      padding: 8px 0;
+      display: flex;
+      flex-direction: column;
+      width: 200px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+      background-image: url('/assets/game/horses/options-bar.png');
+      background-size: cover;
+
+      a {
+        color: #fff;
+        font-family: 'UpheavalPro';
+        font-size: 20px;
+        text-decoration: none;
+        padding: 8px 14px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #7d4d45;
+        }
+      }
+    }
+  }
   }
 
   .account {
