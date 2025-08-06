@@ -21,6 +21,8 @@ export interface HorseResults {
   tokenReward: number;
   medalReward: number;
   xpReward: number;
+  droppedItems: string[];
+  droppedChests: number[];
 }
 
 const ModalRaceStart: React.FC<Props> = ({

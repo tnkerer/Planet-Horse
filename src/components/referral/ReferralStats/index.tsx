@@ -116,7 +116,7 @@ const ReferralStats: React.FC<ReferralStatsProps> = ({ data }) => {
           <ul>
             {data.referredPlayers.map((player, idx) => (
               <li key={idx}>
-                <span className={styles.displayName}>{player.displayName}</span>
+                <span className={styles.displayName}>{`${player.displayName.slice(0, 24)}...`}</span>
                 <span
                   className={`${styles.statusIcon} ${
                     player.active ? styles.active : styles.inactive

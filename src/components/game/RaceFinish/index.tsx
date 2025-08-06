@@ -6,11 +6,17 @@ import getResultHorseImage from '@/utils/hooks/race-result-image-horse';
 import { Horse } from '@/domain/models/Horse';
 import CountUp from 'react-countup';
 import { HorseResults } from '../Modals/RaceStart';
+import { items as itemsConst } from '@/utils/constants/items';
 
 interface Props {
   horseResult: HorseResults;
-  horse: Horse | boolean;
+  horse: any;
 }
+
+const chestIcons: Record<number, string> = {
+  1: '/assets/items/normal_chest.webp',
+  2: '/assets/items/champion_chest.webp',
+};
 
 const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
   const { loading, image } = getResultImage(horseResult.position);
@@ -18,6 +24,10 @@ const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
 
   // Use the field your API actually returns:
   const finalReward = horseResult.tokenReward;
+
+  const hasDrops =
+    horseResult.droppedItems.length > 0 ||
+    horseResult.droppedChests.length > 0;
 
   return (
     <div className={styles.raceResultContent}>
@@ -58,6 +68,35 @@ const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
                 />
               ) : null}
             </div>
+
+            {hasDrops && (
+              <div className={styles.dropsSection}>
+                <div className={styles.dropsMessage}>
+                  You got new items!
+                </div>
+                <div className={styles.raceResultDrops}>
+                  {horseResult.droppedItems.map(name => {
+                    const def = itemsConst[name];
+                    return (
+                      <img
+                        key={name}
+                        src={`/assets/items/${String(def.src)}.webp`}
+                        alt={name}
+                        className={styles.dropIcon}
+                      />
+                    );
+                  })}
+                  {horseResult.droppedChests.map(type => (
+                    <img
+                      key={`chest-${type}`}
+                      src={chestIcons[type] || chestIcons[1]}
+                      alt={`Chest ${type}`}
+                      className={styles.dropIcon}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
