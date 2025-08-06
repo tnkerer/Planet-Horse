@@ -77,10 +77,17 @@ const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
                 <div className={styles.raceResultDrops}>
                   {horseResult.droppedItems.map(name => {
                     const def = itemsConst[name];
+                    const webpSrc = `/assets/items/${String(def.src)}.webp`;
+                    const gifSrc = `/assets/items/${String(def.src)}.gif`;
                     return (
                       <img
                         key={name}
-                        src={`/assets/items/${String(def.src)}.webp`}
+                        src={webpSrc}
+                        onError={e => {
+                          const img = e.currentTarget;
+                          img.onerror = null;      // prevent loops
+                          img.src = gifSrc;
+                        }}
                         alt={name}
                         className={styles.dropIcon}
                       />
