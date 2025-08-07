@@ -4,9 +4,10 @@ import { WalletProvider } from '@/contexts/WalletContext'
 import { UserProvider } from '@/contexts/UserContext'
 import CustomCursor from '@/utils/components/custom-cursor'
 import { inject } from '@vercel/analytics'
+import Insights from './insights'
 
 inject()
-export function reportWebVitals(metric) {}
+
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -14,6 +15,7 @@ function MyApp({ Component, pageProps }) {
       <UserProvider>
         <CustomCursor />
         <Component {...pageProps} />
+        <Insights />
       </UserProvider>
     </WalletProvider>
   )
