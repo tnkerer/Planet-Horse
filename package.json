@@ -28,6 +28,7 @@
     "@moralisweb3/evm-api": "^2.27.2",
     "@sky-mavis/tanto-connect": "^0.0.20",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@vercel/analytics": "^0.1.6",
     "eslint": "^7.12.1",
     "eslint-config-standard-with-typescript": "^21.0.1",
     "eslint-plugin-import": "^2.22.1",
