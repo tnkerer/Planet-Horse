@@ -6,6 +6,7 @@ import CustomCursor from '@/utils/components/custom-cursor'
 import { inject } from '@vercel/analytics'
 
 inject()
+export function reportWebVitals(metric) {}
 
 function MyApp({ Component, pageProps }) {
   return (
