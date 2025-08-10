@@ -143,7 +143,7 @@ export const items = {
     "Krambee The Goat": {
         "name": "Krambee The Goat",
         "src": "goat",
-        "description": "Increase drop rate of items ingame by 15%",
+        "description": "Increase drop rate of items ingame by 100%",
         "breakable": false,
         "consumable": false,
         "trophy": true,
