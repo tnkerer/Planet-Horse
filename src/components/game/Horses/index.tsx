@@ -275,11 +275,11 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           <div className={styles.countCurrency}>
             <div className={styles.currencyGroup}>
               <Image src={phorseToken} width={25} height={25} alt="phorse" />
-              <span>{phorse?.toFixed(0) || 0}</span>
+              <span id='phorse-balance'>{phorse?.toFixed(0) || 0}</span>
             </div>
             <div className={styles.currencyGroup}>
               <Image src={medalIcon} width={14} height={20} alt="medal" />
-              <span>{medals?.toFixed(0) || 0}</span>
+              <span id='medals-balance'>{medals?.toFixed(0) || 0}</span>
             </div>
           </div>
         </div>

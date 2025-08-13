@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import { Horse, Item } from '@/domain/models/Horse';
 import { xpProgression } from '@/utils/constants/xp-progression';
-import { lvlUpFee } from '@/utils/constants/level-up-fee';
+import { lvlUpFee, lvlUpRarityMultiplier } from '@/utils/constants/level-up-fee';
 import ModalRaceStart from '../Modals/RaceStart';
 import RecoveryCenter from '../Modals/RecoveryCenter';
 import ModalReward from '../Modals/Reward';
@@ -45,11 +45,11 @@ const ITEM_SLUG_MAP: Record<string, string> = Object.fromEntries(
 
 const RARITY_MOD: Record<string, number> = {
   "common": 1,
-  "uncommon": 1.6,
-  "rare": 2.4,
-  "epic": 3.2,
-  "legendary": 4,
-  "mythic": 4.8
+  "uncommon": 1.3,
+  "rare": 1.6,
+  "epic": 1.9,
+  "legendary": 2.2,
+  "mythic": 2.5
 };
 
 const BASE_DENOM = 18;
@@ -97,11 +97,29 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const recoveryCost = Number((parseInt(horse.staty.level) * recoveryMod).toFixed(2));
 
   // Calculate level‐up fees:
-  const levelStr = horse.staty.level;
-  const phorseFee: string = (lvlUpFee.phorse[levelStr] ?? 0).toString();
-  const medalFee: string = (lvlUpFee.medals[levelStr] ?? 0).toString();
+  type Rarity = keyof typeof lvlUpRarityMultiplier;
 
+  const levelStr = Number(horse.staty.level);
+  const rarityStr = horse.profile.type_horse_slug;
 
+  function getLevelUpFee(level: number, raritySlug: string) {
+    // Normalize: "common" -> "Common"
+    const rarityKey = (raritySlug.charAt(0).toUpperCase() + raritySlug.slice(1))
+
+    const basePhorse = lvlUpFee.phorse[level] ?? 0;
+    const baseMedals = lvlUpFee.medals[level] ?? 0;
+    const mult = lvlUpRarityMultiplier[rarityKey];
+    if (!mult) return { phorse: basePhorse, medals: baseMedals };
+
+    return {
+      phorse: Math.ceil(basePhorse * mult.phorse),
+      medals: Math.ceil(baseMedals * mult.medals),
+    };
+  }
+
+  const fees = getLevelUpFee(levelStr, rarityStr);
+  const phorseFee: string = fees.phorse.toString();
+  const medalFee: string = fees.medals.toString();
 
   const handleLevelUpClick = () => {
     const text = `Do you want to level up your horse for ${phorseFee} Phorse and ${medalFee} Medal?`;
