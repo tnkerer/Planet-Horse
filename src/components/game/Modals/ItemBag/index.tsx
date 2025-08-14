@@ -23,6 +23,7 @@ import ConfirmMultipleDeposit from '../ConfirmMultipleDeposit';
 import MultipleRecycleConfirmModal from '../MultipleRecycleConfirmModal';
 import ConfirmMultipleMint from '../MultipleMintConfirmModal';
 import Tooltip from '../../Tooltip';
+import { useUser } from '@/contexts/UserContext';
 
 interface LocalItemDef {
   name: string;
@@ -85,6 +86,8 @@ const ItemBag: React.FC<Props> = ({
   const [currentPage, setCurrentPage] = useState(0);
 
   const [foodUsed, setFoodUsed] = useState<number>(horse?.profile.food_used ?? 0);
+
+  const { updateBalance } = useUser();
 
 
   const [multiRecycle, setMultiRecycle] = useState<{
@@ -341,6 +344,42 @@ const ItemBag: React.FC<Props> = ({
       setErrorMessage(err.message || 'Failed to use item');
     } finally {
       setActiveDropdownIndex(null);
+    }
+  };
+
+  // "Open" handler
+  const handleOpenBag = async () => {
+    setErrorMessage(null);
+    try {
+      const res = await fetch(`${process.env.API_URL}/user/items/open-bag`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': `openbag-${Date.now()}-${Math.random().toString(36).slice(2)}`
+        },
+        body: JSON.stringify({}), // body optional (key comes via header)
+      });
+
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
+      }
+
+      const data = await res.json(); // { added, newMedals, remainingBags }
+      setInfoMessage(`Opened Medal Bag: +${String(data.added)} medals!`);
+      await updateBalance(); // update balances
+      await fetchItems(); // refresh bag contents
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to open Medal Bag');
+    } finally {
+      setActiveDropdownIndex(null);
+      setTooltip(null);
     }
   };
 
@@ -696,16 +735,27 @@ const ItemBag: React.FC<Props> = ({
                                     }`}
                                 >
                                   {item.consumable ? (
-                                    <><div
-                                      className={styles.dropdownOption}
-                                      onClick={async () => {
-                                        handleUse(item.name, item.usesLeft)
-                                        setTooltip(null)
-                                      }
-                                      }
-                                    >
-                                      Use
-                                    </div>
+                                    <>
+                                      {/* CHANGED: Use → Open for Medal Bag */}
+                                      {item.name === 'Medal Bag' ? (
+                                        <div
+                                          className={styles.dropdownOption}
+                                          onClick={handleOpenBag}
+                                        >
+                                          Open
+                                        </div>
+                                      ) : (
+                                        <div
+                                          className={styles.dropdownOption}
+                                          onClick={async () => {
+                                            handleUse(item.name, item.usesLeft);
+                                            setTooltip(null);
+                                          }}
+                                        >
+                                          Use
+                                        </div>
+                                      )}
+
                                       <div
                                         className={styles.dropdownOption}
                                         onClick={() => {
@@ -720,13 +770,11 @@ const ItemBag: React.FC<Props> = ({
                                         <div
                                           className={styles.dropdownOption}
                                           onClick={() => {
-                                            // kick off the multiple‐mint flow:
                                             setMultiMint({
                                               name: item.name,
                                               quantity: 1,
                                               maxQuantity: item.quantity,
                                             });
-                                            // close dropdown
                                             setActiveDropdownIndex(null);
                                           }}
                                         >
@@ -790,6 +838,14 @@ const ItemBag: React.FC<Props> = ({
                                     >
                                       Upgrade
                                     </div> : null}
+                                    {item.name === 'Medal Bag' && (
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={handleOpenBag}
+                                      >
+                                        Open
+                                      </div>
+                                    )}
                                     <div
                                       className={styles.dropdownOption}
                                       onClick={() => {
