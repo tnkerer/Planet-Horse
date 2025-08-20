@@ -154,7 +154,7 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                 try { const j = await res.json(); if (j?.message) msg = j.message; } catch { }
                 throw new Error(msg);
             }
-            setErrorMessage('✅ Crafted 1× Medal Bag!');
+            setErrorMessage('Successfully Crafted 1× Medal Bag!');
             await fetchItems();
             await updateBalance();
             setDisplayedText('Hi, I am Master Artificer Bruno! What would you like to do today?');
