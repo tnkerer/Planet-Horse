@@ -9,7 +9,9 @@ import { useWallet } from '@/contexts/WalletContext'
 import ConfirmModal from '@/components/game/Modals/ConfirmModal'
 import { useUser } from '@/contexts/UserContext'
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
-import medal from '@/assets/icons/medal.gif'
+import wronIcon from '@/assets/icons/wron.gif';
+import medalIcon from '@/assets/icons/medal.gif';
+
 
 const Navbar: React.FC = () => {
   const [burger, setBurger] = useState(false)
@@ -18,7 +20,7 @@ const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [showMarketplaceDropdown, setShowMarketplaceDropdown] = useState(false) // NEW
   const [discordInfo, setDiscordInfo] = useState<{ discordId: string | null, discordTag: string | null } | null>(null)
-  const { phorse, medals } = useUser()
+  const { phorse, medals, wron } = useUser()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const marketplaceDropdownRef = useRef<HTMLDivElement>(null) // NEW
 
@@ -152,13 +154,17 @@ const Navbar: React.FC = () => {
                 ) : (
                   <div onClick={handleConnectDiscord}>Connect Discord</div>
                 )}
-                <div>
+                <div className={styles.currencyGroup}>
                   <span>{phorse | 0}  </span>
-                  <Image width={25} height={25} src={phorseToken} alt="phorse coin" />
+                  <Image width={20} height={20} src={phorseToken} alt="phorse coin" />
                 </div>
                 <div className={styles.currencyGroup}>
                   <span>{medals | 0}  </span>
-                  <Image width={14} height={20} src={medal} alt="medals" />
+                  <Image width={14} height={20} src={medalIcon} alt="medals" />
+                </div>
+                <div className={styles.currencyGroup}>
+                  <span>{wron | 0}  </span>
+                  <Image width={20} height={20} src={wronIcon} alt="wron" />
                 </div>
               </div>
             )}

@@ -3,10 +3,10 @@ import styles from './styles.module.scss'
 import ShopChestCard from '../ShopChestCard'
 import Image from 'next/image'
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
-import medal from '@/assets/icons/medal.gif'
+import medalIcon from '@/assets/icons/medal.gif'
 import { useUser } from '@/contexts/UserContext'
 import ItemBag from '../Modals/ItemBag'
-import PresaleCard from '../PresaleCard'
+import wronIcon from '@/assets/icons/wron.gif';
 import MineModal from '../Modals/MineModal'
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const Items: React.FC<Props> = ({ changeView }) => {
-  const { phorse, medals } = useUser();
+  const { phorse, medals, wron } = useUser();
   const [modalItems, setModalItems] = useState(false)
   const [modalMine, setModalMine] = useState(false)
 
@@ -59,12 +59,16 @@ const Items: React.FC<Props> = ({ changeView }) => {
           </div>
           <div className={styles.countCurrency}>
             <div className={styles.currencyGroup}>
-              <Image width={25} height={25} src={phorseToken} alt="phorse coin" />
-              <span id='phorse-balance'>{phorse | 0}</span>
+              <Image src={phorseToken} width={25} height={25} alt="phorse" />
+              <span id='phorse-balance'>{phorse?.toFixed(0) || 0}</span>
             </div>
             <div className={styles.currencyGroup}>
-              <Image width={14} height={20} src={medal} alt="medals" />
-              <span id='medals-balance'>{medals | 0}</span>
+              <Image src={medalIcon} width={14} height={20} alt="medal" />
+              <span id='medals-balance'>{medals?.toFixed(0) || 0}</span>
+            </div>
+            <div className={styles.currencyGroup}>
+              <Image src={wronIcon} width={25} height={25} alt="wron" />
+              <span id='wron-balance'>{wron?.toFixed(2) || 0}</span>
             </div>
           </div>
         </div>

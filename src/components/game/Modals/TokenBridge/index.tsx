@@ -3,6 +3,8 @@ import Image from 'next/image'
 import styles from './styles.module.scss'
 
 import closeIcon from '@/assets/game/pop-up/fechar.png'
+import phorseToken from '@/assets/icons/coin.gif'
+import wronIcon from '@/assets/icons/wron.gif'
 
 import { useUser } from '@/contexts/UserContext'
 import { useWallet } from '@/contexts/WalletContext'
@@ -21,14 +23,26 @@ const ERC20_ABI = [
   'function balanceOf(address account) view returns (uint256)',
 ]
 
+type TokenSymbol = 'PHORSE' | 'WRON'
+
 interface TokenBridgeProps {
   onClose: () => void
 }
 
+const LIMITS: Record<TokenSymbol, { min: number; max: number; withdrawPlaceholder: string }> = {
+  PHORSE: { min: 1000, max: 100000, withdrawPlaceholder: '1000' },
+  WRON:   { min: 0.01, max: 10000,  withdrawPlaceholder: '0.01' },
+}
+
 const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
-  const { phorse, updateBalance } = useUser()
+  // ⬇️ assumes your UserContext exposes both phorse and wron balances (game-side)
+  const { phorse, wron, updateBalance } = useUser() as any
   const { address, connect } = useWallet()
 
+  // 🔀 new: selected token
+  const [token, setToken] = useState<TokenSymbol>('PHORSE')
+
+  // wallet balance for the selected token
   const [walletBalance, setWalletBalance] = useState<string>('0')
 
   const [depositAmount, setDepositAmount] = useState('')
@@ -36,9 +50,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
 
   const [showConfirm, setShowConfirm] = useState(false)
   const [confirmText, setConfirmText] = useState<React.ReactNode>('')
-  const [confirmAction, setConfirmAction] = useState<() => Promise<void>>(
-    async () => { }
-  )
+  const [confirmAction, setConfirmAction] = useState<() => Promise<void>>(async () => {})
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [infoMessage, setInfoMessage] = useState<string | null>(null)
@@ -52,40 +64,38 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
     return new BrowserProvider(ronin.provider)
   }
 
-  // Fetch wallet PHORSE balance
+  const selectedContractsAddress = token === 'PHORSE' ? contracts.phorse : contracts.wron
+  const gameAvailable = token === 'PHORSE' ? (phorse ?? 0) : (wron ?? 0)
+  const { min, max, withdrawPlaceholder } = LIMITS[token]
+
+  // Fetch wallet token balance for the selected token
   const fetchWalletBalance = useCallback(async () => {
     try {
       if (!address) {
         setWalletBalance('0')
         return
       }
-
       const provider = getRoninProvider()
       const signer = await provider.getSigner()
-
-      const tokenContract = new Contract(contracts.phorse, ERC20_ABI, signer)
-
+      const tokenContract = new Contract(selectedContractsAddress, ERC20_ABI, signer)
       const rawBalance = await tokenContract.balanceOf(address)
       const formatted = formatUnits(rawBalance, 18)
-
       setWalletBalance(formatted)
     } catch (err) {
       console.error('Failed to fetch wallet balance', err)
       setWalletBalance('0')
     }
-  }, [address])
+  }, [address, selectedContractsAddress])
 
   useEffect(() => {
     fetchWalletBalance()
-  }, [address, fetchWalletBalance])
+    // reset amounts when toggling token to avoid accidental cross-token values
+    setDepositAmount('')
+    setWithdrawAmount('')
+  }, [token, address, fetchWalletBalance])
 
-  const handleMaxDeposit = () => {
-    setDepositAmount(walletBalance.toString())
-  }
-
-  const handleMaxWithdraw = () => {
-    setWithdrawAmount(phorse?.toString() ?? '0')
-  }
+  const handleMaxDeposit = () => setDepositAmount(walletBalance.toString())
+  const handleMaxWithdraw = () => setWithdrawAmount((Number(gameAvailable) || 0).toString())
 
   // Deposit Handler (ERC20 Transfer)
   const openDepositConfirm = () => {
@@ -97,7 +107,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
 
     setConfirmText(
       <>
-        Do you wish to deposit {amount} PHORSE to the game (
+        Do you wish to deposit {amount} {token} to the game (
         <span style={{ color: '#E21C21' }}>
           this will require signing an onchain token transfer
         </span>
@@ -110,17 +120,14 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
         if (!address) {
           await connect()
         }
-
         const provider = getRoninProvider()
         const signer = await provider.getSigner()
 
-        const tokenContract = new Contract(contracts.phorse, ERC20_ABI, signer)
-
+        const tokenContract = new Contract(selectedContractsAddress, ERC20_ABI, signer)
         const value = parseUnits(depositAmount, 18)
 
         const tx = await tokenContract.transfer(wallets.treasury, value)
         console.log('Transaction submitted:', tx)
-
         const receipt = await tx.wait()
         console.log('Transaction confirmed:', receipt)
 
@@ -158,24 +165,72 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
 
   const openWithdrawConfirm = async () => {
     const amount = Number(withdrawAmount)
-    if (isNaN(amount) || amount <= 999) {
-      setErrorMessage('Please enter a valid amount greater than 999.')
+    if (isNaN(amount)) {
+      setErrorMessage('Please enter a valid number.')
+      return
+    }
+    if (amount < min) {
+      setErrorMessage(`Amount must be greater than or equal to ${min}`)
+      return
+    }
+    if (amount > max) {
+      setErrorMessage(`Amount must be lower than or exactly ${max}`)
       return
     }
 
-    try {
-      const { taxPct } = await fetchWithdrawTax()
+    if (token === 'PHORSE') {
+      // Original PHORSE flow (with tax)
+      try {
+        const { taxPct } = await fetchWithdrawTax()
 
-      setConfirmText(
-        <>
-          Do you wish to withdraw {amount} PHORSE from the game (
-          <span style={{ color: '#E21C21' }}>paying a {taxPct}% tax</span>)?
-        </>
-      )
+        setConfirmText(
+          <>
+            Do you wish to withdraw {amount} PHORSE from the game (
+            <span style={{ color: '#E21C21' }}>paying a {taxPct}% tax</span>)?
+          </>
+        )
 
+        setConfirmAction(() => async () => {
+          try {
+            const res = await fetch(`${process.env.API_URL}/user/withdraw`, {
+              method: 'POST',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ amount }),
+            })
+
+            if (!res.ok) {
+              let msg = `HTTP ${res.status}`
+              try {
+                const errJson = await res.json()
+                if (errJson?.message) msg = errJson.message
+              } catch {}
+              throw new Error(msg)
+            }
+
+            await res.json() // { transactionId }
+            setInfoMessage(
+              `Withdrawal initiated. This might take a few minutes. Check your Profile page for more info.`
+            )
+
+            updateBalance()
+            setWithdrawAmount('')
+          } catch (err: any) {
+            setErrorMessage(err.message || 'Failed to withdraw')
+          }
+        })
+
+        setShowConfirm(true)
+      } catch (err: any) {
+        console.error(err)
+        setErrorMessage(err.message || 'Could not calculate withdraw tax')
+      }
+    } else {
+      // WRON flow (no tax, different endpoint)
+      setConfirmText(<>Do you wish to withdraw {amount} WRON from the game?</>)
       setConfirmAction(() => async () => {
         try {
-          const res = await fetch(`${process.env.API_URL}/user/withdraw`, {
+          const res = await fetch(`${process.env.API_URL}/user/withdraw/wron`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -187,12 +242,11 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
             try {
               const errJson = await res.json()
               if (errJson?.message) msg = errJson.message
-            } catch { }
+            } catch {}
             throw new Error(msg)
           }
 
-          const { transactionId } = await res.json()
-
+          await res.json() // { transactionId }
           setInfoMessage(
             `Withdrawal initiated. This might take a few minutes. Check your Profile page for more info.`
           )
@@ -205,9 +259,6 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
       })
 
       setShowConfirm(true)
-    } catch (err: any) {
-      console.error(err)
-      setErrorMessage(err.message || 'Could not calculate withdraw tax')
     }
   }
 
@@ -226,26 +277,43 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
         />
       )}
 
-      {errorMessage && (
-        <ErrorModal text={errorMessage} onClose={() => setErrorMessage(null)} />
-      )}
+      {errorMessage && <ErrorModal text={errorMessage} onClose={() => setErrorMessage(null)} />}
 
-      {infoMessage && (
-        <InfoModal text={infoMessage} onClose={() => setInfoMessage(null)} />
-      )}
+      {infoMessage && <InfoModal text={infoMessage} onClose={() => setInfoMessage(null)} />}
 
       <div className={styles.overlay}>
         <div className={styles.modal}>
-          <button
-            className={styles.closeBtn}
-            onClick={onClose}
-            aria-label="Close"
-          >
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
             <Image src={closeIcon} alt="Close" width={30} height={30} />
           </button>
 
           <div className={styles.title}>TOKEN BRIDGE</div>
 
+          {/* 🔀 Token Toggle */}
+          <div className={styles.toggleWrap} role="tablist" aria-label="Select token">
+            <button
+              role="tab"
+              aria-selected={token === 'PHORSE'}
+              className={`${styles.toggleBtn} ${token === 'PHORSE' ? styles.toggleActive : ''}`}
+              onClick={() => setToken('PHORSE')}
+              type="button"
+            >
+              <Image src={phorseToken} alt="PHORSE" width={22} height={22} />
+              <span>PHORSE</span>
+            </button>
+            <button
+              role="tab"
+              aria-selected={token === 'WRON'}
+              className={`${styles.toggleBtn} ${token === 'WRON' ? styles.toggleActive : ''}`}
+              onClick={() => setToken('WRON')}
+              type="button"
+            >
+              <Image src={wronIcon} alt="WRON" width={22} height={22} />
+              <span>WRON</span>
+            </button>
+          </div>
+
+          {/* Deposit Row */}
           <div className={styles.row}>
             <div className={styles.inputGroup}>
               <input
@@ -255,15 +323,8 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
                 onChange={(e) => setDepositAmount(e.target.value)}
                 placeholder="0"
               />
-              <button
-                className={styles.maxBtn}
-                onClick={handleMaxDeposit}
-                type="button"
-              >
-                max
-              </button>
               <div className={styles.available}>
-                Available: {Number(walletBalance).toFixed(2)}
+                Available in wallet: {Number(walletBalance).toFixed(4)} {token}
               </div>
             </div>
             <button
@@ -275,6 +336,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
             </button>
           </div>
 
+          {/* Withdraw Row */}
           <div className={styles.row}>
             <div className={styles.inputGroup}>
               <div className={styles.inputSection}>
@@ -283,25 +345,20 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
                   type="text"
                   value={withdrawAmount}
                   onChange={(e) => setWithdrawAmount(e.target.value)}
-                  placeholder="1000"
+                  placeholder={withdrawPlaceholder}
                 />
-                <button
-                  className={styles.maxBtn}
-                  onClick={handleMaxWithdraw}
-                  type="button"
-                >
-                  max
-                </button>
               </div>
               <div className={styles.available}>
-                Available: {phorse?.toFixed(0) ?? 0}
-                <br />Min. Withdraw:
+                Available ingame: {(Number(gameAvailable) || 0).toFixed(token === 'PHORSE' ? 0 : 4)} {token}
+                <br />
+                Min. Withdraw:{' '}
                 <span style={{ color: '#E21C21' }}>
-                  1000
+                  {token === 'PHORSE' ? '1000' : '0.01'}
                 </span>
-                <br />Max. Withdraw:
+                <br />
+                Max. Withdraw:{' '}
                 <span style={{ color: '#E21C21' }}>
-                  100.000
+                  {token === 'PHORSE' ? '100.000' : '10.000'}
                 </span>
               </div>
             </div>

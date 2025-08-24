@@ -4,6 +4,7 @@ import ItemBag from '../Modals/ItemBag';
 import SingleHorse from '../SingleHorse';
 import Image from 'next/image';
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif';
+import wronIcon from '@/assets/icons/wron.gif';
 import medalIcon from '@/assets/icons/medal.gif';
 import { useUser } from '@/contexts/UserContext';
 import { useWallet } from '@/contexts/WalletContext';
@@ -95,7 +96,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalRaces, setModalRaces] = useState(false);
   const [modalMine, setModalMine] = useState(false)
   const [modalItems, setModalItems] = useState(false);
-  const { phorse, medals, updateBalance } = useUser();
+  const { phorse, medals, wron, updateBalance } = useUser();
   const { isAuthorized, address } = useWallet();
 
   const [rawHorseList, setRawHorseList] = useState<Horse[]>([]);
@@ -280,6 +281,10 @@ const Horses: React.FC<Props> = ({ changeView }) => {
             <div className={styles.currencyGroup}>
               <Image src={medalIcon} width={14} height={20} alt="medal" />
               <span id='medals-balance'>{medals?.toFixed(0) || 0}</span>
+            </div>
+            <div className={styles.currencyGroup}>
+              <Image src={wronIcon} width={25} height={25} alt="wron" />
+              <span id='wron-balance'>{wron?.toFixed(2) || 0}</span>
             </div>
           </div>
         </div>

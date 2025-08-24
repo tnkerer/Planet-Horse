@@ -4,6 +4,7 @@ import { useWallet } from './WalletContext'
 interface UserContextValue {
   phorse: number | null
   medals: number | null
+  wron: number | null
   loading: boolean
   error: Error | null
   updateBalance: () => Promise<void>
@@ -18,6 +19,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const { isConnected, isAuthorized, address } = useWallet()
   const [phorse, setPhorse] = useState<number | null>(null)
   const [medals, setMedals] = useState<number | null>(null)
+  const [wron, setWron] = useState<number | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<Error | null>(null)
 
@@ -39,13 +41,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (!res.ok) {
         throw new Error(`Failed to fetch balance: ${res.status}`)
       }
-      const data = (await res.json()) as { phorse: number, medals: number }
+      const data = (await res.json()) as { phorse: number, medals: number, wron: number }
       setPhorse(data.phorse)
       setMedals(data.medals)
+      setWron(data.wron)
     } catch (err: any) {
       setError(err)
       setPhorse(null)
       setMedals(null)
+      setWron(null)
     } finally {
       setLoading(false)
     }
@@ -84,6 +88,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } else {
       setPhorse(null)
       setMedals(null)
+      setWron(null)
       setError(null)
       setUserAddress(null)
       setIsExpired(null)
@@ -95,7 +100,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, [fetchBalance, isAuthorized])
 
   return (
-    <UserContext.Provider value={{ phorse, medals, loading, error, updateBalance, userAddress, isExpired, whoIs }}>
+    <UserContext.Provider value={{ phorse, medals, wron, loading, error, updateBalance, userAddress, isExpired, whoIs }}>
       {children}
     </UserContext.Provider>
   )
