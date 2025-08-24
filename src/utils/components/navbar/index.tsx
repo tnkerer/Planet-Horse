@@ -14,13 +14,16 @@ import medalIcon from '@/assets/icons/medal.gif';
 
 
 const Navbar: React.FC = () => {
-  const [burger, setBurger] = useState(false)
+  
   const { address, isConnected, connect, disconnect } = useWallet()
+  const { phorse, medals, wron } = useUser()
+
+  const [ burger, setBurger ] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const [showMarketplaceDropdown, setShowMarketplaceDropdown] = useState(false) // NEW
   const [discordInfo, setDiscordInfo] = useState<{ discordId: string | null, discordTag: string | null } | null>(null)
-  const { phorse, medals, wron } = useUser()
+  
   const dropdownRef = useRef<HTMLDivElement>(null)
   const marketplaceDropdownRef = useRef<HTMLDivElement>(null) // NEW
 
@@ -155,15 +158,15 @@ const Navbar: React.FC = () => {
                   <div onClick={handleConnectDiscord}>Connect Discord</div>
                 )}
                 <div className={styles.currencyGroup}>
-                  <span>{phorse | 0}  </span>
+                  <span>{phorse?.toFixed(0) || 0}  </span>
                   <Image width={20} height={20} src={phorseToken} alt="phorse coin" />
                 </div>
                 <div className={styles.currencyGroup}>
-                  <span>{medals | 0}  </span>
+                  <span>{medals?.toFixed(0) || 0}  </span>
                   <Image width={14} height={20} src={medalIcon} alt="medals" />
                 </div>
                 <div className={styles.currencyGroup}>
-                  <span>{wron | 0}  </span>
+                  <span>{wron?.toFixed(2) || 0}  </span>
                   <Image width={20} height={20} src={wronIcon} alt="wron" />
                 </div>
               </div>
