@@ -40,6 +40,9 @@ interface BackendHorse {
   nickname: string | null;
   foodUsed: number;
   gen: number;
+  lastBreeding: string;
+  currentBreeds: number;
+  maxBreeds: number;
   equipments: Array<{
     id: string;
     ownerId: string;
@@ -68,6 +71,8 @@ export interface Horse {
   };
   staty: {
     status: string;
+    started: string;
+    breeding: string;
     level: string;
     exp: string;
     upgradable: boolean;
@@ -145,6 +150,8 @@ const Horses: React.FC<Props> = ({ changeView }) => {
         },
         staty: {
           status: h.status,
+          started: h.lastBreeding,
+          breeding: `${h.currentBreeds}/${h.maxBreeds}`,
           level: String(h.level),
           exp: String(h.exp),
           upgradable: h.upgradable,

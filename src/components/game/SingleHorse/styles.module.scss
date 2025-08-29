@@ -191,8 +191,6 @@
                             font-size: 2.5vw;
                         }
                     }
-
-
                 }
 
                 .horseProfile {
@@ -206,7 +204,7 @@
                         grid-template-rows: repeat(4, auto); // max 4 rows per column
                         grid-auto-flow: column; // fill rows first, then wrap to next column
                         row-gap: 0.4vw;
-                        column-gap: 6vw;
+                        column-gap: 3vw;
                     }
 
                     // (optional) keep it from getting too narrow/wide

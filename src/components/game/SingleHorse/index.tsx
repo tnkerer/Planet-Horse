@@ -60,6 +60,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const [modalRewards, setModalRewards] = useState(false);
   const [showItems, setShowItems] = useState(false);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [countdown, setCountdown] = useState<string | null>(null);
 
   // “Confirm level‐up?” dialog
   const [showConfirm, setShowConfirm] = useState(false);
@@ -186,7 +187,6 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   //     – Otherwise display `empty.webp`.
   //
   const levelNum = Number(horse.staty.level);
-  const MAX_SLOTS = 4;
 
   function slotState(index: number): 'locked' | 'unlocked' {
     if (levelNum < 2) return 'locked';
@@ -250,6 +250,36 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
       setUnequipIndex(null);
     }
   };
+
+  useEffect(() => {
+    if (horse.staty.status !== 'BREEDING' || !horse.staty.started) {
+      setCountdown(null);
+      return;
+    }
+
+    const end = new Date(horse.staty.started).getTime() + 24 * 60 * 60 * 1000;
+
+    const update = () => {
+      const now = Date.now();
+      const diff = end - now;
+      if (diff <= 0) {
+        setCountdown('00:00:00');
+        return;
+      }
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      setCountdown(
+        `${hours.toString().padStart(2, '0')}:` +
+        `${minutes.toString().padStart(2, '0')}:` +
+        `${seconds.toString().padStart(2, '0')}`
+      );
+    };
+
+    update(); // initial run
+    const id = setInterval(update, 1000); // update every second
+    return () => clearInterval(id);
+  }, [horse.staty.status, horse.staty.started]);
 
   return (
     <>
@@ -411,11 +441,19 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   </span>
                 </div>
                 <div className={styles.horseItemDescription}>
-                  STATUS: <span>{horse.staty.status}</span>
+                  BREEDS: <span>{horse.staty.breeding}</span>
                 </div>
                 <div className={styles.horseItemDescription}>
-                  BREEDS: <span>{'0/24'}</span>
+                  STATUS: <span>{horse.staty.status}</span>
                 </div>
+                {horse.staty.status === 'BREEDING' && (
+                  <div className={styles.horseItemDescription}>
+                    ENDING:{' '}
+                    <span>
+                      {countdown ?? horse.staty.started}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className={styles.horseStaty}>
@@ -426,20 +464,20 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   EXP: <span>{xp}</span>
                 </div>
                 <div className={styles.horseItemDescription}>
-                  POWER: <span>{horse.staty.power}</span>
+                  PWR: <span>{horse.staty.power}</span>
                   {extraStats.extraPwr > 0 && (
                     <span style={{ color: statColor }}> +{extraStats.extraPwr}</span>
                   )}
                 </div>
                 <div className={styles.horseItemDescription}>
-                  SPRINT: <span>{horse.staty.sprint}</span>
+                  SPT: <span>{horse.staty.sprint}</span>
                   {extraStats.extraSpt > 0 && (
                     <span style={{ color: statColor }}> +{extraStats.extraSpt}</span>
                   )}
                 </div>
 
                 <div className={styles.horseItemDescription}>
-                  SPEED: <span>{horse.staty.speed}</span>
+                  SPD: <span>{horse.staty.speed}</span>
                   {extraStats.extraSpd > 0 && (
                     <span style={{ color: statColor }}> +{extraStats.extraSpd}</span>
                   )}
