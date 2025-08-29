@@ -421,7 +421,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                 </div>
                 <div className={styles.horseItemDescriptionBox}>
                   <div className={styles.horseItemDescription}>
-                    SEX:{' '}
+                    {' '}
                     <span className={styles.horseItemDynamic} style={{ color: sexColor }}>
                       {horse.profile.sex}
                     </span>
@@ -444,11 +444,11 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   BREEDS: <span>{horse.staty.breeding}</span>
                 </div>
                 <div className={styles.horseItemDescription}>
-                  STATUS: <span>{horse.staty.status}</span>
+                  <span>{horse.staty.status}</span>
                 </div>
                 {horse.staty.status === 'BREEDING' && (
                   <div className={styles.horseItemDescription}>
-                    ENDING:{' '}
+                    {' '}
                     <span>
                       {countdown ?? horse.staty.started}
                     </span>
