@@ -135,6 +135,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       const data = (await hRes.json()) as BackendHorse[];
       const { nextTimestamp } = (await rRes.json()) as { nextTimestamp: number };
 
+      console.log(data)
       const mapped: Horse[] = data.map(h => ({
         id: Number(h.tokenId),
         profile: {
