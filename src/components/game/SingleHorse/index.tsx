@@ -356,10 +356,17 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
           <div className={styles.horseId}>{horse.id}</div>
 
           <div className={styles.horseGif}>
-            <img
-              src={`/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status.toLowerCase()}.gif`}
-              alt={`${horse.profile.name} (${horse.staty.status.toLowerCase()})`}
-            />
+            {horse.staty.status === 'BREEDING' ? (
+              <img
+                src="/assets/game/horses/breeding.gif"
+                alt={`${horse.profile.name} (breeding)`}
+              />
+            ) : (
+              <img
+                src={`/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status.toLowerCase()}.gif`}
+                alt={`${horse.profile.name} (${horse.staty.status.toLowerCase()})`}
+              />
+            )}
           </div>
 
           <div className={styles.horseInfo}>
@@ -392,19 +399,22 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                 </div>
 
                 <div className={styles.horseItemDescription}>
-                  HORSE TYPE:{' '}
+                  {' '}
                   <span className={styles.horseItemDynamic} style={{ color: labelColor }}>
                     {horse.profile.type_horse}
                   </span>
                 </div>
                 <div className={styles.horseItemDescription}>
-                  STABLE TYPE:{' '}
+                  GEN:{' '}
                   <span className={styles.horseItemDescriptionGray}>
-                    {horse.profile.type_jockey}
+                    {horse.staty.generation}
                   </span>
                 </div>
                 <div className={styles.horseItemDescription}>
                   STATUS: <span>{horse.staty.status}</span>
+                </div>
+                <div className={styles.horseItemDescription}>
+                  BREEDS: <span>{'0/24'}</span>
                 </div>
               </div>
 

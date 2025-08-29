@@ -39,6 +39,7 @@ interface BackendHorse {
   updatedAt: string;
   nickname: string | null;
   foodUsed: number;
+  gen: number;
   equipments: Array<{
     id: string;
     ownerId: string;
@@ -74,6 +75,7 @@ export interface Horse {
     sprint: string;
     speed: string;
     energy: string;
+    generation: string;
   };
   items: Array<{
     id: string;
@@ -150,6 +152,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           sprint: String(h.currentSprint),
           speed: String(h.currentSpeed),
           energy: `${h.currentEnergy}/${h.maxEnergy}`,
+          generation: String(h.gen)
         },
         items: h.equipments,
       }));

@@ -313,7 +313,7 @@ const ShopChestCard: React.FC = () => {
       {showBuyMultipleConfirm && selectedChestType != null && (
         <MultipleConfirmModal
           quantity={quantityToBuy}
-          max={10}
+          max={12}
           price={referredById ? chests[selectedChestType].discountedPrice : chests[selectedChestType].price}
           onQuantityChange={setQuantityToBuy}
           onClose={() => setShowBuyMultipleConfirm(false)}
