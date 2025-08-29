@@ -27,7 +27,7 @@ export interface Horse {
   staty: {
     status: string;
     started: string;
-    breeding:string;
+    breeding: string;
     level: string;
     exp: string;
     upgradable: boolean;

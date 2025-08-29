@@ -151,7 +151,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
         staty: {
           status: h.status,
           started: h.lastBreeding,
-          breeding: `${h.currentBreeds}/${h.maxBreeds}`,
+          breeding: `${String(h.currentBreeds)}/${String(h.maxBreeds)}`,
           level: String(h.level),
           exp: String(h.exp),
           upgradable: h.upgradable,
