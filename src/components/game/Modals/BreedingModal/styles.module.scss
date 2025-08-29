@@ -1,0 +1,350 @@
+.modalWrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+}
+
+.modalFull {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    position: relative;
+    width: 620px;
+    /* scaled up for new art */
+    max-width: 70vw;
+    aspect-ratio: 362 / 306;
+    /* new background ratio */
+    background-image: url('/assets/horse_table_raw.png');
+    /* new background */
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    @media (max-width: 700px) {
+        width: 420px;
+        max-width: 92vw;
+    }
+
+    .modalClose {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 3;
+
+        @media (min-width: 700px) {
+            top: 40px;
+            right: 40px;
+        }
+    }
+
+    .title {
+        position: absolute;
+        top: 13.5%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'SpaceHorse';
+        color: #582c25;
+        font-size: clamp(18px, 2.2vw, 28px);
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .arrow {
+        position: absolute;
+        top: 52%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        text-align: center;
+        cursor: pointer;
+        z-index: 3;
+        user-select: none;
+
+        &:disabled {
+            opacity: .3;
+            cursor: default;
+        }
+    }
+
+    .prev {
+        left: 8px;
+    }
+
+    .next {
+        right: 8px;
+    }
+
+    .carouselViewport {
+        position: absolute;
+        top: 18.5%;
+        /* tuned for new background layout */
+        left: 50%;
+        width: 90%;
+        height: 68%;
+        transform: translateX(-50%);
+        overflow-x: hidden;
+        overflow-y: auto;
+        touch-action: pan-y;
+
+        scrollbar-gutter: stable both-edges;
+
+        /* 👇 Ensure the cursor is NOT your custom “plus” here */
+        cursor: none;
+        /* or `auto` */
+
+        /* Firefox */
+        scrollbar-width: thin;
+        /* thin | auto | none */
+        scrollbar-color: #7d4d45 #dacda8;
+        /* thumb | track */
+
+        /* WebKit / Chromium / Edge */
+        &::-webkit-scrollbar {
+            width: 12px;
+            /* thickness */
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #dacda8;
+            /* your slot/track color */
+            border-radius: 8px;
+            box-shadow: inset 0 0 0 1px #7d4d45;
+            /* subtle frame to match UI */
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: linear-gradient(#7d4d45, #582c25);
+            /* matches button/border tones */
+            border-radius: 8px;
+            border: 2px solid #dacda8;
+            /* creates inner padding effect */
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(#7d4d45, #3c201a);
+            /* darker on hover */
+        }
+
+        &::-webkit-scrollbar-corner {
+            background: #dacda8;
+            cursor: none;
+        }
+
+        /* Slightly slimmer on small screens */
+        @media (max-width: 700px) {
+            &::-webkit-scrollbar {
+                width: 8px;
+            }
+        }
+
+        /* Optional: smoother scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .carouselTrack {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: transform .3s ease;
+    }
+
+    .page {
+        flex: 0 0 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .gridContainer {
+        width: 82%;
+        height: 92%;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        gap: 1.5%;
+        padding: 32px 16px;
+
+        @media (max-width: 1200px) {
+            gap: 2.3%;
+            padding: 24px 12px;
+        }
+    }
+
+    .gridItemWrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+
+        .gridItemEmpty {
+            width: 100%;
+            height: 100%;
+            background: #dacda8;
+            /* slot color */
+            border-radius: 6px;
+        }
+
+        .gridItem {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+
+            &::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: #dacda8;
+                /* ← requested slot color */
+                border-radius: 6px;
+                z-index: 0;
+            }
+
+            &:hover {
+                outline: 2px solid rgba(0, 0, 0, 0.35);
+                border-radius: 6px;
+            }
+
+            .imageWrapper {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+
+                img {
+                    position: absolute;
+                    inset: 4% 4% 4% 4%;
+                    width: auto;
+                    height: 75%;
+                    object-fit: contain;
+                    margin: auto;
+                    display: block;
+                }
+            }
+
+            .horseId {
+                position: absolute;
+                top: 6%;
+                right: 6%;
+                font-family: 'SpaceHorse';
+                color: #582c25;
+                font-size: clamp(10px, 1vw, 14px);
+                z-index: 2;
+                text-shadow: -1px 1px 0 #fff8;
+            }
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #be9c7f;
+            border: 1px solid #7d4d45;
+            border-radius: 4px;
+            margin-top: 4px;
+            z-index: 50;
+            min-width: 6rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+            pointer-events: auto;
+
+            .dropdownOption {
+                font-family: 'SpaceHorse';
+                font-size: .9rem;
+                padding: .5rem 1rem;
+                color: #333;
+                cursor: pointer;
+
+                &:hover {
+                    background: #7d4d45;
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    .dotsContainer {
+        position: absolute;
+        bottom: 8.5%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: .5rem;
+        z-index: 3;
+    }
+
+    .dot {
+        width: .8rem;
+        height: .8rem;
+        background: #bbb;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background .2s;
+    }
+
+    .activeDot {
+        background: #7d4d45;
+    }
+}
+
+/* Tooltip styling */
+.tooltipPortal {
+    display: block;
+    position: fixed;
+    background: rgba(149, 174, 189, 0.9);
+    border: 1px solid #3e3631;
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-family: 'SpaceHorse';
+    font-size: 0.95rem;
+    color: #000;
+    max-width: 260px;
+    z-index: 9999;
+    pointer-events: none;
+    white-space: normal;
+    overflow-wrap: break-word;
+
+    .tooltipSection {
+        margin-bottom: 4px;
+    }
+
+    .row {
+        display: flex;
+        gap: 6px;
+        align-items: baseline;
+    }
+
+    .label {
+        color: #583400;
+        min-width: 70px;
+        font-weight: bold;
+    }
+
+    .value {
+        color: #663901;
+    }
+
+    .dim {
+        color: #5002b6;
+    }
+
+    .bonus {
+        font-weight: bold;
+        margin-left: 4px;
+    }
+}

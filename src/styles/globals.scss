@@ -44,6 +44,18 @@ html {
 
 }
 
+body.no-plus-cursor,
+body.no-plus-cursor * {
+	cursor: default !important;
+}
+
+body.no-plus-cursor .customCursor {
+	opacity: 0;
+	/* hide your DOM cursor */
+	pointer-events: none;
+	/* keep it out of the way */
+}
+
 html {
 	background-color: var(--background);
 	font-family: 'SpaceHorsef';
@@ -65,8 +77,10 @@ ul {
 }
 
 @media (max-width: 415px) {
-  html, body {
-    width: 100%;
-    overflow-x: hidden;
-  }
+
+	html,
+	body {
+		width: 100%;
+		overflow-x: hidden;
+	}
 }

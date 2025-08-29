@@ -1,7 +1,7 @@
+// src/components/game/BreedFarm/index.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from './styles.module.scss';
 import ItemBag from '../Modals/ItemBag';
-import SingleHorse from '../SingleHorse';
 import Image from 'next/image';
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif';
 import wronIcon from '@/assets/icons/wron.gif';
@@ -9,17 +9,13 @@ import medalIcon from '@/assets/icons/medal.gif';
 import { useUser } from '@/contexts/UserContext';
 import { useWallet } from '@/contexts/WalletContext';
 import InfoModal from '../Modals/InfoModal';
-import RacesModal from '../Modals/RacesModal';
+import BreedingStud from '../BreedingStud';
 import MineModal from '../Modals/MineModal';
+import BreedingModal from '../Modals/BreedingModal';
+import { BreedingProvider, useBreeding } from '@/contexts/BreedingContext';
 
 type OrderByType = 'level' | 'rarity' | 'energy';
-const ORDER_OPTIONS = [
-  { value: 'level', label: 'Highest Level' },
-  { value: 'rarity', label: 'Highest Rarity' },
-  { value: 'energy', label: 'Most Energy' },
-];
 
-// Backend response shape
 interface BackendHorse {
   tokenId: string;
   name: string;
@@ -99,26 +95,20 @@ interface Props {
   changeView: (view: string) => void;
 }
 
-const Horses: React.FC<Props> = ({ changeView }) => {
-  const [modalRaces, setModalRaces] = useState(false);
-  const [modalMine, setModalMine] = useState(false)
+const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
   const [modalItems, setModalItems] = useState(false);
   const { phorse, medals, wron, updateBalance } = useUser();
-  const { isAuthorized, address } = useWallet();
+  const { address } = useWallet();
 
   const [rawHorseList, setRawHorseList] = useState<Horse[]>([]);
   const [horseList, setHorseList] = useState<Horse[]>([]);
-  const [nextRecoveryTs, setNextRecoveryTs] = useState<number | null>(null);
-  const [timeLeft, setTimeLeft] = useState<string>('—:—:—');
-
   const [orderBy, setOrderBy] = useState<OrderByType>('level');
-
   const [informational, setInformational] = useState<string | null>(null);
+  const [modalMine, setModalMine] = useState(false);
 
   const loadHorses = useCallback(async () => {
     if (!address) {
       setRawHorseList([]);
-      setNextRecoveryTs(null);
       return;
     }
     updateBalance();
@@ -133,7 +123,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       if (!rRes.ok) throw new Error(`Recovery ${rRes.status}`);
 
       const data = (await hRes.json()) as BackendHorse[];
-      const { nextTimestamp } = (await rRes.json()) as { nextTimestamp: number };
+      await rRes.json(); // currently unused (nextTimestamp)
 
       const mapped: Horse[] = data.map(h => ({
         id: Number(h.tokenId),
@@ -146,7 +136,7 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           type_horse_slug: h.rarity.toLowerCase(),
           type_jockey: 'NONE',
           time: '120 Days',
-          food_used: h.foodUsed
+          food_used: h.foodUsed,
         },
         staty: {
           status: h.status,
@@ -159,130 +149,82 @@ const Horses: React.FC<Props> = ({ changeView }) => {
           sprint: String(h.currentSprint),
           speed: String(h.currentSpeed),
           energy: `${h.currentEnergy}/${h.maxEnergy}`,
-          generation: String(h.gen)
+          generation: String(h.gen),
         },
         items: h.equipments,
       }));
 
       setRawHorseList(mapped);
-      setNextRecoveryTs(nextTimestamp);
     } catch (err) {
       console.error('Failed to load horses:', err);
       setRawHorseList([]);
-      setNextRecoveryTs(null);
     }
   }, [address, updateBalance]);
 
-  useEffect(() => {
-    loadHorses();
-  }, [loadHorses]);
+  useEffect(() => { loadHorses(); }, [loadHorses]);
 
   useEffect(() => {
     setHorseList(sortHorses(rawHorseList, orderBy));
   }, [rawHorseList, orderBy]);
 
-  const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setOrderBy(e.target.value as OrderByType);
-  };
-
   const toggleItemBag = () => setModalItems(prev => !prev);
 
-  useEffect(() => {
-    if (nextRecoveryTs == null) return;
-    const tick = () => {
-      const diff = nextRecoveryTs - Date.now();
-      if (diff <= 0) {
-        setTimeLeft('00:00:00');
-        return clearInterval(id);
-      }
-      const h = Math.floor(diff / 3600_000);
-      const m = Math.floor((diff % 3600_000) / 60_000);
-      const s = Math.floor((diff % 60_000) / 1000);
-      setTimeLeft(
-        String(h).padStart(2, '0') + ':' +
-        String(m).padStart(2, '0') + ':' +
-        String(s).padStart(2, '0')
-      );
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [nextRecoveryTs]);
-
-  function sortHorses(list: Horse[], orderBy: OrderByType): Horse[] {
+  function sortHorses(list: Horse[], order: OrderByType): Horse[] {
     const arr = [...list];
     const rarityOrder = ['mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
-
-    switch (orderBy) {
+    switch (order) {
       case 'level':
         arr.sort((a, b) => parseInt(b.staty.level) - parseInt(a.staty.level));
         break;
-      case 'energy':
-        arr.sort((a, b) => {
-          const aE = parseInt(a.staty.energy.split('/')[0], 10);
-          const bE = parseInt(b.staty.energy.split('/')[0], 10);
-          return bE - aE;
-        });
+      case 'energy': {
+        const val = (s: string) => parseInt(s.split('/')[0], 10);
+        arr.sort((a, b) => val(b.staty.energy) - val(a.staty.energy));
         break;
-      case 'rarity':
+      }
+      case 'rarity': {
         arr.sort((a, b) => {
           const aIdx = rarityOrder.indexOf(a.profile.type_horse_slug);
           const bIdx = rarityOrder.indexOf(b.profile.type_horse_slug);
           return aIdx - bIdx;
         });
         break;
+      }
     }
-
     return arr;
   }
 
   return (
     <>
-
-      {modalRaces && (
-        <RacesModal
-          setVisible={setModalRaces}
-          status={modalRaces}
-          totalHorses={horseList.filter(h => h.staty.status === 'IDLE').length}
-          horses={horseList.filter(h => h.staty.status === 'IDLE')}
-          reloadHorses={loadHorses}
-        />
-      )}
-
-      {modalMine && (
-        <MineModal
-          setVisible={setModalMine}
-          status={modalMine}
-        />
-      )}
-
       <ItemBag status={modalItems} closeModal={toggleItemBag} />
+      {modalMine && <MineModal setVisible={setModalMine} status={modalMine} />}
 
       <div className={styles.secondBar}>
         <div className={styles.containerBar}>
           <div className={styles.actionContainer}>
-            <div className={styles.actionOptions}>
-              <button
-                className={`${styles.bagButton} ${modalItems ? styles.bagOpened : ''}`}
-                onClick={toggleItemBag}
-              />
-              <button
-                className={styles.refreshButton}
-                onClick={async () => {
-                  await loadHorses();
-                  setInformational('Stable reloaded!');
-                }}
-              />
-              <button
-                className={styles.raceAllButton}
-                onClick={() => { setModalRaces(true); }}
-              />
-              <button
-                className={styles.upgradeButton}
-                onClick={() => { setModalMine(true); }}
-              />
+            <div className={styles.actionContainer}>
+              <div className={styles.actionOptions}>
+                <button
+                  className={`${styles.bagButton} ${modalItems ? styles.bagOpened : ''}`}
+                  onClick={() => setModalItems(true)}
+                  aria-label="Open Bag"
+                >
+                  <span className={styles.notificationBadge}></span>
+                </button>
+                <button
+                  className={styles.racingButton}
+                  onClick={() => changeView('horses')}
+                  aria-label="Go to racing"
+                >
+                  <span className={styles.notificationBadge}></span>
+                </button>
+                <button
+                  className={styles.upgradeButton}
+                  onClick={() => { setModalMine(true); }}
+                />
+              </div>
             </div>
           </div>
+
           <div className={styles.countCurrency}>
             <div className={styles.currencyGroup}>
               <Image src={phorseToken} width={25} height={25} alt="phorse" />
@@ -301,67 +243,53 @@ const Horses: React.FC<Props> = ({ changeView }) => {
       </div>
 
       <div className={styles.container}>
-        <div className={styles.countRow}>
-          {nextRecoveryTs && (
-            <span className={styles.nextRecovery}>
-              <span className={styles.fullLabel}>Next Energy recovery in ‎ </span>
-              <span className={styles.shortLabel}>⚡ ‎ </span>
-              {timeLeft}
-            </span>
-          )}
-          <span className={styles.countHorses}>
-            {horseList.length} Horses
-          </span>
-          <div className={styles.orderBy}>
-            <label htmlFor="orderBySelect">Order By:{" "}</label>
-            <select
-              id="orderBySelect"
-              value={orderBy}
-              onChange={handleOrderChange}
-            >
-              {ORDER_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className={styles.cardHorses}>
-          {horseList.map((h) => (
-            <SingleHorse
-              key={h.id}
-              horse={h}
-              reloadHorses={loadHorses}
-            />
-          ))}
-
-          <div className={styles.addHorse}>
-            <div className={styles.addHorseWrapper}>
-              <div className={styles.plusHorse} onClick={() => { window.open("https://marketplace.roninchain.com/collections/origin-horses", "_blank") }}>+</div>
-              <div className={styles.addHorseText}>
-                <a
-                  href="https://marketplace.roninchain.com/collections/origin-horses"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.addHorseLink}
-                >
-                  GRAB SOME HORSES AND YOU WILL BE ON YOUR WAY TO RUNNING LIKE A PRO!
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <StudsRow horses={horseList} />
       </div>
+
       {informational && (
-        <InfoModal
-          text={informational}
-          onClose={() => setInformational(null)}
-        />
+        <InfoModal text={informational} onClose={() => setInformational(null)} />
       )}
     </>
   );
 };
 
-export default Horses;
+const StudsRow: React.FC<{ horses: Horse[] }> = ({ horses }) => {
+  const { studs } = useBreeding();
+  const [studModalOpen, setStudModalOpen] = useState(false);
+  const [activeStudId, setActiveStudId] = useState<number | string | null>(null);
+
+  const openStud = (slot: 0 | 1) => {
+    if (studs[slot].active) {
+      console.log(`Stud ${slot} is being used (active breeding).`);
+      return;
+    }
+    setActiveStudId(slot);
+    setStudModalOpen(true);
+  };
+
+  return (
+    <>
+      <div className={styles.studsRow}>
+        <BreedingStud index={0} horses={horses} id={0} onOpen={() => openStud(0)} />
+        <BreedingStud index={1} horses={horses} id={1} onOpen={() => openStud(1)} />
+      </div>
+
+      <BreedingModal
+        status={studModalOpen}
+        studId={activeStudId}
+        horses={horses}
+        onClose={() => setStudModalOpen(false)}
+      />
+    </>
+  );
+};
+
+const BreedFarm: React.FC<Props> = (props) => {
+  return (
+    <BreedingProvider>
+      <BreedFarmInner {...props} />
+    </BreedingProvider>
+  );
+};
+
+export default BreedFarm;

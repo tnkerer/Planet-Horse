@@ -31,9 +31,9 @@ const CardOptions: React.FC<Props> = ({ changeView }) => {
           <div className={styles.card}>
             <Image layout="fill" src={horseFusionGif} alt="card-breed" width={200} height={200} />
             <button
-              className={styles.fusionButton}
-            /* onClick={setPopUp('fusion')} */
-            >Coming Soon...</button>
+              className={styles.buyButton}
+              onClick={() => changeView('breeding')}
+            >BREEDING FARM</button>
           </div>
           <div className={styles.card}>
             <Image layout="fill" src={upgradeStableGif} alt="card-upgrade" width={200} height={200} />

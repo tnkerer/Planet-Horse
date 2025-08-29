@@ -8,9 +8,7 @@
   background: url('/cursor/cursor.png') center / contain no-repeat;
   margin-top: 13px;
   margin-left: 13px;
-  transition:
-    background 50ms ease,
-    transform 50ms ease;
+  transition: background 50ms ease, transform 50ms ease;
 }
 
 .hovered {
@@ -23,7 +21,13 @@
   transform: translate(-50%, -50%) scale(0.9);
 }
 
-/* hide it on narrow viewports */
+/* NEW: hidden when over scrollbar */
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* hide on narrow viewports */
 @media (max-width: 560px) {
   .cursor,
   .cursor.hovered,

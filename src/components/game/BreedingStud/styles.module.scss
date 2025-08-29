@@ -1,0 +1,253 @@
+.studCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 46 / 29;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .18s ease;
+  will-change: transform;
+  transform: translateZ(0);
+
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.03);
+  }
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/game/breeding/breed_space.webp');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+}
+
+/* TOP ERROR OVERLAY (does not affect layout) */
+.errorOverlay {
+  position: absolute;
+  top: 6%;
+  left: 6%;
+  right: 6%;
+  z-index: 3;
+  pointer-events: none;
+
+  font-family: 'SpaceHorse';
+  color: #8ef705;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .25);
+  line-height: 1.1;
+
+  ul {
+    margin: 0;
+    padding-left: 1rem;
+  }
+
+  li {
+    list-style: disc;
+  }
+
+  @media (max-width: 420px) {
+    font-size: 11px;
+  }
+}
+
+/* Horses render within this "safe" box */
+.horseSafeArea {
+  position: absolute;
+  inset: 25% 40% 25% 20%;
+  /* top right bottom left */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+
+  .horseSolo {
+    width: 32%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .horsePair {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    gap: 4%;
+
+    .horseImg {
+      width: 32%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+/* Bottom-right UI area */
+.safeArea {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  /* right align */
+  justify-content: flex-end;
+  /* bottom align */
+  gap: .35rem;
+  padding: .6rem;
+  pointer-events: none;
+  /* children re-enable */
+}
+
+/* Single row that holds timer + costs + buttons */
+.actions {
+  position: absolute;        /* ← was static/flex child */
+  right: .8rem;              /* horizontal offset from the right edge */
+  bottom: .40rem;            /* ↓ push the row DOWN toward the edge; increase this to go lower */
+  pointer-events: auto;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .45rem;
+
+  transform: scale(.96);     /* keep your scale (optional) */
+
+  @media (max-width: 920px) {
+    justify-content: flex-end;
+    right: .6rem;
+    bottom: .30rem;          /* tune for small screens */
+  }
+
+  @media (max-width: 500px) {
+    right: .5rem;
+    bottom: -2.5rem;
+  }
+}
+
+/* Timer sits to the far left of the row */
+.timer {
+  font-family: 'SpaceHorse';
+  color: #fff;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, .35);
+  padding: 0 .35rem;
+  min-width: 86px;
+  text-align: center;
+}
+
+/* Costs appear immediately to the right of the timer */
+.costs {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+
+  .costItem {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    font-family: 'SpaceHorse';
+    color: #fff;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .35);
+    background: rgba(0, 0, 0, .25);
+    border-radius: 8px;
+    padding: 2px 6px;
+
+    img {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+/* Buttons stay on the right of the row */
+.btn {
+  font-family: 'SpaceHorse';
+  height: 2.2rem;
+  padding: 0 1rem;
+  background-image: url('/assets/game/buttons/button.svg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-color: transparent;
+  border: none;
+  color: #000;
+  line-height: 2.2rem;
+  cursor: pointer;
+  outline: none;
+  min-width: 9.5rem;
+  text-align: center;
+
+  &:hover {
+    background-image: url('/assets/game/buttons/button-mouse.svg');
+  }
+
+  &:active {
+    background-image: url('/assets/game/buttons/button-click.svg');
+  }
+}
+
+.disabled {
+  pointer-events: none;
+  filter: grayscale(.2) brightness(.9);
+  background-image: url('/assets/game/buttons/button-click.svg') !important;
+}
+
+/* Small white icon button for Reset */
+.iconBtn {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, .28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: #fff;
+    /* ← white icon */
+    display: block;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, .38);
+  }
+
+  &:active {
+    background: rgba(0, 0, 0, .46);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.resetIcon {}
+
+/* reserved for future tweaks */
+
+@media (max-width: 920px) {
+  .actions {
+    gap: .35rem;
+    transform: scale(.92);
+  }
+
+  .timer {
+    min-width: 74px;
+  }
+
+  .costs .costItem img {
+    width: 16px;
+    height: 16px;
+  }
+}

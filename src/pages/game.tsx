@@ -6,6 +6,7 @@ import CardOptions from '@/components/game/CardOptions'
 import Horses from '@/components/game/Horses'
 import Items from '@/components/game/Items'
 import PageContent from '@/utils/components/page-content'
+import BreedFarm from '@/components/game/BreedFarm'
 
 const Game: React.FC = () => {
   const [view, setView] = useState('horses')
@@ -30,6 +31,12 @@ const Game: React.FC = () => {
         {view === 'horses' && (
           <Pattern type="light">
             <Horses changeView={toogleView} />
+            <Footer copyrightTextColor="white" />
+          </Pattern>
+        )}
+        {view === 'breeding' && (
+          <Pattern type="light">
+            <BreedFarm changeView={toogleView} />
             <Footer copyrightTextColor="white" />
           </Pattern>
         )}
