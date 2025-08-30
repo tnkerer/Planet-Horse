@@ -46,6 +46,20 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
     const touchStartX = useRef<number | null>(null);
     const touchEndX = useRef<number | null>(null);
 
+    const fullText = 'Howdy! Let us choose which horse is going to the breeding stud.';
+    const [displayedText, setDisplayedText] = useState('');
+    useEffect(() => {
+        if (!status) return;
+        setDisplayedText('');
+        let i = 0;
+        const timer = setInterval(() => {
+            i++;
+            setDisplayedText(fullText.slice(0, i));
+            if (i >= fullText.length) clearInterval(timer);
+        }, 25);
+        return () => clearInterval(timer);
+    }, [status]);
+
     // Build a list excluding already-picked horses & those in active server breeds (parents):
     const excluded = useMemo(() => {
         const set = new Set<number>(selectedHorseIds);
@@ -200,14 +214,6 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
     };
 
     if (!status || currentStud == null) return null;
-
-    const pickHandler = async (horseId: number) => {
-        // before picking, see how many this stud already has:
-        const already = currentStud.horseIds.length;
-        await selectHorse(currentStud.id, horseId);
-        // If that was the second pick, close the modal:
-        if (already === 1) onClose();
-    };
 
     return (
         <div className={styles.modalWrapper}>
@@ -415,6 +421,21 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
                             </div>
                         </Tooltip>
                     )}
+                </div>
+                <div className={styles.dialogWrapper}>
+                    <img
+                        src="/assets/characters/horse_handler.png"
+                        alt="Horse Handler"
+                        className={styles.character}
+                    />
+
+                    <div className={styles.rpgDialogBox}>
+                        <div className={styles.dialogText}>
+                            {displayedText}
+                            <span className={styles.cursor}>|</span>
+                        </div>
+                        {/* No answers here for BreedingModal */}
+                    </div>
                 </div>
             </div>
         </div>
