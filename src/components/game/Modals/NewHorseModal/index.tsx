@@ -65,8 +65,6 @@ const NewHorseModal: React.FC<Props> = ({ tokenId, onClose }) => {
           </div>
 
           <div className={styles.info}>
-            {meta?.description && <p className={styles.desc}>{meta.description}</p>}
-
             <div className={styles.grid}>
               <div><span className={styles.k}>Rarity:</span> <span className={styles.v}>{A('rarity') ?? '-'}</span></div>
               <div><span className={styles.k}>Gender:</span> <span className={styles.v}>{A('gender') ?? '-'}</span></div>
@@ -86,11 +84,6 @@ const NewHorseModal: React.FC<Props> = ({ tokenId, onClose }) => {
 
         <div className={styles.footer}>
           <span className={styles.token}>Mint Request for Horse Token ID: {tokenId} Placed in the Queue!</span>
-          {meta?.external_url && (
-            <a href={meta.external_url} target="_blank" rel="noreferrer" className={styles.link}>
-              View Project
-            </a>
-          )}
         </div>
       </div>
     </div>
