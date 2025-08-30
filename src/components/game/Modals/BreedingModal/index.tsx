@@ -94,7 +94,7 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
         const xpStr = buildXp(h);
 
         // Position above the card, centered; clamp to viewport
-        let x = rect.left + rect.width / 2;
+        let x = rect.left + rect.width / 1.1;
         let y = rect.top - 8;
         x = Math.max(12, Math.min(window.innerWidth - 12, x));
         y = Math.max(12, y);
