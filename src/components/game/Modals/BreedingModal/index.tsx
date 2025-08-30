@@ -46,7 +46,7 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
     const touchStartX = useRef<number | null>(null);
     const touchEndX = useRef<number | null>(null);
 
-    const fullText = 'Howdy! Let us choose which horse is going to the breeding stud.';
+    const fullText = 'Howdy! Let us choose which horse are going to the breeding stud.';
     const [displayedText, setDisplayedText] = useState('');
     useEffect(() => {
         if (!status) return;
