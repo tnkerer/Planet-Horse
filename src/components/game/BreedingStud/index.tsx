@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import type { Horse } from '../BreedFarm';
 import { useBreeding } from '@/contexts/BreedingContext';
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif';
 import wronIcon from '@/assets/icons/wron.gif';
+import NewHorseModal from '@/components/game/Modals/NewHorseModal';
 
 interface BreedingStudProps {
   index: number;
@@ -25,7 +26,6 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
   const { studs, clearSlot, loadActiveBreeds } = useBreeding();
   const stud = studs[studId];
 
-
   // resolve picked horse objects for rendering
   const picked = useMemo(() => {
     return stud.horseIds
@@ -33,8 +33,7 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
       .filter((h): h is Horse => Boolean(h));
   }, [stud.horseIds, horses]);
 
-
-  // local submit error (POST /user/breed failures)
+  // local submit error (POST failures)
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   // countdown for active breed
@@ -50,9 +49,70 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
 
   const isActive = !!stud.active;
   const hasTwo = stud.horseIds.length === 2;
+
+  // ── Finalize-check state (only after timer hits 00:00:00) ──────────────
+  const [finalizeEligible, setFinalizeEligible] = useState(false);
+  const [finalizeReasons, setFinalizeReasons] = useState<string[] | null>(null);
+  const [offspringTokenId, setOffspringTokenId] = useState<number | null>(null);
+  const [checkingFinalize, setCheckingFinalize] = useState(false);
+  const lastCheckedKeyRef = useRef<string | null>(null);
+
+  const pairKey = stud.horseIds.join('-');
+
+  const resetFinalizeState = () => {
+    setFinalizeEligible(false);
+    setFinalizeReasons(null);
+    setOffspringTokenId(null);
+    setCheckingFinalize(false);
+    lastCheckedKeyRef.current = null;
+  };
+
+  useEffect(() => {
+    // reset finalize state whenever pair changes or activity resets
+    resetFinalizeState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pairKey, isActive]);
+
+  const doFinalizeCheck = async () => {
+    if (!isActive || stud.horseIds.length !== 2) return;
+    const [a, b] = stud.horseIds;
+    const key = `${a}-${b}`;
+    if (lastCheckedKeyRef.current === key) return; // already checked for this pair
+
+    try {
+      setCheckingFinalize(true);
+      const res = await fetch(
+        `${process.env.API_URL}/user/finalize/check?a=${a}&b=${b}`,
+        { credentials: 'include' }
+      );
+      const data = await res.json().catch(() => ({} as any));
+      lastCheckedKeyRef.current = key;
+
+      setFinalizeEligible(!!data?.eligible);
+      setFinalizeReasons(Array.isArray(data?.reasons) ? data.reasons : null);
+      setOffspringTokenId(
+        typeof data?.tokenId === 'number' ? data.tokenId : null
+      );
+    } catch (e: any) {
+      setFinalizeEligible(false);
+      setFinalizeReasons([e?.message || 'Finalize check failed']);
+    } finally {
+      setCheckingFinalize(false);
+    }
+  };
+
+  // When timer is done, trigger the finalize-check once.
+  useEffect(() => {
+    if (isActive && timeLeft === '00:00:00') {
+      void doFinalizeCheck();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isActive, timeLeft]);
+
+  // ── Buttons enabled/disabled ───────────────────────────────────────────
   const resetDisabled = isActive || stud.horseIds.length === 0;
-  const startDisabled = isActive || !hasTwo || !stud.eligible;
-  const finishDisabled = !isActive || timeLeft !== '00:00:00';
+  const startDisabled = isActive || !hasTwo || !stud.eligible; // stud.eligible from preflight in context
+  const finishDisabled = !isActive || !(timeLeft === '00:00:00' && finalizeEligible);
 
   const imgPath = (h: Horse, hovered: boolean) =>
     `/assets/game/breeding/stable-horses/right/${h.profile.type_horse_slug}/${h.profile.name_slug}-${hovered ? 'hover' : 'regular'}.gif`;
@@ -70,6 +130,7 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
     if (resetDisabled) return;
     clearSlot(studId);
     setSubmitError(null);
+    resetFinalizeState();
   };
 
   const handleStart = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -88,16 +149,15 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
       });
 
       let data: any = null;
-      try { data = await res.json(); } catch { }
+      try { data = await res.json(); } catch { /* no body */ }
 
       if (res.ok) {
         console.log('✅ Breeding has started.', data);
         clearSlot(studId);
         await loadActiveBreeds();
+        resetFinalizeState();
       } else {
-        const msg =
-          (data && (data.message || data.error || JSON.stringify(data))) ||
-          `HTTP ${res.status}`;
+        const msg = (data && (data.message || data.error || JSON.stringify(data))) || `HTTP ${res.status}`;
         setSubmitError(msg);
         console.error('❌ Start breeding failed:', msg);
       }
@@ -108,117 +168,181 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
     }
   };
 
-  const handleFinish = (e: React.MouseEvent<HTMLButtonElement>) => {
+  // New offspring modal state
+  const [showOffspring, setShowOffspring] = useState(false);
+  const [mintedTokenId, setMintedTokenId] = useState<number | null>(null);
+
+  const handleFinish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    console.log(`Finish Breeding for stud ${studId} (server id: ${stud.active?.id})`);
+    if (!isActive) return;
+
+    // Safety: if timer done but we haven't enabled yet, force a check
+    if (timeLeft === '00:00:00' && !finalizeEligible) {
+      await doFinalizeCheck();
+      if (!finalizeEligible) return; // still not eligible
+    }
+
+    const [a, b] = stud.horseIds.map(String);
+
+    try {
+      const res = await fetch(`${process.env.API_URL}/user/finalize-breed`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ a, b }),
+      });
+
+      const data = await res.json().catch(() => ({} as any));
+
+      if (res.ok) {
+        const mintedId: number | null =
+          data?.mintRequest?.tokenId ??
+          offspringTokenId ??
+          null;
+
+        console.log('✅ Breeding finalized.', data);
+
+        await loadActiveBreeds(); // refresh occupied/available studs
+        clearSlot(studId);       // clear any local picks on the slot
+
+        if (mintedId != null) {
+          setMintedTokenId(mintedId);
+          setShowOffspring(true);
+        }
+        // Clear error state
+        setSubmitError(null);
+        resetFinalizeState();
+      } else {
+        const msg = (data && (data.message || data.error || JSON.stringify(data))) || `HTTP ${res.status}`;
+        setSubmitError(msg);
+        console.error('❌ Finalize breeding failed:', msg);
+      }
+    } catch (err: any) {
+      const msg = err?.message || 'Network error';
+      setSubmitError(msg);
+      console.error('❌ Finalize breeding failed:', msg);
+    }
   };
 
-  // Compute overlay errors (red) without affecting layout
+  // Compose overlay errors (red)
   const overlayErrors: string[] = [];
-  if (hasTwo && !stud.eligible && stud.reasons?.length) {
+  if (hasTwo && stud.eligible === false && stud.reasons?.length) {
     overlayErrors.push(...stud.reasons);
+  }
+  if (timeLeft === '00:00:00' && finalizeEligible === false && finalizeReasons?.length) {
+    overlayErrors.push(...finalizeReasons);
   }
   if (submitError) overlayErrors.push(submitError);
 
   return (
-    <div
-      className={styles.studCard}
-      data-index={index}
-      role="button"
-      tabIndex={0}
-      aria-label={`Breeding stud ${studId}`}
-      onClick={handleActivate}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivate(); } }}
-    >
-      <div className={styles.bg} />
+    <>
+      <div
+        className={styles.studCard}
+        data-index={index}
+        role="button"
+        tabIndex={0}
+        aria-label={`Breeding stud ${studId}`}
+        onClick={handleActivate}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivate(); } }}
+      >
+        <div className={styles.bg} />
 
-      {/* NON-INTRUSIVE ERROR OVERLAY (top) */}
-      {overlayErrors.length > 0 && (
-        <div className={styles.errorOverlay} aria-live="polite">
-          {overlayErrors.length === 1 ? (
-            <span>{overlayErrors[0]}</span>
-          ) : (
-            <ul>{overlayErrors.map((m, i) => <li key={i}>{m}</li>)}</ul>
-          )}
-        </div>
-      )}
-
-      {/* horses safe area */}
-      <div className={styles.horseSafeArea}>
-        {picked.length === 1 && (
-          <img
-            className={styles.horseSolo}
-            src={imgPath(picked[0], false)}
-            onMouseOver={(e) => (e.currentTarget.src = imgPath(picked[0], true))}
-            onMouseOut={(e) => (e.currentTarget.src = imgPath(picked[0], false))}
-            alt={`Horse #${picked[0].id}`}
-          />
-        )}
-        {picked.length === 2 && (
-          <div className={styles.horsePair}>
-            {picked.map(h => (
-              <img
-                key={h.id}
-                className={styles.horseImg}
-                src={imgPath(h, false)}
-                onMouseOver={(e) => (e.currentTarget.src = imgPath(h, true))}
-                onMouseOut={(e) => (e.currentTarget.src = imgPath(h, false))}
-                alt={`Horse #${h.id}`}
-              />
-            ))}
+        {/* NON-INTRUSIVE ERROR OVERLAY (top) */}
+        {overlayErrors.length > 0 && (
+          <div className={styles.errorOverlay} aria-live="polite">
+            {overlayErrors.length === 1 ? (
+              <span>{overlayErrors[0]}</span>
+            ) : (
+              <ul>{overlayErrors.map((m, i) => <li key={i}>{m}</li>)}</ul>
+            )}
           </div>
         )}
-      </div>
 
-      {/* bottom-right UI */}
-      <div className={styles.safeArea}>
-        <div className={styles.actions}>
-          {/* LEFT side of the row */}
-          {stud.active && <div className={styles.timer}>⏱ {timeLeft}</div>}
-          {stud.costs && (
-            <div className={styles.costs}>
-              <span className={styles.costItem}>
-                <img src={wronIcon.src} alt="WRON" /> {stud.costs.ronCost}
-              </span>
-              <span className={styles.costItem}>
-                <img src={phorseToken.src} alt="PHORSE" /> {stud.costs.phorseCost}
-              </span>
+        {/* horses safe area */}
+        <div className={styles.horseSafeArea}>
+          {picked.length === 1 && (
+            <img
+              className={styles.horseSolo}
+              src={imgPath(picked[0], false)}
+              onMouseOver={(e) => (e.currentTarget.src = imgPath(picked[0], true))}
+              onMouseOut={(e) => (e.currentTarget.src = imgPath(picked[0], false))}
+              alt={`Horse #${picked[0].id}`}
+            />
+          )}
+          {picked.length === 2 && (
+            <div className={styles.horsePair}>
+              {picked.map(h => (
+                <img
+                  key={h.id}
+                  className={styles.horseImg}
+                  src={imgPath(h, false)}
+                  onMouseOver={(e) => (e.currentTarget.src = imgPath(h, true))}
+                  onMouseOut={(e) => (e.currentTarget.src = imgPath(h, false))}
+                  alt={`Horse #${h.id}`}
+                />
+              ))}
             </div>
           )}
+        </div>
 
-          {/* RIGHT side (icon + buttons) */}
-          <button
-            className={`${styles.iconBtn} ${styles.resetIcon}`}
-            onClick={handleReset}
-            disabled={resetDisabled}
-            aria-label="Reset pair"
-            title="Reset pair"
-          >
-            {/* white refresh icon */}
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M21 12a9 9 0 0 1-9 9 9 9 0 1 1 6.36-15.36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M21 3v6h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
+        {/* bottom-right UI */}
+        <div className={styles.safeArea}>
+          <div className={styles.actions}>
+            {/* LEFT side: timer + costs */}
+            {stud.active && <div className={styles.timer}>⏱ {timeLeft}{checkingFinalize && timeLeft === '00:00:00' ? ' • checking…' : ''}</div>}
 
-          <button
-            className={`${styles.btn} ${styles.startBtn} ${startDisabled ? styles.disabled : ''}`}
-            onClick={handleStart}
-            disabled={startDisabled}
-          >
-            Start Breeding
-          </button>
+            {stud.costs && (
+              <div className={styles.costs}>
+                <span className={styles.costItem}>
+                  <img src={wronIcon.src} alt="WRON" /> {stud.costs.ronCost}
+                </span>
+                <span className={styles.costItem}>
+                  <img src={phorseToken.src} alt="PHORSE" /> {stud.costs.phorseCost}
+                </span>
+              </div>
+            )}
 
-          <button
-            className={`${styles.btn} ${styles.finishBtn} ${finishDisabled ? styles.disabled : ''}`}
-            onClick={handleFinish}
-            disabled={finishDisabled}
-          >
-            Finish Breeding
-          </button>
+            {/* RIGHT side: reset icon + buttons */}
+            <button
+              className={`${styles.iconBtn} ${styles.resetIcon}`}
+              onClick={handleReset}
+              disabled={resetDisabled}
+              aria-label="Reset pair"
+              title="Reset pair"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 12a9 9 0 0 1-9 9 9 9 0 1 1 6.36-15.36" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M21 3v6h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+
+            <button
+              className={`${styles.btn} ${styles.startBtn} ${startDisabled ? styles.disabled : ''}`}
+              onClick={handleStart}
+              disabled={startDisabled}
+            >
+              Start Breeding
+            </button>
+
+            <button
+              className={`${styles.btn} ${styles.finishBtn} ${finishDisabled ? styles.disabled : ''}`}
+              onClick={handleFinish}
+              disabled={finishDisabled}
+            >
+              Finish Breeding
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* New Offspring modal */}
+      {showOffspring && mintedTokenId != null && (
+        <NewHorseModal
+          tokenId={mintedTokenId}
+          onClose={() => setShowOffspring(false)}
+        />
+      )}
+    </>
   );
 };
 

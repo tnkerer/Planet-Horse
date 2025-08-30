@@ -45,7 +45,7 @@ export const BreedingProvider: React.FC<{ children?: ReactNode }> = ({ children 
 
   const loadActiveBreeds = useCallback(async () => {
     try {
-      const res = await fetch(`${process.env.API_URL}/user/breed?notFinalizedOnly=true`, { credentials: 'include' });
+      const res = await fetch(`${process.env.API_URL}/user/breed?finalizedOnly=true`, { credentials: 'include' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const arr: Array<{ id: string; parents: number[]; started: string; finalized: boolean }> = await res.json();
 
