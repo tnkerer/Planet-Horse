@@ -683,7 +683,7 @@ const ItemBag: React.FC<Props> = ({
                               onMouseEnter={(e) => {
                                 const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
                                 setTooltip({
-                                  x: rect.left + rect.width / 2,
+                                  x: rect.left + rect.width / 1.1,
                                   y: rect.top - 8,
                                   name: item.name,
                                   content: item.description,
