@@ -84,6 +84,12 @@
       object-fit: contain;
     }
   }
+
+  .horsePair .horseImg:nth-child(2) {
+    transform: scaleX(-1);
+    /* or: rotateY(180deg); */
+    transform-origin: center;
+  }
 }
 
 /* Bottom-right UI area */
@@ -104,9 +110,12 @@
 
 /* Single row that holds timer + costs + buttons */
 .actions {
-  position: absolute;        /* ← was static/flex child */
-  right: .8rem;              /* horizontal offset from the right edge */
-  bottom: .40rem;            /* ↓ push the row DOWN toward the edge; increase this to go lower */
+  position: absolute;
+  /* ← was static/flex child */
+  right: .8rem;
+  /* horizontal offset from the right edge */
+  bottom: .40rem;
+  /* ↓ push the row DOWN toward the edge; increase this to go lower */
   pointer-events: auto;
 
   display: flex;
@@ -114,12 +123,14 @@
   flex-wrap: wrap;
   gap: .45rem;
 
-  transform: scale(.96);     /* keep your scale (optional) */
+  transform: scale(.96);
+  /* keep your scale (optional) */
 
   @media (max-width: 920px) {
     justify-content: flex-end;
     right: .6rem;
-    bottom: .30rem;          /* tune for small screens */
+    bottom: .30rem;
+    /* tune for small screens */
   }
 
   @media (max-width: 500px) {
