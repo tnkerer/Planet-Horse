@@ -70,7 +70,6 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
   useEffect(() => {
     // reset finalize state whenever pair changes or activity resets
     resetFinalizeState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairKey, isActive]);
 
   const doFinalizeCheck = async () => {
@@ -106,7 +105,6 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
     if (isActive && timeLeft === '00:00:00') {
       void doFinalizeCheck();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive, timeLeft]);
 
   // ── Buttons enabled/disabled ───────────────────────────────────────────
@@ -226,10 +224,10 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
 
   // Compose overlay errors (red)
   const overlayErrors: string[] = [];
-  if (hasTwo && stud.eligible === false && stud.reasons?.length) {
+  if (hasTwo && !stud.eligible && stud.reasons?.length) {
     overlayErrors.push(...stud.reasons);
   }
-  if (timeLeft === '00:00:00' && finalizeEligible === false && finalizeReasons?.length) {
+  if (timeLeft === '00:00:00' && !finalizeEligible && finalizeReasons?.length) {
     overlayErrors.push(...finalizeReasons);
   }
   if (submitError) overlayErrors.push(submitError);
