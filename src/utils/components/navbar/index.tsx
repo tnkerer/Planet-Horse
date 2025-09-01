@@ -115,6 +115,7 @@ const Navbar: React.FC = () => {
             <Link href='/game'><a>GAME</a></Link>
             <Link href='/profile'><a>PROFILE</a></Link>
             <Link href='/referral'><a>REFERRAL</a></Link>
+            <a href='https://stakeplanethorse.kttylabs.xyz/' rel="noreferrer" target="_blank">STAKE</a>
             
             {/* Marketplace with dropdown */}
             <div className={styles.marketplaceWrapper} ref={marketplaceDropdownRef}>
@@ -122,7 +123,7 @@ const Navbar: React.FC = () => {
                 className={styles.marketplaceButton}
                 onClick={() => setShowMarketplaceDropdown(prev => !prev)}
               >
-                MARKETPLACE
+                MARKET
               </div>
               {showMarketplaceDropdown && (
                 <div className={styles.marketplaceDropdown}>
