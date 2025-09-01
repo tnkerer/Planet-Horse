@@ -76,7 +76,7 @@ const NewHorseModal: React.FC<Props> = ({ tokenId, onClose }) => {
               <div><span className={styles.k}>Energy:</span> <span className={styles.v}>{A('energy') ?? '-'}</span></div>
               <div><span className={styles.k}>Max Energy:</span> <span className={styles.v}>{A('max energy') ?? '-'}</span></div>
               <div><span className={styles.k}>Gen:</span> <span className={styles.v}>{A('gen') ?? '-'}</span></div>
-              <div><span className={styles.k}>Breeding Count:</span> <span className={styles.v}>{A('breeding count') ?? '-'}</span></div>
+              <div><span className={styles.k}>Max Breeding:</span> <span className={styles.v}>{A('max breeding count') ?? '-'}</span></div>
               <div><span className={styles.k}>Type:</span> <span className={styles.v}>{A('horse type') ?? '-'}</span></div>
             </div>
           </div>
