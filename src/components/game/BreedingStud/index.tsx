@@ -25,7 +25,7 @@ const formatHHMMSS = (ms: number) => {
 const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }) => {
   const studId = (id ?? index) as 0 | 1;
   const { studs, clearSlot, loadActiveBreeds } = useBreeding();
-  const { updateBalance} = useUser();
+  const { updateBalance } = useUser();
   const stud = studs[studId];
 
   // resolve picked horse objects for rendering
@@ -262,26 +262,56 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
         {/* horses safe area */}
         <div className={styles.horseSafeArea}>
           {picked.length === 1 && (
-            <img
-              className={styles.horseSolo}
-              src={imgPath(picked[0], false)}
-              onMouseOver={(e) => (e.currentTarget.src = imgPath(picked[0], true))}
-              onMouseOut={(e) => (e.currentTarget.src = imgPath(picked[0], false))}
-              alt={`Horse #${picked[0].id}`}
-            />
+            <div className={`${styles.horseWrap} ${styles.single}`}>
+              <img
+                className={styles.horseImg}
+                src={imgPath(picked[0], false)}
+                onMouseOver={(e) => (e.currentTarget.src = imgPath(picked[0], true))}
+                onMouseOut={(e) => (e.currentTarget.src = imgPath(picked[0], false))}
+                alt={`Horse #${picked[0].id}`}
+              />
+              <div className={styles.horseLabel}>
+                <span className={styles.horseIdBadge}>#{picked[0].id}</span>
+                <span className={styles.horseName}>
+                  {(picked[0].profile.nickname?.trim()?.length
+                    ? picked[0].profile.nickname
+                    : picked[0].profile.name) || ''}
+                </span>
+              </div>
+            </div>
           )}
+
           {picked.length === 2 && (
             <div className={styles.horsePair}>
-              {picked.map(h => (
-                <img
-                  key={h.id}
-                  className={styles.horseImg}
-                  src={imgPath(h, false)}
-                  onMouseOver={(e) => (e.currentTarget.src = imgPath(h, true))}
-                  onMouseOut={(e) => (e.currentTarget.src = imgPath(h, false))}
-                  alt={`Horse #${h.id}`}
-                />
+              {picked.map((h, i) => (
+                <div key={h.id} className={styles.horseWrap}>
+                  <img
+                    className={styles.horseImg}
+                    src={imgPath(h, false)}
+                    onMouseOver={(e) => (e.currentTarget.src = imgPath(h, true))}
+                    onMouseOut={(e) => (e.currentTarget.src = imgPath(h, false))}
+                    alt={`Horse #${h.id}`}
+                  />
+                  <div className={styles.horseLabel}>
+                    <span className={styles.horseName}>#{h.id}</span>
+                    {/* <span className={styles.horseName}>
+                      {(h.profile.nickname?.trim()?.length
+                        ? h.profile.nickname
+                        : h.profile.name) || ''}
+                    </span> */}
+                  </div>
+                </div>
               ))}
+
+              {/* 💗 only show while this stud is actively breeding */}
+              {isActive && (
+                <img
+                  className={styles.heartOverlay}
+                  src="/assets/game/breeding/heat.gif"
+                  alt="Breeding"
+                  aria-hidden="true"
+                />
+              )}
             </div>
           )}
         </div>

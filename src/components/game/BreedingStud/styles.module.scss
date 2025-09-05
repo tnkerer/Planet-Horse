@@ -64,10 +64,74 @@
   justify-content: flex-end;
   pointer-events: none;
 
-  .horseSolo {
+  /* container around each horse image so we can position a label */
+  .horseWrap {
+    position: relative;
     width: 32%;
     height: 100%;
-    object-fit: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* the horse gif/image */
+    .horseImg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* label above the head */
+    .horseLabel {
+      position: absolute;
+      top: 2%;
+      /* adjust to sit over the head */
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      pointer-events: none;
+
+      /* don't block clicks on the stud */
+
+      /* pill background for readability */
+      background: rgba(0, 0, 0, 0.45);
+      padding: 2px 8px 3px;
+      border-radius: 8px;
+
+      // max-width: 86%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      font-family: 'SpaceHorse';
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .4);
+      line-height: 1.05;
+
+      .horseIdBadge {
+        font-size: clamp(10px, 2.6vw, 12px);
+        opacity: 0.95;
+      }
+
+      .horseName {
+        font-size: clamp(11px, 3vw, 13px);
+        font-weight: 700;
+      }
+
+      @media (max-width: 520px) {
+        .horseSafeArea .horseLabel {
+          padding: 2px 6px 3px;
+        }
+      }
+    }
+  }
+
+  /* Single horse slightly larger (optional) */
+  .single {
+    width: 36%;
   }
 
   .horsePair {
@@ -78,17 +142,34 @@
     height: 100%;
     gap: 4%;
 
-    .horseImg {
-      width: 32%;
-      height: 100%;
-      object-fit: contain;
+    /* Flip ONLY the second horse image, not its label */
+    .horseWrap:nth-child(2) .horseImg {
+      transform: scaleX(-1);
+      /* or rotateY(180deg) */
+      transform-origin: center;
     }
   }
 
-  .horsePair .horseImg:nth-child(2) {
-    transform: scaleX(-1);
-    /* or: rotateY(180deg); */
-    transform-origin: center;
+  /* 💗 heart between them */
+  .heartOverlay {
+    position: absolute;
+    top: 42%;
+    /* vertical sweet spot */
+    right: calc(32% + 2%);
+    /* horse width (32%) + half the gap (2% of 4%) */
+    transform: translate(50%, -80%);
+    width: clamp(28px, 6.5vw, 32px);
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .35));
+  }
+
+  @media (max-width: 520px) {
+    .heartOverlay {
+      top: 45%;
+      width: clamp(22px, 8vw, 48px);
+    }
   }
 }
 
