@@ -52,7 +52,7 @@ const RARITY_MOD: Record<string, number> = {
   "mythic": 2.5
 };
 
-const BASE_DENOM = 18;
+const BASE_DENOM = 24;
 
 const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const [modalRecovery, setModalRecovery] = useState(false);
@@ -97,15 +97,13 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   const recoveryMod = RARITY_MOD[slug] * (260 / BASE_DENOM);
   const recoveryCost = Number((parseInt(horse.staty.level) * recoveryMod).toFixed(2));
 
-  // Calculate level‐up fees:
-  type Rarity = keyof typeof lvlUpRarityMultiplier;
-
   const levelStr = Number(horse.staty.level);
   const rarityStr = horse.profile.type_horse_slug;
 
   function getLevelUpFee(level: number, raritySlug: string) {
     // Normalize: "common" -> "Common"
     const rarityKey = (raritySlug.charAt(0).toUpperCase() + raritySlug.slice(1))
+
 
     const basePhorse = lvlUpFee.phorse[level] ?? 0;
     const baseMedals = lvlUpFee.medals[level] ?? 0;

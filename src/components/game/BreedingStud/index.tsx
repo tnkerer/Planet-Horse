@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import type { Horse } from '../BreedFarm';
 import { useBreeding } from '@/contexts/BreedingContext';
+import { useUser } from '@/contexts/UserContext';
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif';
 import wronIcon from '@/assets/icons/wron.gif';
 import NewHorseModal from '@/components/game/Modals/NewHorseModal';
@@ -24,6 +25,7 @@ const formatHHMMSS = (ms: number) => {
 const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }) => {
   const studId = (id ?? index) as 0 | 1;
   const { studs, clearSlot, loadActiveBreeds } = useBreeding();
+  const { updateBalance} = useUser();
   const stud = studs[studId];
 
   // resolve picked horse objects for rendering
@@ -153,6 +155,7 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
         console.log('✅ Breeding has started.', data);
         clearSlot(studId);
         await loadActiveBreeds();
+        updateBalance();
         resetFinalizeState();
       } else {
         const msg = (data && (data.message || data.error || JSON.stringify(data))) || `HTTP ${res.status}`;
