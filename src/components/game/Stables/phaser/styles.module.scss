@@ -1,0 +1,85 @@
+.host {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Bottom actions row (floats above canvas) */
+.bottomBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  // gap: 14px;
+
+  padding: 10px 12px;
+  z-index: 5;             /* above the canvas */
+  pointer-events: auto;   /* clicks go to buttons */
+}
+
+/* Reuse the same art as your Items page */
+.bagButton {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  background: url('/assets/icons/bag.png') no-repeat center/contain;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  &:hover {
+    background-image: url('/assets/icons/bag_hover.png');
+  }
+}
+
+/* When modal is open, swap the icon (same behavior as Items) */
+.bagOpened {
+  background-image: url('/assets/icons/bag_opened.png') !important;
+
+  &:hover {
+    background-image: url('/assets/icons/bag_opened.png');
+  }
+}
+
+.upgradeButton {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  background: url('/assets/icons/upgrade.png') no-repeat center/contain;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  &:hover {
+    background-image: url('/assets/icons/upgrade_hover.png');
+  }
+
+  @media (max-width: 700px) {
+    width: 68px;
+    height: 68px;
+  }
+}
+
+.notificationBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Mobile tweaks */
+@media (max-width: 700px) {
+  .bottomBar {
+    gap: 10px;
+    padding: 8px 10px;
+  }
+  .bagButton {
+    width: 60px;
+    height: 60px;
+  }
+}

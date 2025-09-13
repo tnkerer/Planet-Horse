@@ -2,11 +2,13 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from 'react';
 
 type SlotId = 0 | 1;
+type GeneId = 17000 | 17001 | 17002;
 type Costs = { phorseCost: number; ronCost: number };
 
 type StudSlot = {
   id: SlotId;
   horseIds: number[];                 // chosen in UI
+  geneIds?: [GeneId | null, GeneId | null];
   eligible?: boolean;
   costs?: Costs;
   reasons?: string[];
@@ -24,6 +26,8 @@ type BreedingCtx = {
   selectHorse: (slot: SlotId, horseId: number) => Promise<void>;
   clearSlot: (slot: SlotId) => void;
   preflight: (slot: SlotId) => Promise<void>;
+  setGene: (slot: SlotId, geneSlot: 0 | 1, geneId: GeneId | null) => void;
+  clearGenes: (slot: SlotId) => void;
 };
 
 const BreedingContext = createContext<BreedingCtx | null>(null);
@@ -52,8 +56,8 @@ export const BreedingProvider: React.FC<{ children?: ReactNode }> = ({ children 
       const top2 = (arr || []).slice(0, 2);
       setStuds(prev => {
         const next: [StudSlot, StudSlot] = [
-          { ...prev[0], eligible: undefined, costs: undefined, reasons: undefined, active: undefined, horseIds: prev[0].horseIds },
-          { ...prev[1], eligible: undefined, costs: undefined, reasons: undefined, active: undefined, horseIds: prev[1].horseIds },
+          { ...prev[0], eligible: undefined, costs: undefined, reasons: undefined, active: undefined, horseIds: prev[0].horseIds, geneIds: prev[0].geneIds ?? [null, null], },
+          { ...prev[1], eligible: undefined, costs: undefined, reasons: undefined, active: undefined, horseIds: prev[1].horseIds, geneIds: prev[1].geneIds ?? [null, null], },
         ];
         top2.forEach((b, i) => {
           next[i] = {
@@ -111,7 +115,7 @@ export const BreedingProvider: React.FC<{ children?: ReactNode }> = ({ children 
       const newIds = [...cur.horseIds, horseId];
 
       const next = [...prev] as [StudSlot, StudSlot];
-      next[slot] = { ...cur, horseIds: newIds, eligible: undefined, costs: undefined, reasons: undefined };
+      next[slot] = { ...cur, horseIds: newIds, eligible: undefined, costs: undefined, reasons: undefined, geneIds: cur.geneIds ?? [null, null], };
       return next;
     });
     // No await here—preflight is triggered by the effect below when we *see* length===2
@@ -120,21 +124,72 @@ export const BreedingProvider: React.FC<{ children?: ReactNode }> = ({ children 
   const clearSlot = useCallback((slot: SlotId) => {
     setStuds(prev => {
       const next = [...prev] as [StudSlot, StudSlot];
-      next[slot] = { id: slot, horseIds: [], eligible: undefined, costs: undefined, reasons: undefined, active: prev[slot].active };
+      next[slot] = {
+        id: slot,
+        horseIds: [],
+        // keep active if present, but do not clear genes here (we expose clearGenes separately)
+        active: prev[slot].active,
+        eligible: undefined,
+        costs: undefined,
+        reasons: undefined,
+        geneIds: prev[slot].geneIds ?? [null, null],
+      };
+      return next;
+    });
+  }, []);
+
+  const setGene = useCallback((slot: SlotId, geneSlot: 0 | 1, geneId: GeneId | null) => {
+    setStuds(prev => {
+      const cur = prev[slot];
+      const curGenes: [GeneId | null, GeneId | null] = cur.geneIds ?? [null, null];
+
+      if (geneId != null) {
+        const otherSlot: 0 | 1 = geneSlot === 0 ? 1 : 0;
+        if (curGenes[otherSlot] === geneId) {
+          // no-op if trying to assign the same gene to both slots
+          return prev;
+        }
+      }
+
+      const nextGenes: [GeneId | null, GeneId | null] = [...curGenes] as any;
+      nextGenes[geneSlot] = geneId;
+      
+      const next = [...prev] as [StudSlot, StudSlot];
+      next[slot] = { ...cur, geneIds: nextGenes };
+      return next;
+    });
+  }, []);
+
+  // NEW: clear both gene slots
+  const clearGenes = useCallback((slot: SlotId) => {
+    setStuds(prev => {
+      const cur = prev[slot];
+      const next = [...prev] as [StudSlot, StudSlot];
+      next[slot] = { ...cur, geneIds: [null, null] };
       return next;
     });
   }, []);
 
   useEffect(() => { loadActiveBreeds(); }, [loadActiveBreeds]);
 
-  // ▶ Auto-run preflight whenever a slot first reaches two picks and isn’t server-active
   useEffect(() => {
     if (!studs[0].active && studs[0].horseIds.length === 2 && studs[0].eligible === undefined) preflight(0);
     if (!studs[1].active && studs[1].horseIds.length === 2 && studs[1].eligible === undefined) preflight(1);
   }, [studs, preflight]);
 
   return (
-    <BreedingContext.Provider value={{ studs, selectedHorseIds, loadActiveBreeds, selectHorse, clearSlot, preflight }}>
+    <BreedingContext.Provider
+      value={{
+        studs,
+        selectedHorseIds,
+        loadActiveBreeds,
+        selectHorse,
+        clearSlot,
+        preflight,
+        setGene,       // ← NEW
+        clearGenes,    // ← NEW
+      }}
+    >
       {children}
     </BreedingContext.Provider>
   );

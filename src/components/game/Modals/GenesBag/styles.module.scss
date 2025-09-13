@@ -1,0 +1,264 @@
+/* src/components/game/Modals/GenesBag/styles.module.scss */
+
+.modalBag {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalFull {
+    position: relative;
+    width: 480px;
+    max-width: 60vw;
+    aspect-ratio: 1 / 1;
+    background-image: url('/assets/bag_raw.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    @media (max-width: 700px) {
+        width: 360px;
+        max-width: none;
+    }
+}
+
+.modalClose {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.title {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'SpaceHorse';
+    color: #e0e0e0;
+    font-size: clamp(14px, 1.2vw, 22px);
+}
+
+.loadingWrapper {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.loadingText {
+    color: #fff;
+    font-family: 'SpaceHorse';
+    font-size: clamp(14px, 1.2vw, 18px);
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    text-align: center;
+    cursor: pointer;
+    z-index: 10;
+
+    &:disabled {
+        opacity: .3;
+        cursor: default;
+    }
+}
+
+.prev {
+    left: 8px;
+}
+
+.next {
+    right: 8px;
+}
+
+.carouselViewport {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 90%;
+    height: 65%;
+    transform: translateX(-50%);
+    overflow-x: hidden;
+    overflow-y: visible;
+    touch-action: pan-y;
+}
+
+.carouselTrack {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform .3s ease;
+}
+
+.page {
+    flex: 0 0 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gridContainer {
+    width: 80%;
+    height: 90%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1%;
+    padding: 40px 20px;
+}
+
+.gridItemWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.gridItemEmpty {
+    width: 100%;
+    height: 100%;
+    background: #49413d;
+    border-radius: 6px;
+}
+
+.gridItem {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #49413d;
+        border-radius: 6px;
+        z-index: 0;
+    }
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.itemCount {
+    position: absolute;
+    top: 4%;
+    right: 4%;
+    font-family: 'SpaceHorse';
+    color: #fff;
+    text-shadow: -2px 1px 0 #000;
+    font-size: clamp(11px, .8vw, 14px);
+    z-index: 2;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    background: #be9c7f;
+    border: 1px solid #7d4d45;
+    border-radius: 4px;
+    min-width: 6rem;
+    z-index: 5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+}
+
+.dropdownOption {
+    font-family: 'SpaceHorse';
+    font-size: .9rem;
+    padding: .5rem 1rem;
+    color: #333;
+    cursor: pointer;
+    background: transparent;
+
+    &:hover {
+        background: #7d4d45;
+        color: #fff;
+    }
+}
+
+.dropdownAbove {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 4px;
+}
+
+.dotsContainer {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: .5rem;
+    z-index: 5;
+}
+
+.dot {
+    width: .8rem;
+    height: .8rem;
+    background: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.activeDot {
+    background: #7d4d45;
+}
+
+.tooltipPortal {
+    display: block;
+    position: fixed;
+    background: rgba(149, 174, 189, .8);
+    border: 1px solid #3e3631;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'SpaceHorse';
+    color: #000;
+    max-width: 240px;
+    z-index: 9999;
+    pointer-events: none;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.tooltipTitle {
+    display: block;
+    margin-top: .25rem;
+    color: #1b07ce;
+    font-family: 'SpaceHorse';
+}
+
+.usesLeft {
+    display: block;
+    margin-top: .25rem;
+    color: #800606;
+    font-family: 'SpaceHorse';
+}

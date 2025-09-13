@@ -1,0 +1,21 @@
+.tooltip {
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 10px));
+  max-width: 240px;
+  background: rgba(149,174,189,.9);
+  border: 1px solid #3e3631;
+  border-radius: 6px;
+  padding: 6px 8px;
+  z-index: 9999;
+  pointer-events: none;
+  color: #000;
+  font-family: 'SpaceHorse';
+}
+.title {
+  color: #1b07ce;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.desc {
+  line-height: 1.15;
+}

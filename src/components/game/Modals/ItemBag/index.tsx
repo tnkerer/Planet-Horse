@@ -13,6 +13,7 @@ import { items as itemsConst } from '@/utils/constants/items';
 import { Horse } from '@/domain/models/Horse';
 import ErrorModal from '../ErrorModal';
 import InfoModal from '../InfoModal';
+import UpgradeResults, { Upgrades } from '../UpgradeResults';
 import {
   BrowserProvider,
   Contract
@@ -86,6 +87,9 @@ const ItemBag: React.FC<Props> = ({
   const [currentPage, setCurrentPage] = useState(0);
 
   const [foodUsed, setFoodUsed] = useState<number>(horse?.profile.food_used ?? 0);
+
+  const [upgradesData, setUpgradesData] = useState<Upgrades | null>(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const { updateBalance } = useUser();
 
@@ -538,7 +542,51 @@ const ItemBag: React.FC<Props> = ({
       await loadOnChain()
     } catch (err: any) {
       console.error(err);
-      setErrorMessage(err.message || 'Failed to deposit items');
+      setErrorMessage('Something went wrong! Failed to deposit items');
+    }
+  };
+
+  const handleUseLevelUpTicket = async () => {
+    if (!horse) {
+      setErrorMessage('Select a horse before using a Level Up Ticket.');
+      return;
+    }
+    setErrorMessage(null);
+    setInfoMessage(null);
+
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/horses/${horse.id}/level-up`,
+        {
+          method: 'PUT',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ useTicket: true }), // << key bit
+        }
+      );
+
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
+      }
+
+      const data = (await res.json()) as Upgrades;
+      setUpgradesData(data);
+      setShowUpgrade(true);
+
+      // refresh UI bits
+      if (reloadHorses) await reloadHorses();
+      await fetchItems();
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to use Level Up Ticket');
+    } finally {
+      setActiveDropdownIndex(null);
+      setTooltip(null);
     }
   };
 
@@ -736,7 +784,7 @@ const ItemBag: React.FC<Props> = ({
                                 >
                                   {item.consumable ? (
                                     <>
-                                      {/* CHANGED: Use → Open for Medal Bag */}
+                                      {/* Medal Bag special-case (already present) */}
                                       {item.name === 'Medal Bag' ? (
                                         <div
                                           className={styles.dropdownOption}
@@ -744,7 +792,18 @@ const ItemBag: React.FC<Props> = ({
                                         >
                                           Open
                                         </div>
+                                      ) : item.name === 'Level Up Ticket' ? (
+                                        // << NEW: when Level Up Ticket, call level-up with useTicket=true
+                                        <div
+                                          className={styles.dropdownOption}
+                                          onClick={async () => {
+                                            await handleUseLevelUpTicket();
+                                          }}
+                                        >
+                                          Use
+                                        </div>
                                       ) : (
+                                        // all other consumables → original consume endpoint
                                         <div
                                           className={styles.dropdownOption}
                                           onClick={async () => {
@@ -760,7 +819,12 @@ const ItemBag: React.FC<Props> = ({
                                         className={styles.dropdownOption}
                                         onClick={() => {
                                           setTooltip(null);
-                                          setMultiRecycle({ name: item.name, uses: item.usesLeft, quantity: 1, maxQuantity: item.quantity });
+                                          setMultiRecycle({
+                                            name: item.name,
+                                            uses: item.usesLeft,
+                                            quantity: 1,
+                                            maxQuantity: item.quantity
+                                          });
                                           setActiveDropdownIndex(null);
                                         }}
                                       >
@@ -983,6 +1047,20 @@ const ItemBag: React.FC<Props> = ({
                   multiDeposit.quantity
                 );
                 setMultiDeposit(null);
+              }}
+            />
+          )}
+
+          {showUpgrade && upgradesData && (
+            <UpgradeResults
+              horse={horse}
+              upgrades={upgradesData}
+              onClose={async () => {
+                setShowUpgrade(false);
+                setUpgradesData(null);
+                try {
+                  if (reloadHorses) await reloadHorses();
+                } catch (e) { console.error(e); }
               }}
             />
           )}

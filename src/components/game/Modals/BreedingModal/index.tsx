@@ -7,12 +7,28 @@ import type { Horse } from '@/domain/models/Horse';
 import { itemModifiers, items as itemDefs } from '@/utils/constants/items';
 import { xpProgression } from '@/utils/constants/xp-progression';
 import { useBreeding } from '@/contexts/BreedingContext';
+import { BrowserProvider, Contract, getAddress } from 'ethers';
+import ErrorModal from '../ErrorModal';
+import InfoModal from '../InfoModal';
+import { useHorseList } from '../../Stables/hooks/useHorseList';
 
 interface Props {
     status: boolean;
     studId: number | string | null;
     horses: Horse[];
     onClose: () => void;
+}
+
+const BURN_ADDR = getAddress('0x000000000000000000000000000000000000dEaD');
+const ERC721_V1 = '0x66eeb20a1957c4b3743ecad19d0c2dbcf56b683f'; // 1..2202
+const ERC721_V2 = '0x1296ffefc43ff7eb4b7617c02ef80253db905215'; // 2203+
+
+function getRoninProvider(): BrowserProvider {
+    const ronin = (window as any).ronin;
+    if (!ronin?.provider) {
+        throw new Error('Ronin wallet not detected. Please install & connect your Ronin wallet.');
+    }
+    return new BrowserProvider(ronin.provider);
 }
 
 const rarityColorMap: Record<string, string> = {
@@ -45,9 +61,13 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
     const containerRef = useRef<HTMLDivElement>(null);
     const touchStartX = useRef<number | null>(null);
     const touchEndX = useRef<number | null>(null);
-
+    const { loadHorses } = useHorseList('level');
     const fullText = 'Howdy! Let us choose which horse are going to the breeding stud.';
     const [displayedText, setDisplayedText] = useState('');
+
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [infoMessage, setInfoMessage] = useState<string | null>(null);
+
     useEffect(() => {
         if (!status) return;
         setDisplayedText('');
@@ -177,6 +197,51 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
             return () => document.removeEventListener('click', onClickOutside);
         }
     }, [activeDropdownIndex]);
+
+
+    const handleBurn = async (h: Horse) => {
+        try {
+            // Block if selected in any stud or a parent of an active breed
+            const inAnyStud =
+                studs[0].horseIds.includes(h.id) ||
+                studs[1].horseIds.includes(h.id) ||
+                (studs[0].active?.parents || []).includes(h.id) ||
+                (studs[1].active?.parents || []).includes(h.id);
+
+            if (inAnyStud) {
+                setErrorMessage('This horse is selected or actively breeding. Remove it first to burn.');
+                return;
+            }
+
+            const provider = getRoninProvider();
+            const signer = await provider.getSigner();
+            const from = await signer.getAddress();
+
+            const tokenId = Number(h.id);
+            const nftAddress = tokenId >= 1 && tokenId <= 2202 ? ERC721_V1 : ERC721_V2;
+
+            const ERC721_ABI = [
+                'function safeTransferFrom(address from, address to, uint256 tokenId)'
+            ];
+            const nft = new Contract(nftAddress, ERC721_ABI, signer);
+
+            const tx = await nft.safeTransferFrom(from, BURN_ADDR, tokenId);
+            console.log('📝 Burn tx sent:', tx.hash);
+            await tx.wait();
+            console.log('🔥 Burn confirmed for token', tokenId);
+
+            setActiveDropdownIndex(null);
+            setErrorMessage(null);
+            setInfoMessage('Burn successful. This might take a few minutes to reflect ingame. Check your Profile page for confirmation.');
+            await loadHorses();
+        } catch (e: any) {
+            console.error('Burn failed', e);
+            setActiveDropdownIndex(null);
+            setInfoMessage(null);
+            setErrorMessage('Something went wrong. Failed to burn horse');
+        }
+    };
+
 
     const onTouchStart = (e: TouchEvent) => { touchStartX.current = e.touches[0].clientX; touchEndX.current = null; };
     const onTouchMove = (e: TouchEvent) => { touchEndX.current = e.touches[0].clientX; };
@@ -309,6 +374,23 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
                                                                 >
                                                                     Breed
                                                                 </div>
+                                                                <div
+                                                                    className={styles.dropdownOption}
+                                                                    role="button"
+                                                                    tabIndex={0}
+                                                                    onClick={async (e) => {
+                                                                        e.stopPropagation();
+                                                                        await handleBurn(h);
+                                                                    }}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'Enter' || e.key === ' ') {
+                                                                            e.preventDefault();
+                                                                            (e.currentTarget as HTMLDivElement).click();
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    Burn
+                                                                </div>
                                                             </div>
                                                         )}
                                                     </div>
@@ -340,6 +422,13 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
                                 />
                             ))}
                         </div>
+                    )}
+
+                    {errorMessage && (
+                        <ErrorModal text={errorMessage} onClose={() => setErrorMessage(null)} />
+                    )}
+                    {infoMessage && (
+                        <InfoModal text={infoMessage} onClose={() => setInfoMessage(null)} />
                     )}
 
                     {/* Tooltip content mirrors SingleHorse PROFILE + STATY */}

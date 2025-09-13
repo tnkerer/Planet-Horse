@@ -7,93 +7,16 @@ import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif';
 import wronIcon from '@/assets/icons/wron.gif';
 import medalIcon from '@/assets/icons/medal.gif';
 import { useUser } from '@/contexts/UserContext';
-import { useWallet } from '@/contexts/WalletContext';
 import InfoModal from '../Modals/InfoModal';
 import RacesModal from '../Modals/RacesModal';
 import MineModal from '../Modals/MineModal';
+import { useHorseList, OrderByType } from '../Stables/hooks/useHorseList';
 
-type OrderByType = 'level' | 'rarity' | 'energy';
 const ORDER_OPTIONS = [
   { value: 'level', label: 'Highest Level' },
   { value: 'rarity', label: 'Highest Rarity' },
   { value: 'energy', label: 'Most Energy' },
 ];
-
-// Backend response shape
-interface BackendHorse {
-  tokenId: string;
-  name: string;
-  sex: 'MALE' | 'FEMALE';
-  status: string;
-  rarity: string;
-  exp: number;
-  upgradable: boolean;
-  level: number;
-  currentPower: number;
-  currentSprint: number;
-  currentSpeed: number;
-  currentEnergy: number;
-  maxEnergy: number;
-  lastRace: string | null;
-  createdAt: string;
-  updatedAt: string;
-  nickname: string | null;
-  foodUsed: number;
-  gen: number;
-  lastBreeding: string;
-  currentBreeds: number;
-  maxBreeds: number;
-  equipments: Array<{
-    id: string;
-    ownerId: string;
-    horseId: string;
-    name: string;
-    value: number;
-    breakable: boolean;
-    uses: number;
-    createdAt: string;
-    updatedAt: string;
-  }>;
-}
-
-export interface Horse {
-  id: number;
-  profile: {
-    nickname: string | null;
-    name: string;
-    name_slug: string;
-    sex: string;
-    type_horse: string;
-    type_horse_slug: string;
-    type_jockey: string;
-    time: string;
-    food_used: number;
-  };
-  staty: {
-    status: string;
-    started: string;
-    breeding: string;
-    level: string;
-    exp: string;
-    upgradable: boolean;
-    power: string;
-    sprint: string;
-    speed: string;
-    energy: string;
-    generation: string;
-  };
-  items: Array<{
-    id: string;
-    ownerId: string;
-    horseId: string;
-    name: string;
-    value: number;
-    breakable: boolean;
-    uses: number;
-    createdAt: string;
-    updatedAt: string;
-  }>;
-}
 
 interface Props {
   changeView: (view: string) => void;
@@ -103,83 +26,12 @@ const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalRaces, setModalRaces] = useState(false);
   const [modalMine, setModalMine] = useState(false)
   const [modalItems, setModalItems] = useState(false);
-  const { phorse, medals, wron, updateBalance } = useUser();
-  const { isAuthorized, address } = useWallet();
+  const { phorse, medals, wron } = useUser();
 
-  const [rawHorseList, setRawHorseList] = useState<Horse[]>([]);
-  const [horseList, setHorseList] = useState<Horse[]>([]);
-  const [nextRecoveryTs, setNextRecoveryTs] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>('—:—:—');
-
   const [orderBy, setOrderBy] = useState<OrderByType>('level');
-
   const [informational, setInformational] = useState<string | null>(null);
-
-  const loadHorses = useCallback(async () => {
-    if (!address) {
-      setRawHorseList([]);
-      setNextRecoveryTs(null);
-      return;
-    }
-    updateBalance();
-
-    try {
-      const [hRes, rRes] = await Promise.all([
-        fetch(`${process.env.API_URL}/horses/blockchain`, { credentials: 'include' }),
-        fetch(`${process.env.API_URL}/horses/next-energy-recovery`, { credentials: 'include' }),
-      ]);
-
-      if (!hRes.ok) throw new Error(`Horses ${hRes.status}`);
-      if (!rRes.ok) throw new Error(`Recovery ${rRes.status}`);
-
-      const data = (await hRes.json()) as BackendHorse[];
-      const { nextTimestamp } = (await rRes.json()) as { nextTimestamp: number };
-
-      const mapped: Horse[] = data.map(h => ({
-        id: Number(h.tokenId),
-        profile: {
-          nickname: h.nickname ? h.nickname : null,
-          name: h.name,
-          name_slug: h.name.toLowerCase().replace(/\s+/g, '-'),
-          sex: h.sex.toLowerCase(),
-          type_horse: h.rarity.toUpperCase(),
-          type_horse_slug: h.rarity.toLowerCase(),
-          type_jockey: 'NONE',
-          time: '120 Days',
-          food_used: h.foodUsed
-        },
-        staty: {
-          status: h.status,
-          started: h.lastBreeding,
-          breeding: `${String(h.currentBreeds)}/${String(h.maxBreeds)}`,
-          level: String(h.level),
-          exp: String(h.exp),
-          upgradable: h.upgradable,
-          power: String(h.currentPower),
-          sprint: String(h.currentSprint),
-          speed: String(h.currentSpeed),
-          energy: `${h.currentEnergy}/${h.maxEnergy}`,
-          generation: String(h.gen)
-        },
-        items: h.equipments,
-      }));
-
-      setRawHorseList(mapped);
-      setNextRecoveryTs(nextTimestamp);
-    } catch (err) {
-      console.error('Failed to load horses:', err);
-      setRawHorseList([]);
-      setNextRecoveryTs(null);
-    }
-  }, [address, updateBalance]);
-
-  useEffect(() => {
-    loadHorses();
-  }, [loadHorses]);
-
-  useEffect(() => {
-    setHorseList(sortHorses(rawHorseList, orderBy));
-  }, [rawHorseList, orderBy]);
+  const { horseList, loadHorses, nextRecoveryTs } = useHorseList(orderBy);
 
   const handleOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setOrderBy(e.target.value as OrderByType);
@@ -209,36 +61,8 @@ const Horses: React.FC<Props> = ({ changeView }) => {
     return () => clearInterval(id);
   }, [nextRecoveryTs]);
 
-  function sortHorses(list: Horse[], orderBy: OrderByType): Horse[] {
-    const arr = [...list];
-    const rarityOrder = ['mythic', 'legendary', 'epic', 'rare', 'uncommon', 'common'];
-
-    switch (orderBy) {
-      case 'level':
-        arr.sort((a, b) => parseInt(b.staty.level) - parseInt(a.staty.level));
-        break;
-      case 'energy':
-        arr.sort((a, b) => {
-          const aE = parseInt(a.staty.energy.split('/')[0], 10);
-          const bE = parseInt(b.staty.energy.split('/')[0], 10);
-          return bE - aE;
-        });
-        break;
-      case 'rarity':
-        arr.sort((a, b) => {
-          const aIdx = rarityOrder.indexOf(a.profile.type_horse_slug);
-          const bIdx = rarityOrder.indexOf(b.profile.type_horse_slug);
-          return aIdx - bIdx;
-        });
-        break;
-    }
-
-    return arr;
-  }
-
   return (
     <>
-
       {modalRaces && (
         <RacesModal
           setVisible={setModalRaces}

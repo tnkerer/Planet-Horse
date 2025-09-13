@@ -6,6 +6,9 @@ import { useUser } from '@/contexts/UserContext';
 import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif';
 import wronIcon from '@/assets/icons/wron.gif';
 import NewHorseModal from '@/components/game/Modals/NewHorseModal';
+import GenesBag from '@/components/game/Modals/GenesBag';
+import GeneTooltip from './GeneTooltip';
+import { items as itemsConst } from '@/utils/constants/items';
 
 interface BreedingStudProps {
   index: number;
@@ -13,6 +16,22 @@ interface BreedingStudProps {
   id?: string | number;
   onOpen?: (studId: string | number) => void;
 }
+
+const geneMeta = (id: number | null) => {
+  if (id == null) return { title: 'Empty Gene Slot', desc: 'Select a gene to boost your offspring.' };
+  const def =
+    id === 17000 ? itemsConst['Power Genes'] :
+      id === 17001 ? itemsConst['Speed Genes'] :
+        id === 17002 ? itemsConst['Sprint Genes'] :
+          undefined;
+
+  return {
+    title: def?.name ?? 'Unknown Gene',
+    desc: def?.description ?? '',
+  };
+};
+
+const GENE_PLACEHOLDER = '/assets/items/no_gene.png'; // public/assets/items/no_gene.png
 
 const formatHHMMSS = (ms: number) => {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -24,9 +43,13 @@ const formatHHMMSS = (ms: number) => {
 
 const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }) => {
   const studId = (id ?? index) as 0 | 1;
-  const { studs, clearSlot, loadActiveBreeds } = useBreeding();
+  const { studs, clearSlot, loadActiveBreeds, clearGenes } = useBreeding();
   const { updateBalance } = useUser();
   const stud = studs[studId];
+
+  const [ttVisible, setTtVisible] = useState(false);
+  const [ttPos, setTtPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [ttContent, setTtContent] = useState<{ title: string; desc: string }>({ title: '', desc: '' });
 
   // resolve picked horse objects for rendering
   const picked = useMemo(() => {
@@ -51,6 +74,7 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
 
   const isActive = !!stud.active;
   const hasTwo = stud.horseIds.length === 2;
+  const hasAnyGenes = !!(stud.geneIds?.some(id => id != null));
 
   // ── Finalize-check state (only after timer hits 00:00:00) ──────────────
   const [finalizeEligible, setFinalizeEligible] = useState(false);
@@ -58,6 +82,9 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
   const [offspringTokenId, setOffspringTokenId] = useState<number | null>(null);
   const [checkingFinalize, setCheckingFinalize] = useState(false);
   const lastCheckedKeyRef = useRef<string | null>(null);
+  const [showGenesBag, setShowGenesBag] = useState(false);
+  const [targetGeneSlot, setTargetGeneSlot] = useState<0 | 1 | null>(null);
+
 
   const pairKey = stud.horseIds.join('-');
 
@@ -110,7 +137,7 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
   }, [isActive, timeLeft]);
 
   // ── Buttons enabled/disabled ───────────────────────────────────────────
-  const resetDisabled = isActive || stud.horseIds.length === 0;
+  const resetDisabled = isActive || (stud.horseIds.length === 0 && !hasAnyGenes);
   const startDisabled = isActive || !hasTwo || !stud.eligible; // stud.eligible from preflight in context
   const finishDisabled = !isActive || !(timeLeft === '00:00:00' && finalizeEligible);
 
@@ -129,6 +156,7 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
     e.stopPropagation();
     if (resetDisabled) return;
     clearSlot(studId);
+    clearGenes(studId);
     setSubmitError(null);
     resetFinalizeState();
   };
@@ -140,12 +168,24 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
 
     const [a, b] = stud.horseIds.map(String);
 
+    // Build body with optional genes
+    const payload: Record<string, any> = { a, b };
+    const [gA, gB] = (stud.geneIds ?? []) as Array<number | null>;
+    if (gA != null) payload.geneA = gA;
+    if (gB != null) payload.geneB = gB;
+
+    // Idempotency key (pair + genes)
+    const idemKey = `breed-${a}-${b}-${[gA ?? 'x', gB ?? 'x'].join('-')}`;
+
     try {
       const res = await fetch(`${process.env.API_URL}/user/breed`, {
         method: 'POST',
         credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ a, b }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': idemKey,
+        },
+        body: JSON.stringify(payload),
       });
 
       let data: any = null;
@@ -153,7 +193,9 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
 
       if (res.ok) {
         console.log('✅ Breeding has started.', data);
+        // Clear both horses and genes locally
         clearSlot(studId);
+        clearGenes(studId);
         await loadActiveBreeds();
         updateBalance();
         resetFinalizeState();
@@ -167,6 +209,18 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
       setSubmitError(msg);
       console.error('❌ Start breeding failed:', msg);
     }
+  };
+
+  const handleGeneClick = (slot: 0 | 1) => {
+    setTargetGeneSlot(slot);
+    setShowGenesBag(true);
+  };
+
+  const geneIcon = (nameOrNull: string | null) => {
+    if (!nameOrNull) return GENE_PLACEHOLDER;
+    // If later you store real names like "Power Genes", "Speed Genes", "Sprint Genes"
+    // and you also have items[name].src, you can map to: `/assets/items/${items[name].src}.webp`
+    return GENE_PLACEHOLDER; // placeholder until wiring to real item defs
   };
 
   // New offspring modal state
@@ -247,6 +301,56 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivate(); } }}
       >
         <div className={styles.bg} />
+
+        {/* ─────────────── Genes indicator (top-right) ─────────────── */}
+        <div className={styles.genesStrip} aria-label="Gene slots">
+          {([0, 1] as const).map((slotIdx) => {
+            const gid = stud.geneIds?.[slotIdx] ?? null;
+            const icon =
+              gid === 17000 ? '/assets/items/power_gene.gif' :
+                gid === 17001 ? '/assets/items/speed_gene.gif' :
+                  gid === 17002 ? '/assets/items/sprint_gene.gif' :
+                    '/assets/items/no_gene.png';
+
+            return (
+              <button
+                key={slotIdx}
+                type="button"
+                className={styles.geneBtn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleGeneClick(slotIdx);
+                }}
+                onMouseEnter={(e) => {
+                  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                  const meta = geneMeta(gid);
+                  setTtContent(meta);
+                  setTtPos({ x: rect.left + rect.width / 2, y: rect.top });
+                  setTtVisible(true);
+                }}
+                onMouseLeave={() => setTtVisible(false)}
+                onFocus={(e) => {
+                  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                  const meta = geneMeta(gid);
+                  setTtContent(meta);
+                  setTtPos({ x: rect.left + rect.width / 2, y: rect.top });
+                  setTtVisible(true);
+                }}
+                onBlur={() => setTtVisible(false)}
+                aria-label={`Gene slot ${slotIdx + 1}`}
+                title=""
+              >
+                <img
+                  src={icon}
+                  alt={ttContent.title || `Gene slot ${slotIdx + 1}`}
+                  className={styles.geneImg}
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/assets/items/no_gene.png'; }}
+                />
+              </button>
+            );
+          })}
+        </div>
+        {/* ──────────────────────────────────────────────────────────────── */}
 
         {/* NON-INTRUSIVE ERROR OVERLAY (top) */}
         {overlayErrors.length > 0 && (
@@ -373,6 +477,23 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
           onClose={() => setShowOffspring(false)}
         />
       )}
+
+      {showGenesBag && targetGeneSlot != null && (
+        <GenesBag
+          status={showGenesBag}
+          onClose={() => setShowGenesBag(false)}
+          targetSlot={targetGeneSlot}
+          studId={studId}
+        />
+      )}
+
+      <GeneTooltip
+        visible={ttVisible}
+        x={ttPos.x}
+        y={ttPos.y}
+        title={ttContent.title}
+        desc={ttContent.desc}
+      />
     </>
   );
 };

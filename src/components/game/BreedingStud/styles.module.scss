@@ -26,6 +26,62 @@
   pointer-events: none;
 }
 
+.genesStrip {
+  position: absolute;
+  /* pin to top-right inside the stud card */
+  top: 20%;
+  left: 4%;
+  z-index: 3;
+  display: inline-flex;
+  gap: 6px;
+  pointer-events: auto; // clickable even if parent has none
+
+  /* never overflow the background: keep it inside padding and scale down on small screens */
+  max-width: 40%;
+  flex-wrap: nowrap;
+
+  @media (max-width: 920px) {
+    top: 20%;
+    left: 5%;
+    gap: 5px;
+  }
+
+  @media (max-width: 520px) {
+    gap: 4px;
+  }
+}
+
+.geneBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(26px, 4.8vw, 34px);
+  height: clamp(26px, 4.8vw, 34px);
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.25);
+  outline: none;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  &:active {
+    background: rgba(0, 0, 0, 0.45);
+  }
+}
+
+.geneImg {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  pointer-events: none; // click goes to button
+  user-select: none;
+}
+
 /* TOP ERROR OVERLAY (does not affect layout) */
 .errorOverlay {
   position: absolute;

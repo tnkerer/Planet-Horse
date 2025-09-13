@@ -1,0 +1,219 @@
+.secondBar {
+    background-image: url('../../../assets/game/horses/options-bar.png');
+    min-height: 100px;
+    width: 100%;
+    background-size: cover;
+    flex: 0 0 auto;
+
+    .containerBar {
+        padding: 25px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        @media (max-width: 700px) {
+            flex-direction: column;
+        }
+    }
+
+    .actionContainer {
+
+
+        .actionOptions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            /* @media screen and (max-width: 920px) {
+        flex-direction: column;
+        text-align: left;
+        align-items: normal;
+      } */
+
+            flex-wrap: wrap;
+
+            &>div {
+                font-family: 'UpheavalPro';
+                text-shadow: 0 3px 2px rgba(0, 0, 0, 0.2);
+                color: #fff;
+                font-size: 22px;
+                cursor: pointer;
+                margin-right: 30px;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            .racingButton {
+                position: relative;
+                width: 72px;
+                height: 72px;
+                background: url('/assets/icons/racing.png') no-repeat center/contain;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                margin: 0;
+
+                &:hover {
+                    background-image: url('/assets/icons/racing_hover.png');
+                }
+
+                // badge de notificação, se você quiser posicionar o span dentro dele
+                .notificationBadge {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                }
+
+                @media (max-width: 700px) {
+                    width: 68px;
+                    height: 68px;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    grid-gap: 16px;
+                    justify-items: center;
+                }
+            }
+
+            .bagButton {
+                position: relative;
+                width: 72px;
+                height: 72px;
+                background: url('/assets/icons/bag.png') no-repeat center/contain;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                margin: 0;
+
+                &:hover {
+                    background-image: url('/assets/icons/bag_hover.png');
+                }
+
+                /* when modal is open, swap the icon */
+                &.bagOpened {
+                    background-image: url('/assets/icons/bag_opened.png') !important;
+
+                    &:hover {
+                        /* optionally a hover‐state for opened */
+                        background-image: url('/assets/icons/bag_opened.png');
+                    }
+                }
+
+                // badge de notificação, se você quiser posicionar o span dentro dele
+                .notificationBadge {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                }
+
+                @media (max-width: 700px) {
+                    width: 68px;
+                    height: 68px;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    grid-gap: 16px;
+                    justify-items: center;
+                }
+            }
+
+            .upgradeButton {
+                position: relative;
+                width: 72px;
+                height: 72px;
+                background: url('/assets/icons/upgrade.png') no-repeat center/contain;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                margin: 0;
+
+                &:hover {
+                    background-image: url('/assets/icons/upgrade_hover.png');
+                }
+
+                // badge de notificação, se você quiser posicionar o span dentro dele
+                .notificationBadge {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                }
+
+                @media (max-width: 700px) {
+                    width: 68px;
+                    height: 68px;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    grid-gap: 16px;
+                    justify-items: center;
+                }
+            }
+
+        }
+
+    }
+
+    .countCurrency {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+
+        span {
+            max-width: 180px;
+            background: #582c25;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-family: 'SpaceHorse';
+            font-size: 20px;
+            color: #fff;
+            margin-right: 8px;
+        }
+
+        .currencyGroup {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media screen and (max-width: 430px) {
+            flex-wrap: wrap;
+            justify-content: center;
+            row-gap: 8px;
+        }
+    }
+}
+
+.container {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 40px 20px 20px 20px;
+}
+
+.canvasWrap {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto 24px;
+  aspect-ratio: 16/9;    /* preserves space for the Phaser canvas */
+  background: rgba(0,0,0,.08);
+  border: 1px solid #7d4d45;
+  border-radius: 8px;
+  overflow: hidden;
+
+  @media (max-width: 920px) {
+    aspect-ratio: 16/10; /* a bit taller on mobile if you prefer */
+  }
+}
+
+/* If you want the canvas to always fill this box */
+.canvasWrap :global(canvas) {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
