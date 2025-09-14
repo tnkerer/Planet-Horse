@@ -2,17 +2,44 @@
 import React from 'react';
 import ItemBag from '@/components/game/Modals/ItemBag';
 import MineModal from '@/components/game/Modals/MineModal';
+import RacesModal from '@/components/game/Modals/RacesModal';
 import ui from './styles.module.scss';
 import type { Horse } from '../types/horse';
 import { bus } from './bus';
 
-type Props = { horseList: Horse[] };
+type Props = {
+  horseList: Horse[];
+  reloadHorses: () => Promise<void>;  // + NEW
+};
 
-const PhaserStablesCanvas: React.FC<Props> = ({ horseList }) => {
+const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
   const hostRef = React.useRef<HTMLDivElement | null>(null);
   const [bagOpen, setBagOpen] = React.useState(false);
   const [mineOpen, setMineOpen] = React.useState(false);
-  const [showHUD, setShowHUD] = React.useState(false); // NEW
+  const [showHUD, setShowHUD] = React.useState(false);
+  const [modalRaces, setModalRaces] = React.useState(false);
+  // const { horseList, loadHorses, nextRecoveryTs } = useHorseList('level');
+
+  // Keep the latest list in a ref, so we can emit it right after loadHorses:
+  const horseListRef = React.useRef<Horse[]>([]);
+  React.useEffect(() => {
+    horseListRef.current = horseList;
+    bus.emit('horses:update', horseList);  // push to Phaser on every change
+  }, [horseList]);
+
+  // Use this wherever you need to "Race All" or reload from a modal:
+  const reloadHorsesAndEmit = React.useCallback(async () => {
+    await reloadHorses();                     // triggers state update
+    // emit on next frame so state has settled
+    requestAnimationFrame(() => {
+      bus.emit('horses:update', horseListRef.current);
+    });
+  }, [reloadHorses]);
+
+  const idleHorses = React.useMemo(
+    () => horseList.filter(h => h.staty.status === 'IDLE'),
+    [horseList]
+  );
 
   React.useEffect(() => {
     let dispose: (() => void) | null = null;
@@ -37,6 +64,24 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList }) => {
       bus.off('hud:show', onShow);
       bus.off('hud:hide', onHide);
     };
+  }, []); // ← no horseList dep
+
+  // stream horse updates to Phaser without re-creating the game
+  React.useEffect(() => {
+    bus.emit('horses:update', horseList);
+  }, [horseList]);
+
+  React.useEffect(() => {
+    const sendNow = () => bus.emit('horses:update', horseList);
+    bus.on('horses:request', sendNow);
+
+    // also push once on next frame to cover initial mount timing
+    const raf = requestAnimationFrame(sendNow);
+
+    return () => {
+      bus.off('horses:request', sendNow);
+      cancelAnimationFrame(raf);
+    };
   }, [horseList]);
 
   return (
@@ -60,6 +105,14 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList }) => {
           </button>
 
           <button
+            className={ui.raceAllButton}
+            onClick={() => { setModalRaces(true); setTimeout(() => bus.emit('ui:click'), 0); }}
+            disabled={idleHorses.length === 0}
+            aria-label="Race All"
+            title={idleHorses.length ? `Race ${idleHorses.length} idle horse(s)` : 'No idle horses'}
+          />
+
+          <button
             className={ui.upgradeButton}
             onClick={() => {
               setMineOpen(true);
@@ -78,6 +131,15 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList }) => {
       )}
       {showHUD && (
         <MineModal setVisible={setMineOpen} status={mineOpen} />
+      )}
+      {showHUD && modalRaces && (
+        <RacesModal
+          setVisible={setModalRaces}
+          status={modalRaces}
+          totalHorses={idleHorses.length}
+          horses={idleHorses}
+          reloadHorses={reloadHorsesAndEmit}
+        />
       )}
     </div>
   );

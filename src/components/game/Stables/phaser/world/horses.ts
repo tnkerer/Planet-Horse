@@ -178,6 +178,11 @@ export function spawnHorsesRandom(
   uiLayer: Phaser.GameObjects.Layer,
   list: Horse[],
   worldSize: { w: number; h: number },
+
+  // NEW: get the latest horse object by id
+  resolveHorse: (id: number) => Horse | undefined,
+  // NEW: tell the scene which horse is being hovered (or null)
+  onHoverIdChange?: (id: number | null) => void,
 ) {
   const tooltip = createTooltip(scene, uiLayer);
   const sprites: Phaser.GameObjects.Sprite[] = [];
@@ -196,6 +201,7 @@ export function spawnHorsesRandom(
       .setOrigin(0.5, 1)
       .setInteractive({ useHandCursor: true });
 
+    spr.setData('horseId', h.id);
     const scale = TARGET_H / FRAME_H;
     spr.setScale(scale);
 
@@ -215,23 +221,26 @@ export function spawnHorsesRandom(
     spr.play(animKey(h, false));
     // helper to restart both from frame 0
     const playBoth = (horseAnimKey: string) => {
-      // hard restart (ignoreIfPlaying=false), startFrame=0
       spr.play(horseAnimKey, false);
       shadow.play(SHADOW_ANIM_KEY, false);
     };
 
-    // swap & re-sync on hover in/out
     spr.on('pointerover', () => {
       playBoth(animKey(h, true));
-      showTooltip(tooltip, h);
+
+      const id = spr.getData('horseId') as number;
+      const latest = resolveHorse(id) ?? h;   // <— use fresh object if present
+      showTooltip(tooltip, latest);
+
+      onHoverIdChange?.(id);
     });
 
     spr.on('pointerout', () => {
       playBoth(animKey(h, false));
       hideTooltip(tooltip);
+      onHoverIdChange?.(null);
     });
 
-    // keep moving tooltip
     spr.on('pointermove', (p: Phaser.Input.Pointer) => moveTooltip(tooltip, p.x, p.y));
 
     sprites.push(spr);
@@ -239,3 +248,6 @@ export function spawnHorsesRandom(
 
   return { sprites, tooltip };
 }
+
+export type { TooltipRefs };
+export { showTooltip };

@@ -8,7 +8,7 @@ import { initAudio } from '../core/audio';
 import { createBackground, fitBackgroundToCover } from '../core/background';
 import { enablePan, PanState } from '../core/pan';
 import { createHUD } from '../ui/hudRoot';
-import { ensureHorseAnims, ensureShadowAnim, spawnHorsesRandom } from '../world/horses';
+import { spawnHorsesRandom, ensureHorseAnims, ensureShadowAnim, type TooltipRefs, showTooltip } from '../world/horses'; // adjust path
 
 import type { Horse } from '../../types/horse';
 
@@ -18,6 +18,9 @@ export class MainScene extends Phaser.Scene {
     private disposePan?: () => void;
     private horses: Horse[] = [];
     private horseSprites?: ReturnType<typeof spawnHorsesRandom>;
+    private readonly horseById = new Map<number, Horse>();
+    private hoveredId: number | null = null;
+    private readonly tooltip?: TooltipRefs;
 
     constructor() { super('Main'); }
 
@@ -26,10 +29,20 @@ export class MainScene extends Phaser.Scene {
         console.log('[MainScene] horseList received:', this.horses);
     }
 
+    private readonly handleHorsesUpdate = (list: Horse[]) => {
+        this.horses = list;
+        // update any UI/state in scene that depends on horses
+    };
+
     create() {
         applyResponsiveViewport(this);
         bus.emit('hud:show');
+        bus.on('horses:update', this.handleHorsesUpdate);
+        this.time.delayedCall(0, () => bus.emit('horses:request'));
 
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            bus.off('horses:update', this.handleHorsesUpdate);
+        });
         // layers & cameras
         const layers = createLayers(this);
         const mainCam = this.cameras.main;
@@ -54,7 +67,8 @@ export class MainScene extends Phaser.Scene {
                 await ensureShadowAnim(this);               // ⬅️ add this
                 await ensureHorseAnims(this, this.horses);
                 this.horseSprites = spawnHorsesRandom(
-                    this, layers.world, layers.ui, this.horses, { w: bg.w, h: bg.h }
+                    this, layers.world, layers.ui, this.horses, { w: bg.w, h: bg.h }, (id) => this.horseById.get(id),             // resolver
+                    (idOrNull) => { this.hoveredId = idOrNull; } // track current hover
                 );
             } catch (e) {
                 console.error('[MainScene] horse anims error:', e);
@@ -107,6 +121,10 @@ export class MainScene extends Phaser.Scene {
             hud.destroy();
             this.disposePan?.();
             bus.emit('hud:hide');
+            bus.off('horses:update', this.handleHorsesUpdate);
         });
+
+
     }
+
 }

@@ -376,11 +376,11 @@ const BreedingStud: React.FC<BreedingStudProps> = ({ index, horses, id, onOpen }
               />
               <div className={styles.horseLabel}>
                 <span className={styles.horseIdBadge}>#{picked[0].id}</span>
-                <span className={styles.horseName}>
+                {/* <span className={styles.horseName}>
                   {(picked[0].profile.nickname?.trim()?.length
                     ? picked[0].profile.nickname
                     : picked[0].profile.name) || ''}
-                </span>
+                </span> */}
               </div>
             </div>
           )}

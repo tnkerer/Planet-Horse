@@ -12,6 +12,8 @@ import MineModal from '../Modals/MineModal';
 import InfoModal from '../Modals/InfoModal';
 import PhaserStablesCanvas from './phaser/PhaserStablesCanvas';
 import { useHorseList } from './hooks/useHorseList';
+import { bus } from './phaser/bus';
+import type { Horse } from './types/horse';
 
 interface Props {
   changeView: (view: string) => void;
@@ -21,7 +23,7 @@ const Stables: React.FC<Props> = ({ changeView }) => {
   const [modalItems, setModalItems] = useState(false);
   const [modalMine, setModalMine] = useState(false);
   const [informational, setInformational] = useState<string | null>(null);
-  const { horseList } = useHorseList('level');
+  const { horseList, loadHorses } = useHorseList('level');
   const { phorse, medals, wron, updateBalance } = useUser();
   const { address } = useWallet();
 
@@ -84,7 +86,7 @@ const Stables: React.FC<Props> = ({ changeView }) => {
       {/* === HERE: Phaser canvas instead of StudsRow === */}
       <div className={styles.container}>
         <div className={styles.canvasWrap}>
-          <PhaserStablesCanvas horseList={horseList} />
+          <PhaserStablesCanvas horseList={horseList} reloadHorses={loadHorses} />
         </div>
       </div>
 
