@@ -3,6 +3,7 @@ import Pattern from '@/utils/components/pattern'
 import Navbar from '@/utils/components/navbar'
 import PageContent from '@/utils/components/page-content'
 import Stables from '@/components/game/Stables'
+import Footer from '@/utils/components/footer'
 
 const Game: React.FC = () => {
   const [view, setView] = useState('horses')
@@ -17,6 +18,7 @@ const Game: React.FC = () => {
       <PageContent>
           <Pattern type="brown">
             <Stables changeView={toogleView} />
+            <Footer copyrightTextColor="white" />
           </Pattern>
       </PageContent>
     </>
