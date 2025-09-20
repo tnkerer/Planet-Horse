@@ -38,7 +38,7 @@ const Stables: React.FC<Props> = ({ changeView }) => {
       {modalMine && <MineModal setVisible={setModalMine} status={modalMine} />}
 
 
-      <div className={styles.secondBar}>
+      {/* <div className={styles.secondBar}>
         <div className={styles.containerBar}>
           <div className={styles.actionContainer}>
             <div className={styles.actionOptions}>
@@ -81,7 +81,7 @@ const Stables: React.FC<Props> = ({ changeView }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* === HERE: Phaser canvas instead of StudsRow === */}
       <div className={styles.container}>
