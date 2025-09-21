@@ -51,7 +51,7 @@
 .tooltipBubble {
   position: absolute;
   top: 28px;
-  right: 0;
+  right: 0;                 /* default: bubble opens to the LEFT of the trigger */
   min-width: 220px;
   background: #fff6df;
   border: 1px solid #e5c77a;
@@ -62,7 +62,20 @@
   transform: translateY(-4px);
   transition: all .15s ease-out;
   z-index: 5;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+  box-shadow: 0 6px 18px rgba(0,0,0,.18);
+}
+
+/* NEW: when near the viewport’s left edge, open to the RIGHT of the trigger */
+.flipRight {
+  right: auto;
+  left: 0;                 /* anchor bubble’s left edge to trigger’s left edge */
+}
+
+/* keep your hover rule as-is */
+.tooltipAnchor:hover .tooltipBubble {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .tooltipLine {

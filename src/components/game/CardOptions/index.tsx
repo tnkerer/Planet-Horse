@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import levelGif from '@/assets/game/actions-cards/level.gif'
 import chestGif from '@/assets/game/actions-cards/chest.gif'
 import horseFusionGif from '@/assets/game/actions-cards/fusion.gif'
 import upgradeStableGif from '@/assets/game/actions-cards/upgrade.gif'
@@ -14,7 +13,7 @@ interface Props {
 
 const CardOptions: React.FC<Props> = ({ changeView }) => {
   const [showBridge, setShowBridge] = useState(false)
-  
+
   return (
     <div className={styles.container}>
       {showBridge && <TokenBridge onClose={() => setShowBridge(false)} />}
@@ -23,7 +22,7 @@ const CardOptions: React.FC<Props> = ({ changeView }) => {
           <div className={styles.card}>
             <Image layout="fill" src={chestGif} alt="card-chest" width={200} height={200} />
             <button
-              className={styles.buyButton}
+              className={styles.activeButton}
               /* onClick={setPopUp('chest')} */
               onClick={() => changeView('items')}
             >BUY CHESTS</button>
@@ -31,21 +30,23 @@ const CardOptions: React.FC<Props> = ({ changeView }) => {
           <div className={styles.card}>
             <Image layout="fill" src={horseFusionGif} alt="card-breed" width={200} height={200} />
             <button
-              className={styles.buyButton}
+              className={styles.activeButton}
               onClick={() => changeView('breeding')}
             >BREEDING FARM</button>
           </div>
           <div className={styles.card}>
             <Image layout="fill" src={upgradeStableGif} alt="card-upgrade" width={200} height={200} />
             <button
-              className={styles.upgradeButton}
-            /* onClick={setPopUp('upgrade')} */
-            >Coming Soon...</button>
+              className={styles.activeButton}
+              onClick={() => changeView('stables')}   // ← was “Coming Soon…”
+            >
+              VISIT STABLES
+            </button>
           </div>
           <div className={styles.card}>
             <Image layout="fill" src={bridgeGif} alt="bridge-level" width={200} height={200} />
             <button
-              className={styles.buyButton}
+              className={styles.activeButton}
               onClick={() => setShowBridge(true)}
             >BRIDGE TOKENS</button>
           </div>
