@@ -207,9 +207,9 @@
   .cardItems {
     display: flex;
     flex-direction: row;
-    // flex-wrap: wrap;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     max-width: 1050px;
     gap: 2%;
 

@@ -92,17 +92,41 @@ function showTooltip(t: TooltipRefs, h: Horse) {
 }
 const hideTooltip = (t: TooltipRefs) => t.root.setVisible(false);
 function moveTooltip(t: TooltipRefs, screenX: number, screenY: number) {
-  const ox = 14;
-  const oy = 10;
+  const scene = t.root.scene;
+
+  // Canvas (render) bounds in game coordinates (not window pixels)
+  const sw = scene.scale.width;
+  const sh = scene.scale.height;
+
+  const pad = 12;     // keep a small margin from canvas edges
+  const ox = 14;      // cursor horizontal offset
+  const oy = 10;      // cursor vertical offset
   const w = t.bg.width;
   const h = t.bg.height;
+
+  // Try the default placement: to the RIGHT of the cursor, above if possible
   let x = screenX + ox;
   let y = screenY - oy - h;
-  const sw = window.innerWidth;
-  if (x + w > sw - 12) x = sw - 12 - w;
-  if (y < 12) y = screenY + oy;
+
+  // If it would overflow on the RIGHT, flip to the LEFT of the cursor
+  if (x + w > sw - pad) {
+    x = screenX - ox - w;
+  }
+
+  // If above would overflow on the TOP, place it BELOW the cursor
+  if (y < pad) {
+    y = screenY + oy;
+  }
+
+  // Final clamps so it never leaks outside the canvas
+  if (x < pad) x = pad;
+  if (x + w > sw - pad) x = sw - pad - w;
+  if (y < pad) y = pad;
+  if (y + h > sh - pad) y = sh - pad - h;
+
   t.root.setPosition(x, y);
 }
+
 
 // Paths/keys -------------------------------------------------------------------
 const sheetUrl = (h: Horse, hovered: boolean) =>

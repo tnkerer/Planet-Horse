@@ -6,8 +6,9 @@ import phorseToken from '@/assets/utils/logos/animted-phorse-coin.gif'
 import medalIcon from '@/assets/icons/medal.gif'
 import { useUser } from '@/contexts/UserContext'
 import ItemBag from '../Modals/ItemBag'
-import wronIcon from '@/assets/icons/wron.gif';
+import wronIcon from '@/assets/icons/wron.gif'
 import MineModal from '../Modals/MineModal'
+import PresaleList from '../Presale/PresaleList'
 
 interface Props {
   changeView: (view: string) => void
@@ -78,8 +79,8 @@ const Items: React.FC<Props> = ({ changeView }) => {
         <span className={styles.title}>ITEMS SHOP</span>
 
         <div className={styles.cardItems}>
+          <PresaleList />
           <ShopChestCard />
-
         </div>
       </div>
     </>

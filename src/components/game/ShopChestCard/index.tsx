@@ -13,8 +13,8 @@ interface ShopItem {
   id: number
   name: string
   'src-idle': string
-  'src-drop': string
-  'src-open': string
+  'src-drop'?: string
+  'src-open'?: string
   quantity: string
 }
 

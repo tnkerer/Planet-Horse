@@ -1,0 +1,207 @@
+/* components/Presale/styles.module.scss */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+  justify-content: center;
+}
+
+.card {
+  width: 203.5px !important;
+  height: 300px;
+  background-repeat: no-repeat;
+  background-position: center 20px;
+  background-size: contain;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1rem;
+  position: relative;
+}
+
+/* Top-right tooltip */
+.tooltipAnchor {
+  position: absolute;
+  top: 32px;
+  right: 16px;
+
+  &:hover .tooltipBubble {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+}
+
+.tooltipTrigger {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f0d399;
+  color: #351414;
+  font-weight: bold;
+  font-family: 'SpaceHorse';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+.tooltipBubble {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  min-width: 220px;
+  background: #fff6df;
+  border: 1px solid #e5c77a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: all .15s ease-out;
+  z-index: 5;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+}
+
+.tooltipLine {
+  font-family: 'SpaceHorse';
+  font-size: 0.8rem;
+  color: #351414;
+  line-height: 1.2rem;
+}
+
+.blue {
+  color: #175fe6;
+}
+
+.red {
+  color: #b30000;
+}
+
+.itemBadge {
+  background-image: url('/assets/game/Items/notification-badge.webp');
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: white;
+  font-family: 'SpaceHorse';
+  position: absolute;
+  top: 35px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  line-height: 1;
+  padding-left: 2px;
+  padding-bottom: 1px;
+}
+
+.title {
+  margin-top: auto;
+  font-family: 'SpaceHorse';
+  font-size: 1rem;
+  color: #351414;
+  text-align: center;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-family: 'SpaceHorse';
+  font-weight: bold;
+  color: #473400;
+  margin: 6px 0;
+
+  .strikethrough {
+    text-decoration: line-through;
+    color: red;
+  }
+
+  .discounted {
+    color: #015522;
+    font-weight: bold;
+    font-size: 1.05em;
+  }
+}
+
+.phorseIcon {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.qtyRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0.25rem;
+
+  button {
+    width: 24px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+    background: #f0d399;
+    border-radius: 4px;
+    font-family: 'SpaceHorse';
+  }
+
+  .qty {
+    min-width: 28px;
+    text-align: center;
+    font-family: 'SpaceHorse';
+  }
+}
+
+.buttonRow {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5vw;
+  transform: scale(0.95);
+
+  button {
+    position: relative;
+    font-family: 'SpaceHorse';
+    width: 100%;
+    height: 2.5rem;
+    background-image: url('/assets/game/buttons/button.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #000000;
+    text-align: center;
+    line-height: 2.5rem;
+    outline: none;
+
+    &:hover {
+      background-image: url('/assets/game/buttons/button-mouse.svg');
+    }
+
+    &:active {
+      background-image: url('/assets/game/buttons/button-click.svg');
+    }
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.countdownSubtext {
+  margin-top: 4px;
+  font-family: 'SpaceHorse';
+  font-size: 0.7rem;
+  color: #5b4a2b;
+  opacity: 0.85;
+  text-align: center;
+}
