@@ -38,7 +38,7 @@ const CardOptions: React.FC<Props> = ({ changeView }) => {
             <Image layout="fill" src={upgradeStableGif} alt="card-upgrade" width={200} height={200} />
             <button
               className={styles.activeButton}
-              onClick={() => changeView('stables')}   // ← was “Coming Soon…”
+              // onClick={() => changeView('stables')}   // ← was “Coming Soon…”
             >
               VISIT STABLES
             </button>

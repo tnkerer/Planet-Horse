@@ -144,7 +144,7 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy }) =>
                         <span className={styles.blue}>Total Discount: {discountPct}%</span>
                     </div>
                     {sale.discountList?.length > 0 &&
-                        sale.discountList.slice(0, 4).map((txt, i) => (
+                        sale.discountList.slice(0, 9).map((txt, i) => (
                             <div key={i} className={styles.tooltipLine}> {txt}</div>
                         ))
                     }
