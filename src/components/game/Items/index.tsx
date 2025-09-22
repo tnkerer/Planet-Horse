@@ -79,7 +79,7 @@ const Items: React.FC<Props> = ({ changeView }) => {
         <span className={styles.title}>ITEMS SHOP</span>
 
         <div className={styles.cardItems}>
-          <PresaleList />
+          {/* <PresaleList /> */}
           <ShopChestCard />
         </div>
       </div>
