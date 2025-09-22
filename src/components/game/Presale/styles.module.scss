@@ -218,3 +218,19 @@
   opacity: 0.85;
   text-align: center;
 }
+
+.supplyBadge {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #fff6df;
+  border: 1px solid #e5c77a;
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  font-family: 'SpaceHorse';
+  font-size: 0.8rem;
+  color: #351414;
+  line-height: 1;
+  z-index: 6; // above background, below tooltip bubble
+}

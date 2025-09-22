@@ -1,5 +1,5 @@
 // components/Presale/PresaleCard.tsx
-import React, { useEffect, useMemo, useState, useRef } from 'react'
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react'
 import styles from './styles.module.scss'
 import type { Preflight, PresalePhase, StableDef } from './presale'
 import ErrorModal from '../Modals/ErrorModal'
@@ -18,8 +18,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL
 const cap90 = (pct: number) => Math.min(90, Math.max(0, pct))
 
 const MINT_TIME: Record<PresalePhase, number> = {
-     GTD: 1758546000,  // 2025-09-22 13:00:00 UTC
-     FCFS: 1758549600, // 2025-09-22 14:00:00 UTC
+    GTD: 1758546000,  // 2025-09-22 13:00:00 UTC
+    FCFS: 1758549600, // 2025-09-22 14:00:00 UTC
 }
 
 function formatCountdown(ms: number) {
@@ -45,6 +45,7 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy, onAf
     const bubbleRef = useRef<HTMLDivElement | null>(null)
     const [flipRight, setFlipRight] = useState(false)
     const { updateBalance } = useUser();
+    const [maxTokenId, setMaxTokenId] = useState<number | null>(null)
 
     const { sale, discountPct: rawPct } = preflight
 
@@ -66,9 +67,6 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy, onAf
         if (stable.paused || stable.supplyLeft <= 0) return false
         return whitelistAvailable
     }, [stable.paused, stable.supplyLeft, whitelistAvailable])
-
-    // optional, if you cap per-user
-    // const maxQty = useMemo(() => Math.min(stable.perUserCap ?? 99, stable.supplyLeft), [stable.perUserCap, stable.supplyLeft])
 
     // countdown
     useEffect(() => {
@@ -123,6 +121,25 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy, onAf
         }
     }
 
+    // NEW: refetch supply helper
+    const refetchSupply = useCallback(async () => {
+        try {
+            const res = await fetch(`${API_URL}/stable/max-token-id`, { credentials: 'include' })
+            if (!res.ok) throw new Error(`HTTP ${res.status}`)
+            const data = await res.json()
+            setMaxTokenId(Number(data?.maxTokenId ?? 0))
+        } catch (e) {
+            // silent fail; keep last known value
+            // console.warn('Failed to fetch max-token-id', e)
+        }
+    }, [])
+
+    useEffect(() => {
+        refetchSupply()
+        const id = setInterval(refetchSupply, 30_000)
+        return () => clearInterval(id)
+    }, [refetchSupply])
+
     const handleBuyClick = async () => {
         const startMs = MINT_TIME[cardType] * 1000
         const now = Date.now()
@@ -158,6 +175,11 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy, onAf
             className={styles.card}
             style={{ backgroundImage: `url('/assets/items/${stable.src}.gif')` }}
         >
+
+            {/* NEW: Supply indicator (top-left) */}
+            <div className={styles.supplyBadge} title="Minted so far">
+                {typeof maxTokenId === 'number' ? `${maxTokenId}` : '…'}/400
+            </div>
             {/* Top-right tooltip */}
             <div
                 className={styles.tooltipAnchor}
@@ -200,7 +222,7 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy, onAf
 
                 {whitelistAvailable && countdown && (
                     <div className={styles.countdownSubtext}>
-                       {countdown}
+                        {countdown}
                     </div>
                 )}
             </div>
