@@ -135,10 +135,15 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy, onAf
     }, [])
 
     useEffect(() => {
-        refetchSupply()
-        const id = setInterval(refetchSupply, 30_000)
-        return () => clearInterval(id)
-    }, [refetchSupply])
+        void refetchSupply(); // fire initial fetch, ignore returned Promise
+
+        const id = setInterval(() => {
+            void refetchSupply(); // fire-and-forget inside the interval
+        }, 30_000);
+
+        return () => clearInterval(id);
+    }, [refetchSupply]);
+
 
     const handleBuyClick = async () => {
         const startMs = MINT_TIME[cardType] * 1000
