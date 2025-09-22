@@ -1,22 +1,29 @@
 // components/Presale/PresaleList.tsx
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 import PresaleCard from './PresaleCard'
 import type { Preflight, StableDef } from './presale'
 
-const STABLE: StableDef = {
-  id: 1,
-  name: 'Founder Stable',
-  src: 'stable',
-  price: 250,
-  supplyLeft: 400,
-  perUserCap: 2,
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL
 
 const PresaleList: React.FC = () => {
   const [preflight, setPreflight] = useState<Preflight | null>(null)
-  const [stable, setStable] = useState<StableDef>(STABLE)
+
+  const refetchPreflight = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_URL}/user/stable/preflight`, { credentials: 'include' })
+      if (!res.ok) throw new Error(`preflight failed ${res.status}`)
+      const data: Preflight = await res.json()
+      setPreflight(data)
+    } catch (e) {
+      console.error(e)
+    }
+  }, [])
+
+  useEffect(() => {
+    refetchPreflight()
+  }, [refetchPreflight])
 
   useEffect(() => {
     (async () => {
@@ -47,6 +54,7 @@ const PresaleList: React.FC = () => {
         }}
         preflight={preflight}
         onBuy={async (qty) => handleBuy('GTD', qty)}
+        onAfterBuy={refetchPreflight}
       />
       <PresaleCard
         cardType="FCFS"
@@ -60,6 +68,7 @@ const PresaleList: React.FC = () => {
         }}
         preflight={preflight}
         onBuy={async (qty) => handleBuy('FCFS', qty)}
+        onAfterBuy={refetchPreflight}
       />
     </div>
   )

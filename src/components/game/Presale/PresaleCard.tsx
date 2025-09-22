@@ -3,20 +3,23 @@ import React, { useEffect, useMemo, useState, useRef } from 'react'
 import styles from './styles.module.scss'
 import type { Preflight, PresalePhase, StableDef } from './presale'
 import ErrorModal from '../Modals/ErrorModal'
+import { useUser } from '@/contexts/UserContext'
 
 type Props = {
     cardType: PresalePhase // 'GTD' | 'FCFS'
     stable: StableDef
     preflight: Preflight
     onBuy: (quantity: number) => void | Promise<void>
+    onAfterBuy?: () => void | Promise<void>
 }
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL
 
 const cap90 = (pct: number) => Math.min(90, Math.max(0, pct))
 
-// Unix seconds (provided by you)
 const MINT_TIME: Record<PresalePhase, number> = {
-    GTD: 1758546000,  // 2025-09-22 13:00:00 UTC
-    FCFS: 1758549600, // 2025-09-22 14:00:00 UTC
+     GTD: 1758546000,  // 2025-09-22 13:00:00 UTC
+     FCFS: 1758549600, // 2025-09-22 14:00:00 UTC
 }
 
 function formatCountdown(ms: number) {
@@ -32,18 +35,19 @@ function formatCountdown(ms: number) {
     return days > 0 ? `${days}d ${hh}:${mm}:${ss}` : `${hh}:${mm}:${ss}`
 }
 
-const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy }) => {
-    const [qty, setQty] = useState(1)
+const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy, onAfterBuy }) => {
+    const [qty] = useState(1) // buying exactly 1 stable per call
     const [countdown, setCountdown] = useState<string>('')
     const [showError, setShowError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [buying, setBuying] = useState(false) // NEW
     const anchorRef = useRef<HTMLDivElement | null>(null)
     const bubbleRef = useRef<HTMLDivElement | null>(null)
     const [flipRight, setFlipRight] = useState(false)
+    const { updateBalance } = useUser();
 
     const { sale, discountPct: rawPct } = preflight
 
-    // ✅ Whitelist is available only if phase is active and not used yet
     const whitelistAvailable = useMemo(() => {
         return cardType === 'GTD'
             ? sale.gtd && !sale.gtdUsed
@@ -58,18 +62,15 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy }) =>
         [stable.price, discountPct]
     )
 
-    // Button enabled by whitelist + supply (intentionally NOT gating by time so we can show the error modal)
     const enabled = useMemo(() => {
         if (stable.paused || stable.supplyLeft <= 0) return false
         return whitelistAvailable
     }, [stable.paused, stable.supplyLeft, whitelistAvailable])
 
-    const maxQty = useMemo(() => {
-        const cap = stable.perUserCap ?? 99
-        return Math.min(cap, stable.supplyLeft)
-    }, [stable.perUserCap, stable.supplyLeft])
+    // optional, if you cap per-user
+    // const maxQty = useMemo(() => Math.min(stable.perUserCap ?? 99, stable.supplyLeft), [stable.perUserCap, stable.supplyLeft])
 
-    // ⏱️ Countdown
+    // countdown
     useEffect(() => {
         if (!whitelistAvailable) {
             setCountdown('')
@@ -82,38 +83,68 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy }) =>
         return () => clearInterval(id)
     }, [cardType, whitelistAvailable])
 
+    // --- NEW: API call to /stable/buy
+    const buyStable = async () => {
+        try {
+            setBuying(true)
+            const res = await fetch(`${API_URL}/stable/buy`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ salePhase: cardType }),
+            })
+
+            const payload = await res.json().catch(() => ({} as any))
+            if (!res.ok) {
+                const msg = Array.isArray(payload?.message)
+                    ? payload.message.join(', ')
+                    : (payload?.message || `Buy failed (${res.status})`)
+                throw new Error(msg)
+            }
+
+            // Parent hook (refresh wallet, etc.)
+            if (onBuy) await onBuy(1)
+
+            // **Refresh preflight** so UI flips gtdUsed/fcfsUsed/discount immediately
+            if (onAfterBuy) await onAfterBuy()
+
+            if (updateBalance) await updateBalance()
+
+            // Optional success notice
+            setErrorMessage(
+                `Success! Stable purchase queued.\nToken #${payload?.tokenId ?? '?'} • Charged ${payload?.priceCharged ?? '?'} WRON.`
+            )
+            setShowError(true)
+        } catch (err: any) {
+            setErrorMessage(err?.message || 'Unexpected error')
+            setShowError(true)
+        } finally {
+            setBuying(false)
+        }
+    }
+
     const handleBuyClick = async () => {
         const startMs = MINT_TIME[cardType] * 1000
         const now = Date.now()
-
         if (now < startMs) {
-            const local = new Date(startMs).toLocaleString()
-            const utc = new Date(startMs).toUTCString()
-            setErrorMessage(
-                `${cardType} sale hasn't started yet.\nStarts in ${countdown}.`
-            )
+            setErrorMessage(`${cardType} sale hasn't started yet.\nStarts in ${countdown}.`)
             setShowError(true)
             return
         }
-
-        // sale started — proceed
-        await onBuy(qty)
+        await buyStable()
     }
 
-    // Decide if the tooltip would overflow on the left; if so, render to the right
+    // Tooltip flip calc
     const checkFlip = () => {
         const ar = anchorRef.current?.getBoundingClientRect()
-        const bw = bubbleRef.current?.offsetWidth ?? 240 // fall back to min-width
+        const bw = bubbleRef.current?.offsetWidth ?? 240
         if (!ar) return
-        const SAFE = 8 // px
+        const SAFE = 8
         const wouldOverflowLeft = ar.left - bw < SAFE
         setFlipRight(wouldOverflowLeft)
     }
 
-    // Recompute on hover/focus (and touch)
     const onOpenTooltip = () => checkFlip()
-
-    // optional: recompute on resize just in case
     useEffect(() => {
         const onResize = () => {
             if (bubbleRef.current && anchorRef.current) checkFlip()
@@ -145,7 +176,7 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy }) =>
                     </div>
                     {sale.discountList?.length > 0 &&
                         sale.discountList.slice(0, 9).map((txt, i) => (
-                            <div key={i} className={styles.tooltipLine}> {txt}</div>
+                            <div key={i} className={styles.tooltipLine}>{txt}</div>
                         ))
                     }
                     <div className={`${styles.tooltipLine} ${styles.red}`}>Discount Capped at 90%</div>
@@ -159,16 +190,17 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy }) =>
             <div className={styles.buttonRow}>
                 <button
                     className={styles.buyButton}
-                    disabled={!enabled}
+                    disabled={!enabled || buying}          // ← lock while buying
                     onClick={handleBuyClick}
                 >
-                    {whitelistAvailable ? `BUY ${cardType} STABLE` : 'Not Whitelisted'}
+                    {buying
+                        ? 'PROCESSING…'
+                        : (whitelistAvailable ? `BUY ${cardType} STABLE` : 'Not Whitelisted')}
                 </button>
 
-                {/* Small subtext with countdown when available */}
                 {whitelistAvailable && countdown && (
                     <div className={styles.countdownSubtext}>
-                        Starts in {countdown}
+                       {countdown}
                     </div>
                 )}
             </div>
