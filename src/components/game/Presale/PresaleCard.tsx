@@ -112,7 +112,7 @@ const PresaleCard: React.FC<Props> = ({ cardType, stable, preflight, onBuy, onAf
 
             // Optional success notice
             setErrorMessage(
-                `Success! Stable purchase queued.\nToken #${payload?.tokenId ?? '?'} • Charged ${payload?.priceCharged ?? '?'} WRON.`
+                `Success! Stable purchase queued.\nToken #${String(payload?.tokenId) ?? '?'} • Charged ${String(payload?.priceCharged) ?? '?'} WRON.`
             )
             setShowError(true)
         } catch (err: any) {
