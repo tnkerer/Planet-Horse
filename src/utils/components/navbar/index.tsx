@@ -130,6 +130,7 @@ const Navbar: React.FC = () => {
                   <a href="https://marketplace.roninchain.com/collections/origin-horses" rel="noreferrer" target="_blank">Origin Horses</a>
                   <a href="https://marketplace.roninchain.com/collections/planet-horse-offspring" rel="noreferrer" target="_blank">Offspring</a>
                   <a href="https://marketplace.roninchain.com/collections/planet-horse-items" rel="noreferrer" target="_blank">Items</a>
+                  <a href="https://marketplace.roninchain.com/collections/planet-horse-stables" rel="noreferrer" target="_blank">Stables</a>
                 </div>
               )}
             </div>
