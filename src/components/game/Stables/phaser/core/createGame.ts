@@ -3,11 +3,8 @@ import Phaser from 'phaser';
 import { BootScene } from '../scenes/BootScene';
 import { LoadingScene } from '../scenes/LoadingScene';
 import { MainScene } from '../scenes/MainScene';
-import type { Horse } from '../../types/horse';
 
-type Options = { horseList?: Horse[] };
-
-export function createGame(host: HTMLElement, opts: Options = {}) {
+export function createGame(host: HTMLElement,  opts: { horseList?: any; apiBase: string }) {
   const cfg: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     parent: host,
@@ -29,6 +26,9 @@ export function createGame(host: HTMLElement, opts: Options = {}) {
   };
 
   const game = new Phaser.Game(cfg);
+
+    // registry values for scenes
+  game.registry.set('apiBase', opts.apiBase);
 
   // ✅ stash horseList so LoadingScene can pass it to Main
   game.registry.set('horseList', opts.horseList ?? []);

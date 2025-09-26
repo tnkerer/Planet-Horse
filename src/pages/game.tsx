@@ -38,6 +38,7 @@ const Game: React.FC = () => {
         {view === 'stables' && (
           <Pattern type="brown">
             <Stables changeView={toogleView} />
+            <Footer copyrightTextColor="white" />
           </Pattern>
         )}
         {view === 'breeding' && (

@@ -11,6 +11,8 @@ type Events = {
   // NEW:
   'horses:update': Horse[];   // React -> Phaser (push latest list)
   'horses:request': undefined; // Phaser -> React (ask for current list)
+
+  'game:horse:changed': undefined;
 };
 
 export const bus = mitt<Events>();

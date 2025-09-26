@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 import type { Horse } from '../../types/horse';
 
+
+export type Placement = { x: number; y: number; flipX: boolean };
+
+
 // === CONFIG you can tweak ===
 const FRAME_W = 48;             // set to the per-frame size you exported (48/64/96…)
 const FRAME_H = 48;
@@ -21,9 +25,12 @@ type TooltipRefs = { root: Phaser.GameObjects.Container; bg: Phaser.GameObjects.
 // === Safe zones in *source image* coordinates (unscaled) ===
 type SrcRect = { x1: number; y1: number; x2: number; y2: number };
 const SAFE_RECTS_SRC: SrcRect[] = [
-  { x1: 1552, y1: 20, x2: 1984, y2: 744 }, // (1552,744) (1552,20) (1984,20) (1984,744)
-  { x1: 924, y1: 560, x2: 1552, y2: 760 }, // (924,760) (924,560) (1552,560) (1552,760)
+  { x1: 1425, y1: 20, x2: 1984, y2: 770 }, // (1552,744) (1552,20) (1984,20) (1984,744)
+  { x1: 1675, y1: 770, x2: 1984, y2: 1104 },
+  { x1: 1125, y1: 770, x2: 1495, y2: 1104 }, // (924,760) (924,560) (1552,560) (1552,760)
   { x1: 20, y1: 20, x2: 500, y2: 500 }, // (20,500) (500,500) (500,20) (20,20)
+  { x1: 20, y1: 500, x2: 300, y2: 800 },
+  { x1: 970, y1: 20, x2: 1190, y2: 450 },
   { x1: 20, y1: 800, x2: 900, y2: 1100 },// (20,1100) (20,800) (900,800) (900,1100)
 ];
 
@@ -196,6 +203,73 @@ export async function ensureHorseAnims(scene: Phaser.Scene, list: Horse[]) {
 }
 
 // Spawner with safe area + random mirror --------------------------------------
+function rectArea(r: WorldRect) {
+  return Math.max(0, r.xMax - r.xMin) * Math.max(0, r.yMax - r.yMin);
+}
+function pickPointInRect(rng: Phaser.Math.RandomDataGenerator, r: WorldRect, margin: number) {
+  const x = Math.floor(rng.between(r.xMin + margin, r.xMax - margin));
+  const y = Math.floor(rng.between(r.yMin + margin, r.yMax - margin));
+  return { x, y };
+}
+function pickRectWeighted(rng: Phaser.Math.RandomDataGenerator, rects: WorldRect[]) {
+  const weights = rects.map(rectArea);
+  const total = weights.reduce((a, b) => a + b, 0) || 1;
+  let t = rng.frac() * total;
+  for (let i = 0; i < rects.length; i++) {
+    t -= weights[i];
+    if (t <= 0) return rects[i];
+  }
+  return rects[rects.length - 1];
+}
+function dist2(a: { x: number; y: number }, b: { x: number; y: number }) {
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  return dx * dx + dy * dy;
+}
+
+function findNonOverlappingPlacement(
+  rng: Phaser.Math.RandomDataGenerator,
+  rects: WorldRect[],
+  existing: Map<number, Placement>,
+  minSepPx: number,
+  margin: number,
+  attempts = 30,
+  shrink = 0.85,
+): Placement {
+  // progressively relax min distance if space is tight
+  let minSep = minSepPx;
+  const minSep2Initial = minSep * minSep;
+
+  for (let round = 0; round < 5; round++) {
+    const minSep2 = minSep * minSep;
+
+    for (let i = 0; i < attempts; i++) {
+      const r = pickRectWeighted(rng, rects);
+      const { x, y } = pickPointInRect(rng, r, margin);
+      let ok = true;
+      for (const p of existing.values()) {
+        if (dist2({ x, y }, p) < minSep2) { ok = false; break; }
+      }
+      if (ok) {
+        return { x, y, flipX: rng.frac() < MIRROR_CHANCE };
+      }
+    }
+    // relax and try again
+    minSep = Math.max(8, Math.floor(minSep * shrink));
+  }
+
+  // fallback: last-resort random anywhere
+  const r = pickRectWeighted(rng, rects);
+  const { x, y } = pickPointInRect(rng, r, margin);
+  return { x, y, flipX: rng.frac() < MIRROR_CHANCE };
+}
+
+/**
+ * Spawns horses with non-overlapping placements.
+ * - Reuses `placements` for existing horses (stable positions).
+ * - New horses get a position at least `minSepPx` from others.
+ * - Deterministic using `seed`.
+ */
 export function spawnHorsesRandom(
   scene: Phaser.Scene,
   worldLayer: Phaser.GameObjects.Layer,
@@ -203,47 +277,64 @@ export function spawnHorsesRandom(
   list: Horse[],
   worldSize: { w: number; h: number },
 
-  // NEW: get the latest horse object by id
   resolveHorse: (id: number) => Horse | undefined,
-  // NEW: tell the scene which horse is being hovered (or null)
   onHoverIdChange?: (id: number | null) => void,
+
+  placements?: Map<number, Placement>,
+
+  // NEW: options
+  opts?: { minSepPx?: number; seed?: string },
 ) {
   const tooltip = createTooltip(scene, uiLayer);
   const sprites: Phaser.GameObjects.Sprite[] = [];
 
   const rects = getScaledSafeRects(scene, worldSize.w, worldSize.h, 'bg');
+  const placeMap = placements ?? new Map<number, Placement>();
 
+  // Default min separation roughly one sprite height
+  const minSepPx = Math.max(12, Math.floor((opts?.minSepPx ?? TARGET_H * 0.95)));
+  // Deterministic RNG so refreshes don’t “jump” layout for new horses
+  const rng = new Phaser.Math.RandomDataGenerator([opts?.seed ?? 'ph:horses']);
+
+  // Ensure all placements exist for current list (reusing old, creating new)
+  for (const h of list) {
+    if (!placeMap.has(h.id)) {
+      const p = findNonOverlappingPlacement(rng, rects, placeMap, minSepPx, MARGIN, 30, 0.85);
+      placeMap.set(h.id, p);
+    }
+  }
 
   for (const h of list) {
-    // Pick a random rect, then a random point inside (with inner margin)
-    const r = Phaser.Utils.Array.GetRandom(rects);
-    const x = Phaser.Math.Between(Math.ceil(r.xMin + MARGIN), Math.floor(r.xMax - MARGIN));
-    const y = Phaser.Math.Between(Math.ceil(r.yMin + MARGIN), Math.floor(r.yMax - MARGIN));
+    const place = placeMap.get(h.id); // exists from block above
+    const { x, y, flipX } = place;
 
-    // Create shadow + horse exactly as you already do (kept here for completeness)
     const spr = scene.add.sprite(x, y, sheetKey(h, false), 0)
       .setOrigin(0.5, 1)
       .setInteractive({ useHandCursor: true });
 
-    spr.setData('horseId', h.id);
     const scale = TARGET_H / FRAME_H;
     spr.setScale(scale);
+    spr.setFlipX(flipX);
+    spr.setData('horseId', h.id);
 
-    const mirrored = Math.random() < MIRROR_CHANCE;
-    spr.setFlipX(mirrored);
+    // y-depth painter’s algo (helps readability)
+    spr.setDepth(y);
 
     const shadow = scene.add.sprite(x, y, SHADOW_SHEET_KEY, 0)
       .setOrigin(0.5, 1)
       .setScale(scale)
-      .setFlipX(mirrored)
-      .setDepth(spr.depth - 1)
+      .setFlipX(flipX)
+      .setDepth(y - 1)
       .play(SHADOW_ANIM_KEY);
+
+    // keep ref to destroy shadow with the horse
+    spr.setData('shadow', shadow);
 
     worldLayer.add(shadow);
     worldLayer.add(spr);
 
     spr.play(animKey(h, false));
-    // helper to restart both from frame 0
+
     const playBoth = (horseAnimKey: string) => {
       spr.play(horseAnimKey, false);
       shadow.play(SHADOW_ANIM_KEY, false);
@@ -251,11 +342,9 @@ export function spawnHorsesRandom(
 
     spr.on('pointerover', () => {
       playBoth(animKey(h, true));
-
       const id = spr.getData('horseId') as number;
-      const latest = resolveHorse(id) ?? h;   // <— use fresh object if present
+      const latest = resolveHorse(id) ?? h;
       showTooltip(tooltip, latest);
-
       onHoverIdChange?.(id);
     });
 
@@ -272,6 +361,7 @@ export function spawnHorsesRandom(
 
   return { sprites, tooltip };
 }
+
 
 export type { TooltipRefs };
 export { showTooltip };

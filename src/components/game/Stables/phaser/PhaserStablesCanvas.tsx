@@ -55,7 +55,10 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
       if (!hostRef.current) return;
       const { createGame } = await import('./core/createGame');
       if (!mounted) return;
-      dispose = createGame(hostRef.current, { horseList });
+      dispose = createGame(hostRef.current, {
+        horseList, // optional seed
+        apiBase: process.env.API_URL,
+      });
     })();
 
     return () => {
@@ -64,25 +67,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
       bus.off('hud:show', onShow);
       bus.off('hud:hide', onHide);
     };
-  }, []); // ← no horseList dep
-
-  // stream horse updates to Phaser without re-creating the game
-  React.useEffect(() => {
-    bus.emit('horses:update', horseList);
-  }, [horseList]);
-
-  React.useEffect(() => {
-    const sendNow = () => bus.emit('horses:update', horseList);
-    bus.on('horses:request', sendNow);
-
-    // also push once on next frame to cover initial mount timing
-    const raf = requestAnimationFrame(sendNow);
-
-    return () => {
-      bus.off('horses:request', sendNow);
-      cancelAnimationFrame(raf);
-    };
-  }, [horseList]);
+  }, []);
 
   return (
     <div ref={hostRef} className={ui.host}>
