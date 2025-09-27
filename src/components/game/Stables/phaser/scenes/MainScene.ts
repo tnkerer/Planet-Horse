@@ -111,6 +111,7 @@ export class MainScene extends Phaser.Scene {
     };
 
     create() {
+        
         // --- Viewport & base UI wiring
         applyResponsiveViewport(this);
         bus.emit('hud:show');

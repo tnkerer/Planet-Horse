@@ -4,9 +4,9 @@ import { BootScene } from '../scenes/BootScene';
 import { LoadingScene } from '../scenes/LoadingScene';
 import { MainScene } from '../scenes/MainScene';
 
-export function createGame(host: HTMLElement,  opts: { horseList?: any; apiBase: string }) {
+export function createGame(host: HTMLElement, opts: { horseList?: any; apiBase: string }) {
   const cfg: Phaser.Types.Core.GameConfig = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     parent: host,
     transparent: true,
     backgroundColor: 'rgba(0,0,0,0)',
@@ -22,12 +22,25 @@ export function createGame(host: HTMLElement,  opts: { horseList?: any; apiBase:
       disableWebAudio: false,
       noAudio: false,
     },
+    render: {
+      antialias: true,                  // Canvas2D + hint for WebGL
+      antialiasGL: true,                // request MSAA-capable WebGL context
+      pixelArt: false,                  // use LINEAR sampling (smooth)
+      roundPixels: false,               // don't snap to whole pixels
+      mipmapFilter: 'LINEAR_MIPMAP_LINEAR'
+    },
+
+    // If you’re on older Phaser (<3.60), also add at root:
+    pixelArt: false,
+    antialias: true,
+    antialiasGL: true,
+    roundPixels: false,
     scene: [BootScene, LoadingScene, MainScene],
   };
 
   const game = new Phaser.Game(cfg);
 
-    // registry values for scenes
+  // registry values for scenes
   game.registry.set('apiBase', opts.apiBase);
 
   // ✅ stash horseList so LoadingScene can pass it to Main
@@ -48,9 +61,9 @@ export function createGame(host: HTMLElement,  opts: { horseList?: any; apiBase:
   window.addEventListener('resize', onWinResize);
 
   return () => {
-    try { ro.disconnect(); } catch {}
+    try { ro.disconnect(); } catch { }
     document.removeEventListener('visibilitychange', onVis);
     window.removeEventListener('resize', onWinResize);
-    try { game.destroy(true); } catch {}
+    try { game.destroy(true); } catch { }
   };
 }
