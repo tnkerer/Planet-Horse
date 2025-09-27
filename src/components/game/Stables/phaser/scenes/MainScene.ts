@@ -80,7 +80,7 @@ export class MainScene extends Phaser.Scene {
     };
 
     private readonly playClick = () => {
-        if (this.sound?.mute) return;
+        // if (this.sound?.mute) return;
         try {
             if (this.sound.locked) return;
             const click = this.audio?.click;

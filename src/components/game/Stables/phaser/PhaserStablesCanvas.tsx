@@ -203,7 +203,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
       bus.off('ui:open-horse', onOpenHorse);
       bus.off('ui:close-horse', onCloseHorse);
     };
-  }, [isWide, horseList]);
+  }, [isWide]);
 
   React.useEffect(() => {
     const onOpen = ({ id }: { id: number }) => {
@@ -267,7 +267,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
         <div className={ui.sideBar} style={{ top: sidebarTop }}>
           <button
             className={`${ui.bagButton} ${bagOpen ? ui.bagOpened : ''}`}
-            onClick={() => { setBagOpen(true); setTimeout(() => bus.emit('ui:click'), 0); }}
+            onClick={() =>  setBagOpen(true) }
             aria-label="Open Bag"
             title="Open Bag"
           >
@@ -276,7 +276,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
 
           <button
             className={ui.raceAllButton}
-            onClick={() => { setModalRaces(true); setTimeout(() => bus.emit('ui:click'), 0); }}
+            onClick={() => setModalRaces(true) }
             disabled={idleHorses.length === 0}
             aria-label="Race All"
             title={idleHorses.length ? `Race ${idleHorses.length} idle horse(s)` : 'No idle horses'}
@@ -284,21 +284,21 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
 
           <button
             className={ui.breedingButton}
-            onClick={() => { setModalBreeding(true); setTimeout(() => bus.emit('ui:click'), 0); }}
+            onClick={() => setModalBreeding(true) }
             aria-label="Breeding"
             title="Breeding"
           />
 
           <button
             className={ui.upgradeButton}
-            onClick={() => { setMineOpen(true); setTimeout(() => bus.emit('ui:click'), 0); }}
+            onClick={() => setMineOpen(true)}
             aria-label="Upgrade Stables"
             title="Upgrade Stables"
           />
 
           <button
             className={ui.chestsButton}
-            onClick={() => { setModalChests(true); setTimeout(() => bus.emit('ui:click'), 0); }}
+            onClick={() => setModalChests(true)}
             aria-label="Chests"
             title="Chests"
           />
