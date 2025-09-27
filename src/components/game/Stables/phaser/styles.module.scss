@@ -4,6 +4,28 @@
   height: 100%;
 }
 
+.unavailable {
+  display: grid;
+  // place-items: center;
+  min-height: 60vh;
+  padding: 24px;
+  text-align: center;
+  color: #e6e6e6;
+  background: #0b0b0b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+
+  h3 {
+    margin: 0 0 8px;
+    font: 600 18px/1.2 'SpaceHorse', sans-serif;
+  }
+
+  p {
+    margin: 0;
+    opacity: .85;
+  }
+}
+
 /* Bottom actions row (floats above canvas) */
 .bottomBar {
   position: absolute;
@@ -17,8 +39,27 @@
   // gap: 14px;
 
   padding: 10px 12px;
-  z-index: 5;             /* above the canvas */
-  pointer-events: auto;   /* clicks go to buttons */
+  z-index: 5;
+  /* above the canvas */
+  pointer-events: auto;
+  /* clicks go to buttons */
+}
+
+.sideBar {
+  position: absolute;
+  left: 0;
+  top: 140px;
+  /* JS will override this via inline style from Profile HUD bounds */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // gap: 10px;
+
+  // padding: 8px 6px;
+  z-index: 5;
+  /* above the canvas */
+  pointer-events: auto;
+  /* enable clicks */
 }
 
 /* Reuse the same art as your Items page */
@@ -66,6 +107,26 @@
   }
 }
 
+.breedingButton {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  background: url('/assets/icons/breed.png') no-repeat center/contain;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  &:hover {
+    background-image: url('/assets/icons/breed_hover.png');
+  }
+
+  @media (max-width: 700px) {
+    width: 64px;
+    height: 64px;
+  }
+}
+
 .raceAllButton {
   position: relative;
   width: 72px;
@@ -92,6 +153,26 @@
   }
 }
 
+.chestsButton {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  background: url('/assets/icons/chest.png') no-repeat center/contain;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  &:hover {
+    background-image: url('/assets/icons/chest_hover.png');
+  }
+
+  @media (max-width: 700px) {
+    width: 64px;
+    height: 64px;
+  }
+}
+
 .notificationBadge {
   position: absolute;
   top: 0;
@@ -104,6 +185,7 @@
     gap: 10px;
     padding: 8px 10px;
   }
+
   .bagButton {
     width: 60px;
     height: 60px;

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import type { Horse } from '../../types/horse';
+import { bus } from '../bus';
 
 
 export type Placement = { x: number; y: number; flipX: boolean };
@@ -17,10 +18,28 @@ const SHADOW_SHEET_URL = '/assets/game/breeding/shadow-spritesheet.png';
 const SHADOW_SHEET_KEY = 'horse-shadow-sheet';
 const SHADOW_ANIM_KEY = 'horse-shadow-run';
 
+// --- Status overlays (64x64) ---
+const SLEEPY_SHEET_URL = '/assets/game/breeding/sleepy-spritesheet.png';
+const SLEEPY_SHEET_KEY = 'status-sleepy-sheet';
+const SLEEPY_ANIM_KEY = 'status-sleepy-loop';
+
+const HURT_SHEET_URL = '/assets/game/breeding/hurt-spritesheet.png';
+const HURT_SHEET_KEY = 'status-hurt-sheet';
+const HURT_ANIM_KEY = 'status-hurt-loop';
+
+const NEIGH_KEYS = ['neigh-01', 'neigh-02', 'neigh-03'] as const;
+const NEIGH_URLS = [
+  '/assets/game/phaser/misc/neigh-01.wav',
+  '/assets/game/phaser/misc/neigh-02.wav',
+  '/assets/game/phaser/misc/neigh-03.wav',
+];
+
 
 // Tooltip (label/value) -------------------------------------------------------
 type TooltipRow = { label: Phaser.GameObjects.Text; value: Phaser.GameObjects.Text };
 type TooltipRefs = { root: Phaser.GameObjects.Container; bg: Phaser.GameObjects.Rectangle; rows: TooltipRow[] };
+type OverlayKind = 'sleep' | 'hurt';
+
 
 // === Safe zones in *source image* coordinates (unscaled) ===
 type SrcRect = { x1: number; y1: number; x2: number; y2: number };
@@ -28,10 +47,10 @@ const SAFE_RECTS_SRC: SrcRect[] = [
   { x1: 1425, y1: 20, x2: 1984, y2: 770 }, // (1552,744) (1552,20) (1984,20) (1984,744)
   { x1: 1675, y1: 770, x2: 1984, y2: 1104 },
   { x1: 1125, y1: 770, x2: 1495, y2: 1104 }, // (924,760) (924,560) (1552,560) (1552,760)
-  { x1: 20, y1: 20, x2: 500, y2: 500 }, // (20,500) (500,500) (500,20) (20,20)
+  { x1: 20, y1: 60, x2: 500, y2: 500 }, // (20,500) (500,500) (500,20) (20,20)
   { x1: 20, y1: 500, x2: 300, y2: 800 },
   { x1: 970, y1: 20, x2: 1190, y2: 450 },
-  { x1: 20, y1: 800, x2: 900, y2: 1100 },// (20,1100) (20,800) (900,800) (900,1100)
+  { x1: 20, y1: 800, x2: 900, y2: 1020 },// (20,1100) (20,800) (900,800) (900,1100)
 ];
 
 type WorldRect = { xMin: number; xMax: number; yMin: number; yMax: number };
@@ -53,11 +72,306 @@ function getScaledSafeRects(scene: Phaser.Scene, worldW: number, worldH: number,
   });
 }
 
+function clampMenuToScreen(
+  scene: Phaser.Scene,
+  x: number, y: number,
+  w: number, h: number,
+  pad = 8
+) {
+  const sw = scene.scale.width;
+  const sh = scene.scale.height;
+  const nx = Math.min(Math.max(pad, x), sw - w - pad);
+  const ny = Math.min(Math.max(pad, y), sh - h - pad);
+  return { x: nx, y: ny };
+}
+
+type HorseMenu = {
+  root: Phaser.GameObjects.Container;
+  showAt: (screenX: number, screenY: number, horseId: number) => void;
+  hide: () => void;
+  destroy: () => void;
+  setResolver: (r: (id: number) => Horse | undefined) => void; // NEW
+};
+
+function statusToKind(status: string): OverlayKind | null {
+  if (status === 'SLEEP') return 'sleep';
+  if (status === 'BRUISED') return 'hurt';
+  return null;
+}
+
+/** Destroy any existing overlay for this sprite */
+function clearStatusOverlay(spr: Phaser.GameObjects.Sprite) {
+  const prev = spr.getData('statusOverlay') as Phaser.GameObjects.Sprite | null;
+  if (prev) prev.destroy();
+  spr.setData('statusOverlay', null);
+  spr.setData('statusOverlayKind', null);
+}
+
+/** Create/replace the overlay for the given status (or remove if none). */
+function applyStatusOverlay(
+  scene: Phaser.Scene,
+  worldLayer: Phaser.GameObjects.Layer,
+  spr: Phaser.GameObjects.Sprite,
+  status: string,
+  baseDepth: number,
+) {
+  const desired = statusToKind(status);
+
+  const prev = spr.getData('statusOverlay') as Phaser.GameObjects.Sprite | null;
+  const prevKind = spr.getData('statusOverlayKind') as OverlayKind | null;
+
+  // No overlay needed → destroy previous and bail
+  if (!desired) {
+    clearStatusOverlay(spr);
+    return;
+  }
+
+  // If the kind changed, nuke the old one first
+  if (prev && prevKind !== desired) {
+    if (prev) prev.destroy();
+    spr.setData('statusOverlay', null);
+  }
+
+  // If we already have the right overlay, just keep it in sync and return
+  const keep = spr.getData('statusOverlay') as Phaser.GameObjects.Sprite | null;
+  if (keep && prevKind === desired) {
+    keep
+      .setPosition(spr.x, spr.y)
+      .setDepth(baseDepth + 1)
+      .setFlipX(
+        desired === 'sleep'
+          ? !spr.flipX // keep your original sleepy mirroring
+          : spr.flipX
+      );
+    return;
+  }
+
+  // Create a fresh overlay
+  const overlayScale = TARGET_H / 64; // your overlay frames are 64×64
+  const key = desired === 'sleep' ? SLEEPY_SHEET_KEY : HURT_SHEET_KEY;
+  const anim = desired === 'sleep' ? SLEEPY_ANIM_KEY : HURT_ANIM_KEY;
+
+  const overlay = scene.add
+    .sprite(spr.x, spr.y, key, 0)
+    .setOrigin(0.5, 1)
+    .setScale(overlayScale)
+    .setFlipX(desired === 'sleep' ? !spr.flipX : spr.flipX)
+    .setDepth(baseDepth + 1)
+    .play(anim);
+
+  worldLayer.add(overlay);
+
+  spr.setData('statusOverlay', overlay);
+  spr.setData('statusOverlayKind', desired);
+
+  // Ensure it can’t outlive its horse
+  spr.once(Phaser.GameObjects.Events.DESTROY, () => {
+    if (overlay) overlay.destroy();
+  });
+}
+
+function createHorseContextMenu(
+  scene: Phaser.Scene,
+  uiLayer: Phaser.GameObjects.Layer,
+  getHorseById?: (id: number) => Horse | undefined
+): HorseMenu {
+  ensureNeighSfx(scene); // keep your neigh SFX loader if you added it
+
+  const root = scene.add.container(0, 0).setDepth(10_000).setVisible(false);
+  uiLayer.add(root);
+
+  // Panel
+  const paddingX = 10;
+  const itemH = 28;
+  const width = 140;
+
+  let currentHorseId: number | null = null;
+  let resolver: ((id: number) => Horse | undefined) | undefined = getHorseById;
+
+  const bg = scene.add.rectangle(0, 0, width, itemH + 8, 0xbe9c7f, 1).setOrigin(0, 0);
+  bg.setStrokeStyle(1, 0x7d4d45, 1);
+  root.add(bg);
+
+  type MenuItem = {
+    key: string;
+    hit: Phaser.GameObjects.Rectangle;
+    txt: Phaser.GameObjects.Text;
+    setEnabled: (enabled: boolean) => void;
+  };
+
+  const items: Record<string, MenuItem> = {};
+
+  let neighLock = false;
+
+  function playNeighIfIdle(scene: Phaser.Scene) {
+    const mgr = scene.sound;
+    if (!mgr || neighLock) return;
+
+    // If any of our neigh sounds is already playing, do nothing
+    for (const k of NEIGH_KEYS) {
+      const s = mgr.get(k);
+      if (s && (s.isPlaying || s.isPaused)) {
+        return;
+      }
+    }
+
+    const choices = NEIGH_KEYS.filter(k => scene.cache.audio.exists(k));
+    if (choices.length === 0) return;
+
+    const key = Phaser.Utils.Array.GetRandom(choices);
+
+    // Reuse or create an instance so we can subscribe to end events
+    let snd = mgr.get(key);
+    if (!snd) snd = mgr.add(key);
+
+    neighLock = true;
+    const release = () => {
+      neighLock = false;
+      snd?.off('complete', release);
+      snd?.off('stop', release);
+    };
+    snd.once('complete', release);
+    snd.once('stop', release);
+    snd.play({ volume: 0.6 });
+  }
+
+
+  const mkItem = (label: string, onClick: () => void): MenuItem => {
+    const idx = Object.keys(items).length;
+    const y = 4 + idx * itemH;
+
+    const hit = scene.add.rectangle(0, y, width, itemH, 0x000000, 0)
+      .setOrigin(0, 0)
+      .setInteractive({ useHandCursor: true });
+
+    const txt = scene.add.text(paddingX, y + 6, label, {
+      fontFamily: 'SpaceHorse, sans-serif',
+      fontSize: '14px',
+      color: '#333333',
+    });
+
+    let enabled = true;
+    const setEnabled = (e: boolean) => {
+      enabled = e;
+      if (enabled) {
+        hit.setInteractive({ useHandCursor: true });
+        txt.setAlpha(1);
+        txt.setColor('#333333');
+      } else {
+        hit.disableInteractive();
+        txt.setAlpha(0.55);
+        txt.setColor('#666666');
+        hit.setFillStyle(0x000000, 0); // ensure no hover bg remains
+      }
+    };
+
+    hit.on('pointerover', () => {
+      if (!enabled) return;
+      hit.setFillStyle(0x7d4d45, 1);
+      txt.setColor('#ffffff');
+    });
+    hit.on('pointerout', () => {
+      if (!enabled) return;
+      hit.setFillStyle(0x000000, 0);
+      txt.setColor('#333333');
+    });
+    hit.on('pointerup', () => {
+      if (!enabled) return;
+      onClick();
+    });
+
+    root.add(hit);
+    root.add(txt);
+    bg.setSize(width, 8 + (idx + 1) * itemH);
+
+    const mi = { key: label.toLowerCase(), hit, txt, setEnabled };
+    items[mi.key] = mi;
+    return mi;
+  };
+
+  // OPEN
+  mkItem('Open', () => {
+    if (currentHorseId != null) {
+      playNeighIfIdle(scene);
+      bus.emit('ui:click');
+      bus.emit('ui:open-horse', currentHorseId);
+      bus.emit('horse:open', { id: currentHorseId });
+    }
+    root.setVisible(false);
+  });
+
+  // RACE (enabled only when status === 'IDLE')
+  const raceItem = mkItem('Race', () => {
+    if (currentHorseId != null) {
+      bus.emit('ui:click');
+      bus.emit('horse:race', { id: currentHorseId });
+    }
+    root.setVisible(false);
+  });
+
+  // RESTORE (enabled only when status === 'BRUISED')
+  const restoreItem = mkItem('Restore', () => {
+    if (currentHorseId != null) {
+      bus.emit('ui:click');
+      bus.emit('horse:restore', { id: currentHorseId });
+    }
+    root.setVisible(false);
+  });
+
+  // BURN
+  mkItem('Burn', () => {
+    if (currentHorseId != null) {
+      bus.emit('ui:click');
+      bus.emit('horse:burn', { id: currentHorseId });
+    }
+    root.setVisible(false);
+  });
+
+  // hide on outside click
+  const onGlobalDown = (_p: Phaser.Input.Pointer, targets: any[]) => {
+    if (!root.visible) return;
+    const hitOurMenu = targets.some(t => (t).parentContainer === root || t === bg);
+    if (!hitOurMenu) root.setVisible(false);
+  };
+  scene.input.on('pointerdown', onGlobalDown);
+
+  return {
+    root,
+    setResolver: (r) => { resolver = r; },
+    showAt: (screenX, screenY, horseId) => {
+      currentHorseId = horseId;
+
+      // look up current status to enable/disable items
+      const h = resolver?.(horseId);
+      const status = h?.staty?.status ?? '';
+
+      raceItem.setEnabled(status === 'IDLE');
+      restoreItem.setEnabled(status === 'BRUISED');
+
+      // optional: play random neigh on open (if already cached)
+      const available = NEIGH_KEYS.filter(k => scene.cache.audio.exists(k));
+      if (available.length > 0) {
+        scene.sound.play(Phaser.Utils.Array.GetRandom(available), { volume: 0.6 });
+      }
+
+      const { w, h: hh } = { w: bg.width, h: bg.height };
+      const pos = clampMenuToScreen(scene, screenX, screenY, w, hh, 8);
+      root.setPosition(pos.x, pos.y);
+      root.setVisible(true);
+    },
+    hide: () => root.setVisible(false),
+    destroy: () => {
+      try { scene.input.off('pointerdown', onGlobalDown); } catch { }
+      try { root.destroy(true); } catch { }
+    },
+  };
+}
+
 function createTooltip(scene: Phaser.Scene, uiLayer: Phaser.GameObjects.Layer): TooltipRefs {
   const root = scene.add.container(0, 0).setDepth(2000).setVisible(false);
   const bg = scene.add.rectangle(0, 0, 10, 10, 0x95AEDB, 0.9).setStrokeStyle(1, 0x3e3631).setOrigin(0, 0);
   const mkText = (color = '#000') => scene.add.text(0, 0, '', { fontFamily: 'SpaceHorse, sans-serif', fontSize: '14px', color });
-  const rows: TooltipRow[] = Array.from({ length: 9 }).map(() => ({ label: mkText('#583400'), value: mkText('#000000') }));
+  const rows: TooltipRow[] = Array.from({ length: 10 }).map(() => ({ label: mkText('#583400'), value: mkText('#000000') }));
   root.add([bg, ...rows.flatMap(r => [r.label, r.value])]); uiLayer.add(root);
   return { root, bg, rows };
 }
@@ -67,10 +381,11 @@ function showTooltip(t: TooltipRefs, h: Horse) {
   const name = (h.profile.nickname?.trim()?.length ? h.profile.nickname : h.profile.name).slice(0, 16);
 
   const rows: Array<[string, string, string?]> = [
+    ['ID:', h.id],
     ['NAME:', name],
     ['SEX:', h.profile.sex, sexColorMap[h.profile.sex.toLowerCase()] ?? '#000000'],
     ['RARITY:', h.profile.type_horse, rarityColorMap[h.profile.type_horse_slug] ?? '#000000'],
-    ['GEN:', h.staty.generation],
+    // ['GEN:', h.staty.generation],
     ['BREEDS:', (h.staty as any).breeding ?? '0/24'],
     ['STATUS:', h.staty.status],
     ['LEVEL:', h.staty.level],
@@ -134,6 +449,19 @@ function moveTooltip(t: TooltipRefs, screenX: number, screenY: number) {
   t.root.setPosition(x, y);
 }
 
+function ensureNeighSfx(scene: Phaser.Scene) {
+  const toLoad: Array<{ key: string; url: string }> = [];
+  for (let i = 0; i < NEIGH_KEYS.length; i++) {
+    const k = NEIGH_KEYS[i];
+    if (!scene.cache.audio.exists(k)) {
+      toLoad.push({ key: k, url: NEIGH_URLS[i] });
+    }
+  }
+  if (toLoad.length > 0) {
+    toLoad.forEach(({ key, url }) => scene.load.audio(key, url));
+    scene.load.start(); // fire-and-forget; menu can show while these finish
+  }
+}
 
 // Paths/keys -------------------------------------------------------------------
 const sheetUrl = (h: Horse, hovered: boolean) =>
@@ -143,25 +471,62 @@ const animKey = (h: Horse, hovered: boolean) => `horse-${h.id}-${hovered ? 'hove
 
 // Load the shadow spritesheet once and create its looping animation
 export async function ensureShadowAnim(scene: Phaser.Scene) {
+  let queued = 0;
+
   if (!scene.textures.exists(SHADOW_SHEET_KEY)) {
-    scene.load.spritesheet(SHADOW_SHEET_KEY, SHADOW_SHEET_URL, {
-      frameWidth: 48,   // both horse & shadow are 48×48
-      frameHeight: 48,
-    });
+    scene.load.spritesheet(SHADOW_SHEET_KEY, SHADOW_SHEET_URL, { frameWidth: 48, frameHeight: 48 });
+    queued++;
+  }
+  // NEW: status overlays
+  if (!scene.textures.exists(SLEEPY_SHEET_KEY)) {
+    scene.load.spritesheet(SLEEPY_SHEET_KEY, SLEEPY_SHEET_URL, { frameWidth: 64, frameHeight: 64 });
+    queued++;
+  }
+  if (!scene.textures.exists(HURT_SHEET_KEY)) {
+    scene.load.spritesheet(HURT_SHEET_KEY, HURT_SHEET_URL, { frameWidth: 64, frameHeight: 64 });
+    queued++;
+  }
+
+  if (queued > 0) {
     await new Promise<void>(resolve => {
       scene.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
       scene.load.start();
     });
   }
+
+  // Shadow anim (unchanged)
   if (!scene.anims.exists(SHADOW_ANIM_KEY)) {
     scene.anims.create({
       key: SHADOW_ANIM_KEY,
       frames: scene.anims.generateFrameNumbers(SHADOW_SHEET_KEY, {}),
-      frameRate: FPS_RUN, // reuse your horse FPS so they “feel” synced
+      frameRate: FPS_RUN,
+      repeat: -1,
+    });
+  }
+
+  // NEW: sleepy (6 frames: 0..5)
+  if (!scene.anims.exists(SLEEPY_ANIM_KEY)) {
+    scene.anims.create({
+      key: SLEEPY_ANIM_KEY,
+      frames: scene.anims.generateFrameNumbers(SLEEPY_SHEET_KEY, { start: 0, end: 5 }),
+      frameRate: 8,
+      repeat: -1,
+    });
+  }
+
+  // NEW: hurt (8 frames: 0..7)
+  if (!scene.anims.exists(HURT_ANIM_KEY)) {
+    scene.anims.create({
+      key: HURT_ANIM_KEY,
+      frames: scene.anims.generateFrameNumbers(HURT_SHEET_KEY, { start: 0, end: 7 }),
+      frameRate: 10,
       repeat: -1,
     });
   }
 }
+
+
+
 
 // Load/anim ensure -------------------------------------------------------------
 export async function ensureHorseAnims(scene: Phaser.Scene, list: Horse[]) {
@@ -276,17 +641,30 @@ export function spawnHorsesRandom(
   uiLayer: Phaser.GameObjects.Layer,
   list: Horse[],
   worldSize: { w: number; h: number },
-
   resolveHorse: (id: number) => Horse | undefined,
   onHoverIdChange?: (id: number | null) => void,
-
   placements?: Map<number, Placement>,
-
-  // NEW: options
   opts?: { minSepPx?: number; seed?: string },
 ) {
   const tooltip = createTooltip(scene, uiLayer);
   const sprites: Phaser.GameObjects.Sprite[] = [];
+
+  // NEW: ensure a single shared context menu
+  const menuKey = '__horse_ctx_menu__';
+  let menu: HorseMenu = (scene as any)[menuKey];
+  if (!menu) {
+    menu = createHorseContextMenu(scene, uiLayer, resolveHorse);
+    (scene as any)[menuKey] = menu;
+
+    // Clean up on shutdown
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      menu.destroy();
+      (scene as any)[menuKey] = undefined;
+    });
+  } else {
+    // keep resolver fresh if this spawner is re-run
+    menu.setResolver(resolveHorse);
+  }
 
   const rects = getScaledSafeRects(scene, worldSize.w, worldSize.h, 'bg');
   const placeMap = placements ?? new Map<number, Placement>();
@@ -333,6 +711,8 @@ export function spawnHorsesRandom(
     worldLayer.add(shadow);
     worldLayer.add(spr);
 
+    applyStatusOverlay(scene, worldLayer, spr, h.staty.status, y);
+
     spr.play(animKey(h, false));
 
     const playBoth = (horseAnimKey: string) => {
@@ -355,6 +735,13 @@ export function spawnHorsesRandom(
     });
 
     spr.on('pointermove', (p: Phaser.Input.Pointer) => moveTooltip(tooltip, p.x, p.y));
+
+    spr.on('pointerup', (p: Phaser.Input.Pointer) => {
+      const id = spr.getData('horseId') as number;
+      // Show the dropdown near the click
+      menu.showAt(p.x, p.y, id);
+      bus.emit('ui:click');
+    });
 
     sprites.push(spr);
   }

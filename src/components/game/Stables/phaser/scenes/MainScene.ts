@@ -9,6 +9,8 @@ import { initAudio } from '../core/audio';
 import { createBackground, fitBackgroundToCover } from '../core/background';
 import { enablePan, PanState } from '../core/pan';
 import { createHUD } from '../ui/hudRoot';
+import { createProfileHUD, type ProfileHUD } from '../ui/profileHUD';
+import { BalanceLiveStore, type BalanceStoreOpts } from '../core/balanceService';
 
 import {
     spawnHorsesRandom,
@@ -20,6 +22,9 @@ import {
 
 import type { Horse } from '../../types/horse';
 import { HorseLiveStore, type HorseSnapshot } from '../core/horseService';
+
+import { StableLiveStore, type BackendStable } from '../core/stableService';
+import { spawnOrUpdateStable } from '../world/stable';
 
 type Layers = {
     world: Phaser.GameObjects.Layer;
@@ -49,6 +54,9 @@ export class MainScene extends Phaser.Scene {
     private horseSprites?: { sprites: Phaser.GameObjects.Sprite[]; tooltip: TooltipRefs };
     private readonly horseById = new Map<number, Horse>();
     private hoveredId: number | null = null;
+    private profileHUD?: ProfileHUD;
+    private balStore?: BalanceLiveStore;
+    private balUnsub?: () => void;
 
     // Live store for in-game fetching
     private store?: HorseLiveStore;
@@ -56,6 +64,9 @@ export class MainScene extends Phaser.Scene {
 
     private readonly placements = new Map<number, Placement>();
 
+    private stableStore?: StableLiveStore;
+    private stableUnsub?: () => void;
+    private stableDTO: BackendStable | null = null;
 
     // Handlers we need to keep references to for cleanup
     private readonly resizeHandler = (size: Phaser.Structs.Size) => {
@@ -92,6 +103,13 @@ export class MainScene extends Phaser.Scene {
         this.horses = data.horseList ?? [];
     }
 
+    private readonly emitProfileBounds = () => {
+        const c = this.profileHUD?.container;
+        if (!c) return;
+        const b = c.getBounds(); // UI camera space == screen pixels
+        bus.emit('ui:profile-bounds', { left: b.x, top: b.y, width: b.width, height: b.height });
+    };
+
     create() {
         // --- Viewport & base UI wiring
         applyResponsiveViewport(this);
@@ -127,8 +145,33 @@ export class MainScene extends Phaser.Scene {
         this.input.on('gameobjectup', this.playClick, this);
         bus.on('ui:click', this.playClick as any);
 
+        this.profileHUD = createProfileHUD(this, this.layers.ui, {
+            x: 18,
+            y: 18,
+            scale: 0.64,           // tweak to taste
+            avatarOffsetX: 75,     // <-- move the horse.gif left/right under the window
+            avatarOffsetY: 75,     // <-- move the horse.gif up/down under the window
+            name: '--',       // placeholder
+            phorse: 0,
+            wron: 0,
+            shard: 0,
+        });
+
+        this.emitProfileBounds();
+
+
+
         // --- Live store
         const apiBase = this.game.registry.get('apiBase') as string;
+
+        this.balStore = new BalanceLiveStore({
+            apiBase,
+            credentials: 'include',
+            pollBaseMs: 20000,
+            jitterRatio: 0.30,
+            maxBackoffMs: 120000,
+        });
+
         this.store = new HorseLiveStore({
             apiBase,
             credentials: 'include',
@@ -136,6 +179,27 @@ export class MainScene extends Phaser.Scene {
             jitterRatio: 0.30,
             maxBackoffMs: 120000,
         });
+
+        this.stableStore = new StableLiveStore(apiBase, 'include');
+
+        this.stableUnsub = this.stableStore.subscribe((snap) => {
+            if (snap.stable && snap.stable !== this.stableDTO) {
+                this.stableDTO = snap.stable;
+
+                void spawnOrUpdateStable(
+                    this,
+                    this.layers.world,
+                    this.layers.ui, // UI layer for tooltip
+                    { tokenId: snap.stable.tokenId, level: snap.stable.level },
+                    { x: 825, y: 425 },
+                    1.15
+                ).catch((e) => {
+                    console.error('[MainScene] failed to spawn/update stable:', e);
+                });
+            }
+        });
+
+        this.stableStore.fetchOnce().catch(e => console.error('stable fetch error', e));
 
         const onSnap = (snap: HorseSnapshot) => {
             // If reference changed, update and respawn
@@ -153,15 +217,30 @@ export class MainScene extends Phaser.Scene {
             // this.hud?.updateEnergyTimer?.(snap.nextRecoveryTs);
         };
 
+        const onBal = (snap: import('../core/balanceService').BalanceSnapshot) => {
+            if (snap.nickname) this.profileHUD?.setNickname(snap.nickname);
+            // r1 = PHORSE, r2 = WRON, r3 = MEDALS (we feed MEDALS into "shard" row text)
+            this.profileHUD?.setBalances({
+                phorse: snap.phorse ?? 0,
+                wron: snap.wron ?? 0,
+                shard: snap.medals ?? 0, // text for row 3; when you have a medal icon, just swap the texture key in profileHUD
+            });
+        };
+        this.balUnsub = this.balStore.subscribe(onBal);
+        this.balStore.start();
+
         this.unsub = this.store.subscribe(onSnap);
         this.store.start();
 
         // Optional: react to gameplay events that change horses (from Phaser or React)
-        const onHorseChanged = () => this.store?.refreshSoon(300);
+        const onHorseChanged = () => { this.store?.refreshSoon(300); this.balStore?.refreshSoon(300); }
         bus.on('game:horse:changed', onHorseChanged);
 
         // --- Resize & shutdown
-        this.scale.on('resize', this.resizeHandler);
+        this.scale.on('resize', (size) => {
+            this.resizeHandler(size);
+            this.emitProfileBounds();
+        });
 
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             // input
@@ -174,6 +253,8 @@ export class MainScene extends Phaser.Scene {
             this.unsub = undefined;
             this.store?.destroy();
             this.store = undefined;
+            this.balUnsub?.(); this.balUnsub = undefined;
+            this.balStore?.destroy(); this.balStore = undefined;
 
             // bus
             bus.off('game:horse:changed', onHorseChanged);
@@ -181,12 +262,22 @@ export class MainScene extends Phaser.Scene {
             // hud & pan
             try { this.hud?.destroy?.(); } catch { }
             this.disposePan?.();
+            this.profileHUD?.destroy(); this.profileHUD = undefined;
 
             // sprites cleanup
             try {
                 this.horseSprites?.sprites.forEach(s => s.destroy());
                 this.horseSprites = undefined;
             } catch { }
+
+            try { this.stableUnsub?.(); } catch { }
+            this.stableUnsub = undefined;
+            this.stableStore?.destroy();
+            this.stableStore = undefined;
+
+            const existing: Phaser.GameObjects.Sprite | undefined = (this as any).__stableSprite;
+            if (existing) try { existing.destroy(); } catch { }
+            (this as any).__stableSprite = undefined;
 
             // layers & ui
             bus.emit('hud:hide');

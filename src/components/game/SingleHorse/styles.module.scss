@@ -15,7 +15,7 @@
         overflow: hidden;
 
         @media screen and (max-width: 920px) {
-            width: 97vw;
+            width: 92vw;
             height: 60vw;
         }
 
@@ -87,6 +87,7 @@
                 .horseItems {
                     display: flex;
                     margin-top: 1.8vw;
+                    margin-left: -2.0vw;
                     margin-bottom: -0.6vw;
 
                     @media screen and (max-width: 920px) {
@@ -365,7 +366,8 @@
                             background-image: url('../../../assets/game/horses/items.png');
 
                             @media screen and (max-width: 920px) {
-                                width: 10vw;
+                                width: 8vw;
+                                height: 60%;
                             }
 
                             &:hover {
@@ -382,7 +384,8 @@
                             background-image: url('../../../assets/game/horses/restore.png');
 
                             @media screen and (max-width: 920px) {
-                                width: 13vw;
+                                width: 10vw;
+                                height: 60%;
                             }
 
                             &:hover {
@@ -427,7 +430,8 @@
                             background-image: url('../../../assets/game/horses/rewards.png');
 
                             @media screen and (max-width: 920px) {
-                                width: 13vw;
+                                width: 10vw;
+                                height: 60%;
                             }
 
                             &:hover {

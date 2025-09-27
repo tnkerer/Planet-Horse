@@ -207,7 +207,7 @@
   overflow: hidden;
 
   @media (max-width: 920px) {
-    aspect-ratio: 16/10; /* a bit taller on mobile if you prefer */
+    aspect-ratio: 16/9; /* a bit taller on mobile if you prefer */
   }
 }
 
