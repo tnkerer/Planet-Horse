@@ -24,6 +24,8 @@ type Events = {
   'horse:restore' : { id: number};
 
   'stable:horses-open' : { tokenId: string};
+
+  'canvas:input-enabled' : boolean;
 };
 
 export const bus = mitt<Events>();

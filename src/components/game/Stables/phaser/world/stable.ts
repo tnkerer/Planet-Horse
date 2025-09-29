@@ -101,6 +101,13 @@ async function callFinishUpgrade(scene: Phaser.Scene, tokenId: string) {
   return body;
 }
 
+function getNextUpgradeInfo(level: number) {
+  const next = Math.min(4, Math.max(1, level + 1)) as 1 | 2 | 3 | 4;
+  if (level >= 4) return null; // no next level
+  return { nextLevel: next, cost: STABLE_LEVELS[next-1].upgradeCostPhorse };
+}
+
+
 /* ===========================================================
    Tooltip (unchanged)
 =========================================================== */
@@ -256,6 +263,8 @@ function createStableMenu(scene: Phaser.Scene, uiLayer: Phaser.GameObjects.Layer
   const root = scene.add.container(0, 0).setDepth(10_200).setVisible(false);
   uiLayer.add(root);
 
+  const confirm = createUpgradeConfirm(scene, uiLayer);
+
   const baseWidth = 180;
   const itemH = 28;
   const padX = 10;
@@ -337,12 +346,17 @@ function createStableMenu(scene: Phaser.Scene, uiLayer: Phaser.GameObjects.Layer
   upHit.on('pointerup', async () => {
     if (!upEnabled || !current) return;
     const tokenId = current.tokenId;
+
     try {
-      if (current.upgrading && (current.upgradeRemainingSeconds ?? 1) <= 0) {
+      const eta = current.upgradeRemainingSeconds ?? null;
+      const canFinish = current.upgrading && (eta ?? 1) <= 0;
+
+      if (canFinish) {
+        // Finish immediately (no confirm)
         await callFinishUpgrade(scene, tokenId);
         const fresh = await fetchStatus(scene, tokenId);
         refreshLabelAndMenu(scene, fresh);
-        // swap sprite if level incremented
+
         const spr: Phaser.GameObjects.Sprite | undefined = (scene as any).__stableSprite;
         if (spr && fresh.level !== (spr.getData('stableDto') as StableDTO)?.level) {
           const lv = Math.max(1, Math.min(4, Math.floor(fresh.level))) as 1 | 2 | 3 | 4;
@@ -353,17 +367,25 @@ function createStableMenu(scene: Phaser.Scene, uiLayer: Phaser.GameObjects.Layer
         }
         const p: Popup = (scene as any).__stablePopup;
         p?.show('Upgrade finalized!', 'success');
-      } else {
+        root.setVisible(false);
+        return;
+      }
+
+      // Start upgrade (show confirm)
+      const info = getNextUpgradeInfo(current.level);
+      if (!info) return; // maxed; guard
+
+      confirm.show(current, async () => {
         await callStartUpgrade(scene, tokenId);
         const fresh = await fetchStatus(scene, tokenId);
         refreshLabelAndMenu(scene, fresh);
         const p: Popup = (scene as any).__stablePopup;
         p?.show('Upgrade started!', 'success');
-      }
+        root.setVisible(false);
+      });
     } catch (e: any) {
       const p: Popup = (scene as any).__stablePopup;
       p?.show(e?.message ?? 'Action failed', 'error', 3500);
-    } finally {
       root.setVisible(false);
     }
   });
@@ -415,8 +437,8 @@ function createStableMenu(scene: Phaser.Scene, uiLayer: Phaser.GameObjects.Layer
     },
     hide: () => root.setVisible(false),
     destroy: () => {
-      try { scene.input.off('pointerdown', onGlobalDown); } catch {}
-      try { root.destroy(true); } catch {}
+      try { scene.input.off('pointerdown', onGlobalDown); } catch { }
+      try { root.destroy(true); } catch { }
     },
   };
 }
@@ -491,6 +513,167 @@ function createPopup(scene: Phaser.Scene, uiLayer: Phaser.GameObjects.Layer): Po
   };
 }
 
+type UpgradeConfirm = {
+  show: (st: StableStatus, onConfirm: () => Promise<void>) => void;
+  hide: () => void;
+  root: Phaser.GameObjects.Container;
+};
+
+function createUpgradeConfirm(scene: Phaser.Scene, uiLayer: Phaser.GameObjects.Layer): UpgradeConfirm {
+  const root = scene.add.container(0, 0).setDepth(10_600).setVisible(false);
+  uiLayer.add(root);
+
+  const PAD = 14;
+  const BG_W = 360;
+  const BG_H = 150;
+  const RADIUS = 6;
+
+  // ---- Panel (rounded) ----
+  const bg = scene.add.graphics();
+  const drawPanel = () => {
+    bg.clear();
+    bg.fillStyle(0xF2E3C4, 1);            // #f2e3c4
+    bg.lineStyle(1, 0x9C835B, 1);         // #9c835b
+    bg.fillRoundedRect(0, 0, BG_W, BG_H, RADIUS);
+    bg.strokeRoundedRect(0, 0, BG_W, BG_H, RADIUS);
+  };
+  drawPanel();
+  // Make inside clicks not close the modal
+  bg.setInteractive(new Phaser.Geom.Rectangle(0, 0, BG_W, BG_H), Phaser.Geom.Rectangle.Contains);
+
+  const title = scene.add.text(PAD, PAD, 'Confirm Upgrade', {
+    fontFamily: 'SpaceHorse, sans-serif',
+    fontSize: '18px',
+    color: '#2b1b10',
+  });
+
+  const line1 = scene.add.text(PAD, PAD + 30, '', {
+    fontFamily: 'SpaceHorse, sans-serif',
+    fontSize: '16px',
+    color: '#2b1b10',
+    wordWrap: { width: BG_W - PAD * 2 },
+  });
+
+  const line2 = scene.add.text(PAD, PAD + 56, '', {
+    fontFamily: 'SpaceHorse, sans-serif',
+    fontSize: '16px',
+    color: '#2b1b10',
+  });
+
+  const close = scene.add.image(BG_W - 6, 6, CLOSE_ICON_KEY)
+    .setOrigin(1, 0)
+    .setDisplaySize(24, 24)
+    .setInteractive({ useHandCursor: true });
+
+  // ---- Buttons (rounded) ----
+  const btnW = 120;
+  const btnH = 32;
+  const gap = 14;
+  const btnY = BG_H - PAD - btnH;
+
+  const drawBtn = (g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, fill: number, alpha: number, stroke = 0x9C835B) => {
+    g.clear();
+    g.fillStyle(fill, alpha);
+    g.lineStyle(1, stroke, 1);
+    g.fillRoundedRect(x, y, w, h, RADIUS);
+    g.strokeRoundedRect(x, y, w, h, RADIUS);
+  };
+
+  const cancelBg = scene.add.graphics();
+  drawBtn(cancelBg, PAD, btnY, btnW, btnH, 0x000000, 0.08);
+
+  const cancelHit = scene.add.rectangle(PAD, btnY, btnW, btnH, 0x000000, 0)
+    .setOrigin(0, 0)
+    .setInteractive({ useHandCursor: true });
+
+  const cancelTxt = scene.add.text(PAD + 16, btnY + 7, 'Cancel', {
+    fontFamily: 'SpaceHorse, sans-serif', fontSize: '14px', color: '#2b1b10'
+  });
+
+  const confirmX = PAD + btnW + gap;
+  const confirmBg = scene.add.graphics();
+  drawBtn(confirmBg, confirmX, btnY, btnW, btnH, 0x7d4d45, 1);
+
+  const confirmHit = scene.add.rectangle(confirmX, btnY, btnW, btnH, 0x000000, 0)
+    .setOrigin(0, 0)
+    .setInteractive({ useHandCursor: true });
+
+  const confirmTxt = scene.add.text(confirmX + 16, btnY + 7, 'Confirm', {
+    fontFamily: 'SpaceHorse, sans-serif', fontSize: '14px', color: '#ffffff'
+  });
+
+  root.add([bg, title, line1, line2, close, cancelBg, cancelHit, cancelTxt, confirmBg, confirmHit, confirmTxt]);
+
+  let pending = false;
+  let go: (() => Promise<void>) | null = null;
+
+  const layout = () => {
+    const sw = scene.scale.width;
+    root.setPosition(Math.round((sw - BG_W) / 2), 48);
+  };
+
+  const hide = () => {
+    pending = false;
+    root.setVisible(false);
+  };
+
+  close.on('pointerup', hide);
+  cancelHit.on('pointerup', hide);
+
+  // Hover states (redraw rounded buttons)
+  cancelHit.on('pointerover', () => drawBtn(cancelBg, PAD, btnY, btnW, btnH, 0x9C835B, 0.20));
+  cancelHit.on('pointerout', () => drawBtn(cancelBg, PAD, btnY, btnW, btnH, 0x000000, 0.08));
+
+  confirmHit.on('pointerover', () => drawBtn(confirmBg, confirmX, btnY, btnW, btnH, 0x7d4d45, 1));
+  confirmHit.on('pointerout', () => drawBtn(confirmBg, confirmX, btnY, btnW, btnH, 0x7d4d45, 1));
+
+  // ✅ Always close after result; show error via global popup when it fails
+  confirmHit.on('pointerup', async () => {
+    if (pending || !go) return;
+    pending = true;
+    try {
+      await go();
+      // success popup is shown by the caller (menu handler) as before
+    } catch (e: any) {
+      const p: Popup = (scene as any).__stablePopup;
+      p?.show(e?.message ?? 'Upgrade failed', 'error', 3500);
+    } finally {
+      hide(); // always close (success or error)
+    }
+  });
+
+  // Outside click closes (bg is interactive so inside clicks are ignored here)
+  const onGlobalDown = (_p: Phaser.Input.Pointer, targets: any[]) => {
+    if (!root.visible) return;
+    const inside = targets.some(t => (t).parentContainer === root || t === bg);
+    if (!inside) hide();
+  };
+  scene.input.on('pointerdown', onGlobalDown);
+
+  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+    try { scene.input.off('pointerdown', onGlobalDown); } catch { }
+    try { root.destroy(true); } catch { }
+  });
+
+  return {
+    root,
+    hide,
+    show: (st, onConfirm) => {
+      const info = getNextUpgradeInfo(st.level);
+      if (!info) return; // maxed
+      line1.setText(`Upgrade Stable #${st.tokenId} to Level ${info.nextLevel}?`);
+      line2.setText(`Cost: ${String(info.cost.toLocaleString())} PHORSE`);
+      go = onConfirm;
+      pending = false;
+      layout();
+      root.setVisible(true);
+    },
+  };
+}
+
+
+
+
 /* ===========================================================
    Countdown runtime (updates label every 1s when upgrading)
 =========================================================== */
@@ -506,7 +689,7 @@ function ensureCountdown(scene: Phaser.Scene): LabelCountdown {
     rt = {};
     (scene as any).__stableCountdown = rt;
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      if (rt?.timer) { try { rt.timer.remove(false); } catch {} }
+      if (rt?.timer) { try { rt.timer.remove(false); } catch { } }
       (scene as any).__stableCountdown = undefined;
     });
   }
@@ -515,7 +698,7 @@ function ensureCountdown(scene: Phaser.Scene): LabelCountdown {
 
 function stopCountdown(scene: Phaser.Scene) {
   const rt: LabelCountdown | undefined = (scene as any).__stableCountdown;
-  if (rt?.timer) { try { rt.timer.remove(false); } catch {} rt.timer = undefined; }
+  if (rt?.timer) { try { rt.timer.remove(false); } catch { } rt.timer = undefined; }
   if (rt) rt.endsAtMs = null;
 }
 
@@ -533,7 +716,7 @@ function startCountdown(scene: Phaser.Scene, st: StableStatus) {
   rt.endsAtMs = endsAtMs ?? null;
 
   // clear any previous
-  if (rt.timer) { try { rt.timer.remove(false); } catch {} rt.timer = undefined; }
+  if (rt.timer) { try { rt.timer.remove(false); } catch { } rt.timer = undefined; }
 
   if (!endsAtMs) return; // nothing to tick
 

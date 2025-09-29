@@ -68,6 +68,9 @@ export class MainScene extends Phaser.Scene {
     private stableUnsub?: () => void;
     private stableDTO: BackendStable | null = null;
 
+    private worldStable!: Phaser.GameObjects.Layer;
+    private worldHorses!: Phaser.GameObjects.Layer;
+
     // Handlers we need to keep references to for cleanup
     private readonly resizeHandler = (size: Phaser.Structs.Size) => {
         applyResponsiveViewport(this);
@@ -111,7 +114,7 @@ export class MainScene extends Phaser.Scene {
     };
 
     create() {
-        
+
         // --- Viewport & base UI wiring
         applyResponsiveViewport(this);
         bus.emit('hud:show');
@@ -120,6 +123,11 @@ export class MainScene extends Phaser.Scene {
         this.layers = createLayers(this);
         this.uiCam = createUICamera(this);
         wireCameraIgnores(this, this.uiCam, this.layers.world, this.layers.ui);
+
+        this.worldStable = this.add.layer().setName('world-stable').setDepth(100);
+        this.worldHorses = this.add.layer().setName('world-horses').setDepth(200);
+
+        this.uiCam.ignore([this.worldStable, this.worldHorses]);
 
         // Audio + HUD
         this.audio = initAudio(this);
@@ -189,14 +197,13 @@ export class MainScene extends Phaser.Scene {
 
                 void spawnOrUpdateStable(
                     this,
-                    this.layers.world,
-                    this.layers.ui, // UI layer for tooltip
+                    // 3) Put stables on the lower layer
+                    this.worldStable,
+                    this.layers.ui,
                     { tokenId: snap.stable.tokenId, level: snap.stable.level },
                     { x: 825, y: 425 },
                     1.15
-                ).catch((e) => {
-                    console.error('[MainScene] failed to spawn/update stable:', e);
-                });
+                ).catch((e) => console.error('[MainScene] failed to spawn/update stable:', e));
             }
         });
 
@@ -237,6 +244,10 @@ export class MainScene extends Phaser.Scene {
         const onHorseChanged = () => { this.store?.refreshSoon(300); this.balStore?.refreshSoon(300); }
         bus.on('game:horse:changed', onHorseChanged);
 
+        bus.on('canvas:input-enabled', (enabled: boolean) => {
+            this.input.enabled = enabled; // disables all Phaser input processing
+        });
+
         // --- Resize & shutdown
         this.scale.on('resize', (size) => {
             this.resizeHandler(size);
@@ -248,7 +259,8 @@ export class MainScene extends Phaser.Scene {
             this.input.off('pointerup', this.playClick, this);
             this.input.off('gameobjectup', this.playClick, this);
             bus.off('ui:click', this.playClick as any);
-
+            bus.off('canvas:input-enabled');
+            
             // store
             this.unsub?.();
             this.unsub = undefined;
@@ -326,13 +338,14 @@ export class MainScene extends Phaser.Scene {
         // Spawn new
         this.horseSprites = spawnHorsesRandom(
             this,
-            this.layers.world,
+            // Horses on the higher layer so they render above & receive clicks first
+            this.worldHorses,
             this.layers.ui,
             this.horses,
             { w: this.bgDims.w, h: this.bgDims.h },
             (id) => this.horseById.get(id),
             (idOrNull) => { this.hoveredId = idOrNull; },
-            this.placements, // ✅ pass stable placements map
+            this.placements,
         );
     }
 }

@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 import type { Horse } from '../../types/horse';
 import { bus } from '../bus';
+import {
+  ensureStatusOverlayAssets,
+  applyStatusOverlay,
+} from './statusOverlays';
 
 
 export type Placement = { x: number; y: number; flipX: boolean };
@@ -18,15 +22,6 @@ const SHADOW_SHEET_URL = '/assets/game/breeding/shadow-spritesheet.png';
 const SHADOW_SHEET_KEY = 'horse-shadow-sheet';
 const SHADOW_ANIM_KEY = 'horse-shadow-run';
 
-// --- Status overlays (64x64) ---
-const SLEEPY_SHEET_URL = '/assets/game/breeding/sleepy-spritesheet.png';
-const SLEEPY_SHEET_KEY = 'status-sleepy-sheet';
-const SLEEPY_ANIM_KEY = 'status-sleepy-loop';
-
-const HURT_SHEET_URL = '/assets/game/breeding/hurt-spritesheet.png';
-const HURT_SHEET_KEY = 'status-hurt-sheet';
-const HURT_ANIM_KEY = 'status-hurt-loop';
-
 const NEIGH_KEYS = ['neigh-01', 'neigh-02', 'neigh-03'] as const;
 const NEIGH_URLS = [
   '/assets/game/phaser/misc/neigh-01.wav',
@@ -38,19 +33,21 @@ const NEIGH_URLS = [
 // Tooltip (label/value) -------------------------------------------------------
 type TooltipRow = { label: Phaser.GameObjects.Text; value: Phaser.GameObjects.Text };
 type TooltipRefs = { root: Phaser.GameObjects.Container; bg: Phaser.GameObjects.Rectangle; rows: TooltipRow[] };
-type OverlayKind = 'sleep' | 'hurt';
 
 
 // === Safe zones in *source image* coordinates (unscaled) ===
 type SrcRect = { x1: number; y1: number; x2: number; y2: number };
 const SAFE_RECTS_SRC: SrcRect[] = [
-  { x1: 1425, y1: 20, x2: 1984, y2: 770 }, // (1552,744) (1552,20) (1984,20) (1984,744)
-  { x1: 1675, y1: 770, x2: 1984, y2: 1104 },
+  { x1: 1425, y1: 80, x2: 1960, y2: 770 }, // (1552,744) (1552,20) (1984,20) (1984,744)
+  { x1: 1675, y1: 770, x2: 1960, y2: 1104 },
   { x1: 1125, y1: 770, x2: 1495, y2: 1104 }, // (924,760) (924,560) (1552,560) (1552,760)
-  { x1: 20, y1: 60, x2: 500, y2: 500 }, // (20,500) (500,500) (500,20) (20,20)
-  { x1: 20, y1: 500, x2: 300, y2: 800 },
   { x1: 970, y1: 20, x2: 1190, y2: 450 },
-  { x1: 20, y1: 800, x2: 900, y2: 1020 },// (20,1100) (20,800) (900,800) (900,1100)
+
+  // HUD Region
+  { x1: 200, y1: 200, x2: 500, y2: 500 },
+  // LEFT CORNER
+  { x1: 20, y1: 500, x2: 300, y2: 800 },
+  { x1: 20, y1: 800, x2: 900, y2: 1100 },// (20,1100) (20,800) (900,800) (900,1100)
 ];
 
 type WorldRect = { xMin: number; xMax: number; yMin: number; yMax: number };
@@ -92,83 +89,6 @@ type HorseMenu = {
   destroy: () => void;
   setResolver: (r: (id: number) => Horse | undefined) => void; // NEW
 };
-
-function statusToKind(status: string): OverlayKind | null {
-  if (status === 'SLEEP') return 'sleep';
-  if (status === 'BRUISED') return 'hurt';
-  return null;
-}
-
-/** Destroy any existing overlay for this sprite */
-function clearStatusOverlay(spr: Phaser.GameObjects.Sprite) {
-  const prev = spr.getData('statusOverlay') as Phaser.GameObjects.Sprite | null;
-  if (prev) prev.destroy();
-  spr.setData('statusOverlay', null);
-  spr.setData('statusOverlayKind', null);
-}
-
-/** Create/replace the overlay for the given status (or remove if none). */
-function applyStatusOverlay(
-  scene: Phaser.Scene,
-  worldLayer: Phaser.GameObjects.Layer,
-  spr: Phaser.GameObjects.Sprite,
-  status: string,
-  baseDepth: number,
-) {
-  const desired = statusToKind(status);
-
-  const prev = spr.getData('statusOverlay') as Phaser.GameObjects.Sprite | null;
-  const prevKind = spr.getData('statusOverlayKind') as OverlayKind | null;
-
-  // No overlay needed → destroy previous and bail
-  if (!desired) {
-    clearStatusOverlay(spr);
-    return;
-  }
-
-  // If the kind changed, nuke the old one first
-  if (prev && prevKind !== desired) {
-    if (prev) prev.destroy();
-    spr.setData('statusOverlay', null);
-  }
-
-  // If we already have the right overlay, just keep it in sync and return
-  const keep = spr.getData('statusOverlay') as Phaser.GameObjects.Sprite | null;
-  if (keep && prevKind === desired) {
-    keep
-      .setPosition(spr.x, spr.y)
-      .setDepth(baseDepth + 1)
-      .setFlipX(
-        desired === 'sleep'
-          ? !spr.flipX // keep your original sleepy mirroring
-          : spr.flipX
-      );
-    return;
-  }
-
-  // Create a fresh overlay
-  const overlayScale = TARGET_H / 64; // your overlay frames are 64×64
-  const key = desired === 'sleep' ? SLEEPY_SHEET_KEY : HURT_SHEET_KEY;
-  const anim = desired === 'sleep' ? SLEEPY_ANIM_KEY : HURT_ANIM_KEY;
-
-  const overlay = scene.add
-    .sprite(spr.x, spr.y, key, 0)
-    .setOrigin(0.5, 1)
-    .setScale(overlayScale)
-    .setFlipX(desired === 'sleep' ? !spr.flipX : spr.flipX)
-    .setDepth(baseDepth + 1)
-    .play(anim);
-
-  worldLayer.add(overlay);
-
-  spr.setData('statusOverlay', overlay);
-  spr.setData('statusOverlayKind', desired);
-
-  // Ensure it can’t outlive its horse
-  spr.once(Phaser.GameObjects.Events.DESTROY, () => {
-    if (overlay) overlay.destroy();
-  });
-}
 
 function createHorseContextMenu(
   scene: Phaser.Scene,
@@ -469,21 +389,12 @@ const sheetUrl = (h: Horse, hovered: boolean) =>
 const sheetKey = (h: Horse, hovered: boolean) => `horse-${h.id}-${hovered ? 'hover' : 'regular'}-sheet`;
 const animKey = (h: Horse, hovered: boolean) => `horse-${h.id}-${hovered ? 'hover' : 'regular'}-run`;
 
-// Load the shadow spritesheet once and create its looping animation
 export async function ensureShadowAnim(scene: Phaser.Scene) {
   let queued = 0;
 
+  // Shadow
   if (!scene.textures.exists(SHADOW_SHEET_KEY)) {
     scene.load.spritesheet(SHADOW_SHEET_KEY, SHADOW_SHEET_URL, { frameWidth: 48, frameHeight: 48 });
-    queued++;
-  }
-  // NEW: status overlays
-  if (!scene.textures.exists(SLEEPY_SHEET_KEY)) {
-    scene.load.spritesheet(SLEEPY_SHEET_KEY, SLEEPY_SHEET_URL, { frameWidth: 64, frameHeight: 64 });
-    queued++;
-  }
-  if (!scene.textures.exists(HURT_SHEET_KEY)) {
-    scene.load.spritesheet(HURT_SHEET_KEY, HURT_SHEET_URL, { frameWidth: 64, frameHeight: 64 });
     queued++;
   }
 
@@ -504,29 +415,9 @@ export async function ensureShadowAnim(scene: Phaser.Scene) {
     });
   }
 
-  // NEW: sleepy (6 frames: 0..5)
-  if (!scene.anims.exists(SLEEPY_ANIM_KEY)) {
-    scene.anims.create({
-      key: SLEEPY_ANIM_KEY,
-      frames: scene.anims.generateFrameNumbers(SLEEPY_SHEET_KEY, { start: 0, end: 5 }),
-      frameRate: 8,
-      repeat: -1,
-    });
-  }
-
-  // NEW: hurt (8 frames: 0..7)
-  if (!scene.anims.exists(HURT_ANIM_KEY)) {
-    scene.anims.create({
-      key: HURT_ANIM_KEY,
-      frames: scene.anims.generateFrameNumbers(HURT_SHEET_KEY, { start: 0, end: 7 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-  }
+  // NEW: ensure status overlay sheets & animations (sleep/hurt/breeding)
+  await ensureStatusOverlayAssets(scene);
 }
-
-
-
 
 // Load/anim ensure -------------------------------------------------------------
 export async function ensureHorseAnims(scene: Phaser.Scene, list: Horse[]) {
@@ -711,7 +602,7 @@ export function spawnHorsesRandom(
     worldLayer.add(shadow);
     worldLayer.add(spr);
 
-    applyStatusOverlay(scene, worldLayer, spr, h.staty.status, y);
+    applyStatusOverlay(scene, worldLayer, spr, h.staty.status, y, TARGET_H);
 
     spr.play(animKey(h, false));
 

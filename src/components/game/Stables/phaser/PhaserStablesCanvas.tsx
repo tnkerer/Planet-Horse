@@ -78,6 +78,25 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
     [horseList, openedHorseId]
   );
 
+  const anyModalOpen =
+    showHUD && (
+      bagOpen ||
+      mineOpen ||
+      modalRaces ||
+      modalBreeding ||
+      modalChests ||
+      raceModalOpen ||
+      restoreModalOpen ||
+      stableHorsesOpen ||
+      openedHorseId != null ||
+      confirmBurn.open ||
+      !!errorText
+    );
+
+  React.useEffect(() => {
+    bus.emit('canvas:input-enabled', !anyModalOpen);
+  }, [anyModalOpen]);
+
   React.useEffect(() => {
     const onRace = ({ id }: { id: number }) => {
       const h = horseListRef.current.find(hh => hh.id === id);
