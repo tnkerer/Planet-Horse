@@ -43,8 +43,8 @@ export async function ensureStableTexture(scene: Phaser.Scene, level: number) {
 async function ensureCloseIcon(scene: Phaser.Scene) {
   if (!scene.textures.exists(CLOSE_ICON_KEY)) {
     scene.load.image(CLOSE_ICON_KEY, CLOSE_ICON_URL);
-    await new Promise<void>(res => {
-      scene.load.once(Phaser.Loader.Events.COMPLETE, () => res());
+    await new Promise<void>(resolve => {
+      scene.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
       scene.load.start();
     });
   }
@@ -120,9 +120,15 @@ const hideStableTooltip = (t: StableTooltip) => t.root.setVisible(false);
 
 function moveStableTooltip(t: StableTooltip, screenX: number, screenY: number) {
   const scene = t.root.scene;
-  const sw = scene.scale.width, sh = scene.scale.height;
-  const pad = 12, ox = 14, oy = 10, w = t.bg.width, h = t.bg.height;
-  let x = screenX + ox, y = screenY - oy - h;
+  const sw = scene.scale.width;
+  const sh = scene.scale.height;
+  const pad = 12;
+  const ox = 14;
+  const oy = 10;
+  const w = t.bg.width;
+  const h = t.bg.height;
+  let x = screenX + ox;
+  let y = screenY - oy - h;
   if (x + w > sw - pad) x = screenX - ox - w;
   if (y < pad) y = screenY + oy;
   if (x < pad) x = pad; if (x + w > sw - pad) x = sw - pad - w;
@@ -140,8 +146,11 @@ function showStableTooltip(t: StableTooltip, dto: StableDTO) {
     ['ENERGY TICK:', `+${info.extraEnergyPerTick} / ${STABLE_META.extraTickEveryHours}h`],
     ['UPGRADE COST:', `${info.upgradeCostPhorse.toLocaleString()} PHORSE`],
   ];
-  const padX = 8, padY = 6, gap = 2;
-  let y = padY, maxW = 0;
+  const padX = 8;
+  const padY = 6;
+  const gap = 2;
+  let y = padY;
+  let maxW = 0;
   t.rows.forEach((row, i) => {
     const spec = rows[i]; const visible = !!spec;
     row.label.setVisible(visible); row.value.setVisible(visible);
@@ -236,7 +245,8 @@ type StableMenu = {
 };
 
 function clampMenu(scene: Phaser.Scene, x: number, y: number, w: number, h: number, pad = 8) {
-  const sw = scene.scale.width, sh = scene.scale.height;
+  const sw = scene.scale.width;
+  const sh = scene.scale.height;
   const nx = Math.min(Math.max(pad, x), sw - w - pad);
   const ny = Math.min(Math.max(pad, y), sh - h - pad);
   return { x: nx, y: ny };

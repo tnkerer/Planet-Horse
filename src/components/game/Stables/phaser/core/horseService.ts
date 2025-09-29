@@ -21,6 +21,7 @@ type BackendHorse = {
   currentEnergy: number;
   maxEnergy: number;
   gen: number;
+  stableid: string;
   equipments: any[];
 };
 
@@ -259,6 +260,7 @@ function mapBackendHorseToGame(h: BackendHorse): Horse {
       speed: String(h.currentSpeed),
       energy: `${h.currentEnergy}/${h.maxEnergy}`,
       generation: String(h.gen),
+      stable: String(h.stableid)
     },
     items: h.equipments,
   };

@@ -146,7 +146,6 @@ const StableHorsesModal: React.FC<Props> = ({ status, stableTokenId, horses, onC
     const padded: Row[] = useMemo(() => {
         const rem = rows.length % PER_PAGE;
         return rem ? rows.concat(Array(PER_PAGE - rem).fill(null) as any) : rows;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rows.length]); // reduce churn
 
     const pageCount = Math.max(1, Math.ceil(padded.length / PER_PAGE));
