@@ -22,6 +22,8 @@ type Events = {
   'horse:open': { id: number };
   'horse:race': { id: number };
   'horse:restore' : { id: number};
+
+  'stable:horses-open' : { tokenId: string};
 };
 
 export const bus = mitt<Events>();

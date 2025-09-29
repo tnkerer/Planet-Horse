@@ -14,6 +14,7 @@ import ErrorModal from '@/components/game/Modals/ErrorModal';
 import ModalRaceStart from '@/components/game/Modals/RaceStart';
 import RecoveryCenter from '@/components/game/Modals/RecoveryCenter';
 import SingleHorse from '@/components/game/SingleHorse'
+import StableHorsesModal from '@/components/game/Modals/StableHorsesModal';
 import Image from 'next/image';
 import close from '@/assets/game/pop-up/fechar.png';
 
@@ -46,6 +47,9 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
 
   const [restoreModalOpen, setRestoreModalOpen] = React.useState(false);
   const [restoreHorse, setRestoreHorse] = React.useState<Horse | null>(null);
+
+  const [stableHorsesOpen, setStableHorsesOpen] = React.useState(false);
+  const [stableTokenId, setStableTokenId] = React.useState<string | null>(null);
 
   const [isWide, setIsWide] = React.useState(false);
   React.useEffect(() => {
@@ -97,6 +101,15 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
       bus.off('horse:race', onRace);
       bus.off('horse:restore', onRestore);
     };
+  }, []);
+
+  React.useEffect(() => {
+    const onOpenStableHorses = ({ tokenId }: { tokenId: string }) => {
+      setStableTokenId(tokenId);
+      setStableHorsesOpen(true);
+    };
+    bus.on('stable:horses-open', onOpenStableHorses);
+    return () => { bus.off('stable:horses-open', onOpenStableHorses); };
   }, []);
 
   React.useEffect(() => {
@@ -267,7 +280,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
         <div className={ui.sideBar} style={{ top: sidebarTop }}>
           <button
             className={`${ui.bagButton} ${bagOpen ? ui.bagOpened : ''}`}
-            onClick={() =>  setBagOpen(true) }
+            onClick={() => setBagOpen(true)}
             aria-label="Open Bag"
             title="Open Bag"
           >
@@ -276,7 +289,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
 
           <button
             className={ui.raceAllButton}
-            onClick={() => setModalRaces(true) }
+            onClick={() => setModalRaces(true)}
             disabled={idleHorses.length === 0}
             aria-label="Race All"
             title={idleHorses.length ? `Race ${idleHorses.length} idle horse(s)` : 'No idle horses'}
@@ -284,7 +297,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
 
           <button
             className={ui.breedingButton}
-            onClick={() => setModalBreeding(true) }
+            onClick={() => setModalBreeding(true)}
             aria-label="Breeding"
             title="Breeding"
           />
@@ -355,6 +368,15 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
           cost={calcRecoveryCost(restoreHorse)}
           setVisible={setRestoreModalOpen}
           onRestored={reloadHorsesAndEmit}
+        />
+      )}
+      {showHUD && stableHorsesOpen && stableTokenId && (
+        <StableHorsesModal
+          status={stableHorsesOpen}
+          stableTokenId={stableTokenId}
+          horses={horseList}
+          onClose={() => setStableHorsesOpen(false)}
+          reloadHorses={reloadHorsesAndEmit}
         />
       )}
       {openedHorse && (
