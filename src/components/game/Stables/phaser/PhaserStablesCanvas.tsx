@@ -15,6 +15,8 @@ import ModalRaceStart from '@/components/game/Modals/RaceStart';
 import RecoveryCenter from '@/components/game/Modals/RecoveryCenter';
 import SingleHorse from '@/components/game/SingleHorse'
 import StableHorsesModal from '@/components/game/Modals/StableHorsesModal';
+import { createPortal } from 'react-dom';
+import StableMobile from '@/components/game/Stables/StableMobile';
 import Image from 'next/image';
 import close from '@/assets/game/pop-up/fechar.png';
 
@@ -52,6 +54,9 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
   const [stableTokenId, setStableTokenId] = React.useState<string | null>(null);
 
   const [isWide, setIsWide] = React.useState(false);
+  const [mobileMountEl, setMobileMountEl] = React.useState<HTMLElement | null>(null);
+
+
   React.useEffect(() => {
     const check = () => setIsWide(window.innerWidth >= 952);
     check();
@@ -279,13 +284,56 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
     return () => document.removeEventListener('click', onAnyClick, true);
   }, []);
 
+  React.useEffect(() => {
+    const wrap = hostRef.current?.parentElement; // the .canvasWrap
+    if (!wrap) return;
+
+    // Going DESKTOP (wide): remove the mobile mount & restore canvas visibility
+    if (isWide) {
+      if (mobileMountEl) {
+        try { mobileMountEl.remove(); } catch { }
+        setMobileMountEl(null);
+      }
+      if ((wrap as any).__prevDisplay !== undefined) {
+        wrap.style.display = (wrap as any).__prevDisplay;
+        (wrap as any).__prevDisplay = undefined;
+      }
+      return;
+    }
+
+    // Going MOBILE:
+    // If we've already created the mount, do nothing (prevents loops)
+    if (mobileMountEl && document.body.contains(mobileMountEl)) return;
+
+    // Create a sibling container just after .canvasWrap
+    const mount = document.createElement('div');
+    mount.style.width = '100%';
+    mount.style.display = 'block';
+    wrap.parentElement?.insertBefore(mount, wrap.nextSibling);
+    setMobileMountEl(mount);
+
+    // (Optional) hide the empty canvas box on mobile
+    if ((wrap as any).__prevDisplay === undefined) {
+      (wrap as any).__prevDisplay = wrap.style.display || '';
+      wrap.style.display = 'none';
+    }
+
+    // Cleanup only on component unmount
+    return () => {
+      try { mount.remove(); } catch { }
+    };
+    // IMPORTANT: only depend on isWide, not mobileMountEl
+  }, [isWide]);
+
+
   if (!isWide) {
     return (
-      <div className={ui.unavailable}>
-        <div>
-          <h3>Game unavailable on mobile</h3>
-          <p>Please use a device with a width of at least 952&nbsp;px.</p>
-        </div>
+      <div ref={hostRef}>
+        {mobileMountEl &&
+          createPortal(
+            <StableMobile horses={horseList} reloadHorses={reloadHorses} />,
+            mobileMountEl
+          )}
       </div>
     );
   }

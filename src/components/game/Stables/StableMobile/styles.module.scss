@@ -1,0 +1,88 @@
+.mobileHost {
+  width: 100%;
+  // min-height: 60vh;
+  // padding: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.loadingBox {
+  color: #e6e6e6;
+  font: 600 16px/1 'SpaceHorse', sans-serif;
+}
+
+.stableCard {
+  position: relative;
+  width: min(680px, 86vw);
+  aspect-ratio: 46 / 29; /* same silhouette as BreedingStud */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: transform .18s ease;
+  will-change: transform;
+  transform: translateZ(0);
+
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.02);
+  }
+}
+
+/* Label like Phaser (top-ish center) */
+.labelBox {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(0,0,0,0.45);
+  padding: 6px 10px 7px;
+  border-radius: 8px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,.4);
+  font-family: 'SpaceHorse', sans-serif;
+  pointer-events: none;
+}
+
+.l1 { font-size: 12px; opacity: .95; }
+.l2 { font-size: 13px; font-weight: 700; }
+
+/* Dropdown (top-right inside the card) */
+.dropdown {
+  position: absolute;
+  top: 10%;
+  right: 6%;
+  background: #be9c7f;
+  border: 1px solid #7d4d45;
+  border-radius: 6px;
+  padding: 4px 0;
+  min-width: 180px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+  z-index: 2;
+}
+
+.ddItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  color: #333;
+  font-family: 'SpaceHorse', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: #7d4d45;
+    color: #fff;
+  }
+}
+
+.disabled {
+  opacity: .6;
+  pointer-events: none;
+}
