@@ -104,7 +104,7 @@ async function callFinishUpgrade(scene: Phaser.Scene, tokenId: string) {
 function getNextUpgradeInfo(level: number) {
   const next = Math.min(4, Math.max(1, level + 1)) as 1 | 2 | 3 | 4;
   if (level >= 4) return null; // no next level
-  return { nextLevel: next, cost: STABLE_LEVELS[next-1].upgradeCostPhorse };
+  return { nextLevel: next, cost: STABLE_LEVELS[next - 1].upgradeCostPhorse };
 }
 
 
@@ -182,11 +182,13 @@ type StableLabel = {
   bg: Phaser.GameObjects.Rectangle;
   line1: Phaser.GameObjects.Text; // "Stable #ID"
   line2: Phaser.GameObjects.Text; // "Lvl X • Open" or "Lvl X • Upgrading 01:23:45"
-  setText: (s1: string, s2: string) => void;
+  line3: Phaser.GameObjects.Text;
+  setText: (s1: string, s2: string, s3: string) => void;
   setPos: (x: number, y: number) => void;
   show: () => void;
   hide: () => void;
 };
+
 const LABEL_CFG = {
   padX: 8,
   padY: 4,
@@ -211,20 +213,23 @@ function makeLabel(scene: Phaser.Scene, worldLayer: Phaser.GameObjects.Layer): S
   // mimic the stud label sizes
   const line1 = mkText(12, false); // ID badge
   const line2 = mkText(13, true);  // name row (here we show Level + Status)
+  const line3 = mkText(13, true);
 
-  root.add([bg, line1, line2]);
+  root.add([bg, line1, line2, line3]);
   worldLayer.add(root);
 
-  const setText = (s1: string, s2: string) => {
+  const setText = (s1: string, s2: string, s3: string) => {
     const { padX, padY, gap } = LABEL_CFG;
     line1.setText(s1);
     line2.setText(s2);
+    line3.setText(s3);
 
     line1.setPosition(padX, padY);
     line2.setPosition(padX, padY + line1.height + gap);
+    line3.setPosition(padX, padY + line1.height + line2.height + gap);
 
-    const w = Math.max(line1.width, line2.width) + padX * 2;
-    const h = line1.height + gap + line2.height + padY * 2;
+    const w = Math.max(line1.width, line2.width, line3.width) + padX * 2;
+    const h = line1.height + gap + line2.height + gap + line3.height + padY * 2;
     bg.setSize(w, h);
   };
 
@@ -233,7 +238,7 @@ function makeLabel(scene: Phaser.Scene, worldLayer: Phaser.GameObjects.Layer): S
   };
 
   return {
-    root, bg, line1, line2,
+    root, bg, line1, line2, line3,
     setText, setPos,
     show: () => root.setVisible(true),
     hide: () => root.setVisible(false),
@@ -682,6 +687,84 @@ type LabelCountdown = {
   endsAtMs?: number | null;
 };
 
+type StableTickRT = {
+  timer?: Phaser.Time.TimerEvent;
+  nextAtMs?: number | null;
+};
+
+function ensureStableTickRT(scene: Phaser.Scene): StableTickRT {
+  let rt: StableTickRT | undefined = (scene as any).__stableTickRT;
+  if (!rt) {
+    rt = {};
+    (scene as any).__stableTickRT = rt;
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      if (rt?.timer) { try { rt.timer.remove(false); } catch { } }
+      (scene as any).__stableTickRT = undefined;
+    });
+  }
+  return rt;
+}
+
+function buildStableTickSeg(st: StableStatus, nextAtMs: number | null | undefined) {
+  const extra = st.extraEnergyPerTick ?? 0;
+  if (!nextAtMs) return '';
+  const remain = Math.max(0, Math.ceil((nextAtMs - Date.now()) / 1000));
+  return `+${extra} Energy in ${fmtHMS(remain)}`;
+}
+
+async function fetchNextStableTick(scene: Phaser.Scene): Promise<number | null> {
+  try {
+    const res = await fetch(`${apiBase(scene)}/horses/next-stable-energy`, { credentials: 'include' });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(String(res.status));
+    return typeof data?.nextTimestamp === 'number' ? data.nextTimestamp : null;
+  } catch {
+    return null;
+  }
+}
+
+async function startStableTickTimer(scene: Phaser.Scene, st: StableStatus) {
+  const label: StableLabel | undefined = (scene as any).__stableLabel;
+  const spr: Phaser.GameObjects.Sprite | undefined = (scene as any).__stableSprite;
+  if (!label || !spr) return;
+
+  const rt = ensureStableTickRT(scene);
+
+  // Remember latest status for the timer callback
+  (scene as any).__stableLastStatus = st;
+
+  if (rt.nextAtMs == null) {
+    rt.nextAtMs = await fetchNextStableTick(scene);
+  }
+
+  if (!rt.timer) {
+    rt.timer = scene.time.addEvent({
+      delay: 1000,
+      loop: true,
+      callback: async () => {
+        const cur: StableStatus | undefined = (scene as any).__stableLastStatus;
+        if (!cur) return;
+
+        // When not upgrading, we own the label updates (each second);
+        // when upgrading, the upgrade countdown owns the label (we only supply the segment there).
+        if (!cur.upgrading) {
+          const s1 = `Stable #${cur.tokenId}`;
+          const base = `Lvl ${cur.level} • Open`;
+          const seg = buildStableTickSeg(cur, rt.nextAtMs);
+          label.setText(s1, base, seg);
+          label.setPos(spr.x, spr.y);
+          label.show();
+        }
+
+        // When a window elapses, fetch the next schedule
+        if (rt.nextAtMs && rt.nextAtMs - Date.now() <= 0) {
+          rt.nextAtMs = await fetchNextStableTick(scene);
+        }
+      },
+    });
+  }
+}
+
 /** ensure a single countdown holder on scene */
 function ensureCountdown(scene: Phaser.Scene): LabelCountdown {
   let rt: LabelCountdown | undefined = (scene as any).__stableCountdown;
@@ -730,7 +813,12 @@ function startCountdown(scene: Phaser.Scene, st: StableStatus) {
         ? `Lvl ${st.level} • Upgrading ${fmtHMS(remain)}`
         : `Lvl ${st.level} • Upgrading 00:00:00`;
 
-      label.setText(s1, s2);
+      const tickRT: StableTickRT | undefined = (scene as any).__stableTickRT;
+      const seg = buildStableTickSeg(st, tickRT?.nextAtMs);
+
+      const s3 = seg;
+
+      label.setText(s1, s2, s3);
       label.setPos(spr.x, spr.y);
       label.show();
 
@@ -880,12 +968,19 @@ function refreshLabelAndMenu(scene: Phaser.Scene, st: StableStatus) {
   const menu: StableMenu | undefined = (scene as any).__stableMenu;
   if (!label || !spr) return;
 
+  (scene as any).__stableLastStatus = st;
+  void startStableTickTimer(scene, st);
+
+  const tickRT: StableTickRT | undefined = (scene as any).__stableTickRT;
+  const seg = buildStableTickSeg(st, tickRT?.nextAtMs);
+
   const s1 = `Stable #${st.tokenId}`;
   const s2 = st.upgrading
     ? `Lvl ${st.level} • Upgrading ${fmtHMS(Math.max(0, st.upgradeRemainingSeconds ?? 0))}`
     : `Lvl ${st.level} • Open`;
+  const s3 = seg;
 
-  label.setText(s1, s2);
+  label.setText(s1, s2, s3);
   label.setPos(spr.x, spr.y);
   label.show();
 

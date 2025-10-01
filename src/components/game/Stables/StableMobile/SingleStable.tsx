@@ -57,6 +57,10 @@ export default function SingleStable({ tokenId, level, onOpenHorses, onUpgraded 
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const [showConfirm, setShowConfirm] = useState(false);
+
+  const [nextStableTs, setNextStableTs] = useState<number | null>(null);
+  const [stableRemain, setStableRemain] = useState<number>(0);
+
   const maxed = status.level >= 4;
 
   // Next level & cost (we use current level entry’s cost for next bump)
@@ -115,6 +119,44 @@ export default function SingleStable({ tokenId, level, onOpenHorses, onUpgraded 
     };
   }, [tokenId]);
 
+  useEffect(() => {
+    let cancelled = false;
+    let iv: number | null = null;
+
+    const fetchNext = async () => {
+      try {
+        const res = await fetch(`${process.env.API_URL}/horses/next-stable-energy`, {
+          credentials: 'include'
+        });
+        const data = await res.json().catch(() => ({} as any));
+        if (!res.ok) throw new Error(data?.message || `Next stable tick ${res.status}`);
+        if (!cancelled && typeof data?.nextTimestamp === 'number') {
+          setNextStableTs(data.nextTimestamp);
+        }
+      } catch {
+        // silent (no popup needed)
+      }
+    };
+
+    const tick = () => {
+      if (nextStableTs == null) return;
+      const remain = Math.max(0, Math.ceil((nextStableTs - Date.now()) / 1000));
+      setStableRemain(remain);
+      if (remain <= 0) {
+        // grab the next window when this one elapses
+        void fetchNext();
+      }
+    };
+
+    void fetchNext();              // initial
+    iv = window.setInterval(tick, 1000); // safe (non-async callback)
+
+    return () => {
+      cancelled = true;
+      if (iv) window.clearInterval(iv);
+    };
+  }, [nextStableTs]);
+
   // Outside click to close dropdown
   useEffect(() => {
     if (!showMenu) return;
@@ -127,6 +169,15 @@ export default function SingleStable({ tokenId, level, onOpenHorses, onUpgraded 
     document.addEventListener('click', onDoc, true);
     return () => document.removeEventListener('click', onDoc, true);
   }, [showMenu]);
+
+  // ⬇️ compute extra per tick from current level
+  const extraPerTick =
+    STABLE_LEVELS[Math.max(1, Math.min(4, status.level)) as 1 | 2 | 3 | 4]?.extraEnergyPerTick ?? 0;
+
+  // ⬇️ NEW: stable-tick segment
+  const stableTickSeg = nextStableTs
+    ? `+${extraPerTick} Energy in ${fmtHMS(stableRemain)}`
+    : '';
 
   // API helpers ----------------------------------------------------
   const callStartUpgrade = async () => {
@@ -200,6 +251,7 @@ export default function SingleStable({ tokenId, level, onOpenHorses, onUpgraded 
   const labelLine2 = status.upgrading
     ? `Lvl ${status.level} • Upgrading ${fmtHMS(remaining)}`
     : `Lvl ${status.level} • Open`;
+  const labelLine3 = stableTickSeg;
 
   const dropdownUpgradeLabel = maxed
     ? 'Max Level'
@@ -228,6 +280,7 @@ export default function SingleStable({ tokenId, level, onOpenHorses, onUpgraded 
         <div className={styles.labelBox}>
           <div className={styles.l1}>{labelLine1}</div>
           <div className={styles.l2}>{labelLine2}</div>
+          <div className={styles.l2}>{labelLine3}</div>
         </div>
 
         {/* dropdown */}
