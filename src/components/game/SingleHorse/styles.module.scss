@@ -104,7 +104,7 @@
 
                     @media screen and (max-width: 480px) {
                         margin-top: 2.8vw;
-                        margin-left: -1.0vw;
+                        margin-left: -3.0vw;
                         //padding: 0 1.5vw;
                     }
 
@@ -263,10 +263,12 @@
 
                     @media screen and (max-width: 920px) {
                         font-size: 1.7vw;
+                        // line-height: 1;
                     }
 
                     @media screen and (max-width: 360px) {
                         font-size: 1vw;
+                        // line-height: 1;
                     }
 
                     span {
@@ -307,10 +309,12 @@
 
                     @media screen and (max-width: 920px) {
                         font-size: 1.4vw;
+                        line-height: 1.1;
                     }
 
                     @media screen and (max-width: 360px) {
                         font-size: 1vw;
+                        line-height: 1;
                     }
 
 
@@ -348,152 +352,125 @@
 
             .horseButtons {
                 display: flex;
+                margin-left: -3px;
                 gap: 0.5vw;
 
                 .singleButton {
-
                     button {
-                        background-color: transparent;
-                        background-size: cover;
-                        background-repeat: no-repeat;
-                        border: none;
+                        // Button-55 look, adapted to your palette + sizing
+                        align-self: center;
+                        appearance: none;
+                        background-color: #b5a69f; // base bg (yours)
+                        background-image: none;
+                        background-position: 0 90%;
+                        background-repeat: repeat no-repeat;
+                        background-size: 4px 3px;
+                        border-style: solid;
+                        border-width: clamp(1px, 0.18vw, 2px);
+                        border-color: #4c3e3d; // outline (yours)
+                        color: #4c3e3d; // text color (yours)
                         cursor: pointer;
+                        display: inline-block;
+                        line-height: 1;
+                        outline: none;
+                        // padding: 0 .75rem; // horizontal padding; height is fixed below
+                        text-decoration: none;
+                        transition: all 235ms ease-in-out;
+                        user-select: none;
+                        -webkit-user-select: none;
+                        touch-action: manipulation;
+                        box-sizing: border-box;
+
+                        // funky rounded corners from Button-55
+                        border-radius: 15px 225px 255px 15px / 15px 255px 225px 15px;
+                        // (Expanded longhand to match original Button-55 style)
+                        border-bottom-left-radius: 15px 255px;
+                        border-bottom-right-radius: 225px 15px;
+                        border-top-left-radius: 255px 15px;
+                        border-top-right-radius: 15px 225px;
+
+                        // shadow from Button-55 (slightly softened)
+                        box-shadow: rgba(0, 0, 0, .2) 15px 28px 25px -18px;
+
+                        // Your typography & sizing
+                        font-family: 'SpaceHorse';
+                        font-size: 0.8vw;
                         height: 2.5vw;
 
                         @media screen and (max-width: 920px) {
                             height: 5.6vw;
                             margin-top: 1vw;
+                            font-size: 1.8vw;
                         }
 
                         @media screen and (max-width: 716px) {
-                            // height: 30px;
                             margin-top: 1vw;
                         }
 
+                        // Hover: keep Button-55 lift + your hover color
+                        &:hover {
+                            background-color: #a5b59f; // hover bg (yours)
+                            // box-shadow: rgba(0, 0, 0, .3) 2px 8px 8px -5px;
+                            transform: translate3d(0, 2px, 0);
+                        }
+
+                        // Active: pressed look + your active color
+                        &:active {
+                            background-color: #968a84; // active bg (yours)
+                            // box-shadow: rgba(0, 0, 0, .3) 2px 8px 4px -6px inset;
+                            transform: translateY(1px);
+                        }
+
+                        // Focus: subtle emphasis
+                        &:focus-visible {
+                            box-shadow: rgba(0, 0, 0, .3) 2px 8px 4px -6px, 0 0 0 2px #4c3e3d inset;
+                            outline: none;
+                        }
+
+                        &:disabled {
+                            opacity: 0.6;
+                            cursor: not-allowed;
+                            transform: none;
+                            box-shadow: rgba(0, 0, 0, .2) 8px 16px 14px -12px;
+                        }
+
+                        // Preserve your per-button widths & responsive rules
                         &.itemsButton {
                             width: 4.4vw;
-                            background-image: url('../../../assets/game/horses/items.png');
 
                             @media screen and (max-width: 920px) {
                                 width: 9.4vw;
-                                height: 220%;
-                            }
-
-                            @media screen and (max-width: 716px) {
-                                height: 160%;
-                            }
-
-                            @media screen and (max-width: 512px) {
-                                height: 120%;
-                            }
-
-                            &:hover {
-                                background-image: url('../../../assets/game/horses/items-mouse.png');
-                            }
-
-                            &:active {
-                                background-image: url('../../../assets/game/horses/items-clicado.png');
                             }
                         }
 
                         &.restoreButton {
                             width: 5.8vw;
-                            background-image: url('../../../assets/game/horses/restore.png');
 
                             @media screen and (max-width: 920px) {
                                 width: 12.1vw;
-                                height: 220%;
-                            }
-
-                            @media screen and (max-width: 716px) {
-                                height: 160%;
-                            }
-
-                            @media screen and (max-width: 512px) {
-                                height: 120%;
-                            }
-
-
-                            &:hover {
-                                background-image: url('../../../assets/game/horses/restore-mouse.png');
-                            }
-
-                            &:active {
-                                background-image: url('../../../assets/game/horses/restore-clicado.png');
-                            }
-
-                            &:disabled {
-                                background-image: url('../../../assets/game/horses/restore-clicado.png');
-                                cursor: not-allowed;
                             }
                         }
 
                         &.startButton {
                             width: 3.6vw;
-                            background-image: url('../../../assets/game/horses/start.png');
 
                             @media screen and (max-width: 920px) {
                                 width: 7.5vw;
-                                height: 220%;
-                            }
-
-                            @media screen and (max-width: 716px) {
-                                height: 160%;
-                            }
-
-                            @media screen and (max-width: 512px) {
-                                height: 120%;
-                            }
-
-                            &:hover {
-                                background-image: url('../../../assets/game/horses/start-mouse.png');
-                            }
-
-                            &:active {
-                                background-image: url('../../../assets/game/horses/start-clicado.png');
-                            }
-
-                            &:disabled {
-                                /* use the “clicked” sprite when disabled */
-                                background-image: url('../../../assets/game/horses/start-clicado.png');
-                                cursor: not-allowed;
                             }
                         }
 
                         &.rewardsButton {
                             width: 5.8vw;
-                            background-image: url('../../../assets/game/horses/rewards.png');
 
                             @media screen and (max-width: 920px) {
                                 width: 12.3vw;
-                                height: 220%;
-                            }
-
-                            @media screen and (max-width: 716px) {
-                                height: 160%;
-                            }
-
-                            @media screen and (max-width: 512px) {
-                                height: 120%;
-                            }
-
-                            &:hover {
-                                background-image: url('../../../assets/game/horses/rewards-mouse.png');
-                            }
-
-                            &:active {
-                                background-image: url('../../../assets/game/horses/rewards-clicado.png');
-                            }
-
-                            &:disabled {
-                                /* use the “clicked” sprite when disabled */
-                                background-image: url('../../../assets/game/horses/rewards-clicado.png');
-                                cursor: not-allowed;
                             }
                         }
                     }
                 }
             }
+
+
         }
 
         .horseId {

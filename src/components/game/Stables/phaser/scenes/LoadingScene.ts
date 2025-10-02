@@ -39,6 +39,9 @@ export class LoadingScene extends Phaser.Scene {
         this.load.audio('click', '/assets/game/phaser/misc/zipclick.flac');
         this.load.image('bg', '/assets/game/phaser/misc/background.png');
 
+        this.load.audio('ph_racing', '/assets/game/phaser/misc/racing.mp3');
+        this.load.audio('ph_winner', '/assets/game/phaser/misc/winner.mp3');
+
         this.load.on('progress', (v: number) => {
             this.progress = v;
             this.drawBar(v);

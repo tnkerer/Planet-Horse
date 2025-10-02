@@ -20,6 +20,15 @@ const CardOptions: React.FC<Props> = ({ changeView }) => {
       <div className={styles.cardsWrapper}>
         <div className={styles.cards}>
           <div className={styles.card}>
+            <Image layout="fill" src={upgradeStableGif} alt="card-upgrade" width={200} height={200} />
+            <button
+              className={styles.activeButton}
+              onClick={() => changeView('stables')}
+            >
+              VISIT STABLES
+            </button>
+          </div>
+          <div className={styles.card}>
             <Image layout="fill" src={chestGif} alt="card-chest" width={200} height={200} />
             <button
               className={styles.activeButton}
@@ -33,15 +42,6 @@ const CardOptions: React.FC<Props> = ({ changeView }) => {
               className={styles.activeButton}
               onClick={() => changeView('breeding')}
             >BREEDING FARM</button>
-          </div>
-          <div className={styles.card}>
-            <Image layout="fill" src={upgradeStableGif} alt="card-upgrade" width={200} height={200} />
-            <button
-              className={styles.activeButton}
-              onClick={() => changeView('stables')}
-            >
-              VISIT STABLES
-            </button>
           </div>
           <div className={styles.card}>
             <Image layout="fill" src={bridgeGif} alt="bridge-level" width={200} height={200} />

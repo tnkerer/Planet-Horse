@@ -39,6 +39,7 @@ interface BackendHorse {
   lastBreeding: string;
   currentBreeds: number;
   maxBreeds: number;
+  stableid: string | null;
   equipments: Array<{
     id: string;
     ownerId: string;
@@ -77,6 +78,7 @@ export interface Horse {
     speed: string;
     energy: string;
     generation: string;
+    stable: string | null;
   };
   items: Array<{
     id: string;
@@ -150,6 +152,7 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
           speed: String(h.currentSpeed),
           energy: `${h.currentEnergy}/${h.maxEnergy}`,
           generation: String(h.gen),
+          stable: h.stableid
         },
         items: h.equipments,
       }));
@@ -256,10 +259,27 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
 const StudsRow: React.FC<{ horses: Horse[] }> = ({ horses }) => {
   const { studs } = useBreeding();
   const [studModalOpen, setStudModalOpen] = useState(false);
-  const [activeStudId, setActiveStudId] = useState<number | string | null>(null);
+  const [activeStudId, setActiveStudId] = useState<number | null>(null);
 
-  const openStud = (slot: 0 | 1) => {
-    if (studs[slot].active) {
+  // Count only horses that are housed in a stable
+  const housedCount = React.useMemo(
+    () => horses.filter((h) => h.staty.stable != null).length,
+    [horses]
+  );
+
+  // Desired studs = ceil(housed / 2), but show at least 1
+  const desiredStuds = Math.max(1, Math.ceil(housedCount / 2));
+
+  const { resizeStudSlots } = useBreeding();
+  useEffect(() => {
+    resizeStudSlots(desiredStuds);
+  }, [desiredStuds, resizeStudSlots]);
+
+  // Render up to what the provider currently supports to avoid undefined access
+  const renderStuds = Math.min(desiredStuds, Array.isArray(studs) ? studs.length : desiredStuds);
+
+  const openStud = (slot: number) => {
+    if (studs?.[slot]?.active) {
       console.log(`Stud ${slot} is being used (active breeding).`);
       return;
     }
@@ -270,8 +290,15 @@ const StudsRow: React.FC<{ horses: Horse[] }> = ({ horses }) => {
   return (
     <>
       <div className={styles.studsRow}>
-        <BreedingStud index={0} horses={horses} id={0} onOpen={() => openStud(0)} />
-        <BreedingStud index={1} horses={horses} id={1} onOpen={() => openStud(1)} />
+        {Array.from({ length: renderStuds }).map((_, i) => (
+          <BreedingStud
+            key={i}
+            index={i}
+            id={i}
+            horses={horses}
+            onOpen={() => openStud(i)}
+          />
+        ))}
       </div>
 
       <BreedingModal

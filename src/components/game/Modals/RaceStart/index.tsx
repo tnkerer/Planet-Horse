@@ -7,6 +7,7 @@ import RaceFinish from '../../RaceFinish';
 import { Horse } from '@/domain/models/Horse';
 import ErrorModal from '../ErrorModal';
 import Image from 'next/image';
+import { bus } from '@/components/game/Stables/phaser/bus';
 
 interface Props {
   setVisible: Dispatch<SetStateAction<boolean>>;
@@ -68,6 +69,7 @@ const ModalRaceStart: React.FC<Props> = ({
     setRacing(false);
     setRaceFinish(true);
     onRaceEnd();
+    bus.emit('race:music:finish');
   }
 
   // 4) When `status` becomes true and `horseResult` is still null, call API once
@@ -119,6 +121,16 @@ const ModalRaceStart: React.FC<Props> = ({
     }
   }, [status, horse, horseResult, onRaceEnd]);
 
+  // When modal opens, start race loop music
+  useEffect(() => {
+    if (status) {
+      bus.emit('race:music:start');
+    } else {
+      // on close, resume main theme
+      bus.emit('race:music:resume');
+    }
+  }, [status]);
+
   // 5) If the API errored, show ErrorModal
   if (errorMessage) {
     return (
@@ -143,7 +155,13 @@ const ModalRaceStart: React.FC<Props> = ({
       <div className={styles.modalFull}>
         <div className={styles.modalContent}>
           {/* X button to abort/close */}
-          <div className={styles.modalClose} onClick={() => setVisible(false)}>
+          <div
+            className={styles.modalClose}
+            onClick={() => {
+              setVisible(false);
+              bus.emit('race:music:resume');
+            }}
+          >
             <Image width={30} height={30} src={close} alt="Close" />
           </div>
 

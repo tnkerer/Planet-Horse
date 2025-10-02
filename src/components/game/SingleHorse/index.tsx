@@ -563,7 +563,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                     console.log(`current horse is ${horse.id}`);
                     setShowItems(true);
                   }}
-                />
+                >ITEMS</button>
               </div>
 
               {/* RESTORE BUTTON */}
@@ -572,7 +572,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   className={styles.restoreButton}
                   onClick={() => setModalRecovery(true)}
                   disabled={horse.staty.status !== 'BRUISED'}
-                />
+                >RESTORE</button>
               </div>
 
               {/* REWARDS BUTTON */}
@@ -580,7 +580,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                 <button
                   className={styles.rewardsButton}
                   onClick={() => setModalRewards(true)}
-                />
+                >REWARDS</button>
               </div>
 
               {/* START RACE BUTTON */}
@@ -589,7 +589,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   className={styles.startButton}
                   onClick={() => setModalRaceStart(true)}
                   disabled={horse.staty.status !== 'IDLE'}
-                />
+                >RACE</button>
               </div>
             </div>
           </div>

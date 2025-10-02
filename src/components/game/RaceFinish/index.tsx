@@ -54,19 +54,6 @@ const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
             {/* 2b) The “+ X PHORSE” text, with medal if earned */}
             <div className={styles.raceResultTokens}>
               + <CountUp start={0} end={finalReward} decimals={2} /> PHORSE
-              {horseResult.medalReward > 0 ? (
-                <img
-                  src={'/assets/icons/medal.gif'}
-                  alt="Medal"
-                  style={{
-                    display: 'inline-block',
-                    width: '25px',
-                    height: '35px',
-                    marginLeft: '0.3vw',
-                    verticalAlign: 'middle',
-                  }}
-                />
-              ) : null}
             </div>
 
             {hasDrops && (

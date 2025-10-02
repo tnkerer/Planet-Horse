@@ -56,7 +56,7 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
     } | null>(null);
 
     const { studs, selectedHorseIds, selectHorse } = useBreeding();
-    const slot = studId != null ? (Number(studId) as 0 | 1) : null;
+    const slot = studId != null ? Number(studId) : null;
     const currentStud = slot != null ? studs[slot] : null;
     const containerRef = useRef<HTMLDivElement>(null);
     const touchStartX = useRef<number | null>(null);
@@ -80,21 +80,22 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
         return () => clearInterval(timer);
     }, [status]);
 
-    // Build a list excluding already-picked horses & those in active server breeds (parents):
+    // ✅ Exclude: ALL selected + ALL active parents from ANY stud
     const excluded = useMemo(() => {
         const set = new Set<number>(selectedHorseIds);
-        // Also exclude parents of active breeds (both studs)
-        [0, 1].forEach((slot) => {
-            const s = studs[slot as 0 | 1];
-            (s.active?.parents || []).forEach(p => set.add(p));
-        });
+        studs.forEach(s => (s.active?.parents || []).forEach(p => set.add(p)));
         return set;
     }, [selectedHorseIds, studs]);
 
-    const visibleHorses = useMemo(
-        () => horses.filter(h => !excluded.has(h.id)),
-        [horses, excluded]
-    );
+    // ✅ Only show horses that are housed in a Stable
+    const visibleHorses = useMemo(() => {
+        const hasStable = (h: Horse) => {
+            const sid = (h as any).staty?.stable ?? (h as any).stableid ?? null;
+            return sid !== null && sid !== undefined;
+        };
+        return horses.filter(h => hasStable(h) && !excluded.has(h.id));
+    }, [horses, excluded]);
+
     // Build a padded list so grids are complete
     const paddedHorses = useMemo(() => {
         const arr = [...visibleHorses];
@@ -202,12 +203,9 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
     const handleBurn = async (h: Horse) => {
         try {
             // Block if selected in any stud or a parent of an active breed
-            const inAnyStud =
-                studs[0].horseIds.includes(h.id) ||
-                studs[1].horseIds.includes(h.id) ||
-                (studs[0].active?.parents || []).includes(h.id) ||
-                (studs[1].active?.parents || []).includes(h.id);
-
+            const inAnyStud = studs.some(
+                s => s.horseIds.includes(h.id) || (s.active?.parents || []).includes(h.id)
+            );
             if (inAnyStud) {
                 setErrorMessage('This horse is selected or actively breeding. Remove it first to burn.');
                 return;

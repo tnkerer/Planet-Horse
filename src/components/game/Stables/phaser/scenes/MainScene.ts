@@ -1,7 +1,6 @@
 // src/components/game/Stables/phaser/scenes/MainScene.ts
 import Phaser from 'phaser';
 import { bus } from '../bus';
-
 import { applyResponsiveViewport } from '../utils/viewport';
 import { createLayers } from '../core/layers';
 import { createUICamera, resizeUICamera, wireCameraIgnores } from '../core/cameras';
@@ -31,6 +30,11 @@ type Layers = {
     ui: Phaser.GameObjects.Layer;
 };
 
+const RACE_MUSIC_KEY = 'ph_racing';
+const RACE_MUSIC_URL = '/assets/game/phaser/misc/racing.mp3';
+const WIN_MUSIC_KEY = 'ph_winner';
+const WIN_MUSIC_URL = '/assets/game/phaser/misc/winner.mp3';
+
 type BgDims = { w: number; h: number };
 
 export class MainScene extends Phaser.Scene {
@@ -48,6 +52,66 @@ export class MainScene extends Phaser.Scene {
     // HUD and audio (typed loosely to avoid coupling to your specific HUD type)
     private hud: any;
     private audio: any;
+    private musicTheme?: Phaser.Sound.BaseSound;   // your main theme (from initAudio)
+    private musicOverlay?: Phaser.Sound.BaseSound; // racing / winner
+
+    private getVol(s?: Phaser.Sound.BaseSound, fallback = 1): number {
+        if (!s) return fallback;
+        const v = (s as any).volume;
+        return typeof v === 'number' ? v : fallback;
+    }
+
+    private setVol(s?: Phaser.Sound.BaseSound, v?: number) {
+        if (!s || !v || typeof v !== 'number') return;
+        (s as any).setVolume?.(v);
+    }
+
+    private setLoop(s?: Phaser.Sound.BaseSound, loop?: boolean) {
+        if (!s || typeof loop !== 'boolean') return;
+        (s as any).setLoop?.(loop);
+    }
+
+    private fadeVolume(
+        s: Phaser.Sound.BaseSound | undefined,
+        from: number,
+        to: number,
+        ms: number
+    ) {
+        if (!s) return;
+        if (ms <= 0) { this.setVol(s, to); return; }
+        this.setVol(s, from);
+        this.tweens.addCounter({
+            from, to, duration: ms, ease: 'Linear',
+            onUpdate: (tw) => this.setVol(s, tw.getValue()),
+        });
+    }
+
+    private async ensureAudio(key: string, url: string): Promise<Phaser.Sound.BaseSound> {
+        const existing = this.sound.get(key);
+        if (existing) return existing;
+        if (!this.cache.audio.has(key)) {
+            this.load.audio(key, url);
+            await new Promise<void>((resolve) => {
+                this.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
+                this.load.start();
+            });
+        }
+        // add() returns BaseSound (concrete at runtime)
+        return this.sound.add(key);
+    }
+
+    // ---------- Race music bus handlers ----------
+    private readonly onRaceStartMusic = async () => {
+        await this.playOverlayLoop(RACE_MUSIC_KEY, RACE_MUSIC_URL, 0.9, 200);
+    };
+
+    private readonly onRaceFinishMusic = async () => {
+        await this.playOverlayOneShot(WIN_MUSIC_KEY, WIN_MUSIC_URL, 1.0, 120);
+    };
+
+    private readonly onRaceResumeMusic = async () => {
+        await this.stopOverlayAndUnduck(220); // THEME RESUMES HERE
+    };
 
     // Horses data & sprites
     private horses: Horse[] = [];
@@ -134,6 +198,11 @@ export class MainScene extends Phaser.Scene {
         this.hud = createHUD(this, this.layers.ui, this.audio);
         this.hud.layout(this.scale.width, this.scale.height);
 
+        this.musicTheme =
+            (this.audio?.theme as Phaser.Sound.BaseSound | undefined) ??
+            (this.sound.get('theme')) ??
+            undefined;
+
         // World background + pan
         const bgSprite = createBackground(this, this.layers.world);
         (this as any).__bgSprite = bgSprite; // stash so resize can refit
@@ -153,6 +222,10 @@ export class MainScene extends Phaser.Scene {
         this.input.on('pointerup', this.playClick, this);
         this.input.on('gameobjectup', this.playClick, this);
         bus.on('ui:click', this.playClick as any);
+
+        bus.on('race:music:start', this.onRaceStartMusic as any);
+        bus.on('race:music:finish', this.onRaceFinishMusic as any);
+        bus.on('race:music:resume', this.onRaceResumeMusic as any);
 
         this.profileHUD = createProfileHUD(this, this.layers.ui, {
             x: 18,
@@ -260,7 +333,10 @@ export class MainScene extends Phaser.Scene {
             this.input.off('gameobjectup', this.playClick, this);
             bus.off('ui:click', this.playClick as any);
             bus.off('canvas:input-enabled');
-            
+            bus.off('race:music:start', this.onRaceStartMusic as any);
+            bus.off('race:music:finish', this.onRaceFinishMusic as any);
+            bus.off('race:music:resume', this.onRaceResumeMusic as any);
+
             // store
             this.unsub?.();
             this.unsub = undefined;
@@ -296,6 +372,69 @@ export class MainScene extends Phaser.Scene {
             bus.emit('hud:hide');
             this.scale.off('resize', this.resizeHandler);
         });
+    }
+
+    private async playOverlayLoop(key: string, url: string, targetVol: number, fadeMs: number) {
+        // Stop previous overlay if any
+        if (this.musicOverlay) {
+            try { this.musicOverlay.stop(); this.musicOverlay.destroy(); } catch { }
+            this.musicOverlay = undefined;
+        }
+
+        // Duck theme
+        if (this.musicTheme) this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme, 0.85), 0.01, fadeMs);
+
+        // Start overlay loop
+        const s = await this.ensureAudio(key, url);
+        try { s.stop(); } catch { }
+        this.setLoop(s, true);
+        this.setVol(s, 0);
+        s.play();
+        this.fadeVolume(s, 0, targetVol, fadeMs);
+        this.musicOverlay = s;
+    }
+
+    private async playOverlayOneShot(key: string, url: string, targetVol: number, fadeMs: number) {
+        // Replace any previous overlay (e.g. stop racing loop)
+        if (this.musicOverlay) {
+            try { this.musicOverlay.stop(); this.musicOverlay.destroy(); } catch { }
+            this.musicOverlay = undefined;
+        }
+
+        // Keep theme ducked while winner plays
+        if (this.musicTheme) this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme, 0.85), 0.01, fadeMs);
+
+        const s = await this.ensureAudio(key, url);
+        try { s.stop(); } catch { }
+        this.setLoop(s, false);
+        this.setVol(s, 0);
+        s.play();
+        this.fadeVolume(s, 0, targetVol, fadeMs);
+        this.musicOverlay = s;
+    }
+
+    private async stopOverlayAndUnduck(fadeMs: number) {
+        if (this.musicOverlay) {
+            const s = this.musicOverlay;
+            this.musicOverlay = undefined;
+            try {
+                this.fadeVolume(s, this.getVol(s, 1), 0, Math.min(150, fadeMs));
+                this.time.delayedCall(Math.min(160, fadeMs + 20), () => { try { s.stop(); s.destroy(); } catch { } });
+            } catch { }
+        }
+
+        // Resume main theme (start if needed)
+        if (this.musicTheme && !this.musicTheme.isPlaying) {
+            try {
+                this.musicTheme.stop();
+                this.setLoop(this.musicTheme, true);
+                this.setVol(this.musicTheme, 0);
+                this.musicTheme.play();
+            } catch { }
+        }
+        if (this.musicTheme) {
+            this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme, 0), 0.85, fadeMs);
+        }
     }
 
     /** Ensure textures/anims and (re)spawn horses with current list */

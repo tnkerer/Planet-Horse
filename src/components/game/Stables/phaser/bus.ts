@@ -21,11 +21,16 @@ type Events = {
   'horse:burn': { id: number };
   'horse:open': { id: number };
   'horse:race': { id: number };
-  'horse:restore' : { id: number};
+  'horse:restore': { id: number };
 
-  'stable:horses-open' : { tokenId: string};
+  'stable:horses-open': { tokenId: string };
 
-  'canvas:input-enabled' : boolean;
+  'canvas:input-enabled': boolean;
+
+
+  'race:music:start': undefined;   // open RaceStart → play racing.mp3 (loop)
+  'race:music:finish': undefined;  // switch to winner.mp3 (one-shot)
+  'race:music:resume': undefined;  // close modal → resume main theme
 };
 
 export const bus = mitt<Events>();

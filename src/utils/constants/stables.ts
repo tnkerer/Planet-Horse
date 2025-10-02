@@ -39,3 +39,5 @@ export const stables: StableDef[] = [
     perks: ['VIP role', 'Stable naming', 'Revenue share access'],
   },
 ]
+
+
