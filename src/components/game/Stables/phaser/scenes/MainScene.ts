@@ -55,9 +55,9 @@ export class MainScene extends Phaser.Scene {
     private musicTheme?: Phaser.Sound.BaseSound;   // your main theme (from initAudio)
     private musicOverlay?: Phaser.Sound.BaseSound; // racing / winner
 
-    private getVol(s?: Phaser.Sound.BaseSound, fallback = 1): number {
+    private getVol(s?: Phaser.Sound.BaseSoundManager, fallback = 1): number {
         if (!s) return fallback;
-        const v = (s as any).volume;
+        const v = s.volume;
         return typeof v === 'number' ? v : fallback;
     }
 
@@ -382,7 +382,7 @@ export class MainScene extends Phaser.Scene {
         }
 
         // Duck theme
-        if (this.musicTheme) this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme, 0.85), 0.01, fadeMs);
+        if (this.musicTheme) this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme as any, 0.85), 0.01, fadeMs);
 
         // Start overlay loop
         const s = await this.ensureAudio(key, url);
@@ -402,7 +402,7 @@ export class MainScene extends Phaser.Scene {
         }
 
         // Keep theme ducked while winner plays
-        if (this.musicTheme) this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme, 0.85), 0.01, fadeMs);
+        if (this.musicTheme) this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme as any, 0.85), 0.01, fadeMs);
 
         const s = await this.ensureAudio(key, url);
         try { s.stop(); } catch { }
@@ -418,7 +418,7 @@ export class MainScene extends Phaser.Scene {
             const s = this.musicOverlay;
             this.musicOverlay = undefined;
             try {
-                this.fadeVolume(s, this.getVol(s, 1), 0, Math.min(150, fadeMs));
+                this.fadeVolume(s, this.getVol(s as any, 1), 0, Math.min(150, fadeMs));
                 this.time.delayedCall(Math.min(160, fadeMs + 20), () => { try { s.stop(); s.destroy(); } catch { } });
             } catch { }
         }
@@ -433,7 +433,7 @@ export class MainScene extends Phaser.Scene {
             } catch { }
         }
         if (this.musicTheme) {
-            this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme, 0), 0.85, fadeMs);
+            this.fadeVolume(this.musicTheme, this.getVol(this.musicTheme as any, 0), 0.85, fadeMs);
         }
     }
 

@@ -1,5 +1,5 @@
 // src/components/game/Stables/phaser/PhaserStablesCanvas.tsx
-import React from 'react';
+import React, { useMemo } from 'react';
 import ItemBag from '@/components/game/Modals/ItemBag';
 import MineModal from '@/components/game/Modals/MineModal';
 import RacesModal from '@/components/game/Modals/RacesModal';
@@ -19,13 +19,14 @@ import { createPortal } from 'react-dom';
 import StableMobile from '@/components/game/Stables/StableMobile';
 import Image from 'next/image';
 import close from '@/assets/game/pop-up/fechar.png';
+import { BreedingProvider, useBreeding } from '@/contexts/BreedingContext';
 
 type Props = {
   horseList: Horse[];
   reloadHorses: () => Promise<void>;  // + NEW
 };
 
-const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
+const InnerPhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
   const hostRef = React.useRef<HTMLDivElement | null>(null);
   const [bagOpen, setBagOpen] = React.useState(false);
   const [mineOpen, setMineOpen] = React.useState(false);
@@ -56,6 +57,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
   const [isWide, setIsWide] = React.useState(false);
   const [mobileMountEl, setMobileMountEl] = React.useState<HTMLElement | null>(null);
 
+  const { studs, selectedHorseIds, selectHorse } = useBreeding();
 
   React.useEffect(() => {
     const check = () => setIsWide(window.innerWidth >= 952);
@@ -325,6 +327,23 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
     // IMPORTANT: only depend on isWide, not mobileMountEl
   }, [isWide]);
 
+  // ✅ Exclude: ALL selected + ALL active parents from ANY stud
+  const excluded = useMemo(() => {
+    const set = new Set<number>(selectedHorseIds);
+    studs.forEach(s => (s.active?.parents || []).forEach(p => set.add(p)));
+    return set;
+  }, [selectedHorseIds, studs]);
+
+  // ✅ Only show horses that are housed in a Stable
+  const visibleHorses = useMemo(() => {
+    const hasStable = (h: Horse) => {
+      const sid = (h as any).staty?.stable ?? (h as any).stableid ?? null;
+      return sid !== null && sid !== undefined && sid !== 'null';
+    };
+    console.log(horseList.filter(h => hasStable(h) && !excluded.has(h.id)))
+    return horseList.filter(h => hasStable(h) && !excluded.has(h.id));
+  }, [horseList, excluded]);
+
 
   if (!isWide) {
     return (
@@ -405,7 +424,7 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
         <BreedingHubModal
           status={modalBreeding}
           setVisible={setModalBreeding}
-          horses={horseList}
+          horses={visibleHorses}
           onChanged={async () => {
             // When breeding completes, gently refresh horses + nudge Phaser
             await reloadHorsesAndEmit();
@@ -510,5 +529,11 @@ const PhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) => {
     </div>
   );
 };
+
+const PhaserStablesCanvas: React.FC<Props> = (props) => (
+  <BreedingProvider>
+    <InnerPhaserStablesCanvas {...props} />
+  </BreedingProvider>
+);
 
 export default PhaserStablesCanvas;

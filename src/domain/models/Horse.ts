@@ -36,7 +36,7 @@ export interface Horse {
     speed: string;
     energy: string;
     generation: string;
-    stable: string;
+    stable: string | null;
   };
   // ← now “items” is literally an array of full Item objects
   items: Item[];

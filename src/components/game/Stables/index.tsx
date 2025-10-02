@@ -1,5 +1,5 @@
 // src/components/game/Stables/index.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './styles.module.scss';
 import ItemBag from '../Modals/ItemBag';
 import Image from 'next/image';
@@ -12,8 +12,6 @@ import MineModal from '../Modals/MineModal';
 import InfoModal from '../Modals/InfoModal';
 import PhaserStablesCanvas from './phaser/PhaserStablesCanvas';
 import { useHorseList } from './hooks/useHorseList';
-import { bus } from './phaser/bus';
-import type { Horse } from './types/horse';
 
 interface Props {
   changeView: (view: string) => void;

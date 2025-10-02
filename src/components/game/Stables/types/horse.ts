@@ -22,7 +22,7 @@ export interface BackendHorse {
   lastBreeding: string;
   currentBreeds: number;
   maxBreeds: number;
-  stableid: string;
+  stableid: string | null;
   equipments: Array<{
     id: string;
     ownerId: string;
@@ -62,7 +62,7 @@ export interface Horse {
     speed: string;
     energy: string;
     generation: string;
-    stable: string;
+    stable: string | null;
   };
   items: BackendHorse['equipments'];
 }

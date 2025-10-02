@@ -21,7 +21,7 @@ type BackendHorse = {
   currentEnergy: number;
   maxEnergy: number;
   gen: number;
-  stableid: string;
+  stableid: string | null;
   equipments: any[];
 };
 

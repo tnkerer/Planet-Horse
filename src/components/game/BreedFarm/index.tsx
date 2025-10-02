@@ -116,16 +116,14 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
     updateBalance();
 
     try {
-      const [hRes, rRes] = await Promise.all([
+      const [hRes] = await Promise.all([
         fetch(`${process.env.API_URL}/horses/blockchain`, { credentials: 'include' }),
-        fetch(`${process.env.API_URL}/horses/next-energy-recovery`, { credentials: 'include' }),
+        // fetch(`${process.env.API_URL}/horses/next-energy-recovery`, { credentials: 'include' }),
       ]);
 
       if (!hRes.ok) throw new Error(`Horses ${hRes.status}`);
-      if (!rRes.ok) throw new Error(`Recovery ${rRes.status}`);
 
       const data = (await hRes.json()) as BackendHorse[];
-      await rRes.json(); // currently unused (nextTimestamp)
 
       const mapped: Horse[] = data.map(h => ({
         id: Number(h.tokenId),
