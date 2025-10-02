@@ -22,11 +22,12 @@ const SHADOW_SHEET_URL = '/assets/game/breeding/shadow-spritesheet.png';
 const SHADOW_SHEET_KEY = 'horse-shadow-sheet';
 const SHADOW_ANIM_KEY = 'horse-shadow-run';
 
-const NEIGH_KEYS = ['neigh-01', 'neigh-02', 'neigh-03'] as const;
+const NEIGH_KEYS = ['neigh-01', 'neigh-02', 'neigh-03', 'neigh-04'] as const;
 const NEIGH_URLS = [
   '/assets/game/phaser/misc/neigh-01.wav',
   '/assets/game/phaser/misc/neigh-02.wav',
   '/assets/game/phaser/misc/neigh-03.wav',
+  '/assets/game/phaser/misc/neigh-04.wav',
 ];
 
 
