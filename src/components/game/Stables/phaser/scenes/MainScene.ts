@@ -34,6 +34,8 @@ const RACE_MUSIC_KEY = 'ph_racing';
 const RACE_MUSIC_URL = '/assets/game/phaser/misc/racing.mp3';
 const WIN_MUSIC_KEY = 'ph_winner';
 const WIN_MUSIC_URL = '/assets/game/phaser/misc/winner.mp3';
+const LOSE_MUSIC_KEY = 'ph_loser';
+const LOSE_MUSIC_URL = '/assets/game/phaser/misc/loser.wav';
 
 type BgDims = { w: number; h: number };
 
@@ -108,6 +110,10 @@ export class MainScene extends Phaser.Scene {
     private readonly onRaceFinishMusic = async () => {
         await this.playOverlayOneShot(WIN_MUSIC_KEY, WIN_MUSIC_URL, 1.0, 120);
     };
+
+    private readonly onRaceFinishLose = async () => {
+        await this.playOverlayOneShot(LOSE_MUSIC_KEY, LOSE_MUSIC_URL, 1.0, 120);
+    }
 
     private readonly onRaceResumeMusic = async () => {
         await this.stopOverlayAndUnduck(220); // THEME RESUMES HERE
@@ -225,6 +231,7 @@ export class MainScene extends Phaser.Scene {
 
         bus.on('race:music:start', this.onRaceStartMusic as any);
         bus.on('race:music:finish', this.onRaceFinishMusic as any);
+        bus.on('race:music:finish-loser', this.onRaceFinishLose as any);
         bus.on('race:music:resume', this.onRaceResumeMusic as any);
 
         this.profileHUD = createProfileHUD(this, this.layers.ui, {
@@ -335,6 +342,7 @@ export class MainScene extends Phaser.Scene {
             bus.off('canvas:input-enabled');
             bus.off('race:music:start', this.onRaceStartMusic as any);
             bus.off('race:music:finish', this.onRaceFinishMusic as any);
+            bus.off('race:music:finish-loser', this.onRaceFinishLose as any);
             bus.off('race:music:resume', this.onRaceResumeMusic as any);
 
             // store

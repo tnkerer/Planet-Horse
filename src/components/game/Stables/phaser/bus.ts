@@ -30,6 +30,7 @@ type Events = {
 
   'race:music:start': undefined;   // open RaceStart → play racing.mp3 (loop)
   'race:music:finish': undefined;  // switch to winner.mp3 (one-shot)
+  'race:music:finish-loser' : undefined; // switch to loser.wav (one-shot)
   'race:music:resume': undefined;  // close modal → resume main theme
 };
 

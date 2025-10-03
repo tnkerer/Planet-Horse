@@ -69,7 +69,11 @@ const ModalRaceStart: React.FC<Props> = ({
     setRacing(false);
     setRaceFinish(true);
     onRaceEnd();
+    if(horseResult.position > 5) {
+    bus.emit('race:music:finish-loser');
+    } else if (horseResult.position <= 5) {
     bus.emit('race:music:finish');
+    }
   }
 
   // 4) When `status` becomes true and `horseResult` is still null, call API once

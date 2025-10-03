@@ -41,6 +41,7 @@ export class LoadingScene extends Phaser.Scene {
 
         this.load.audio('ph_racing', '/assets/game/phaser/misc/racing.mp3');
         this.load.audio('ph_winner', '/assets/game/phaser/misc/winner.mp3');
+        this.load.audio('ph_loser', '/assets/game/phaser/misc/loser.wav');
 
         this.load.on('progress', (v: number) => {
             this.progress = v;
