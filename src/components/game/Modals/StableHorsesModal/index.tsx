@@ -44,6 +44,7 @@ const StableHorsesModal: React.FC<Props> = ({ status, stableTokenId, horses, onC
     const [errorText, setErrorText] = useState<string | null>(null);
     const [infoText, setInfoText] = useState<string | null>(null);
     const rootRef = useRef<HTMLDivElement>(null);
+    const attemptedUuidsRef = useRef<Set<string>>(new Set());
 
     // UUID -> tokenId map (filled via /stable/uuid/:uuid)
     const [uuidToTokenId, setUuidToTokenId] = useState<Record<string, string>>({});
@@ -59,18 +60,21 @@ const StableHorsesModal: React.FC<Props> = ({ status, stableTokenId, horses, onC
     useEffect(() => {
         if (!status) return;
 
-        // collect unique UUIDs present on horses
-        const uuids = new Set<string>();
+        // collect unique UUIDs present on horses that we haven't resolved *and* haven't attempted yet
+        const pending: string[] = [];
         for (const h of horses) {
             const uuid = (h as any)?.staty?.stable as (string | null | undefined);
-            if (uuid && !uuidToTokenId[uuid]) uuids.add(uuid);
+            if (!uuid || uuid === 'null') continue;                 // ignore empty values
+            if (uuid in uuidToTokenId) continue;                    // already resolved → skip
+            if (attemptedUuidsRef.current.has(uuid)) continue;      // we already tried this one → skip
+            pending.push(uuid);
         }
-        if (uuids.size === 0) return;
+        if (pending.length === 0) return;
 
         let cancelled = false;
         (async () => {
             const entries = await Promise.all(
-                Array.from(uuids).map(async (u) => {
+                pending.map(async (u) => {
                     try {
                         const res = await fetch(`${API}/stable/uuid/${u}`, { credentials: 'include' });
                         if (!res.ok) throw new Error(`Fetch failed ${res.status}`);
@@ -83,17 +87,19 @@ const StableHorsesModal: React.FC<Props> = ({ status, stableTokenId, horses, onC
                 })
             );
             if (cancelled) return;
-            setUuidToTokenId((prev) => {
-                const next = { ...prev };
-                for (const [u, token] of entries) {
-                    if (token) next[u] = token;
-                }
-                return next;
-            });
+            // mark all as attempted (success or fail) so we don't retry failing UUIDs forever
+            for (const [u] of entries) {
+                attemptedUuidsRef.current.add(u);
+            }
+            // only update state if at least one **new** token was resolved
+            const additions: Record<string, string> = {};
+            for (const [u, token] of entries) {
+                if (token && !(u in uuidToTokenId)) additions[u] = token;
+            }
+            if (Object.keys(additions).length > 0) {
+                setUuidToTokenId(prev => ({ ...prev, ...additions }));
+            }
         })();
-
-        console.log(horses)
-        console.log(horseStableMap)
 
         return () => { cancelled = true; };
     }, [status, horses, uuidToTokenId]);
