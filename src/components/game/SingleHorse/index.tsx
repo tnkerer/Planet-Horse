@@ -391,8 +391,26 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
               />
             ) : (
               <img
-                src={`/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status.toLowerCase()}.gif`}
-                alt={`${horse.profile.name} (${horse.staty.status.toLowerCase()})`}
+                src={`/assets/game/horses/gifs/${horse.profile.type_horse_slug}/${horse.profile.name_slug}-${horse.staty.status === 'IDLE' ? 'running' : horse.staty.status.toLowerCase()}.gif`}
+                alt={`${horse.profile.name} (${horse.staty.status === 'IDLE' ? 'running' : horse.staty.status.toLowerCase()})`}
+              />
+            )}
+
+            {/* Wolf overlay (only if the right trophy is equipped) */}
+            {trophyItem?.name === 'Wolfie Trophy' && horse.staty.status === 'IDLE' && (
+              <img
+                className={styles.wolfOverlay}
+                src="/assets/game/horses/wolfie.gif"
+                alt="Wolfie companion"
+                aria-hidden="true"
+              />
+            )}
+            {trophyItem?.name === 'Red Wolfie Trophy' && horse.staty.status === 'IDLE' && (
+              <img
+                className={styles.wolfOverlay}
+                src="/assets/game/horses/red-wolfie.gif"
+                alt="Red Wolfie companion"
+                aria-hidden="true"
               />
             )}
           </div>

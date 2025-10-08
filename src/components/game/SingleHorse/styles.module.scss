@@ -34,8 +34,27 @@
                 padding: 7.3vw 3.8vw;
 
                 img {
-                    width: 40.2vw;
+                    width: 38.2vw;
                 }
+            }
+
+            .wolfOverlay {
+                position: absolute;
+                z-index: 2; // above the horse
+                pointer-events: none; // don't block clicks on the horse
+                width: 20%; // tune size relative to horse
+                /* Position it near the horse's front legs by default */
+                bottom: 20%;
+                left: 4vh;
+
+                @media screen and (max-width: 520px) {
+                    width: 21.2vw;
+                    bottom: 5.2vh;
+                }
+
+                // Optional: tiny parallax wobble to feel alive
+                // animation: wolfFloat 2.4s ease-in-out infinite;
+                // transform: translateZ(0);
             }
         }
 
