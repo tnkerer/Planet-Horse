@@ -299,7 +299,7 @@ function createTooltip(scene: Phaser.Scene, uiLayer: Phaser.GameObjects.Layer): 
 function showTooltip(t: TooltipRefs, h: Horse) {
   const rarityColorMap: Record<string, string> = { common: '#00aa00', uncommon: '#2F35A8', rare: '#800080', epic: '#ff69b4', legendary: '#a78e06', mythic: '#E21C21' };
   const sexColorMap: Record<string, string> = { male: '#2F35A8', female: '#dc207e' };
-  const name = (h.profile.nickname?.trim()?.length ? h.profile.nickname : h.profile.name).slice(0, 16);
+  const name = (h.profile.nickname?.trim()?.length ? h.profile.nickname : h.profile.name).slice(0, 18);
 
   const rows: Array<[string, string, string?]> = [
     ['ID:', h.id],

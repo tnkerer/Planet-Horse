@@ -439,7 +439,7 @@ const BreedingModal: React.FC<Props> = ({ status, studId, horses, onClose }) => 
                                         <span className={styles.value}>
                                             {(tooltip.horse.profile.nickname && tooltip.horse.profile.nickname.trim().length > 0
                                                 ? tooltip.horse.profile.nickname
-                                                : tooltip.horse.profile.name).slice(0, 16)}
+                                                : tooltip.horse.profile.name).slice(0, 18)}
                                         </span>
                                     </div>
                                     <div className={styles.row}>

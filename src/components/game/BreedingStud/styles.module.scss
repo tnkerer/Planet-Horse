@@ -270,9 +270,10 @@
     /* tune for small screens */
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 520px) {
     right: .5rem;
     bottom: -2.5rem;
+    flex-wrap: wrap;
   }
 }
 

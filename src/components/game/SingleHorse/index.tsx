@@ -405,8 +405,8 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   {' '}
                   <span>
                     {horse.profile.nickname && horse.profile.nickname.trim().length > 0
-                      ? horse.profile.nickname.slice(0, 16)
-                      : horse.profile.name.slice(0, 16)}
+                      ? horse.profile.nickname.slice(0, 18)
+                      : horse.profile.name.slice(0, 18)}
                   </span>
                   {/* Edit icon button */}
                   <button

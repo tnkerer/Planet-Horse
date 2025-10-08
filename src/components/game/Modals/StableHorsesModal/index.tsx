@@ -311,7 +311,7 @@ const StableHorsesModal: React.FC<Props> = ({ status, stableTokenId, horses, onC
                             <div className={styles.row}>
                                 <span className={styles.label}>NAME:</span>
                                 <span className={styles.value}>
-                                    {(tooltip.horse.profile.nickname?.trim() || tooltip.horse.profile.name).slice(0, 16)}
+                                    {(tooltip.horse.profile.nickname?.trim() || tooltip.horse.profile.name).slice(0, 18)}
                                 </span>
                             </div>
                             <div className={styles.row}>
