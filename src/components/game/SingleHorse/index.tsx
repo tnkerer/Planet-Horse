@@ -408,7 +408,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
             {trophyItem?.name === 'Wolfie Trophy' && (horse.staty.status === 'SLEEP' || horse.staty.status === 'BRUISED') && (
               <img
                 className={styles.wolfOverlay}
-                src="/assets/game/horses/wolfie-sleep.webp"
+                src="/assets/game/horses/wolfie-sleep.gif"
                 alt="Wolfie companion"
                 aria-hidden="true"
               />
@@ -424,7 +424,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
             {trophyItem?.name === 'Red Wolfie Trophy' && (horse.staty.status === 'SLEEP' || horse.staty.status === 'BRUISED') && (
               <img
                 className={styles.wolfOverlay}
-                src="/assets/game/horses/red-wolfie-sleep.webp"
+                src="/assets/game/horses/red-wolfie-sleep.gif"
                 alt="Red Wolfie companion"
                 aria-hidden="true"
               />
