@@ -345,7 +345,7 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                                         className={styles.answerOption}
                                         onClick={() => {
                                             setMode('craft')
-                                            typeNarration(`Let’s craft a Medal Bag. You will need ${craftReq['Medal Bag'].medals} medals, ${craftReq['Medal Bag'].phorse} $PHORSE and some materials.`)
+                                            typeNarration(`Let's craft a Medal Bag. You will need ${craftReq['Medal Bag'].medals} medals, ${craftReq['Medal Bag'].phorse} $PHORSE and some materials.`)
                                         }}
                                     >
                                         Craft Medal Bag
