@@ -1,0 +1,358 @@
+.modalOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 4;
+}
+
+.modalContainer {
+  position: relative;
+  width: 650px;
+  height: 625px;
+  max-width: 90vw;
+  max-height: 90vh;
+  background-image: url('/assets/game/quests/noticeboard.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 60px 50px;
+  scale: 0.9;
+
+  @media (max-width: 1100px) {
+    scale: 0.8;
+    margin-top: -50px;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 40px;
+  right: 140px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  @media (min-width: 1200px) {
+    
+  }
+
+  @media (max-width: 920px) {
+    
+  }
+
+  @media (max-width: 700px) {
+    
+  }
+}
+
+.questList {
+  width: 370px;
+  height: 90%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  margin-left: 6px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(73, 65, 61, 0.3);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #7d4d45;
+    border-radius: 4px;
+
+    &:hover {
+      background: #9d6d5d;
+    }
+  }
+}
+
+.questItem {
+  position: relative;
+  background: rgb(154, 174, 183);
+  border-radius: 8px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 90px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.questInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.questTitle {
+  font-family: 'SpaceHorse', sans-serif;
+  font-size: 1.1rem;
+  color: #2c1810;
+  margin: 0 0 4px 0;
+  font-weight: 600;
+}
+
+.questDescription {
+  font-family: 'SpaceHorse', sans-serif;
+  font-size: 0.85rem;
+  color: #3e3631;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.claimButton {
+  position: relative;
+  width: 120px;
+  height: 45px;
+  background-image: url('/assets/buttons/button.webp');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s;
+  font-size: 14px;
+
+  &:hover:not(:disabled) {
+    background-image: url('/assets/buttons/button_hover.webp');
+    transform: scale(1.05);
+  }
+
+  &:active:not(:disabled) {
+    background-image: url('/assets/buttons/button_click.webp');
+    transform: scale(0.98);
+  }
+}
+
+.claimButtonText {
+  font-family: 'SpaceHorse', sans-serif;
+  font-size: 0.7rem;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  margin-top: -5px;
+}
+
+.claimButtonDisabled {
+  opacity: 1;
+  cursor: not-allowed;
+  filter: grayscale(0.6);
+
+  &:hover {
+    transform: none;
+    background-image: url('/assets/buttons/button.webp');
+  }
+}
+
+.claimButtonClaiming {
+  opacity: 0.9;
+  cursor: wait;
+}
+
+.rewardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.rewardSlot {
+  position: relative;
+  width: 55px;
+  height: 55px;
+  background: #49413d;
+  border-radius: 6px;
+  border: 1px solid #3e3631;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.rewardImage {
+  width: 90%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.rewardQuantity {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-family: 'SpaceHorse', sans-serif;
+  font-size: 0.75rem;
+  color: #fff;
+  text-shadow: -1px 1px 0px #000, 1px 1px 0px #000, 1px -1px 0px #000, -1px -1px 0px #000;
+  font-weight: bold;
+
+  @media (max-width: 920px) {
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 700px) {
+    font-size: 0.65rem;
+    top: 1px;
+    right: 3px;
+  }
+}
+
+.scrollIndicator {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(125, 77, 69, 0.9);
+  border: 2px solid #7d4d45;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  svg {
+    color: #fff;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  }
+
+  &:hover {
+    background: rgba(157, 109, 93, 1);
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  &:active {
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  @media (max-width: 920px) {
+    width: 36px;
+    height: 36px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    width: 32px;
+    height: 32px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.scrollUp {
+  top: 70px;
+  animation: bounceUp 2s ease-in-out infinite;
+
+  @media (max-width: 920px) {
+    top: 60px;
+  }
+
+  @media (max-width: 700px) {
+    top: 50px;
+  }
+}
+
+.scrollDown {
+  bottom: 50px;
+  animation: bounceDown 2s ease-in-out infinite;
+
+  @media (max-width: 920px) {
+    bottom: 45px;
+  }
+
+  @media (max-width: 700px) {
+    bottom: 40px;
+  }
+}
+
+@keyframes bounceUp {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+@keyframes bounceDown {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(8px);
+  }
+}
+
+.loadingIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+.loadingText {
+  font-family: 'SpaceHorse', sans-serif;
+  font-size: 0.9rem;
+  color: #7d4d45;
+  animation: pulse 1.5s ease-in-out infinite;
+
+  @media (max-width: 920px) {
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 700px) {
+    font-size: 0.8rem;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

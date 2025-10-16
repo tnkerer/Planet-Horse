@@ -1,5 +1,5 @@
 // src/components/game/Stables/phaser/PhaserStablesCanvas.tsx
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import ItemBag from '@/components/game/Modals/ItemBag';
 import MineModal from '@/components/game/Modals/MineModal';
 import RacesModal from '@/components/game/Modals/RacesModal';
@@ -8,6 +8,7 @@ import ui from './styles.module.scss';
 import type { Horse } from '../types/horse';
 import { bus } from './bus';
 import ChestsHubModal from '../../Modals/ChestsHubModal';
+import QuestsHubModal from '../../Modals/QuestsHubModal';
 import { burnHorseToken } from '../utils/burnHorse';
 import ConfirmModal from '@/components/game/Modals/ConfirmModal';
 import ErrorModal from '@/components/game/Modals/ErrorModal';
@@ -34,6 +35,8 @@ const InnerPhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) 
   const [modalRaces, setModalRaces] = React.useState(false);
   const [modalBreeding, setModalBreeding] = React.useState(false);
   const [modalChests, setModalChests] = React.useState(false);
+  const [modalQuests, setModalQuests] = useState(false)
+  
   // const { horseList, loadHorses, nextRecoveryTs } = useHorseList('level');
 
   const [sidebarTop, setSidebarTop] = React.useState<number>(140);
@@ -56,6 +59,7 @@ const InnerPhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) 
 
   const [isWide, setIsWide] = React.useState(false);
   const [mobileMountEl, setMobileMountEl] = React.useState<HTMLElement | null>(null);
+  const [canvasSize, setCanvasSize] = React.useState({ width: 0, height: 0 });
 
   const { studs, selectedHorseIds, selectHorse } = useBreeding();
 
@@ -65,6 +69,31 @@ const InnerPhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) 
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  // Monitor canvas size for responsive button layout
+  React.useEffect(() => {
+    const checkCanvasSize = () => {
+      const canvas = hostRef.current?.querySelector('canvas');
+      if (canvas) {
+        setCanvasSize({ width: canvas.clientWidth, height: canvas.clientHeight });
+      }
+    };
+
+    checkCanvasSize();
+    window.addEventListener('resize', checkCanvasSize);
+
+    const observer = new MutationObserver(checkCanvasSize);
+    if (hostRef.current) {
+      observer.observe(hostRef.current, { childList: true, subtree: true });
+    }
+
+    return () => {
+      window.removeEventListener('resize', checkCanvasSize);
+      observer.disconnect();
+    };
+  }, [isWide]);
+
+  const useTwoColumns = canvasSize.width > 0 && (canvasSize.width < 1000 || canvasSize.height < 560);
 
   const RARITY_MOD: Record<string, number> = {
     common: 1,
@@ -364,43 +393,65 @@ const InnerPhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) 
       {/* Left sidebar (vertical actions), only while MainScene is active */}
       {showHUD && (
         <div className={ui.sideBar} style={{ top: sidebarTop }}>
-          <button
-            className={`${ui.bagButton} ${bagOpen ? ui.bagOpened : ''}`}
-            onClick={() => setBagOpen(true)}
-            aria-label="Open Bag"
-            title="Open Bag"
-          >
-            <span className={ui.notificationBadge} />
-          </button>
+          <div className={ui.buttonColumn}>
+            <button
+              className={`${ui.bagButton} ${bagOpen ? ui.bagOpened : ''}`}
+              onClick={() => setBagOpen(true)}
+              aria-label="Open Bag"
+              title="Open Bag"
+            >
+              <span className={ui.notificationBadge} />
+            </button>
 
-          <button
-            className={ui.raceAllButton}
-            onClick={() => setModalRaces(true)}
-            disabled={idleHorses.length === 0}
-            aria-label="Race All"
-            title={idleHorses.length ? `Race ${idleHorses.length} idle horse(s)` : 'No idle horses'}
-          />
+            <button
+              className={ui.raceAllButton}
+              onClick={() => setModalRaces(true)}
+              disabled={idleHorses.length === 0}
+              aria-label="Race All"
+              title={idleHorses.length ? `Race ${idleHorses.length} idle horse(s)` : 'No idle horses'}
+            />
 
-          <button
-            className={ui.breedingButton}
-            onClick={() => setModalBreeding(true)}
-            aria-label="Breeding"
-            title="Breeding"
-          />
+            <button
+              className={ui.breedingButton}
+              onClick={() => setModalBreeding(true)}
+              aria-label="Breeding"
+              title="Breeding"
+            />
 
-          <button
-            className={ui.upgradeButton}
-            onClick={() => setMineOpen(true)}
-            aria-label="Upgrade Stables"
-            title="Upgrade Stables"
-          />
+            <button
+              className={ui.upgradeButton}
+              onClick={() => setMineOpen(true)}
+              aria-label="Upgrade Stables"
+              title="Upgrade Stables"
+            />
 
-          <button
-            className={ui.chestsButton}
-            onClick={() => setModalChests(true)}
-            aria-label="Chests"
-            title="Chests"
-          />
+            <button
+              className={ui.chestsButton}
+              onClick={() => setModalChests(true)}
+              aria-label="Chests"
+              title="Chests"
+            />
+
+            {!useTwoColumns && (
+              <button
+                className={ui.questsButton}
+                onClick={() => setModalQuests(true)}
+                aria-label="Quests"
+                title="Quests"
+              />
+            )}
+          </div>
+
+          {useTwoColumns && (
+            <div className={ui.buttonColumn}>
+              <button
+                className={ui.questsButton}
+                onClick={() => setModalQuests(true)}
+                aria-label="Quests"
+                title="Quests"
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -436,6 +487,12 @@ const InnerPhaserStablesCanvas: React.FC<Props> = ({ horseList, reloadHorses }) 
         <ChestsHubModal
           status={modalChests}
           setVisible={setModalChests}
+        />
+      )}
+      {showHUD && modalQuests && (
+        <QuestsHubModal
+          status={modalQuests}
+          setVisible={setModalQuests}
         />
       )}
       {showHUD && raceModalOpen && raceHorse && (
