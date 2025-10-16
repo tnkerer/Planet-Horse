@@ -9,11 +9,11 @@ interface Quest {
   description: string;
   completed: boolean;
   claimed: boolean;
-  rewards: {
+  rewards: Array<{
     name: string;
     src: string;
     quantity: number;
-  }[];
+  }>;
 }
 
 type Props = {
@@ -228,7 +228,7 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
                 className={`${styles.claimButton} ${
                   !quest.completed || quest.claimed ? styles.claimButtonDisabled : ''
                 } ${claiming === quest.id ? styles.claimButtonClaiming : ''}`}
-                onClick={() => handleClaim(quest.id)}
+                onClick={async () => await handleClaim(quest.id)}
                 disabled={!quest.completed || quest.claimed || claiming === quest.id}
               >
                 <span className={styles.claimButtonText}>
