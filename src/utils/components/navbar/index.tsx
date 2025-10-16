@@ -14,16 +14,16 @@ import medalIcon from '@/assets/icons/medal.gif';
 
 
 const Navbar: React.FC = () => {
-  
-  const { address, isConnected, connect, disconnect } = useWallet()
-  const { phorse, medals, wron } = useUser()
 
-  const [ burger, setBurger ] = useState(false)
+  const { address, isConnected, connect, disconnect } = useWallet()
+  const { phorse, medals, wron, career } = useUser()
+
+  const [burger, setBurger] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const [showMarketplaceDropdown, setShowMarketplaceDropdown] = useState(false) // NEW
   const [discordInfo, setDiscordInfo] = useState<{ discordId: string | null, discordTag: string | null } | null>(null)
-  
+
   const dropdownRef = useRef<HTMLDivElement>(null)
   const marketplaceDropdownRef = useRef<HTMLDivElement>(null) // NEW
 
@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
             <Link href='/profile'><a>PROFILE</a></Link>
             <Link href='/referral'><a>REFERRAL</a></Link>
             <a href='https://stakeplanethorse.kttylabs.xyz/' rel="noreferrer" target="_blank">STAKE</a>
-            
+
             {/* Marketplace with dropdown */}
             <div className={styles.marketplaceWrapper} ref={marketplaceDropdownRef}>
               <div
@@ -172,6 +172,10 @@ const Navbar: React.FC = () => {
                   <span>{wron?.toFixed(2) || 0}  </span>
                   <Image width={20} height={20} src={wronIcon} alt="wron" />
                 </div>
+                <div className={styles.currencyGroup}>
+                  <span>Career Factor: {career || 0}  </span>
+                </div>
+
               </div>
             )}
           </div>

@@ -5,6 +5,8 @@ interface UserContextValue {
   phorse: number | null
   medals: number | null
   wron: number | null
+  shards: number | null
+  career: string | null
   loading: boolean
   error: Error | null
   updateBalance: () => Promise<void>
@@ -20,6 +22,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [phorse, setPhorse] = useState<number | null>(null)
   const [medals, setMedals] = useState<number | null>(null)
   const [wron, setWron] = useState<number | null>(null)
+  const [shards, setShards] = useState<number | null>(null)
+  const [career, setCareer] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<Error | null>(null)
 
@@ -41,15 +45,19 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (!res.ok) {
         throw new Error(`Failed to fetch balance: ${res.status}`)
       }
-      const data = (await res.json()) as { phorse: number, medals: number, wron: number }
+      const data = (await res.json()) as { phorse: number, medals: number, wron: number, shards: number, career: string }
       setPhorse(data.phorse)
       setMedals(data.medals)
       setWron(data.wron)
+      setShards(data.shards)
+      setCareer(data.career)
     } catch (err: any) {
       setError(err)
       setPhorse(null)
       setMedals(null)
       setWron(null)
+      setShards(null)
+      setCareer(null)
     } finally {
       setLoading(false)
     }
@@ -89,6 +97,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setPhorse(null)
       setMedals(null)
       setWron(null)
+      setShards(null)
+      setCareer(null)
       setError(null)
       setUserAddress(null)
       setIsExpired(null)
@@ -100,7 +110,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, [fetchBalance, isAuthorized])
 
   return (
-    <UserContext.Provider value={{ phorse, medals, wron, loading, error, updateBalance, userAddress, isExpired, whoIs }}>
+    <UserContext.Provider value={{ phorse, medals, wron, shards, career, loading, error, updateBalance, userAddress, isExpired, whoIs }}>
       {children}
     </UserContext.Provider>
   )

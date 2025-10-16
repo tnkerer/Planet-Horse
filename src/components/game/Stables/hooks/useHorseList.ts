@@ -58,7 +58,9 @@ export function useHorseList(orderBy: OrderByType = 'level') {
           speed: String(h.currentSpeed),
           energy: `${h.currentEnergy}/${h.maxEnergy}`,
           generation: String(h.gen),
-          stable: String(h.stableid)
+          stable: String(h.stableid),
+          horseCareerFactor: h.horseCareerFactor,
+          ownerCareerFactor: h.ownerCareerFactor
         },
         items: h.equipments,
       }));

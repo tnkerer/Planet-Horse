@@ -101,6 +101,13 @@ const ItemBag: React.FC<Props> = ({
     maxQuantity: number;
   } | null>(null);
 
+  const [multiBreak, setMultiBreak] = useState<{
+    name: string;
+    uses: number;
+    quantity: number;
+    maxQuantity: number;
+  } | null>(null);
+
   const [multiMint, setMultiMint] = useState<{
     name: string;
     quantity: number;
@@ -470,6 +477,46 @@ const ItemBag: React.FC<Props> = ({
     }
   };
 
+  const handleMultiBreak = async (
+    itemName: string,
+    usesLeft: number,
+    quantity: number
+  ) => {
+    setErrorMessage(null);
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/user/items/break`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemName: itemName, uses: usesLeft, quantity }),
+        }
+      );
+
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
+      }
+
+      // Expect: { destroyed, perItemShards, totalShards, newShards, remaining }
+      const data = await res.json();
+      setInfoMessage(
+        `Broke ${Number(data.destroyed)} ${itemName}${Number(data.destroyed) > 1 ? 's' : ''}: +${Number(data.totalShards)} shards`
+      );
+
+      await updateBalance();   // shards changed
+      await fetchItems();      // inventory changed
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to break items');
+    }
+  };
+
   const handleMultiWithdraw = async (
     itemName: string,
     quantity: number
@@ -779,7 +826,7 @@ const ItemBag: React.FC<Props> = ({
                               activeDropdownIndex ===
                               pageIdx * totalSlotsPerPage + idx && (
                                 <div
-                                  className={`${styles.dropdown} ${idx >= 8 ? styles.dropdownAbove : ''
+                                  className={`${styles.dropdown} ${idx >= 4 ? styles.dropdownAbove : ''
                                     }`}
                                 >
                                   {item.consumable ? (
@@ -814,7 +861,6 @@ const ItemBag: React.FC<Props> = ({
                                           Use
                                         </div>
                                       )}
-
                                       <div
                                         className={styles.dropdownOption}
                                         onClick={() => {
@@ -845,6 +891,26 @@ const ItemBag: React.FC<Props> = ({
                                           Mint
                                         </div>
                                       )}
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={() => {
+                                          setTooltip(null);
+                                          setMultiBreak({
+                                            name: item.name,
+                                            uses: item.usesLeft,
+                                            quantity: 1,
+                                            maxQuantity: item.quantity
+                                          });
+                                          setActiveDropdownIndex(null);
+                                        }}
+                                      >
+                                        {itemsConst[item.name]?.shards ?? 0}x{' '}
+                                        <img
+                                          src="/assets/icons/shard.gif"
+                                          alt="Shards"
+                                          style={{ width: 8, height: 16, verticalAlign: 'middle' }}
+                                        />
+                                      </div>
                                     </>
                                   ) : (
                                     <>
@@ -883,6 +949,26 @@ const ItemBag: React.FC<Props> = ({
                                           Mint
                                         </div>
                                       )}
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={() => {
+                                          setTooltip(null);
+                                          setMultiBreak({
+                                            name: item.name,
+                                            uses: item.usesLeft,
+                                            quantity: 1,
+                                            maxQuantity: item.quantity
+                                          });
+                                          setActiveDropdownIndex(null);
+                                        }}
+                                      >
+                                        {itemsConst[item.name]?.shards ?? 0}x{' '}
+                                        <img
+                                          src="/assets/icons/shard.gif"
+                                          alt="Shards"
+                                          style={{ width: 8, height: 16, verticalAlign: 'middle' }}
+                                        />
+                                      </div>
                                     </>
                                   )}
                                 </div>
@@ -937,6 +1023,26 @@ const ItemBag: React.FC<Props> = ({
                                         Mint
                                       </div>
                                     )}
+                                    <div
+                                      className={styles.dropdownOption}
+                                      onClick={() => {
+                                        setTooltip(null);
+                                        setMultiBreak({
+                                          name: item.name,
+                                          uses: item.usesLeft,
+                                          quantity: 1,
+                                          maxQuantity: item.quantity
+                                        });
+                                        setActiveDropdownIndex(null);
+                                      }}
+                                    >
+                                      {itemsConst[item.name]?.shards ?? 0}x{' '}
+                                      <img
+                                        src="/assets/icons/shard.gif"
+                                        alt="Shards"
+                                        style={{ width: 8, height: 16, verticalAlign: 'middle' }}
+                                      />
+                                    </div>
                                   </div>
                                 )))}
                           </div>
@@ -1008,6 +1114,26 @@ const ItemBag: React.FC<Props> = ({
                   multiRecycle.quantity
                 );
                 setMultiRecycle(null);
+              }}
+            />
+          )}
+
+          {multiBreak && (
+            <MultipleRecycleConfirmModal
+              quantity={multiBreak.quantity}
+              max={multiBreak.maxQuantity}
+              itemName={multiBreak.name}
+              onQuantityChange={(q) =>
+                setMultiBreak({ ...multiBreak, quantity: q })
+              }
+              onClose={() => setMultiBreak(null)}
+              onConfirm={() => {
+                handleMultiBreak(
+                  multiBreak.name,
+                  multiBreak.uses,
+                  multiBreak.quantity
+                );
+                setMultiBreak(null);
               }}
             />
           )}

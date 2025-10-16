@@ -6,7 +6,8 @@
         "src-drop": "chest_drop",
         "src-open": "chest_opening",
         "src-opened": "chest_opened",
-        "quantity": "1"
+        "quantity": "1",
+        "paused": true
     },
     {
         "id": 2,
@@ -15,7 +16,8 @@
         "src-drop": "chest_drop_2",
         "src-open": "chest_opening_2",
         "src-opened": "chest_opened_2",
-        "quantity": "1"
+        "quantity": "1",
+        "paused": false
     }
     
 ]

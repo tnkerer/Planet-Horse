@@ -233,17 +233,18 @@ export class MainScene extends Phaser.Scene {
         bus.on('race:music:finish', this.onRaceFinishMusic as any);
         bus.on('race:music:finish-loser', this.onRaceFinishLose as any);
         bus.on('race:music:resume', this.onRaceResumeMusic as any);
-
+       
         this.profileHUD = createProfileHUD(this, this.layers.ui, {
             x: 18,
             y: 18,
-            scale: 0.64,           // tweak to taste
-            avatarOffsetX: 75,     // <-- move the horse.gif left/right under the window
-            avatarOffsetY: 75,     // <-- move the horse.gif up/down under the window
-            name: '--',       // placeholder
+            scale: 0.64,
+            avatarOffsetX: 75,
+            avatarOffsetY: 75,
+            name: '--',
             phorse: 0,
-            wron: 0,
             shard: 0,
+            wron: 0,
+            shards: 0,
         });
 
         this.emitProfileBounds();
@@ -307,13 +308,14 @@ export class MainScene extends Phaser.Scene {
 
         const onBal = (snap: import('../core/balanceService').BalanceSnapshot) => {
             if (snap.nickname) this.profileHUD?.setNickname(snap.nickname);
-            // r1 = PHORSE, r2 = WRON, r3 = MEDALS (we feed MEDALS into "shard" row text)
             this.profileHUD?.setBalances({
                 phorse: snap.phorse ?? 0,
-                wron: snap.wron ?? 0,
-                shard: snap.medals ?? 0, // text for row 3; when you have a medal icon, just swap the texture key in profileHUD
+                shard: snap.medals ?? 0, // now 2nd row
+                wron: snap.wron ?? 0, // left side of row 3
+                shards: snap.shards ?? 0, // right side of row 3
             });
         };
+
         this.balUnsub = this.balStore.subscribe(onBal);
         this.balStore.start();
 

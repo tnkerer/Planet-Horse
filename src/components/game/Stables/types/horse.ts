@@ -34,6 +34,8 @@ export interface BackendHorse {
     createdAt: string;
     updatedAt: string;
   }>;
+  horseCareerFactor: number;
+  ownerCareerFactor: number;
 }
 
 // Normalized shape used in UI/Phaser
@@ -63,6 +65,8 @@ export interface Horse {
     energy: string;
     generation: string;
     stable: string | null;
+    horseCareerFactor: number;
+    ownerCareerFactor: number;
   };
   items: BackendHorse['equipments'];
 }

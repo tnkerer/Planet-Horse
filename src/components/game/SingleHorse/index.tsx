@@ -1,5 +1,5 @@
 // src/components/SingleHorse/index.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styles from './styles.module.scss';
 import { Horse, Item } from '@/domain/models/Horse';
 import { xpProgression } from '@/utils/constants/xp-progression';
@@ -99,6 +99,16 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   const levelStr = Number(horse.staty.level);
   const rarityStr = horse.profile.type_horse_slug;
+
+  const shardNeeded = useMemo(() => {
+    const ownerCF = Number(horse.staty.horseCareerFactor)
+    const horseCF = Number(horse.staty.ownerCareerFactor)
+
+    const val = Math.ceil(100 * ownerCF * horseCF);
+    // show integers without decimals, otherwise 2 decimals
+    const isInt = Number.isInteger(val);
+    return isInt ? val.toString() : val.toFixed(2);
+  }, [horse]);
 
   function getLevelUpFee(level: number, raritySlug: string) {
     // Normalize: "common" -> "Common"
@@ -623,7 +633,16 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
                   className={styles.startButton}
                   onClick={() => setModalRaceStart(true)}
                   disabled={horse.staty.status !== 'IDLE'}
-                >RACE</button>
+                  aria-label={`Start race, costs ${shardNeeded} shards`}
+                >
+                  RACE
+                  <br></br>x{shardNeeded}
+                  <img
+                    src="/assets/icons/shard2.gif"
+                    alt="Shards"
+                    className={styles.shardIcon}
+                  />
+                </button>
               </div>
             </div>
           </div>

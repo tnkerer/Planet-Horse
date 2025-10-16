@@ -1,5 +1,5 @@
 // src/components/game/BreedFarm/index.tsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './styles.module.scss';
 import ItemBag from '../Modals/ItemBag';
 import Image from 'next/image';
@@ -51,6 +51,8 @@ interface BackendHorse {
     createdAt: string;
     updatedAt: string;
   }>;
+  horseCareerFactor: number;
+  ownerCareerFactor: number;
 }
 
 export interface Horse {
@@ -79,6 +81,8 @@ export interface Horse {
     energy: string;
     generation: string;
     stable: string | null;
+    horseCareerFactor: number;
+    ownerCareerFactor: number;
   };
   items: Array<{
     id: string;
@@ -99,7 +103,7 @@ interface Props {
 
 const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
   const [modalItems, setModalItems] = useState(false);
-  const { phorse, medals, wron, updateBalance } = useUser();
+  const { phorse, medals, wron, shards, updateBalance } = useUser();
   const { address } = useWallet();
 
   const [rawHorseList, setRawHorseList] = useState<Horse[]>([]);
@@ -107,6 +111,51 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
   const [orderBy, setOrderBy] = useState<OrderByType>('level');
   const [informational, setInformational] = useState<string | null>(null);
   const [modalMine, setModalMine] = useState(false);
+  const [showCurrencies, setShowCurrencies] = useState(false);
+  const currencyRef = useRef<HTMLDivElement | null>(null);
+
+  type CurrencyKey = 'PHORSE' | 'MEDALS' | 'WRON' | 'SHARDS';
+  const SHARD_ICON_SRC = '/assets/icons/shard.gif';
+
+  // Tiny cookie helpers (no deps)
+  const setCookie = (name: string, value: string, days = 180) => {
+    const d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/`;
+  };
+  const getCookie = (name: string): string | null => {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  };
+
+  // Which currency to show on the button
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyKey>('PHORSE');
+
+  // Hydrate from cookie on mount
+  useEffect(() => {
+    const saved = getCookie('selectedCurrency') as CurrencyKey | null;
+    if (saved === 'PHORSE' || saved === 'MEDALS' || saved === 'WRON' || saved === 'SHARDS') {
+      setSelectedCurrency(saved);
+    }
+  }, []);
+
+  const formatNum = (n: number | undefined | null, decimals = 0) =>
+    (n ?? 0).toLocaleString(undefined, { maximumFractionDigits: decimals, minimumFractionDigits: decimals });
+
+  const selectedIconAndValue = () => {
+    switch (selectedCurrency) {
+      case 'PHORSE':
+        return { src: phorseToken, w: 22, h: 22, alt: 'phorse', text: formatNum(phorse, 0), id: 'phorse-balance' };
+      case 'MEDALS':
+        return { src: medalIcon, w: 14, h: 20, alt: 'medal', text: formatNum(medals, 0), id: 'medals-balance' };
+      case 'WRON':
+        return { src: wronIcon, w: 22, h: 22, alt: 'wron', text: formatNum(wron, 2), id: 'wron-balance' };
+      case 'SHARDS':
+        // shards icon uses public path; Next/Image handles it fine
+        return { src: SHARD_ICON_SRC as any, w: 10, h: 20, alt: 'shards', text: formatNum(shards, 0), id: 'shards-balance' };
+    }
+  };
+
 
   const loadHorses = useCallback(async () => {
     if (!address) {
@@ -150,7 +199,9 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
           speed: String(h.currentSpeed),
           energy: `${h.currentEnergy}/${h.maxEnergy}`,
           generation: String(h.gen),
-          stable: h.stableid
+          stable: h.stableid,
+          horseCareerFactor: h.horseCareerFactor,
+          ownerCareerFactor: h.ownerCareerFactor
         },
         items: h.equipments,
       }));
@@ -163,6 +214,19 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
   }, [address, updateBalance]);
 
   useEffect(() => { loadHorses(); }, [loadHorses]);
+
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!currencyRef.current) return;
+      if (!currencyRef.current.contains(e.target as Node)) {
+        setShowCurrencies(false);
+      }
+    }
+    if (showCurrencies) {
+      document.addEventListener('mousedown', onDocClick);
+      return () => document.removeEventListener('mousedown', onDocClick);
+    }
+  }, [showCurrencies]);
 
   useEffect(() => {
     setHorseList(sortHorses(rawHorseList, orderBy));
@@ -193,6 +257,8 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
     }
     return arr;
   }
+
+  const sel = selectedIconAndValue();
 
   return (
     <>
@@ -226,20 +292,82 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
             </div>
           </div>
 
-          <div className={styles.countCurrency}>
-            <div className={styles.currencyGroup}>
-              <Image src={phorseToken} width={25} height={25} alt="phorse" />
-              <span id='phorse-balance'>{phorse?.toFixed(0) || 0}</span>
-            </div>
-            <div className={styles.currencyGroup}>
-              <Image src={medalIcon} width={14} height={20} alt="medal" />
-              <span id='medals-balance'>{medals?.toFixed(0) || 0}</span>
-            </div>
-            <div className={styles.currencyGroup}>
-              <Image src={wronIcon} width={25} height={25} alt="wron" />
-              <span id='wron-balance'>{wron?.toFixed(2) || 0}</span>
-            </div>
+          <div className={styles.countCurrency} ref={currencyRef}>
+
+
+            <button
+              className={styles.currencyButton}
+              onClick={() => setShowCurrencies((s) => !s)}
+              aria-label="Open balances"
+            >
+              {/* Icon */}
+              <Image src={sel.src} width={sel.w} height={sel.h} alt={sel.alt} />
+              {/* Value */}
+              <span id={sel.id}>{sel.text}</span>
+              <i className={showCurrencies ? styles.chevUp : styles.chevDown} aria-hidden />
+            </button>
+
+            {showCurrencies && (
+              <div className={styles.currencyDropdown}>
+                <div
+                  className={styles.currencyRow}
+                  onClick={() => {
+                    setSelectedCurrency('PHORSE');
+                    setCookie('selectedCurrency', 'PHORSE');
+                    setShowCurrencies(false);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <Image src={phorseToken} width={22} height={22} alt="phorse" />
+                  <span id='phorse-balance'>{formatNum(phorse, 0)}</span>
+                </div>
+
+                <div
+                  className={styles.currencyRow}
+                  onClick={() => {
+                    setSelectedCurrency('MEDALS');
+                    setCookie('selectedCurrency', 'MEDALS');
+                    setShowCurrencies(false);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <Image src={medalIcon} width={14} height={20} alt="medal" />
+                  <span id='medals-balance'>{formatNum(medals, 0)}</span>
+                </div>
+
+                <div
+                  className={styles.currencyRow}
+                  onClick={() => {
+                    setSelectedCurrency('WRON');
+                    setCookie('selectedCurrency', 'WRON');
+                    setShowCurrencies(false);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <Image src={wronIcon} width={22} height={22} alt="wron" />
+                  <span id='wron-balance'>{formatNum(wron, 2)}</span>
+                </div>
+
+                <div
+                  className={styles.currencyRow}
+                  onClick={() => {
+                    setSelectedCurrency('SHARDS');
+                    setCookie('selectedCurrency', 'SHARDS');
+                    setShowCurrencies(false);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <Image src={SHARD_ICON_SRC} width={10} height={20} alt="shards" />
+                  <span id='shards-balance'>{formatNum(shards, 0)}</span>
+                </div>
+              </div>
+            )}
           </div>
+
         </div>
       </div>
 

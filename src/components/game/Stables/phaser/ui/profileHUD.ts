@@ -14,6 +14,7 @@ export type ProfileHUDOptions = {
     phorse?: string | number;
     wron?: string | number;
     shard?: string | number;
+    shards?: string | number;
     targetWidth?: number;
 };
 
@@ -21,7 +22,7 @@ export type ProfileHUD = {
     container: Phaser.GameObjects.Container;
     setNickname: (name: string) => void;
     setName: (name: string) => void;
-    setBalances: (vals: { phorse?: string | number; wron?: string | number; shard?: string | number }) => void;
+    setBalances: (vals: { phorse?: string | number; wron?: string | number; shard?: string | number; shards?: string | number; }) => void;
     setAvatarOffsets: (ox: number, oy: number) => void;
     setScale: (s: number) => void;
     destroy: () => void;
@@ -89,8 +90,8 @@ export function createProfileHUD(
     const NAME_Y = 15;
     const ROW_X = 172;
     const ROW1_Y = 64;
-    const ROW_GAP = 28;
-    const ICON_PX = 22; // icon target width in pixels
+    const ROW_GAP = 32;
+    const ICON_PX = 18; // icon target width in pixels
 
     const nameText = scene.add.text(NAME_X, NAME_Y, (opts.nickname ?? 'USER').toUpperCase(), {
         fontFamily: 'SpaceHorse, sans-serif', fontSize: '24px', color: '#ffffff',
@@ -102,7 +103,7 @@ export function createProfileHUD(
         const icon = scene.add.image(ROW_X, y1, texKey).setOrigin(0, 0.5);
         scaleToPixels(icon, ICON_PX);
         const text = scene.add.text(ROW_X + ICON_PX + 8, y1 - 1, fmt(label), {
-            fontFamily: 'SpaceHorse, sans-serif', fontSize: '20px', color: '#fff1d8',
+            fontFamily: 'SpaceHorse, sans-serif', fontSize: '18px', color: '#fff1d8',
             stroke: '#4a2018', strokeThickness: 3,
         }).setOrigin(0, 0.5);
         container.add(icon); container.add(text);
@@ -112,16 +113,17 @@ export function createProfileHUD(
     const r1 = row('icon-phorse', opts.phorse ?? 0, ROW1_Y);
     const r2 = row('icon-wron', opts.wron ?? 0, ROW1_Y + ROW_GAP);
     const r3 = row('icon-medal', opts.shard ?? 0, ROW1_Y + ROW_GAP * 2); // currently shard icon; swap to medal if you add one
-
+    const r4 = row('icon-shard', opts.shards ?? 0, ROW1_Y + ROW_GAP * 3);
 
     // Optional: tiny decorative line texts could be added if you want, but interface.png already has etch lines
 
     function setNickname(v: string) { nameText.setText((v ?? '').toUpperCase()); }
     const setName = setNickname; // alias
-    function setBalances(vals: { phorse?: string | number; wron?: string | number; shard?: string | number }) {
+    function setBalances(vals: { phorse?: string | number; wron?: string | number; shard?: string | number; shards?: string | number; }) {
         if (vals.phorse != null) r1.text.setText(fmt(vals.phorse));
         if (vals.wron != null) r2.text.setText(fmt(vals.wron));
         if (vals.shard != null) r3.text.setText(fmt(vals.shard));
+        if (vals.shards != null) r4.text.setText(fmt(vals.shards));
     }
     function setAvatarOffsets(ox: number, oy: number) { avatarOX = ox; avatarOY = oy; placeAvatar(); }
     function setScale(s: number) { container.setScale(s); }

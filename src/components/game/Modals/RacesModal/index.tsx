@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState, useMemo } from 'react' // ← added useMemo
 import Image from 'next/image'
 import styles from './styles.module.scss'
 import close from '@/assets/game/pop-up/fechar.png'
@@ -20,13 +20,28 @@ const RacesModal: React.FC<Props> = ({
   reloadHorses,
 }) => {
   const cost = totalHorses * 50
-  const fullText = `You can call me Tina. Would you like our Jockeys to run your ${totalHorses} IDLE horses for a ${cost} fee?`
+
+  // NEW: compute total SHARD cost across selected horses
+  const shardCost = useMemo(() => {
+    return (horses ?? []).reduce((sum: number, h: any) => {
+      const ownerCF = h?.staty.ownerCareerFactor;
+      const horseCF = h?.staty.horseCareerFactor;
+      return sum + Math.ceil(100 * ownerCF * horseCF)
+    }, 0)
+  }, [horses])
+
+  // UPDATED: include SHARDS in the dialog text
+  const fullText =
+    `You can call me Tina. Would you like our Jockeys to run your ` +
+    `${totalHorses} IDLE horses for a ${cost} PHORSE fee and ${Number(shardCost)} SHARDS?`
+
   const [displayedText, setDisplayedText] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [textFinished, setTextFinished] = useState(false)
 
   useEffect(() => {
+    console.log(horses)
     if (!status) return
     setDisplayedText('')
     setErrorMessage(null)
@@ -51,7 +66,8 @@ const RacesModal: React.FC<Props> = ({
     setErrorMessage(null)
 
     try {
-      const tokenIds = horses.map(h => h.id.toString())
+      // NOTE: backend expects tokenIds; fall back to id if needed
+      const tokenIds = horses.map(h => (h.tokenId ?? h.id)?.toString())
 
       const res = await fetch(`${process.env.API_URL}/horses/start-multiple-race`, {
         method: 'PUT',
@@ -97,17 +113,7 @@ const RacesModal: React.FC<Props> = ({
             <div className={styles.modalClose} onClick={() => setVisible(false)}>
               <Image src={close} alt="Close" width={30} height={30} />
             </div>
-
-           {/*  <div className={styles.dialogContainer}>
-              <Image src="/assets/dialog_box_2.png" alt="Dialog box" width={300} height={100} />
-              <div className={styles.dialogText}>
-                {displayedText}
-                <span className={styles.cursor}>|</span>
-              </div>
-            </div>
-
-            <button className={styles.buyButton} onClick={handleRun} disabled={loading} />
-           */}</div>
+          </div>
 
           {/* Dialog + Character OUTSIDE modalContent */}
           <div className={styles.dialogWrapper}>

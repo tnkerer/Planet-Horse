@@ -12,7 +12,6 @@ const useImage = (item: Items): Props => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [image, setImage] = useState(null)
-  console.log(item)
 
   useEffect((): void => {
     const fetchImage = async (): Promise<void> => {
