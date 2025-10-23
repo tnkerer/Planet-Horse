@@ -420,15 +420,20 @@ const ShopChestCard: React.FC = () => {
                   <img src="/assets/items/phorse.webp" alt="PHORSE" className={styles.phorseIcon} />
                   {referredById ? (
                     <>
+                      <span className={styles.strikethrough}>{chests[item.id]?.price ?? "?"}</span>
+                      <span className={styles.discounted}>{`${String(chests[item.id]?.discountedPrice) ?? "?"}`}</span>
                       <span className={styles.strikethrough}>
-                        {basePhorse ?? '—'}
+                        {basePhorse}
                       </span>
                       <span className={styles.discounted}>
-                        {discPhorse ?? '—'}
+                        {discPhorse}
                       </span>
                     </>
                   ) : (
-                    <span>{effectivePhorse ?? '—'}</span>
+                    <>
+                      <span>{chests[item.id]?.price ?? "?"}</span>
+                      <span>{effectivePhorse}</span>
+                    </>
                   )}
                 </div>
               </div>
@@ -442,7 +447,7 @@ const ShopChestCard: React.FC = () => {
           quantity={quantityToOpen}
           max={chestQuantities[selectedChestType] ?? 1}
           // pass PHORSE/unit (ceil) for the selected chest
-          price={toPhorse(getUsdPrice(selectedChestType)) ?? 0}
+          price={referredById ? chests[selectedChestType].discountedPrice : chests[selectedChestType].price}
           onQuantityChange={setQuantityToOpen}
           onClose={() => {
             setShowOpenMultipleConfirm(false)
@@ -459,7 +464,7 @@ const ShopChestCard: React.FC = () => {
           quantity={quantityToBuy}
           max={12}
           // pass PHORSE/unit (ceil) for the selected chest
-          price={toPhorse(getUsdPrice(selectedChestType)) ?? 0}
+          price={referredById ? chests[selectedChestType].discountedPrice : chests[selectedChestType].price}
           onQuantityChange={setQuantityToBuy}
           onClose={() => setShowBuyMultipleConfirm(false)}
           onConfirm={handleBuyConfirm}
