@@ -20,9 +20,9 @@ const Burger: React.FC<Props> = ({ close = false }) => {
       <Link href='/profile'>
         <a>Profile</a>
       </Link>
-      <Link href='/referral'>
+      {/* <Link href='/referral'>
         <a>Referral</a>
-      </Link>
+      </Link> */}
       <Link href='https://marketplace.roninchain.com/collections/origin-horses'>
         <a target="_blank">Marketplace</a>
       </Link>

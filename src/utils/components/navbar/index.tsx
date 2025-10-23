@@ -114,7 +114,7 @@ const Navbar: React.FC = () => {
           <div className={styles.options}>
             <Link href='/game'><a>GAME</a></Link>
             <Link href='/profile'><a>PROFILE</a></Link>
-            <Link href='/referral'><a>REFERRAL</a></Link>
+            {/* <Link href='/referral'><a>REFERRAL</a></Link> */}
             <a href='https://stakeplanethorse.kttylabs.xyz/' rel="noreferrer" target="_blank">STAKE</a>
 
             {/* Marketplace with dropdown */}
