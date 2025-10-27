@@ -359,7 +359,7 @@ const ItemBag: React.FC<Props> = ({
   };
 
   // "Open" handler
-  const handleOpenBag = async () => {
+  const handleOpenBag = async (bagName: 'Medal Bag' | 'PHORSE Bag') => {
     setErrorMessage(null);
     try {
       const res = await fetch(`${process.env.API_URL}/user/items/open-bag`, {
@@ -367,9 +367,9 @@ const ItemBag: React.FC<Props> = ({
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Idempotency-Key': `openbag-${Date.now()}-${Math.random().toString(36).slice(2)}`
+          'Idempotency-Key': `openbag-${bagName}-${Date.now()}-${Math.random().toString(36).slice(2)}`
         },
-        body: JSON.stringify({}), // body optional (key comes via header)
+        body: JSON.stringify({ name: bagName }),
       });
 
       if (!res.ok) {
@@ -381,19 +381,26 @@ const ItemBag: React.FC<Props> = ({
         throw new Error(msg);
       }
 
-      const data = await res.json(); // { added, newMedals, remainingBags }
-      setInfoMessage(`Opened Medal Bag: +${String(data.added)} medals!`);
-      await updateBalance(); // update balances
-      await fetchItems(); // refresh bag contents
+      // Medal Bag -> { added, newMedals, remainingBags }
+      // PHORSE Bag -> { added, newPhorse, remainingBags }
+      const data = await res.json();
+      const isPhorse = bagName === 'PHORSE Bag';
+      setInfoMessage(
+        isPhorse
+          ? `Opened PHORSE Bag: +${String(data.added)} $PHORSE!`
+          : `Opened Medal Bag: +${String(data.added)} medals!`
+      );
+
+      await updateBalance(); // medals/phorse changed
+      await fetchItems();    // inventory changed
     } catch (err: any) {
       console.error(err);
-      setErrorMessage(err.message || 'Failed to open Medal Bag');
+      setErrorMessage(err.message || `Failed to open ${bagName}`);
     } finally {
       setActiveDropdownIndex(null);
       setTooltip(null);
     }
   };
-
 
   // “Equip” handler (calls backend /horses/:id/equip-item)
   const handleEquip = async (itemName: string, usesLeft: number) => {
@@ -542,6 +549,7 @@ const ItemBag: React.FC<Props> = ({
       }
       setInfoMessage(`Withdrawal request submitted! It might take a few minutes to reflect in your wallet.`);
       fetchItems();
+      updateBalance();
     } catch (err: any) {
       console.error(err);
       setErrorMessage(err.message || 'Failed to submit withdrawal request');
@@ -832,10 +840,10 @@ const ItemBag: React.FC<Props> = ({
                                   {item.consumable ? (
                                     <>
                                       {/* Medal Bag special-case (already present) */}
-                                      {item.name === 'Medal Bag' ? (
+                                      {['Medal Bag', 'PHORSE Bag'].includes(item.name) ? (
                                         <div
                                           className={styles.dropdownOption}
-                                          onClick={handleOpenBag}
+                                          onClick={async () => handleOpenBag(item.name as 'Medal Bag' | 'PHORSE Bag')}
                                         >
                                           Open
                                         </div>
@@ -988,10 +996,10 @@ const ItemBag: React.FC<Props> = ({
                                     >
                                       Upgrade
                                     </div> : null}
-                                    {item.name === 'Medal Bag' && (
+                                    {['Medal Bag', 'PHORSE Bag'].includes(item.name) && (
                                       <div
                                         className={styles.dropdownOption}
-                                        onClick={handleOpenBag}
+                                        onClick={async () => handleOpenBag(item.name as 'Medal Bag' | 'PHORSE Bag')}
                                       >
                                         Open
                                       </div>

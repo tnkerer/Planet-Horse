@@ -31,7 +31,7 @@ interface TokenBridgeProps {
 
 const LIMITS: Record<TokenSymbol, { min: number; max: number; withdrawPlaceholder: string }> = {
   PHORSE: { min: 1000, max: 100000, withdrawPlaceholder: '1000' },
-  WRON:   { min: 0.01, max: 10000,  withdrawPlaceholder: '0.01' },
+  WRON: { min: 0.01, max: 10000, withdrawPlaceholder: '0.01' },
 }
 
 const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
@@ -40,7 +40,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
   const { address, connect } = useWallet()
 
   // 🔀 new: selected token
-  const [token, setToken] = useState<TokenSymbol>('PHORSE')
+  const [token, setToken] = useState<TokenSymbol>('WRON')
 
   // wallet balance for the selected token
   const [walletBalance, setWalletBalance] = useState<string>('0')
@@ -50,7 +50,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
 
   const [showConfirm, setShowConfirm] = useState(false)
   const [confirmText, setConfirmText] = useState<React.ReactNode>('')
-  const [confirmAction, setConfirmAction] = useState<() => Promise<void>>(async () => {})
+  const [confirmAction, setConfirmAction] = useState<() => Promise<void>>(async () => { })
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [infoMessage, setInfoMessage] = useState<string | null>(null)
@@ -204,7 +204,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
               try {
                 const errJson = await res.json()
                 if (errJson?.message) msg = errJson.message
-              } catch {}
+              } catch { }
               throw new Error(msg)
             }
 
@@ -242,7 +242,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
             try {
               const errJson = await res.json()
               if (errJson?.message) msg = errJson.message
-            } catch {}
+            } catch { }
             throw new Error(msg)
           }
 
@@ -291,7 +291,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
 
           {/* 🔀 Token Toggle */}
           <div className={styles.toggleWrap} role="tablist" aria-label="Select token">
-            <button
+            {/* <button
               role="tab"
               aria-selected={token === 'PHORSE'}
               className={`${styles.toggleBtn} ${token === 'PHORSE' ? styles.toggleActive : ''}`}
@@ -300,7 +300,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
             >
               <Image src={phorseToken} alt="PHORSE" width={22} height={22} />
               <span>PHORSE</span>
-            </button>
+            </button> */}
             <button
               role="tab"
               aria-selected={token === 'WRON'}
@@ -350,7 +350,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
               </div>
               <div className={styles.available}>
                 Available ingame: {(Number(gameAvailable) || 0).toFixed(token === 'PHORSE' ? 0 : 4)} {token}
-                <br />
+                {/* <br />
                 Min. Withdraw:{' '}
                 <span style={{ color: '#E21C21' }}>
                   {token === 'PHORSE' ? '1000' : '0.01'}
@@ -359,7 +359,7 @@ const TokenBridge: React.FC<TokenBridgeProps> = ({ onClose }) => {
                 Max. Withdraw:{' '}
                 <span style={{ color: '#E21C21' }}>
                   {token === 'PHORSE' ? '100.000' : '10.000'}
-                </span>
+                </span> */}
               </div>
             </div>
             <button

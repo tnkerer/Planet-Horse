@@ -24,10 +24,26 @@ const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
 
   // Use the field your API actually returns:
   const finalReward = horseResult.tokenReward;
+  const finalWronReward = horseResult.wronReward;
+  const jackpot = horseResult.jackpot;
 
   const hasDrops =
     horseResult.droppedItems.length > 0 ||
     horseResult.droppedChests.length > 0;
+
+  const isPhorse = (finalReward ?? 0) >= (finalWronReward ?? 0);
+  const amount = isPhorse ? finalReward : finalWronReward;
+  const tokenName = isPhorse ? 'PHORSE' : 'WRON';
+
+  // Render "(JACKPOT)" as a per-character wave with glow2
+  const renderJackpotWave = (text: string) => (
+    <span className={`${styles.jackpotLabel} ${styles.wave} ${styles.glow2}`}>
+      {Array.from(text).map((ch, i) => (
+        <span key={i} className={styles[`char${i + 1}`]}>{ch}</span>
+      ))}
+    </span>
+  );
+
 
   return (
     <div className={styles.raceResultContent}>
@@ -53,7 +69,8 @@ const RaceFinish: React.FC<Props> = ({ horseResult, horse }) => {
 
             {/* 2b) The “+ X PHORSE” text, with medal if earned */}
             <div className={styles.raceResultTokens}>
-              + <CountUp start={0} end={finalReward} decimals={2} /> PHORSE
+              + <CountUp start={0} end={amount} decimals={2} /> {` `}
+              {jackpot ? renderJackpotWave(`${tokenName} (JACKPOT)`) : tokenName}
             </div>
 
             {hasDrops && (

@@ -41,7 +41,8 @@ const ConfirmMultipleMint: React.FC<ConfirmMultipleMintProps> = ({
         {/* Dynamic question */}
         <div className={styles.text}>
           Mint <strong>{quantity}</strong> <em>{itemName}</em>
-          {quantity > 1 ? 's' : ''}? It will cost {100 * quantity} PHORSE.
+          {quantity > 1 ? 's' : ''}? It will cost{' '}
+          <span className={styles.cost}>{(0.2 * quantity).toFixed(2)} WRON</span>.
         </div>
 
         {/* Quantity slider */}

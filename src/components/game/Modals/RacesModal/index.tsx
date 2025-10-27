@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState, useMemo } from 'react' // ← added useMemo
+import React, { Dispatch, SetStateAction, useEffect, useState, useMemo } from 'react'
 import Image from 'next/image'
 import styles from './styles.module.scss'
 import close from '@/assets/game/pop-up/fechar.png'
@@ -19,20 +19,42 @@ const RacesModal: React.FC<Props> = ({
   horses,
   reloadHorses,
 }) => {
-  const cost = totalHorses * 50
+  // NEW: does this user own a Stable?
+  const [hasStable, setHasStable] = useState(false)
 
-  // NEW: compute total SHARD cost across selected horses
+  useEffect(() => {
+    let cancelled = false
+    const loadStable = async () => {
+      try {
+        const res = await fetch(`${process.env.API_URL}/stable/blockchain`, { credentials: 'include' })
+        const data = await res.json().catch(() => ([]))
+        if (!cancelled) {
+          const first = Array.isArray(data) && data.length ? data[0] : null
+          setHasStable(!!first)
+        }
+      } catch {
+        if (!cancelled) setHasStable(false)
+      }
+    }
+    void loadStable()
+    return () => { cancelled = true }
+  }, [])
+
+  // UPDATED: PHORSE cost becomes 0 if user has a Stable
+  const cost = hasStable ? 0 : totalHorses * 50
+
+  // SHARD cost across selected horses
   const shardCost = useMemo(() => {
     return (horses ?? []).reduce((sum: number, h: any) => {
-      const ownerCF = h?.staty.ownerCareerFactor;
-      const horseCF = h?.staty.horseCareerFactor;
+      const ownerCF = h?.staty.ownerCareerFactor
+      const horseCF = h?.staty.horseCareerFactor
       return sum + Math.ceil(100 * ownerCF * horseCF)
     }, 0)
   }, [horses])
 
-  // UPDATED: include SHARDS in the dialog text
+  // UPDATED: dialog text reflects the (possibly zero) PHORSE cost
   const fullText =
-    `You can call me Tina. Would you like our Jockeys to run your ` +
+    `Would you like to run your ` +
     `${totalHorses} IDLE horses for a ${cost} PHORSE fee and ${Number(shardCost)} SHARDS?`
 
   const [displayedText, setDisplayedText] = useState('')
@@ -41,7 +63,6 @@ const RacesModal: React.FC<Props> = ({
   const [textFinished, setTextFinished] = useState(false)
 
   useEffect(() => {
-    console.log(horses)
     if (!status) return
     setDisplayedText('')
     setErrorMessage(null)
@@ -66,7 +87,6 @@ const RacesModal: React.FC<Props> = ({
     setErrorMessage(null)
 
     try {
-      // NOTE: backend expects tokenIds; fall back to id if needed
       const tokenIds = horses.map(h => (h.tokenId ?? h.id)?.toString())
 
       const res = await fetch(`${process.env.API_URL}/horses/start-multiple-race`, {
@@ -81,12 +101,11 @@ const RacesModal: React.FC<Props> = ({
         try {
           const err = await res.json()
           if (err?.message) msg = err.message
-        } catch { }
+        } catch { /* noop */ }
         throw new Error(msg)
       }
 
-      // Success
-      reloadHorses()
+      await reloadHorses()
       setVisible(false)
     } catch (e: any) {
       console.error(e)
@@ -115,7 +134,6 @@ const RacesModal: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Dialog + Character OUTSIDE modalContent */}
           <div className={styles.dialogWrapper}>
             <img src="/assets/characters/punter.png" alt="Punter" className={styles.character} />
 
@@ -125,11 +143,20 @@ const RacesModal: React.FC<Props> = ({
                 <span className={styles.cursor}>|</span>
               </div>
 
-              {textFinished && <div className={styles.answerBox}>
-                <div className={styles.answerOption} onClick={handleRun}>
-                  Yes
+              {/* Optional: small badge when free due to Stable */}
+              {textFinished && hasStable && (
+                <div className={styles.freeBadge}>
+                  Stable perk applied — PHORSE cost is 0
                 </div>
-              </div>}
+              )}
+
+              {textFinished && (
+                <div className={styles.answerBox}>
+                  <div className={styles.answerOption} onClick={handleRun}>
+                    Yes
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
