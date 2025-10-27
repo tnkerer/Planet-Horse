@@ -912,7 +912,7 @@ const ItemBag: React.FC<Props> = ({
                                           setActiveDropdownIndex(null);
                                         }}
                                       >
-                                        {itemsConst[item.name]?.shards ?? 0}x{' '}
+                                        {`Break ${String(itemsConst[item.name]?.shards ?? 0)}`}x{' '}
                                         <img
                                           src="/assets/icons/shard.gif"
                                           alt="Shards"
@@ -970,7 +970,7 @@ const ItemBag: React.FC<Props> = ({
                                           setActiveDropdownIndex(null);
                                         }}
                                       >
-                                        {itemsConst[item.name]?.shards ?? 0}x{' '}
+                                        {`Break ${String(itemsConst[item.name]?.shards ?? 0)}`}x{' '}
                                         <img
                                           src="/assets/icons/shard.gif"
                                           alt="Shards"
@@ -1044,7 +1044,7 @@ const ItemBag: React.FC<Props> = ({
                                         setActiveDropdownIndex(null);
                                       }}
                                     >
-                                      {itemsConst[item.name]?.shards ?? 0}x{' '}
+                                      {`Break ${String(itemsConst[item.name]?.shards ?? 0)}`}x{' '}
                                       <img
                                         src="/assets/icons/shard.gif"
                                         alt="Shards"
@@ -1143,6 +1143,7 @@ const ItemBag: React.FC<Props> = ({
                 );
                 setMultiBreak(null);
               }}
+              break={true}
             />
           )}
 
