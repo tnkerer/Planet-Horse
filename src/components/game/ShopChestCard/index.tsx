@@ -422,17 +422,10 @@ const ShopChestCard: React.FC = () => {
                     <>
                       <span className={styles.strikethrough}>{chests[item.id]?.price ?? "?"}</span>
                       <span className={styles.discounted}>{`${String(chests[item.id]?.discountedPrice) ?? "?"}`}</span>
-                      <span className={styles.strikethrough}>
-                        {basePhorse}
-                      </span>
-                      <span className={styles.discounted}>
-                        {discPhorse}
-                      </span>
                     </>
                   ) : (
                     <>
                       <span>{chests[item.id]?.price ?? "?"}</span>
-                      <span>{effectivePhorse}</span>
                     </>
                   )}
                 </div>
