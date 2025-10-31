@@ -2,60 +2,42 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import styles from './styles.module.scss';
 import closeIcon from '@/assets/game/pop-up/fechar.png';
-
-interface Quest {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-  claimed: boolean;
-  rewards: Array<{
-    name: string;
-    src: string;
-    quantity: number;
-  }>;
-}
+import { useAuthFetch } from '@/utils/hooks/use-auth-fetch';
+import { QuestService, UserQuestProgress, QuestDifficulty } from '@/services/questService';
+import QuestAdminPanel from '../QuestAdminPanel';
+import ErrorModal from '../ErrorModal';
 
 type Props = {
   status: boolean;
   setVisible: (v: boolean) => void;
 };
 
-// TODO: integrate with real API (test generated mock quests)
-const generateMockQuests = (count: number): Quest[] => {
-  const titles = ['Daily Check-in', 'Win 3 Races', 'Breed a Horse', 'Level Up Horse', 'Complete Training'];
-  const descriptions = [
-    'Do a daily check in into the game',
-    'Win 3 races with any horse',
-    'Breed two horses together',
-    'Level up any horse to the next level',
-    'Complete a training session',
-  ];
-
-  return Array.from({ length: count }, (_, i) => ({
-    id: i + 1,
-    title: titles[i % titles.length],
-    description: descriptions[i % descriptions.length],
-    completed: i % 3 !== 2,
-    claimed: i % 4 === 0, 
-    rewards: [
-      { name: 'Medal Bag', src: 'medal_bag', quantity: 1 },
-    ],
-  }));
-};
-
 const QUESTS_PER_PAGE = 5;
-const TOTAL_QUESTS = 20; 
 const SCROLL_THRESHOLD = 5;
 
 const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
-  const [allQuests, setAllQuests] = useState<Quest[]>([]);
-  const [visibleQuests, setVisibleQuests] = useState<Quest[]>([]);
+  const authFetch = useAuthFetch();
+  const questService = new QuestService(authFetch);
+
+  const [allQuests, setAllQuests] = useState<UserQuestProgress[]>([]);
+  const [visibleQuests, setVisibleQuests] = useState<UserQuestProgress[]>([]);
   const [loadedCount, setLoadedCount] = useState(0);
   const [claiming, setClaiming] = useState<number | null>(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
   const [showScrollUp, setShowScrollUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingQuests, setIsLoadingQuests] = useState(false);
+
+  // Error modal state
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [checkinStatus, setCheckinStatus] = useState<{
+    canCheckin: boolean;
+    streak: number;
+    nextCheckinAt: string | null;
+  } | null>(null);
+  const [isCheckingIn, setIsCheckingIn] = useState(false);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const loadMoreTimeoutRef = useRef<NodeJS.Timeout>();
@@ -63,33 +45,55 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
   useEffect(() => {
     if (!status) return;
 
-    const initialQuests = generateMockQuests(TOTAL_QUESTS);
-    setAllQuests(initialQuests);
-    setVisibleQuests(initialQuests.slice(0, QUESTS_PER_PAGE));
-    setLoadedCount(QUESTS_PER_PAGE);
+    const fetchQuests = async () => {
+      setIsLoadingQuests(true);
+      try {
+        const quests = await questService.listQuests();
+        setAllQuests(quests);
+        setVisibleQuests(quests.slice(0, QUESTS_PER_PAGE));
+        setLoadedCount(QUESTS_PER_PAGE);
+      } catch (error) {
+        console.error('Failed to fetch quests:', error);
+      } finally {
+        setIsLoadingQuests(false);
+      }
+    };
+
+    const fetchCheckinStatus = async () => {
+      try {
+        const status = await questService.getCheckinStatus();
+        setCheckinStatus({
+          canCheckin: status.canCheckin,
+          streak: status.streak,
+          nextCheckinAt: status.nextCheckinAt,
+        });
+      } catch (error) {
+        console.error('Failed to fetch checkin status:', error);
+      }
+    };
+
+    fetchQuests();
+    fetchCheckinStatus();
   }, [status]);
 
-  // Check scroll position to show/hide arrows
   const checkScrollPosition = useCallback(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const { scrollTop, scrollHeight, clientHeight } = container;
 
-    // Show down arrow if not at bottom and there are more quests to load OR content is scrollable
     const isAtBottom = scrollHeight - scrollTop - clientHeight <= SCROLL_THRESHOLD;
-    const hasMoreQuests = loadedCount < TOTAL_QUESTS;
+    const hasMoreQuests = loadedCount < allQuests.length;
     const hasScrollableContent = scrollHeight > clientHeight;
     setShowScrollDown(!isAtBottom && (hasMoreQuests || hasScrollableContent));
 
-    // Show up arrow ONLY if scrolled down (strict check at 0)
     const isAtTop = scrollTop < SCROLL_THRESHOLD;
     setShowScrollUp(!isAtTop && scrollTop > 0);
-  }, [loadedCount]);
+  }, [loadedCount, allQuests.length]);
 
   const handleScroll = useCallback(() => {
     const container = scrollContainerRef.current;
-    if (!container || isLoading || loadedCount >= TOTAL_QUESTS) return;
+    if (!container || isLoading || loadedCount >= allQuests.length) return;
 
     const { scrollTop, scrollHeight, clientHeight } = container;
     const scrolledToBottom = scrollHeight - scrollTop - clientHeight < 100;
@@ -103,7 +107,7 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
         setIsLoading(true);
 
         setTimeout(() => {
-          const nextCount = Math.min(loadedCount + QUESTS_PER_PAGE, TOTAL_QUESTS);
+          const nextCount = Math.min(loadedCount + QUESTS_PER_PAGE, allQuests.length);
           setVisibleQuests(allQuests.slice(0, nextCount));
           setLoadedCount(nextCount);
           setIsLoading(false);
@@ -122,7 +126,6 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
     };
 
     container.addEventListener('scroll', onScroll);
-
     checkScrollPosition();
 
     return () => {
@@ -141,25 +144,49 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
   const handleClaim = async (questId: number) => {
     setClaiming(questId);
 
-    // TODO: Replace with actual API call
-    // await fetch(`${process.env.API_URL}/quests/${questId}/claim`, {
-    //   method: 'POST',
-    //   credentials: 'include',
-    // });
+    try {
+      await questService.claimQuest(questId);
 
-    setTimeout(() => {
       setAllQuests(prevQuests =>
         prevQuests.map(q =>
-          q.id === questId ? { ...q, claimed: true } : q
+          q.quest.id === questId ? { ...q, claimed: true, claimedAt: new Date().toISOString() } : q
         )
       );
       setVisibleQuests(prevQuests =>
         prevQuests.map(q =>
-          q.id === questId ? { ...q, claimed: true } : q
+          q.quest.id === questId ? { ...q, claimed: true, claimedAt: new Date().toISOString() } : q
         )
       );
+    } catch (error) {
+      console.error('Failed to claim quest:', error);
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to claim quest');
+      setShowErrorModal(true);
+    } finally {
       setClaiming(null);
-    }, 500);
+    }
+  };
+
+  const handleCheckin = async () => {
+    if (!checkinStatus?.canCheckin || isCheckingIn) return;
+
+    setIsCheckingIn(true);
+    try {
+      const result = await questService.dailyCheckin();
+
+      setCheckinStatus({
+        canCheckin: false,
+        streak: result.streak,
+        nextCheckinAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      });
+
+      const quests = await questService.listQuests();
+      setAllQuests(quests);
+      setVisibleQuests(quests.slice(0, Math.max(loadedCount, QUESTS_PER_PAGE)));
+    } catch (error) {
+      console.error('Failed to check in:', error);
+    } finally {
+      setIsCheckingIn(false);
+    }
   };
 
   const scrollToTop = () => {
@@ -175,6 +202,19 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
     if (container) {
       container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
       setTimeout(() => checkScrollPosition(), 400);
+    }
+  };
+
+  const getDifficultyClass = (difficulty: QuestDifficulty): string => {
+    switch (difficulty) {
+      case 'SIMPLE':
+        return styles.difficultySimple;
+      case 'MEDIUM':
+        return styles.difficultyMedium;
+      case 'ADVANCED':
+        return styles.difficultyAdvanced;
+      default:
+        return '';
     }
   };
 
@@ -201,6 +241,19 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
           <Image src={closeIcon} alt="Close" width={30} height={30} />
         </button>
 
+        <button
+          className={`${styles.checkinButton} ${!checkinStatus?.canCheckin ? styles.checkinDisabled : ''}`}
+          onClick={handleCheckin}
+          disabled={!checkinStatus?.canCheckin || isCheckingIn}
+          aria-label="Daily Check-in"
+        >
+          {!checkinStatus?.canCheckin && (
+            <span className={styles.streakNumber}>{checkinStatus?.streak || 0}</span>
+          )}
+        </button>
+
+        <QuestAdminPanel />
+
         {showScrollUp && (
           <button
             className={`${styles.scrollIndicator} ${styles.scrollUp}`}
@@ -217,49 +270,66 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
         )}
 
         <div className={styles.questList} ref={scrollContainerRef}>
-          {visibleQuests.map((quest) => (
-            <div key={quest.id} className={styles.questItem}>
-              <div className={styles.questInfo}>
-                <h3 className={styles.questTitle}>{quest.title}</h3>
-                <p className={styles.questDescription}>{quest.description}</p>
-              </div>
-
-              <button
-                className={`${styles.claimButton} ${
-                  !quest.completed || quest.claimed ? styles.claimButtonDisabled : ''
-                } ${claiming === quest.id ? styles.claimButtonClaiming : ''}`}
-                onClick={async () => await handleClaim(quest.id)}
-                disabled={!quest.completed || quest.claimed || claiming === quest.id}
-              >
-                <span className={styles.claimButtonText}>
-                  {quest.claimed ? 'CLAIMED' : claiming === quest.id ? 'CLAIMING...' : 'CLAIM'}
-                </span>
-              </button>
-
-              <div className={styles.rewardsContainer}>
-                {quest.rewards.map((reward, idx) => (
-                  <div key={idx} className={styles.rewardSlot}>
-                    <div className={styles.rewardImage}>
-                      <img
-                        src={`/assets/items/${reward.src}.webp`}
-                        alt={reward.name}
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = `/assets/items/${reward.src}.gif`;
-                        }}
-                      />
-                    </div>
-                    <span className={styles.rewardQuantity}>{reward.quantity}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-
-          {isLoading && (
+          {isLoadingQuests ? (
             <div className={styles.loadingIndicator}>
-              <span className={styles.loadingText}>Loading more quests...</span>
+              <span className={styles.loadingText}>Loading quests...</span>
             </div>
+          ) : (
+            <>
+              {visibleQuests.map((userQuest) => (
+                <div key={userQuest.quest.id} className={`${styles.questItem} ${getDifficultyClass(userQuest.quest.difficulty)}`}>
+                  <div className={styles.questInfo}>
+                    <h3 className={styles.questTitle}>{userQuest.quest.title}</h3>
+                    <p className={styles.questDescription}>{userQuest.quest.description}</p>
+                    <div className={styles.progressBar}>
+                      <div
+                        className={styles.progressFill}
+                        style={{ width: `${(userQuest.progress / userQuest.quest.questsToComplete) * 100}%` }}
+                      />
+                      <span className={styles.progressText}>
+                        {userQuest.progress}/{userQuest.quest.questsToComplete}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    className={`${styles.claimButton} ${
+                      !userQuest.completed || userQuest.claimed ? styles.claimButtonDisabled : ''
+                    } ${claiming === userQuest.quest.id ? styles.claimButtonClaiming : ''}`}
+                    onClick={async () => await handleClaim(userQuest.quest.id)}
+                    disabled={!userQuest.completed || userQuest.claimed || claiming === userQuest.quest.id}
+                  >
+                    <span className={styles.claimButtonText}>
+                      {userQuest.claimed ? 'CLAIMED' : claiming === userQuest.quest.id ? 'CLAIMING...' : 'CLAIM'}
+                    </span>
+                  </button>
+
+                  <div className={styles.rewardsContainer}>
+                    {userQuest.quest.reward.map((reward, idx) => (
+                      <div key={idx} className={styles.rewardSlot}>
+                        <div className={styles.rewardImage}>
+                          <img
+                            src={`/assets/items/${reward.type === 'item' ? reward.itemName : reward.type}.webp`}
+                            alt={reward.type}
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = `/assets/items/${reward.type === 'item' ? reward.itemName : reward.type}.gif`;
+                            }}
+                          />
+                        </div>
+                        <span className={styles.rewardQuantity}>{reward.amount}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              {isLoading && (
+                <div className={styles.loadingIndicator}>
+                  <span className={styles.loadingText}>Loading more quests...</span>
+                </div>
+              )}
+            </>
           )}
         </div>
 
@@ -278,6 +348,13 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
           </button>
         )}
       </div>
+
+      {showErrorModal && (
+        <ErrorModal
+          text={errorMessage}
+          onClose={() => setShowErrorModal(false)}
+        />
+      )}
     </div>
   );
 };

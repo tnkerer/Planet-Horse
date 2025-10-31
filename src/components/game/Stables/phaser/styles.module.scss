@@ -180,16 +180,16 @@
 
 .questsButton {
   position: relative;
-  width: 48px;
-  height: 48px;
-  background: url('/assets/icons/quests.png') no-repeat center/contain;
+  width: 72px;
+  height: 72px;
+  background: url('/assets/icons/quests.webp') no-repeat center/contain;
   border: none;
   cursor: pointer;
   padding: 0;
   margin: 0;
 
   &:hover {
-    background-image: url('/assets/icons/quests_hover.png');
+    background-image: url('/assets/icons/quests_hover.webp');
   }
 
   @media (max-width: 700px) {

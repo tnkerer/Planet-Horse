@@ -12,6 +12,7 @@ import MineModal from '../Modals/MineModal';
 import InfoModal from '../Modals/InfoModal';
 import PhaserStablesCanvas from './phaser/PhaserStablesCanvas';
 import { useHorseList } from './hooks/useHorseList';
+import QuestsHubModal from '../Modals/QuestsHubModal';
 
 interface Props {
   changeView: (view: string) => void;
@@ -20,6 +21,7 @@ interface Props {
 const Stables: React.FC<Props> = ({ changeView }) => {
   const [modalItems, setModalItems] = useState(false);
   const [modalMine, setModalMine] = useState(false);
+  const [modalQuests, setModalQuests] = useState(false);
   const [informational, setInformational] = useState<string | null>(null);
   const { horseList, loadHorses } = useHorseList('level');
   const { phorse, medals, wron, updateBalance } = useUser();
@@ -34,6 +36,9 @@ const Stables: React.FC<Props> = ({ changeView }) => {
     <>
       <ItemBag status={modalItems} closeModal={() => setModalItems(false)} />
       {modalMine && <MineModal setVisible={setModalMine} status={modalMine} />}
+      {modalQuests && (
+        <QuestsHubModal setVisible={setModalQuests} status={modalQuests} />
+      )}
 
 
       <div className={styles.secondBar}>
@@ -60,6 +65,12 @@ const Stables: React.FC<Props> = ({ changeView }) => {
                 className={styles.upgradeButton}
                 onClick={() => setModalMine(true)}
                 aria-label="Open Mine"
+              />
+
+              <button
+                className={styles.questsButton}
+                onClick={() => setModalQuests(true)}
+                aria-label="Open Quests"
               />
             </div>
           </div>

@@ -222,6 +222,8 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
                   className={styles.upgradeButton}
                   onClick={() => { setModalMine(true); }}
                 />
+
+                
               </div>
             </div>
           </div>

@@ -151,6 +151,30 @@
                 }
             }
 
+            .questsButton {
+                position: relative;
+                width: 72px;
+                height: 72px;
+                background: url('/assets/icons/quests.webp') no-repeat center/contain;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                margin: 0;
+
+                &:hover {
+                    background-image: url('/assets/icons/quests_hover.webp');
+                }
+
+                @media (max-width: 700px) {
+                    width: 68px;
+                    height: 68px;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    grid-gap: 16px;
+                    justify-items: center;
+                }
+            }
+
         }
 
     }
