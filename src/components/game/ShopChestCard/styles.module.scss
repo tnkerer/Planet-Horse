@@ -302,8 +302,108 @@
   /* mais espaço acima da badge */
   padding-bottom: 1rem;
 
+  position: relative;
+  overflow: visible;
+  /* allow tooltip to overflow the card if needed */
+
   /* menos espaço abaixo, se necessário */
 }
+
+/* Wrapper sits top-right */
+.dropTooltipWrapper {
+  position: absolute;
+  top: 24px;
+  left: 6px;
+  z-index: 5;
+  /* above card content */
+  display: inline-block;
+}
+
+/* Small circular "i" button */
+.infoBtn {
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  user-select: none;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 0;
+}
+
+/* The actual tooltip panel */
+.dropTooltip {
+  position: absolute;
+  top: 30px;
+  /* below the button */
+  left: 0;
+  min-width: 240px;
+  max-width: 320px;
+  max-height: 400px;
+  overflow: auto;
+  padding: 10px 12px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  background: #101216;
+  color: #e9edf3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease-in-out;
+}
+
+/* Show on hover/focus */
+.dropTooltipWrapper:hover .dropTooltip,
+.dropTooltipWrapper:focus-within .dropTooltip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Tooltip header + list */
+.tooltipHeader {
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .02em;
+  opacity: .9;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.tooltipList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tooltipItem {
+  font-size: 12px;
+  line-height: 1.35;
+  margin: 2px 0;
+  white-space: nowrap;
+}
+
+/* Color coding
+   <1% = PURPLE, <10% = BLUE, >=10% = GREEN
+*/
+.ratePurple {
+  color: #a78bfa;
+}
+
+/* violet-400 */
+.rateBlue {
+  color: #60a5fa;
+}
+
+/* blue-400 */
+.rateGreen {
+  color: #34d399;
+}
+
+/* emerald-400 */
 
 /* imagem do chest */
 .imageWrapper {
@@ -320,8 +420,8 @@
   color: white;
   font-family: 'SpaceHorse';
   position: absolute;
-  margin-top: 35px;
-  margin-left: 130px;
+  margin-top: 22px;
+  margin-left: 160px;
   width: 36px;
   height: 36px;
   display: flex;
@@ -404,6 +504,20 @@
 }
 
 .buttonRow button:active {
+  background-image: url('/assets/game/buttons/button-click.svg');
+}
+
+/* add near the other button rules */
+.buttonRow button:disabled {
+  background-image: url('/assets/game/buttons/button-click.svg');
+  cursor: not-allowed;
+  /* optional: make it look “inactive” */
+  filter: grayscale(0.2) brightness(0.95);
+}
+
+/* make sure hover/active don’t override disabled */
+.buttonRow button:disabled:hover,
+.buttonRow button:disabled:active {
   background-image: url('/assets/game/buttons/button-click.svg');
 }
 

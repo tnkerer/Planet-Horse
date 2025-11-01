@@ -296,7 +296,7 @@ const StableHorsesModal: React.FC<Props> = ({ status, stableTokenId, horses, onC
                     <img src="/assets/characters/horse_handler.png" alt="Stable Handler" className={styles.character} />
                     <div className={styles.rpgDialogBox}>
                         <div className={styles.dialogText}>
-                            {`Pick which horses should live in Stable #${stableTokenId}.\n\nAssign up to your stable capacity. Removing a horse requires a 24h cooldown since last assignment.`}
+                            {`Pick which horses should live in Stable #${stableTokenId}.\n\nRemoving a horse requires a 24h cooldown.`}
                             <span className={styles.cursor}>|</span>
                         </div>
                     </div>

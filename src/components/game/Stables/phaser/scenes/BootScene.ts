@@ -10,8 +10,9 @@ export class BootScene extends Phaser.Scene {
     this.load.image('hud-avatar', '/assets/game/phaser/ui/horse.gif');
     this.load.image('icon-phorse', '/assets/game/phaser/ui/coin.webp');
     this.load.image('icon-wron', '/assets/game/phaser/ui/wron.webp');
-    this.load.image('icon-shard', '/assets/game/phaser/ui/shard.gif');
+    // this.load.image('icon-shard', '/assets/game/phaser/ui/shard.gif');
     this.load.image('icon-medal', '/assets/game/phaser/ui/medal.gif');
+    this.load.image('icon-shard', '/assets/icons/shard2.gif')
   }
 
   create() {

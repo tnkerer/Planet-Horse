@@ -13,6 +13,7 @@ interface RaceReward {
     id: string
     createdAt: string
     phorseEarned: number
+    wronEarned: number
     xpEarned: number
     position: number
     horseId: string
@@ -66,6 +67,7 @@ const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
                                     <tr>
                                         <td>Position</td>
                                         <td>PHORSE</td>
+                                        <td>WRON</td>
                                         <td>XP</td>
                                         <td>Date</td>
                                     </tr>
@@ -73,6 +75,7 @@ const ModalReward: React.FC<Props> = ({ closeModal, status, horseId }) => {
                                         <tr key={reward.id}>
                                             <td>{reward.position}</td>
                                             <td>{reward.phorseEarned.toFixed(2)}</td>
+                                            <td>{reward.wronEarned.toFixed(2)}</td>
                                             <td>{reward.xpEarned}</td>
                                             <td>{new Date(reward.createdAt).toLocaleDateString()}</td>
                                         </tr>

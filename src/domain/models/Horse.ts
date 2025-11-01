@@ -37,6 +37,8 @@ export interface Horse {
     energy: string;
     generation: string;
     stable: string | null;
+    horseCareerFactor: number;
+    ownerCareerFactor: number;
   };
   // ← now “items” is literally an array of full Item objects
   items: Item[];

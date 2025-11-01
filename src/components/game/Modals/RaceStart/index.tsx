@@ -20,6 +20,8 @@ interface Props {
 export interface HorseResults {
   position: number;
   tokenReward: number;
+  wronReward: number;
+  jackpot: boolean;
   medalReward: number;
   xpReward: number;
   droppedItems: string[];

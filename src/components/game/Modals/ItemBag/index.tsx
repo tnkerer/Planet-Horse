@@ -101,6 +101,13 @@ const ItemBag: React.FC<Props> = ({
     maxQuantity: number;
   } | null>(null);
 
+  const [multiBreak, setMultiBreak] = useState<{
+    name: string;
+    uses: number;
+    quantity: number;
+    maxQuantity: number;
+  } | null>(null);
+
   const [multiMint, setMultiMint] = useState<{
     name: string;
     quantity: number;
@@ -352,7 +359,7 @@ const ItemBag: React.FC<Props> = ({
   };
 
   // "Open" handler
-  const handleOpenBag = async () => {
+  const handleOpenBag = async (bagName: 'Medal Bag' | 'PHORSE Bag') => {
     setErrorMessage(null);
     try {
       const res = await fetch(`${process.env.API_URL}/user/items/open-bag`, {
@@ -360,9 +367,9 @@ const ItemBag: React.FC<Props> = ({
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Idempotency-Key': `openbag-${Date.now()}-${Math.random().toString(36).slice(2)}`
+          'Idempotency-Key': `openbag-${bagName}-${Date.now()}-${Math.random().toString(36).slice(2)}`
         },
-        body: JSON.stringify({}), // body optional (key comes via header)
+        body: JSON.stringify({ name: bagName }),
       });
 
       if (!res.ok) {
@@ -374,19 +381,26 @@ const ItemBag: React.FC<Props> = ({
         throw new Error(msg);
       }
 
-      const data = await res.json(); // { added, newMedals, remainingBags }
-      setInfoMessage(`Opened Medal Bag: +${String(data.added)} medals!`);
-      await updateBalance(); // update balances
-      await fetchItems(); // refresh bag contents
+      // Medal Bag -> { added, newMedals, remainingBags }
+      // PHORSE Bag -> { added, newPhorse, remainingBags }
+      const data = await res.json();
+      const isPhorse = bagName === 'PHORSE Bag';
+      setInfoMessage(
+        isPhorse
+          ? `Opened PHORSE Bag: +${String(data.added)} $PHORSE!`
+          : `Opened Medal Bag: +${String(data.added)} medals!`
+      );
+
+      await updateBalance(); // medals/phorse changed
+      await fetchItems();    // inventory changed
     } catch (err: any) {
       console.error(err);
-      setErrorMessage(err.message || 'Failed to open Medal Bag');
+      setErrorMessage(err.message || `Failed to open ${bagName}`);
     } finally {
       setActiveDropdownIndex(null);
       setTooltip(null);
     }
   };
-
 
   // “Equip” handler (calls backend /horses/:id/equip-item)
   const handleEquip = async (itemName: string, usesLeft: number) => {
@@ -470,6 +484,46 @@ const ItemBag: React.FC<Props> = ({
     }
   };
 
+  const handleMultiBreak = async (
+    itemName: string,
+    usesLeft: number,
+    quantity: number
+  ) => {
+    setErrorMessage(null);
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/user/items/break`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemName: itemName, uses: usesLeft, quantity }),
+        }
+      );
+
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
+      }
+
+      // Expect: { destroyed, perItemShards, totalShards, newShards, remaining }
+      const data = await res.json();
+      setInfoMessage(
+        `Broke ${Number(data.destroyed)} ${itemName}${Number(data.destroyed) > 1 ? 's' : ''}: +${Number(data.totalShards)} shards`
+      );
+
+      await updateBalance();   // shards changed
+      await fetchItems();      // inventory changed
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to break items');
+    }
+  };
+
   const handleMultiWithdraw = async (
     itemName: string,
     quantity: number
@@ -495,6 +549,7 @@ const ItemBag: React.FC<Props> = ({
       }
       setInfoMessage(`Withdrawal request submitted! It might take a few minutes to reflect in your wallet.`);
       fetchItems();
+      updateBalance();
     } catch (err: any) {
       console.error(err);
       setErrorMessage(err.message || 'Failed to submit withdrawal request');
@@ -779,16 +834,16 @@ const ItemBag: React.FC<Props> = ({
                               activeDropdownIndex ===
                               pageIdx * totalSlotsPerPage + idx && (
                                 <div
-                                  className={`${styles.dropdown} ${idx >= 8 ? styles.dropdownAbove : ''
+                                  className={`${styles.dropdown} ${idx >= 4 ? styles.dropdownAbove : ''
                                     }`}
                                 >
                                   {item.consumable ? (
                                     <>
                                       {/* Medal Bag special-case (already present) */}
-                                      {item.name === 'Medal Bag' ? (
+                                      {['Medal Bag', 'PHORSE Bag'].includes(item.name) ? (
                                         <div
                                           className={styles.dropdownOption}
-                                          onClick={handleOpenBag}
+                                          onClick={async () => handleOpenBag(item.name as 'Medal Bag' | 'PHORSE Bag')}
                                         >
                                           Open
                                         </div>
@@ -814,7 +869,6 @@ const ItemBag: React.FC<Props> = ({
                                           Use
                                         </div>
                                       )}
-
                                       <div
                                         className={styles.dropdownOption}
                                         onClick={() => {
@@ -845,6 +899,26 @@ const ItemBag: React.FC<Props> = ({
                                           Mint
                                         </div>
                                       )}
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={() => {
+                                          setTooltip(null);
+                                          setMultiBreak({
+                                            name: item.name,
+                                            uses: item.usesLeft,
+                                            quantity: 1,
+                                            maxQuantity: item.quantity
+                                          });
+                                          setActiveDropdownIndex(null);
+                                        }}
+                                      >
+                                        {`Break ${String(itemsConst[item.name]?.shards ?? 0)}`}x{' '}
+                                        <img
+                                          src="/assets/icons/shard.gif"
+                                          alt="Shards"
+                                          style={{ width: 8, height: 16, verticalAlign: 'middle' }}
+                                        />
+                                      </div>
                                     </>
                                   ) : (
                                     <>
@@ -883,6 +957,26 @@ const ItemBag: React.FC<Props> = ({
                                           Mint
                                         </div>
                                       )}
+                                      <div
+                                        className={styles.dropdownOption}
+                                        onClick={() => {
+                                          setTooltip(null);
+                                          setMultiBreak({
+                                            name: item.name,
+                                            uses: item.usesLeft,
+                                            quantity: 1,
+                                            maxQuantity: item.quantity
+                                          });
+                                          setActiveDropdownIndex(null);
+                                        }}
+                                      >
+                                        {`Break ${String(itemsConst[item.name]?.shards ?? 0)}`}x{' '}
+                                        <img
+                                          src="/assets/icons/shard.gif"
+                                          alt="Shards"
+                                          style={{ width: 8, height: 16, verticalAlign: 'middle' }}
+                                        />
+                                      </div>
                                     </>
                                   )}
                                 </div>
@@ -902,10 +996,10 @@ const ItemBag: React.FC<Props> = ({
                                     >
                                       Upgrade
                                     </div> : null}
-                                    {item.name === 'Medal Bag' && (
+                                    {['Medal Bag', 'PHORSE Bag'].includes(item.name) && (
                                       <div
                                         className={styles.dropdownOption}
-                                        onClick={handleOpenBag}
+                                        onClick={async () => handleOpenBag(item.name as 'Medal Bag' | 'PHORSE Bag')}
                                       >
                                         Open
                                       </div>
@@ -937,6 +1031,26 @@ const ItemBag: React.FC<Props> = ({
                                         Mint
                                       </div>
                                     )}
+                                    <div
+                                      className={styles.dropdownOption}
+                                      onClick={() => {
+                                        setTooltip(null);
+                                        setMultiBreak({
+                                          name: item.name,
+                                          uses: item.usesLeft,
+                                          quantity: 1,
+                                          maxQuantity: item.quantity
+                                        });
+                                        setActiveDropdownIndex(null);
+                                      }}
+                                    >
+                                      {`Break ${String(itemsConst[item.name]?.shards ?? 0)}`}x{' '}
+                                      <img
+                                        src="/assets/icons/shard.gif"
+                                        alt="Shards"
+                                        style={{ width: 8, height: 16, verticalAlign: 'middle' }}
+                                      />
+                                    </div>
                                   </div>
                                 )))}
                           </div>
@@ -1009,6 +1123,27 @@ const ItemBag: React.FC<Props> = ({
                 );
                 setMultiRecycle(null);
               }}
+            />
+          )}
+
+          {multiBreak && (
+            <MultipleRecycleConfirmModal
+              quantity={multiBreak.quantity}
+              max={multiBreak.maxQuantity}
+              itemName={multiBreak.name}
+              onQuantityChange={(q) =>
+                setMultiBreak({ ...multiBreak, quantity: q })
+              }
+              onClose={() => setMultiBreak(null)}
+              onConfirm={() => {
+                handleMultiBreak(
+                  multiBreak.name,
+                  multiBreak.uses,
+                  multiBreak.quantity
+                );
+                setMultiBreak(null);
+              }}
+              break={true}
             />
           )}
 

@@ -23,6 +23,8 @@ type BackendHorse = {
   gen: number;
   stableid: string | null;
   equipments: any[];
+  horseCareerFactor: number;
+  ownerCareerFactor: number;
 };
 
 type NextEnergyRes = { nextTimestamp: number };
@@ -67,11 +69,11 @@ export class HorseLiveStore {
   private etagRecovery: string | null = null;
 
   constructor(opts: HorseStoreOpts) {
-    this.apiBase     = opts.apiBase.replace(/\/+$/, '');
+    this.apiBase = opts.apiBase.replace(/\/+$/, '');
     this.credentials = opts.credentials ?? 'include';
-    this.pollBase    = opts.pollBaseMs ?? 22000;
-    this.jitter      = opts.jitterRatio ?? 0.30;
-    this.maxBackoff  = opts.maxBackoffMs ?? 120000;
+    this.pollBase = opts.pollBaseMs ?? 22000;
+    this.jitter = opts.jitterRatio ?? 0.30;
+    this.maxBackoff = opts.maxBackoffMs ?? 120000;
 
     // Visibility control
     const onVis = () => {
@@ -129,7 +131,7 @@ export class HorseLiveStore {
 
   private notify() {
     for (const l of this.listeners) {
-      try { l(this.snap); } catch {}
+      try { l(this.snap); } catch { }
     }
   }
 
@@ -260,7 +262,9 @@ function mapBackendHorseToGame(h: BackendHorse): Horse {
       speed: String(h.currentSpeed),
       energy: `${h.currentEnergy}/${h.maxEnergy}`,
       generation: String(h.gen),
-      stable: String(h.stableid)
+      stable: String(h.stableid),
+      horseCareerFactor: h.horseCareerFactor,
+      ownerCareerFactor: h.ownerCareerFactor
     },
     items: h.equipments,
   };

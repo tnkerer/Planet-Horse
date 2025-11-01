@@ -40,6 +40,13 @@
   margin-bottom: 1.5rem;
 }
 
+.cost {
+  color: #e03131;
+  /* red */
+  font-weight: 700;
+  /* optional */
+}
+
 /* Slider + value */
 .sliderContainer {
   display: flex;
@@ -52,7 +59,8 @@
   flex: 1;
   -webkit-appearance: none;
   height: 8px;
-  background: #be9c7f;        /* rail color */
+  background: #be9c7f;
+  /* rail color */
   border-radius: 4px;
   outline: none;
 }
@@ -62,7 +70,8 @@
   -webkit-appearance: none;
   width: 18px;
   height: 18px;
-  background: #7d4d45;       /* thumb color */
+  background: #7d4d45;
+  /* thumb color */
   border-radius: 50%;
   // cursor: pointer;
 }
@@ -94,37 +103,39 @@
 
 /* common button styles */
 .buttons button {
-    font-family: 'SpaceHorse';
-    color: white;
-    text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
-    width: 120px;
-    height: 40px;
-    border: none;
-    background-color: transparent;
-    justify-content: center;
-    /* ensure no white fill */
-    cursor: pointer;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    padding: 0;
+  font-family: 'SpaceHorse';
+  color: white;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+  width: 120px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  justify-content: center;
+  /* ensure no white fill */
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  padding: 0;
 }
 
 @media (max-width: 700px) {
-    .buttons button {
-        width: 40vw;
-        height: 8vw;
-        font-size: 3vw;
-    }
+  .buttons button {
+    width: 40vw;
+    height: 8vw;
+    font-size: 3vw;
+  }
 }
 
 /* YES states */
 .yesBtn {
   background-image: url('/assets/buttons/yes.webp');
 }
+
 .yesBtn:hover {
   background-image: url('/assets/buttons/yes_hover.webp');
 }
+
 .yesBtn:active {
   background-image: url('/assets/buttons/yes_click.webp');
 }
@@ -133,9 +144,11 @@
 .noBtn {
   background-image: url('/assets/buttons/no.webp');
 }
+
 .noBtn:hover {
   background-image: url('/assets/buttons/no_hover.webp');
 }
+
 .noBtn:active {
   background-image: url('/assets/buttons/no_click.webp');
 }

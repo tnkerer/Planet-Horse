@@ -472,10 +472,10 @@
                         }
 
                         &.startButton {
-                            width: 3.6vw;
+                            width: 4.6vw;
 
                             @media screen and (max-width: 920px) {
-                                width: 7.5vw;
+                                width: 9.5vw;
                             }
                         }
 
@@ -490,7 +490,16 @@
                 }
             }
 
+            .shardIcon {
+                height: 18px;
+                vertical-align: middle;
+            }
 
+            @media (max-width: 520px) {
+                .shardIcon {
+                    height: 3.6vw;
+                }
+            }
         }
 
         .horseId {

@@ -16,6 +16,7 @@ interface Props {
   onConfirm: () => void;
   /** Item name to display */
   itemName: string;
+  break?: boolean;
 }
 
 const MultipleRecycleConfirmModal: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const MultipleRecycleConfirmModal: React.FC<Props> = ({
   onClose,
   onConfirm,
   itemName,
+  break: willBreak = false,
 }) => {
   return (
     <div className={styles.overlay}>
@@ -38,7 +40,11 @@ const MultipleRecycleConfirmModal: React.FC<Props> = ({
         </button>
 
         <div className={styles.text}>
-          Recycle <strong>{quantity}</strong> <em>{itemName}</em>{quantity > 1 ? 's' : ''}?
+          {willBreak ? (
+            <>Break <strong>{quantity}</strong> <em>{itemName}</em>{quantity > 1 ? 's' : ''} for Shards?</>
+          ) : (
+            <>Recycle <strong>{quantity}</strong> <em>{itemName}</em>{quantity > 1 ? 's' : ''}?</>
+          )}
         </div>
 
         <div className={styles.sliderContainer}>

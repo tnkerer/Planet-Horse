@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState, useMemo } from 'react'
 import Image from 'next/image'
 import styles from './styles.module.scss'
 import close from '@/assets/game/pop-up/fechar.png'
@@ -19,8 +19,44 @@ const RacesModal: React.FC<Props> = ({
   horses,
   reloadHorses,
 }) => {
-  const cost = totalHorses * 50
-  const fullText = `You can call me Tina. Would you like our Jockeys to run your ${totalHorses} IDLE horses for a ${cost} fee?`
+  // NEW: does this user own a Stable?
+  const [hasStable, setHasStable] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    const loadStable = async () => {
+      try {
+        const res = await fetch(`${process.env.API_URL}/stable/blockchain`, { credentials: 'include' })
+        const data = await res.json().catch(() => ([]))
+        if (!cancelled) {
+          const first = Array.isArray(data) && data.length ? data[0] : null
+          setHasStable(!!first)
+        }
+      } catch {
+        if (!cancelled) setHasStable(false)
+      }
+    }
+    void loadStable()
+    return () => { cancelled = true }
+  }, [])
+
+  // UPDATED: PHORSE cost becomes 0 if user has a Stable
+  const cost = hasStable ? 0 : totalHorses * 50
+
+  // SHARD cost across selected horses
+  const shardCost = useMemo(() => {
+    return (horses ?? []).reduce((sum: number, h: any) => {
+      const ownerCF = h?.staty.ownerCareerFactor
+      const horseCF = h?.staty.horseCareerFactor
+      return sum + Math.ceil(100 * ownerCF * horseCF)
+    }, 0)
+  }, [horses])
+
+  // UPDATED: dialog text reflects the (possibly zero) PHORSE cost
+  const fullText =
+    `Would you like to run your ` +
+    `${totalHorses} IDLE horses for a ${cost} PHORSE fee and ${Number(shardCost)} SHARDS?`
+
   const [displayedText, setDisplayedText] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -51,7 +87,7 @@ const RacesModal: React.FC<Props> = ({
     setErrorMessage(null)
 
     try {
-      const tokenIds = horses.map(h => h.id.toString())
+      const tokenIds = horses.map(h => (h.tokenId ?? h.id)?.toString())
 
       const res = await fetch(`${process.env.API_URL}/horses/start-multiple-race`, {
         method: 'PUT',
@@ -65,12 +101,11 @@ const RacesModal: React.FC<Props> = ({
         try {
           const err = await res.json()
           if (err?.message) msg = err.message
-        } catch { }
+        } catch { /* noop */ }
         throw new Error(msg)
       }
 
-      // Success
-      reloadHorses()
+      await reloadHorses()
       setVisible(false)
     } catch (e: any) {
       console.error(e)
@@ -97,19 +132,8 @@ const RacesModal: React.FC<Props> = ({
             <div className={styles.modalClose} onClick={() => setVisible(false)}>
               <Image src={close} alt="Close" width={30} height={30} />
             </div>
+          </div>
 
-           {/*  <div className={styles.dialogContainer}>
-              <Image src="/assets/dialog_box_2.png" alt="Dialog box" width={300} height={100} />
-              <div className={styles.dialogText}>
-                {displayedText}
-                <span className={styles.cursor}>|</span>
-              </div>
-            </div>
-
-            <button className={styles.buyButton} onClick={handleRun} disabled={loading} />
-           */}</div>
-
-          {/* Dialog + Character OUTSIDE modalContent */}
           <div className={styles.dialogWrapper}>
             <img src="/assets/characters/punter.png" alt="Punter" className={styles.character} />
 
@@ -119,11 +143,20 @@ const RacesModal: React.FC<Props> = ({
                 <span className={styles.cursor}>|</span>
               </div>
 
-              {textFinished && <div className={styles.answerBox}>
-                <div className={styles.answerOption} onClick={handleRun}>
-                  Yes
+              {/* Optional: small badge when free due to Stable */}
+              {textFinished && hasStable && (
+                <div className={styles.freeBadge}>
+                  Stable perk applied — PHORSE cost is 0
                 </div>
-              </div>}
+              )}
+
+              {textFinished && (
+                <div className={styles.answerBox}>
+                  <div className={styles.answerOption} onClick={handleRun}>
+                    Yes
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
