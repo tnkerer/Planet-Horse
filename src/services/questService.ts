@@ -32,7 +32,7 @@ export const QUEST_TYPE_LABELS: Record<QuestType, string> = {
 };
 
 export interface QuestReward {
-  type: 'phorse' | 'wron' | 'medals' | 'item';
+  type: 'phorse' | 'wron' | 'medals' | 'shards' | 'item';
   amount: number;
   itemName?: string;
 }

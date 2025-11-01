@@ -311,6 +311,10 @@ const ShopChestCard: React.FC = () => {
                           ? '/assets/items/medal_bag.webp'
                           : `/assets/items/${String(itemDefs[resultNames[0]]?.src || resultNames[0])}.webp`
                     }
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).onerror = null;
+                      (e.currentTarget as HTMLImageElement).src = `/assets/items/${String(itemDefs[resultNames[0]]?.src || resultNames[0])}.gif`;
+                    }}
                     alt={resultNames[0]}
                     className={styles.dropItem}
                   />
@@ -335,7 +339,13 @@ const ShopChestCard: React.FC = () => {
                       }
                       return (
                         <div className={styles.resultItem} key={i}>
-                          <img src={src} alt={name} className={styles.dropGridItem} />
+                          <img
+                            src={src}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).onerror = null;
+                              (e.currentTarget as HTMLImageElement).src = `/assets/items/${String(itemDefs[resultNames[0]]?.src || resultNames[0])}.gif`;
+                            }}
+                            alt={name} className={styles.dropGridItem} />
                           <div className={styles.itemLabel}>{name}</div>
                         </div>
                       )
