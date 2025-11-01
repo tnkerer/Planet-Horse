@@ -50,9 +50,16 @@ const QuestAdminPanel: React.FC<Props> = ({ onQuestCreated }) => {
 
   const checkAdminAccess = async () => {
     try {
-      await authFetch(`${process.env.API_URL || 'http://localhost:3001'}/quest/admin/panel`);
-      setIsAdmin(true);
-      setError('');
+      const res = await authFetch(`${process.env.API_URL || 'http://localhost:3001'}/quest/admin/panel`);
+      console.log(res.status)
+      if (res.status === 403) {
+        setIsAdmin(false)
+        setError('Access denied. Admin privileges required.');
+      } else if (res.status === 200) {
+        setIsAdmin(true);
+        console.log("Is Admin!")
+        setError('');
+      }
     } catch (err) {
       setIsAdmin(false);
       setError('Access denied. Admin privileges required.');
@@ -197,10 +204,10 @@ const QuestAdminPanel: React.FC<Props> = ({ onQuestCreated }) => {
         onClick={handleToggle}
         title="Quest Admin Panel (Admin Only)"
       >
-        {isOpen ? '✕' : '⚙'}
+        {(isOpen && isAdmin) ? '✕' : '⚙'}
       </button>
 
-      {isOpen && (
+      {isOpen && isAdmin && (
         <div className={styles.panelOverlay}>
           <div className={styles.panel}>
             <div className={styles.header}>
@@ -216,7 +223,7 @@ const QuestAdminPanel: React.FC<Props> = ({ onQuestCreated }) => {
               </div>
             )}
 
-            {isAdmin === false && (
+            {!isAdmin && (
               <div className={styles.accessMessage}>
                 <strong>Access Denied</strong>
                 <div className={styles.errorMessage}>
@@ -227,166 +234,166 @@ const QuestAdminPanel: React.FC<Props> = ({ onQuestCreated }) => {
               </div>
             )}
 
-            {isAdmin === true && (
+            {isAdmin && (
               <form onSubmit={handleSubmit} className={styles.form}>
-              <div className={styles.formGroup}>
-                <label>Quest ID</label>
-                <input
-                  type="number"
-                  value={questId}
-                  onChange={(e) => handleIdChange(e.target.value)}
-                  required
-                  min="1"
-                  max="29999"
-                  placeholder="1-9999 (SIMPLE), 10000-19999 (MEDIUM), 20000-29999 (ADVANCED)"
-                />
-                <small>Difficulty: <strong>{difficulty}</strong></small>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Title</label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                  placeholder="e.g., Win 3 Races"
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Description</label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                  placeholder="Describe the quest objective..."
-                  rows={3}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Quest Type</label>
-                <select
-                  value={questType}
-                  onChange={(e) => setQuestType(e.target.value as QuestType)}
-                  required
-                >
-                  {(Object.keys(QUEST_TYPE_LABELS) as QuestType[]).map((type) => (
-                    <option key={type} value={type}>
-                      {QUEST_TYPE_LABELS[type]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Quests to Complete</label>
-                <input
-                  type="number"
-                  value={questsToComplete}
-                  onChange={(e) => setQuestsToComplete(e.target.value)}
-                  required
-                  min="1"
-                  placeholder="How many times to complete"
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className={styles.formGroup}>
+                  <label>Quest ID</label>
                   <input
-                    type="checkbox"
-                    checked={isDailyQuest}
-                    onChange={(e) => setIsDailyQuest(e.target.checked)}
+                    type="number"
+                    value={questId}
+                    onChange={(e) => handleIdChange(e.target.value)}
+                    required
+                    min="1"
+                    max="29999"
+                    placeholder="1-9999 (SIMPLE), 10000-19999 (MEDIUM), 20000-29999 (ADVANCED)"
                   />
-                  Daily Quest (Resets at 00:00 UTC)
-                </label>
-              </div>
+                  <small>Difficulty: <strong>{difficulty}</strong></small>
+                </div>
 
-              <div className={styles.formGroup}>
-                <label>Horses to Unlock</label>
-                <input
-                  type="number"
-                  value={horsesToUnlock}
-                  onChange={(e) => setHorsesToUnlock(e.target.value)}
-                  required
-                  min="0"
-                  placeholder="Minimum horses required (0 = no restriction)"
-                />
-                <small>Quest will only show to users with this many horses or more</small>
-              </div>
+                <div className={styles.formGroup}>
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    placeholder="e.g., Win 3 Races"
+                  />
+                </div>
 
-              <div className={styles.formGroup}>
-                <label>Rewards</label>
-                {rewards.map((reward, index) => (
-                  <div key={index} className={styles.rewardRow}>
-                    <select
-                      value={reward.type}
-                      onChange={(e) => updateReward(index, 'type', e.target.value)}
-                      required
-                    >
-                      <option value="phorse">PHORSE</option>
-                      <option value="wron">WRON</option>
-                      <option value="medals">Medals</option>
-                      <option value="item">Item</option>
-                    </select>
+                <div className={styles.formGroup}>
+                  <label>Description</label>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    required
+                    placeholder="Describe the quest objective..."
+                    rows={3}
+                  />
+                </div>
 
+                <div className={styles.formGroup}>
+                  <label>Quest Type</label>
+                  <select
+                    value={questType}
+                    onChange={(e) => setQuestType(e.target.value as QuestType)}
+                    required
+                  >
+                    {(Object.keys(QUEST_TYPE_LABELS) as QuestType[]).map((type) => (
+                      <option key={type} value={type}>
+                        {QUEST_TYPE_LABELS[type]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Quests to Complete</label>
+                  <input
+                    type="number"
+                    value={questsToComplete}
+                    onChange={(e) => setQuestsToComplete(e.target.value)}
+                    required
+                    min="1"
+                    placeholder="How many times to complete"
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <input
-                      type="number"
-                      value={reward.amount}
-                      onChange={(e) => updateReward(index, 'amount', parseInt(e.target.value))}
-                      required
-                      min="1"
-                      placeholder="Amount"
+                      type="checkbox"
+                      checked={isDailyQuest}
+                      onChange={(e) => setIsDailyQuest(e.target.checked)}
                     />
+                    Daily Quest (Resets at 00:00 UTC)
+                  </label>
+                </div>
 
-                    {reward.type === 'item' && (
-                      <input
-                        type="text"
-                        value={reward.itemName || ''}
-                        onChange={(e) => updateReward(index, 'itemName', e.target.value)}
-                        placeholder="Item name"
+                <div className={styles.formGroup}>
+                  <label>Horses to Unlock</label>
+                  <input
+                    type="number"
+                    value={horsesToUnlock}
+                    onChange={(e) => setHorsesToUnlock(e.target.value)}
+                    required
+                    min="0"
+                    placeholder="Minimum horses required (0 = no restriction)"
+                  />
+                  <small>Quest will only show to users with this many horses or more</small>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Rewards</label>
+                  {rewards.map((reward, index) => (
+                    <div key={index} className={styles.rewardRow}>
+                      <select
+                        value={reward.type}
+                        onChange={(e) => updateReward(index, 'type', e.target.value)}
                         required
-                      />
-                    )}
-
-                    {rewards.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeReward(index)}
-                        className={styles.removeButton}
                       >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-                ))}
+                        <option value="phorse">PHORSE</option>
+                        <option value="wron">WRON</option>
+                        <option value="medals">Medals</option>
+                        <option value="item">Item</option>
+                      </select>
+
+                      <input
+                        type="number"
+                        value={reward.amount}
+                        onChange={(e) => updateReward(index, 'amount', parseInt(e.target.value))}
+                        required
+                        min="1"
+                        placeholder="Amount"
+                      />
+
+                      {reward.type === 'item' && (
+                        <input
+                          type="text"
+                          value={reward.itemName || ''}
+                          onChange={(e) => updateReward(index, 'itemName', e.target.value)}
+                          placeholder="Item name"
+                          required
+                        />
+                      )}
+
+                      {rewards.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeReward(index)}
+                          className={styles.removeButton}
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addReward}
+                    className={styles.addButton}
+                  >
+                    + Add Reward
+                  </button>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={styles.submitButton}
+                >
+                  {isSubmitting ? 'Creating...' : 'Create Quest'}
+                </button>
+
                 <button
                   type="button"
-                  onClick={addReward}
-                  className={styles.addButton}
+                  onClick={handleSync}
+                  disabled={isSyncing}
+                  className={styles.syncButton}
                 >
-                  + Add Reward
+                  {isSyncing ? 'Syncing...' : '🔄 Sync Seed Data to All Users'}
                 </button>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={styles.submitButton}
-              >
-                {isSubmitting ? 'Creating...' : 'Create Quest'}
-              </button>
-
-              <button
-                type="button"
-                onClick={handleSync}
-                disabled={isSyncing}
-                className={styles.syncButton}
-              >
-                {isSyncing ? 'Syncing...' : '🔄 Sync Seed Data to All Users'}
-              </button>
-            </form>
+              </form>
             )}
           </div>
         </div>

@@ -85,14 +85,14 @@ export interface ClaimResponse {
 }
 
 export class QuestService {
-  private baseURL: string;
+  private readonly baseURL: string;
 
   constructor(authFetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>) {
     this.baseURL = process.env.API_URL || 'http://localhost:3001';
     this.authFetch = authFetch;
   }
 
-  private authFetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+  private readonly authFetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
 
   async listQuests(): Promise<UserQuestProgress[]> {
     const response = await this.authFetch(`${this.baseURL}/quest/list`);

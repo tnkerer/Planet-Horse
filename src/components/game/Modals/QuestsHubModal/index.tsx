@@ -6,6 +6,7 @@ import { useAuthFetch } from '@/utils/hooks/use-auth-fetch';
 import { QuestService, UserQuestProgress, QuestDifficulty } from '@/services/questService';
 import QuestAdminPanel from '../QuestAdminPanel';
 import ErrorModal from '../ErrorModal';
+import { useUser } from '@/contexts/UserContext';
 
 type Props = {
   status: boolean;
@@ -18,6 +19,7 @@ const SCROLL_THRESHOLD = 5;
 const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
   const authFetch = useAuthFetch();
   const questService = new QuestService(authFetch);
+  const { updateBalance } = useUser();
 
   const [allQuests, setAllQuests] = useState<UserQuestProgress[]>([]);
   const [visibleQuests, setVisibleQuests] = useState<UserQuestProgress[]>([]);
@@ -164,7 +166,9 @@ const QuestsHubModal: React.FC<Props> = ({ status, setVisible }) => {
     } finally {
       setClaiming(null);
     }
+    updateBalance();
   };
+
 
   const handleCheckin = async () => {
     if (!checkinStatus?.canCheckin || isCheckingIn) return;
