@@ -257,7 +257,7 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                   let imgSrc: string | null = null
 
                   if (mode === 'finalize') {
-                    if (i === 1) imgSrc = '/assets/items/medal_bag.webp'
+                    if (i === 1) imgSrc = '/assets/icons/medal_small.gif'
                     else if (i === 3) imgSrc = '/assets/items/metal.webp'
                     else if (i === 4 && toUpgrade) imgSrc = `/assets/items/${toUpgrade.src}.webp`
                     else if (i === 5) imgSrc = '/assets/items/leather.webp'
