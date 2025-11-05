@@ -212,84 +212,90 @@
 
   }
 
-  .countCurrency {
-    position: relative; // for the dropdown to anchor
+  .currencyContainer {
+    /* Lay children in a horizontal row */
+    display: flex;
+    flex-direction: row;
 
-    .currencyButton {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: 2px solid #7d4d45;
-      background-color: #7d4d45;
-      color: #fff;
-      cursor: pointer;
-      font-family: 'SpaceHorse';
-      font-size: 18px;
+    .countCurrency {
+      position: relative; // for the dropdown to anchor
 
-      span {
-        background: transparent;
-        margin: 0;
-        padding: 0;
-        color: #fff;
-      }
-
-      &:hover {
-        filter: brightness(0.95);
-      }
-    }
-
-    .chevDown,
-    .chevUp {
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-    }
-
-    .chevDown {
-      border-top: 7px solid #fff;
-    }
-
-    .chevUp {
-      border-bottom: 7px solid #fff;
-    }
-
-    .currencyDropdown {
-      position: absolute;
-      right: 0;
-      top: calc(100% + 8px);
-      background: #582c25;
-      border: 2px solid #7d4d45;
-      border-radius: 8px;
-      padding: 10px;
-      min-width: 220px;
-      z-index: 50;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-    }
-
-    .currencyRow {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 4px;
-      cursor: pointer;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.08);
+      .currencyButton {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
         border-radius: 6px;
-      }
-
-      span {
-        background: #582c25;
-        border-radius: 5px;
-        padding: 2px 6px;
-        margin: 0;
+        border: 2px solid #7d4d45;
+        background-color: #7d4d45;
         color: #fff;
+        cursor: pointer;
         font-family: 'SpaceHorse';
         font-size: 18px;
+
+        span {
+          background: transparent;
+          margin: 0;
+          padding: 0;
+          color: #fff;
+        }
+
+        &:hover {
+          filter: brightness(0.95);
+        }
+      }
+
+      .chevDown,
+      .chevUp {
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+      }
+
+      .chevDown {
+        border-top: 7px solid #fff;
+      }
+
+      .chevUp {
+        border-bottom: 7px solid #fff;
+      }
+
+      .currencyDropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background: #582c25;
+        border: 2px solid #7d4d45;
+        border-radius: 8px;
+        padding: 10px;
+        min-width: 220px;
+        z-index: 50;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      }
+
+      .currencyRow {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 4px;
+        cursor: pointer;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 6px;
+        }
+
+        span {
+          background: #582c25;
+          border-radius: 5px;
+          padding: 2px 6px;
+          margin: 0;
+          color: #fff;
+          font-family: 'SpaceHorse';
+          font-size: 18px;
+        }
       }
     }
   }
