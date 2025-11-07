@@ -60,7 +60,8 @@ export function useHorseList(orderBy: OrderByType = 'level') {
           generation: String(h.gen),
           stable: String(h.stableid),
           horseCareerFactor: h.horseCareerFactor,
-          ownerCareerFactor: h.ownerCareerFactor
+          ownerCareerFactor: h.ownerCareerFactor,
+          legacy: h.legacy
         },
         items: h.equipments,
       }));

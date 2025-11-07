@@ -35,6 +35,7 @@ interface BackendHorse {
   updatedAt: string;
   nickname: string | null;
   foodUsed: number;
+  legacy: boolean;
   gen: number;
   lastBreeding: string;
   currentBreeds: number;
@@ -83,6 +84,7 @@ export interface Horse {
     stable: string | null;
     horseCareerFactor: number;
     ownerCareerFactor: number;
+    legacy: boolean;
   };
   items: Array<{
     id: string;
@@ -201,7 +203,8 @@ const BreedFarmInner: React.FC<Props> = ({ changeView }) => {
           generation: String(h.gen),
           stable: h.stableid,
           horseCareerFactor: h.horseCareerFactor,
-          ownerCareerFactor: h.ownerCareerFactor
+          ownerCareerFactor: h.ownerCareerFactor,
+          legacy: h.legacy
         },
         items: h.equipments,
       }));

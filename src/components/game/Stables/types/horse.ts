@@ -19,6 +19,7 @@ export interface BackendHorse {
   nickname: string | null;
   foodUsed: number;
   gen: number;
+  legacy: boolean;
   lastBreeding: string;
   currentBreeds: number;
   maxBreeds: number;
@@ -67,6 +68,7 @@ export interface Horse {
     stable: string | null;
     horseCareerFactor: number;
     ownerCareerFactor: number;
+    legacy: boolean;
   };
   items: BackendHorse['equipments'];
 }

@@ -13,7 +13,7 @@ import { items as itemsConst } from '@/utils/constants/items';
 import { Horse } from '@/domain/models/Horse';
 import ErrorModal from '../ErrorModal';
 import InfoModal from '../InfoModal';
-import UpgradeResults, { Upgrades } from '../UpgradeResults';
+import UpgradeResults, { Upgrades, AscendResult } from '../UpgradeResults';
 import {
   BrowserProvider,
   Contract
@@ -41,6 +41,10 @@ interface ServerItem {
   quantity: number;
   usesLeft: number;
 }
+
+type ProgressResult =
+  | (Upgrades & { kind: 'levelup' })
+  | (AscendResult & { kind: 'ascend' });
 
 export interface DisplayItem {
   id: number | string;       // we’ll give on-chain items string IDs
@@ -88,7 +92,7 @@ const ItemBag: React.FC<Props> = ({
 
   const [foodUsed, setFoodUsed] = useState<number>(horse?.profile.food_used ?? 0);
 
-  const [upgradesData, setUpgradesData] = useState<Upgrades | null>(null);
+  const [upgradesData, setUpgradesData] = useState<ProgressResult | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   const { updateBalance } = useUser();
@@ -630,7 +634,7 @@ const ItemBag: React.FC<Props> = ({
       }
 
       const data = (await res.json()) as Upgrades;
-      setUpgradesData(data);
+      setUpgradesData({ kind: 'levelup', ...data });
       setShowUpgrade(true);
 
       // refresh UI bits
@@ -1185,21 +1189,17 @@ const ItemBag: React.FC<Props> = ({
               }}
             />
           )}
-
-          {showUpgrade && upgradesData && (
+          {showUpgrade && upgradesData && horse && (
             <UpgradeResults
               horse={horse}
-              upgrades={upgradesData}
+              result={upgradesData}
               onClose={async () => {
                 setShowUpgrade(false);
                 setUpgradesData(null);
-                try {
-                  if (reloadHorses) await reloadHorses();
-                } catch (e) { console.error(e); }
+                try { if (reloadHorses) await reloadHorses(); } catch (e) { console.error(e); }
               }}
             />
           )}
-
         </div>
       </div>
     </div>

@@ -8,12 +8,13 @@ import ModalRaceStart from '../Modals/RaceStart';
 import RecoveryCenter from '../Modals/RecoveryCenter';
 import ModalReward from '../Modals/Reward';
 import ItemBag from '../Modals/ItemBag';
-import UpgradeResults, { Upgrades } from '../Modals/UpgradeResults';
+import UpgradeResults, { Upgrades, AscendResult } from '../Modals/UpgradeResults';
 import ConfirmModal from '../Modals/ConfirmModal';
 import ErrorModal from '../Modals/ErrorModal';
 import InfoModal from '../Modals/InfoModal';
 import { itemModifiers, items } from '@/utils/constants/items'
 import NicknameModal from '../Modals/NicknameModal';
+
 
 interface Props {
   horse: Horse;
@@ -68,6 +69,8 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   // Hold server‐returned “upgrades” data
   const [upgradesData, setUpgradesData] = useState<Upgrades | null>(null);
+
+  const [progressResult, setProgressResult] = useState<(Upgrades & { kind: 'levelup' }) | (AscendResult & { kind: 'ascend' }) | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   // Loading & error/info for API calls
@@ -77,6 +80,49 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   // Unequip‐item dialog
   const [unequipIndex, setUnequipIndex] = useState<number | null>(null);
+
+  const [showAscendConfirm, setShowAscendConfirm] = useState(false);
+  const [ascending, setAscending] = useState(false);
+
+
+  // handler to open confirm
+  const handleAscendClick = () => {
+    setShowAscendConfirm(true);
+  };
+
+  // actually call the API to ascend
+  const handleDoAscend = async () => {
+    setShowAscendConfirm(false);
+    setAscending(true);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch(
+        `${process.env.API_URL}/horses/${horse.id}/ascend`,
+        { method: 'PUT', credentials: 'include' }
+      );
+
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try {
+          const errJson = await res.json();
+          if (errJson?.message) msg = errJson.message;
+        } catch { }
+        throw new Error(msg);
+      }
+
+      setInfoMessage('Horse ascended successfully!');
+
+      const data = (await res.json()) as AscendResult;
+      setProgressResult({ kind: 'ascend', ...data });
+      setShowUpgrade(true);
+      await reloadHorses();
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Ascend failed');
+    } finally {
+      setAscending(false);
+    }
+  };
 
   const slug = horse.profile.type_horse_slug;
   const labelColor = rarityColorMap[slug] ?? defaultColor;
@@ -161,7 +207,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
       }
 
       const data = (await res.json()) as Upgrades;
-      setUpgradesData(data);
+      setProgressResult({ kind: 'levelup', ...data });
       setShowUpgrade(true);
     } catch (err: any) {
       setErrorMessage(err.message || 'Level up failed');
@@ -173,7 +219,7 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   // When UpgradeResults is closed, clear it and reload horses:
   const handleUpgradeClose = () => {
     setShowUpgrade(false);
-    setUpgradesData(null);
+    setProgressResult(null);
     reloadHorses().catch(console.error);
   };
 
@@ -195,6 +241,8 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
   //     – Otherwise display `empty.webp`.
   //
   const levelNum = Number(horse.staty.level);
+
+  const canAscend = !horse.staty.legacy && Number(horse.staty.level) >= 15;
 
   function slotState(index: number): 'locked' | 'unlocked' {
     if (levelNum < 2) return 'locked';
@@ -291,11 +339,10 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
 
   return (
     <>
-      {/* ─────────── 1) UpgradeResults Modal ─────────── */}
-      {showUpgrade && upgradesData && (
+      {showUpgrade && progressResult && (
         <UpgradeResults
           horse={horse}
-          upgrades={upgradesData}
+          result={progressResult}
           onClose={handleUpgradeClose}
         />
       )}
@@ -325,6 +372,20 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
           text={`Remove ${equippedItems[unequipIndex].name} from horse #${horse.id}?`}
           onClose={() => setUnequipIndex(null)}
           onConfirm={handleDoUnequip}
+        />
+      )}
+      {showAscendConfirm && (
+        <ConfirmModal
+          text={
+            <span>
+              Ascend this horse?<br />
+              <span style={{ color: '#E21C21', fontWeight: 700 }}>
+                HORSE LEVEL WILL RESET TO ONE!</span> Also, Career factor will be set to 0,
+              Race History will be cleared, and all items will be unequipped.
+            </span>
+          }
+          onClose={() => setShowAscendConfirm(false)}
+          onConfirm={handleDoAscend}
         />
       )}
 
@@ -391,8 +452,24 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
       {/* ─────────── 7) Main Horse Card with Level‐Up Button ─────────── */}
       <div className={`${styles.singleHorse} type-${horse.profile.type_horse_slug}`}>
         <div className={styles.maskCard}>
-          <div className={styles.horseId}>{horse.id}</div>
+          <div
+            className={styles.horseTopRow}
+            data-legacy={horse.staty.legacy ? 'true' : 'false'}
+          >
+            <div className={styles.horseId}>{horse.id}</div>
 
+            {horse.staty.legacy && (
+              <div className={styles.legacyBadge} aria-label="Legacy Horse">
+                <span className={styles.legacyWord}>
+                  {['L', 'E', 'G', 'A', 'C', 'Y'].map((ch, i) => (
+                    <span className={styles.legacyLetter} key={i} style={{ ['--i' as any]: i }}>
+                      {ch}
+                    </span>
+                  ))}
+                </span>
+              </div>
+            )}
+          </div>
           <div className={styles.horseGif}>
             {horse.staty.status === 'BREEDING' ? (
               <img
@@ -647,12 +724,35 @@ const SingleHorse: React.FC<Props> = ({ horse, reloadHorses }) => {
             </div>
           </div>
 
-          {/* ─────────── LEVEL UP BUTTON (only if upgradable) ─────────── */}
-          {horse.staty.upgradable && (
-            <div className={styles.levelUpButton} onClick={handleLevelUpClick}>
-              <img src="/assets/game/horses/level-up.gif" alt="Level Up" />
+          {/* ─────────── LEVEL ACTIONS (Level Up + conditional Ascend) ─────────── */}
+          {(horse.staty.upgradable || canAscend) && (
+            <div className={styles.levelActions}>
+              {canAscend && (
+                <button
+                  className={`${styles.levelActionBtn} ${styles.ascendBtn}`}
+                  onClick={handleAscendClick}
+                  disabled={upgrading || ascending}
+                  aria-label="Ascend"
+                  type="button"
+                >
+                  <img src="/assets/game/horses/ascend.gif" alt="Ascend" />
+                </button>
+              )}
+
+              {horse.staty.upgradable && (
+                <button
+                  className={`${styles.levelActionBtn} ${styles.levelUpBtn}`}
+                  onClick={handleLevelUpClick}
+                  disabled={upgrading || ascending}
+                  aria-label="Level Up"
+                  type="button"
+                >
+                  <img src="/assets/game/horses/level-up.gif" alt="Level Up" />
+                </button>
+              )}
             </div>
           )}
+
         </div>
       </div>
     </>

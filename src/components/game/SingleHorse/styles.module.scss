@@ -502,20 +502,68 @@
             }
         }
 
-        .horseId {
+        /* Position the row where your old horseId used to be */
+        .horseTopRow {
             position: absolute;
             top: 0.1vw;
             right: 10vw;
+            /* keep same anchor as your old .horseId */
+            display: inline-flex;
+            align-items: center;
+            /* vertical centering of ID and badge */
+            gap: clamp(6px, 0.8vw, 16px);
+            z-index: 4;
+            pointer-events: none;
+            /* the row itself doesn’t intercept clicks */
+        }
+
+        .horseTopRow[data-legacy="true"] {
+            right: 4vw;
+
+            @media screen and (max-width: 920px) {
+                right: 10vw;
+            }
+
+            @media screen and (max-width: 680px) {
+                right: 6vw;
+            }
+        }
+
+        /* Let the ID remain styled as before, but remove its absolute positioning */
+        .horseId {
+            /* remove: position, top, right from the old rule */
             font-family: 'SpaceHorse';
             font-size: 1.2vw;
-            color: #7D6B55; // mesmo tom usado em horseItemDescription
+            color: #7D6B55;
             line-height: 1.4;
 
             @media screen and (max-width: 920px) {
-                top: 0.4vw;
-                right: 20vw;
                 font-size: 2.4vw;
             }
+        }
+
+        .legacyBadge {
+            /* Position where your old level-up button was */
+            z-index: 3;
+
+            /* Sizing knobs */
+            --scale: clamp(0.9, 1.2vw, 1.6);
+            /* overall scale */
+            // --gap: clamp(2px, 0.35vw, 8px);
+
+            /* Color palette (tweak freely) */
+            --fill-top: #ffe77a;
+            /* light highlight */
+            --fill-bot: #ffc233;
+            /* warm base */
+            --outline-1: #000000;
+            /* outer stroke */
+            --outline-2: #2b1b00;
+            /* mid stroke (brownish) */
+            --outline-3: #fff4b3;
+            /* inner rim-light */
+            --shadow: rgba(0, 0, 0, 1);
+
         }
     }
 }
@@ -543,4 +591,131 @@
     &:hover img {
         transform: scale(1.1);
     }
+}
+
+/* ─────────────────────────────────────────────────────────
+   Retro Platformer "LEGACY" Badge (SMW-inspired)
+   ─ Chunky rounded text, layered outline, subtle bevel
+   ─ Per-letter hop (staggered), motion-safe fallback
+   ───────────────────────────────────────────────────────── */
+
+.legacyWord {
+    display: inline-flex;
+    gap: var(--gap);
+    align-items: center;
+}
+
+/* Per-letter hop animation */
+@keyframes legacyHop {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    40% {
+        transform: translateY(-10%) rotate(-0.4deg);
+    }
+
+    60% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+.legacyLetter {
+    /* Size & type feel */
+    font-family: 'SpaceHorse', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    font-size: 12px;
+    line-height: 1;
+
+    /* SMW-like rounded, candy fill */
+    background: linear-gradient(180deg, var(--fill-top) 0%, var(--fill-bot) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+
+
+    /* Gentle drop to pop off the backplate */
+    filter: drop-shadow(0 1px 0 var(--shadow)) drop-shadow(0 4px 6px rgba(0, 0, 0, .25));
+    transform-origin: 50% 100%;
+
+    /* Hop (staggered via CSS var --i) */
+    animation: legacyHop 1.35s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.08s);
+
+    @media screen and (max-width: 920px) {
+        font-size: 8px;
+    }
+
+}
+
+/* Slight squish on hover/tap for extra juice (optional) */
+.legacyBadge:hover .legacyLetter {
+    transition: transform 120ms ease;
+    transform: translateY(-6%) scale(1.02);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .legacyLetter {
+        animation: none;
+    }
+}
+
+/* Column wrapper for Level Up + Ascend */
+.levelActions {
+    position: absolute;
+    top: 1vw;
+    left: 1vw;
+    display: flex;
+    flex-direction: row;
+    // gap: 0.5vw;
+    z-index: 3;
+    pointer-events: auto; // clickable
+    user-select: none;
+
+    @media screen and (max-width: 920px) {
+        top: -1vw;
+        left: 0vw;
+        // gap: 1.2vw;
+    }
+}
+
+/* Shared look for action GIF buttons */
+.levelActionBtn {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    // width: 8vw;  /* same width you used for level up */
+    height: auto;
+    transition: transform 0.3s;
+    display: inline-block;
+
+    &:hover {
+        transform: scale(1.15);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        transform: none;
+        opacity: 0.85;
+    }
+
+    img {
+        width: 80px;
+        height: 80px;
+        display: block;
+        pointer-events: none; // keep clicks on the button not the image
+
+        @media screen and (max-width: 920px) {
+            width: 64px;
+            height: 64px;
+        }
+    }
+
+
 }

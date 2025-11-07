@@ -39,6 +39,7 @@ export interface Horse {
     stable: string | null;
     horseCareerFactor: number;
     ownerCareerFactor: number;
+    legacy: boolean;
   };
   // ← now “items” is literally an array of full Item objects
   items: Item[];

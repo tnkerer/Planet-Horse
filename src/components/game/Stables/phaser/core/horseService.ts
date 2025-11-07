@@ -20,6 +20,7 @@ type BackendHorse = {
   currentSpeed: number;
   currentEnergy: number;
   maxEnergy: number;
+  legacy: boolean;
   gen: number;
   stableid: string | null;
   equipments: any[];
@@ -264,7 +265,8 @@ function mapBackendHorseToGame(h: BackendHorse): Horse {
       generation: String(h.gen),
       stable: String(h.stableid),
       horseCareerFactor: h.horseCareerFactor,
-      ownerCareerFactor: h.ownerCareerFactor
+      ownerCareerFactor: h.ownerCareerFactor,
+      legacy: h.legacy
     },
     items: h.equipments,
   };
