@@ -42,7 +42,7 @@ const ConfirmMultipleMint: React.FC<ConfirmMultipleMintProps> = ({
         <div className={styles.text}>
           Mint <strong>{quantity}</strong> <em>{itemName}</em>
           {quantity > 1 ? 's' : ''}? It will cost{' '}
-          <span className={styles.cost}>{(0.2 * quantity).toFixed(2)} WRON</span>.
+          <span className={styles.cost}>{(0.1 * quantity).toFixed(2)} WRON</span>.
         </div>
 
         {/* Quantity slider */}
