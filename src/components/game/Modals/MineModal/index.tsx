@@ -474,11 +474,6 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                         );
                       })()}
                     </div>
-                    {interfaceData[toUpgrade.name]?.willBreak && (
-                      <div style={{ color: 'red' }}>
-                        Warning: This item <b>will break</b> on failure!
-                      </div>
-                    )}
                   </div>
                 ) : mode === 'craft' ? (
                   <div>
