@@ -1,3 +1,9 @@
+@property --clover-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 .modalRecovery {
   &.modalActive {
     display: block;
@@ -183,22 +189,63 @@
     }
 
     .itemCount {
-  position: absolute;
-  top: 4%;
-  right: 4%;
-  font-family: 'SpaceHorse';
-  font-size: 0.75rem;
-  color: #fff;
-  // background-color: rgba(0, 0, 0, 0.6);
-  padding: 2px 6px;
-  border-radius: 6px;
-  text-shadow: 1px 1px 2px #000;
-  z-index: 3;
+      position: absolute;
+      top: 4%;
+      right: 4%;
+      font-family: 'SpaceHorse';
+      font-size: 0.75rem;
+      color: #fff;
+      // background-color: rgba(0, 0, 0, 0.6);
+      padding: 2px 6px;
+      border-radius: 6px;
+      text-shadow: 1px 1px 2px #000;
+      z-index: 3;
 
-  @media (max-width: 700px) {
-    font-size: 2.5vw;
-  }
-}
+      @media (max-width: 700px) {
+        font-size: 2.5vw;
+      }
+    }
+
+    .cloverHalo {
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      padding: 3px;
+      box-sizing: border-box;
+
+      /* animated angle */
+      --clover-angle: 0deg;
+
+      background: conic-gradient(from var(--clover-angle),
+          #ff0000,
+          #ff7f00,
+          #ffff00,
+          #00ff00,
+          #0000ff,
+          #4b0082,
+          #8b00ff,
+          #ff0000);
+
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+
+      animation: cloverHueSpin 1.2s linear infinite;
+      pointer-events: none;
+      z-index: 0; // behind clover image, visible as border
+    }
+
+    @keyframes cloverHueSpin {
+      from {
+        --clover-angle: 0deg;
+      }
+
+      to {
+        --clover-angle: 360deg;
+      }
+    }
 
   }
 }

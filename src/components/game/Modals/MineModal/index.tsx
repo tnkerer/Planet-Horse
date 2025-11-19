@@ -35,6 +35,7 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
   const [mode, setMode] = useState<'default' | 'upgrade' | 'finalize' | 'craft' | 'craftSelect'>('default')
   const [serverItems, setServerItems] = useState<ServerItem[]>([])
   const { medals, updateBalance } = useUser();
+  const [useClover, setUseClover] = useState(false);
 
   const [craftTarget, setCraftTarget] = useState<string | null>(null)
 
@@ -66,6 +67,12 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
 
     return () => clearInterval(timer);
   }, [status, targetText]);
+
+  useEffect(() => {
+    if (useClover && getItemQty('Clover') <= 0) {
+      setUseClover(false);
+    }
+  }, [serverItems, useClover]);
 
   const fetchItems = useCallback(() => {
     if (!status) return
@@ -100,6 +107,7 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
 
   const handleItem = (item: any) => {
     setToUpgrade(item)
+    setUseClover(false)
     setMode('finalize')
     setItemBagOpen(false)
     fetchItems()
@@ -113,7 +121,10 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: toUpgrade.name }),
+        body: JSON.stringify({
+          name: toUpgrade.name,
+          useClover,              // ← NEW
+        }),
       });
 
       if (!res.ok) {
@@ -124,32 +135,32 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
       const data = await res.json();
 
       if (data?.item?.success) {
-        setInfoMessage('Item upgraded successfully!');                         // ← use InfoModal
+        setInfoMessage('Item upgraded successfully!');
       } else if (!data?.item?.success && data?.item?.broken) {
         setErrorMessage('❌ The item broke during the upgrade!');
       } else {
         setErrorMessage('Upgrade failed, but your item is safe.');
       }
 
-      // Refresh inventory/state but DO NOT reset mode immediately if showing info
       fetchItems();
       updateBalance();
 
-      // If success info is shown, reset after user closes it
       if (data?.item?.success) {
         setPostInfoAction(() => () => {
           setToUpgrade(null);
+          setUseClover(false);    // ← reset after success
           setMode('default');
           typeNarration('Hi, I am Master Artificer Bruno! What would you like to do today?');
         });
       } else {
-        // keep user in finalize/upgrade context on failure so they can try again
+        // keep context so player can try again
       }
     } catch (err: any) {
       console.error(err);
       setErrorMessage(err.message || 'Unexpected upgrade error.');
     }
   };
+
 
   // Generic craft handler (uses craftTarget)
   const handleCraft = async () => {
@@ -170,7 +181,7 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
 
       if (!res.ok) {
         let msg = `HTTP ${res.status}`;
-        try { const j = await res.json(); if (j?.message) msg = j.message; } catch {}
+        try { const j = await res.json(); if (j?.message) msg = j.message; } catch { }
         throw new Error(msg);
       }
 
@@ -242,7 +253,16 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
         <div className={styles.modalFull}>
           {/* Main centered content with background */}
           <div className={styles.modalContent}>
-            <div className={styles.modalClose} onClick={() => setVisible(false)}>
+            <div
+              className={styles.modalClose}
+              onClick={() => {
+                setVisible(false)
+                setMode('default')
+                setToUpgrade(null)
+                setCraftTarget(null)
+                setUseClover(false)
+              }}
+            >
               <Image src={close} alt="Close" width={30} height={30} />
             </div>
 
@@ -261,7 +281,11 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                     else if (i === 3) imgSrc = '/assets/items/metal.webp'
                     else if (i === 4 && toUpgrade) imgSrc = `/assets/items/${toUpgrade.src}.webp`
                     else if (i === 5) imgSrc = '/assets/items/leather.webp'
-                    else if (i === 7) imgSrc = '/assets/items/grey-clover.png'
+                    else if (i === 7) {
+                      imgSrc = useClover
+                        ? '/assets/items/clover.webp'       // ← colored clover when active
+                        : '/assets/items/grey-clover.png';  // ← greyed clover when inactive
+                    }
                   } else if (mode === 'craft' || mode === 'craftSelect') {
                     const recipe = craftTarget ? craftReq[craftTarget] || {} : {}
                     const mats = Object.keys(recipe).filter(k => k !== 'phorse' && k !== 'medals')
@@ -327,9 +351,19 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                           ? () => setCraftingBagOpen(true)
                           : (mode === 'upgrade' && i === 4)
                             ? () => setItemBagOpen(true)
-                            : undefined
+                            : (mode === 'finalize' && i === 7 && getItemQty('Clover') > 0)
+                              ? () => setUseClover(prev => !prev)   // ← toggle Clover
+                              : undefined
                       }
-                      style={{ cursor: ((mode === 'craftSelect' && i === 4) || (mode === 'upgrade' && i === 4)) ? 'pointer' : 'default' }}
+                      style={{
+                        cursor: (
+                          (mode === 'craftSelect' && i === 4) ||
+                          (mode === 'upgrade' && i === 4) ||
+                          (mode === 'finalize' && i === 7 && getItemQty('Clover') > 0)
+                        )
+                          ? 'pointer'
+                          : 'default'
+                      }}
                     >
                       {showSlot && (
                         <>
@@ -344,7 +378,7 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                                 onError={(e) => {
                                   if (i === 4 && toUpgrade) {
                                     (e.currentTarget as HTMLImageElement).onerror = null
-                                    ;(e.currentTarget as HTMLImageElement).src = `/assets/items/${toUpgrade.src}.gif`
+                                      ; (e.currentTarget as HTMLImageElement).src = `/assets/items/${toUpgrade.src}.gif`
                                   }
                                 }}
                               />
@@ -377,6 +411,18 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                                   })()}
                                 </span>
                               )}
+                              {/* NEW: Clover active halo + Clover quantity */}
+                              {mode === 'finalize' && i === 7 && useClover && (
+                                <div className={styles.cloverHalo} />
+                              )}
+                              {mode === 'finalize' && i === 7 && (
+                                <span
+                                  className={styles.itemCount}
+                                  style={{ color: getItemQty('Clover') > 0 ? '#fff' : '#ff3d3d' }}
+                                >
+                                  {getItemQty('Clover')}
+                                </span>
+                              )}
                             </div>
                           )}
 
@@ -405,7 +451,28 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
                 {mode === 'finalize' && toUpgrade ? (
                   <div>
                     <div>
-                      This upgrade will cost <b>{interfaceData[toUpgrade.name]?.phorse} PHORSE</b> and the items described above. Success chance: <b>{interfaceData[toUpgrade.name]?.success}%</b>. Do you want to proceed with it?
+                      {(() => {
+                        const baseSuccess = interfaceData[toUpgrade.name]?.success ?? 0;
+                        const effectiveSuccess = Math.min(baseSuccess + (useClover ? 10 : 0), 100);
+
+                        return (
+                          <div>
+                            <div>
+                              This upgrade will cost <b>{interfaceData[toUpgrade.name]?.phorse} PHORSE</b> and the items described above.{' '}
+                              Success chance: <b>{effectiveSuccess}%</b>
+                              {useClover && (
+                                <span> (includes +10% from Clover)</span>
+                              )}
+                              . Do you want to proceed with it?
+                            </div>
+                            {interfaceData[toUpgrade.name]?.willBreak && (
+                              <div style={{ color: 'red' }}>
+                                Warning: This item <b>will break</b> on failure!
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                     {interfaceData[toUpgrade.name]?.willBreak && (
                       <div style={{ color: 'red' }}>
@@ -494,24 +561,37 @@ const MineModal: React.FC<Props> = ({ setVisible, status }) => {
 
               {mode === 'finalize' && (
                 <div className={styles.answerBox}>
-                  <div className={styles.answerOption} onClick={handleUpgrade}>
+                  <div
+                    className={styles.answerOption}
+                    onClick={handleUpgrade}
+                  >
                     Upgrade!
                   </div>
-                  <div className={styles.answerOption} onClick={() => {
-                    setToUpgrade(null)
-                    setMode('upgrade')
-                  }}>
+
+                  <div
+                    className={styles.answerOption}
+                    onClick={() => {
+                      setToUpgrade(null)
+                      setUseClover(false)
+                      setMode('upgrade')
+                    }}
+                  >
                     Choose other
                   </div>
-                  <div className={styles.answerOption}
+
+                  <div
+                    className={styles.answerOption}
                     onClick={() => {
                       setMode('default')
+                      setUseClover(false)
                       typeNarration('Hi, I am Master Artificer Bruno! What would you like to do today?')
-                    }}>
+                    }}
+                  >
                     Back
                   </div>
                 </div>
               )}
+
             </div>
           </div>
         </div>
