@@ -208,6 +208,36 @@
           justify-items: center;
         }
       }
+
+      .derbyButton {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        background: url('/assets/icons/derby.webp') no-repeat center/contain;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+
+        &:hover {
+          background-image: url('/assets/icons/derby_hover.webp');
+        }
+
+        .notificationBadge {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+        @media (max-width: 700px) {
+          width: 68px;
+          height: 68px;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          grid-gap: 16px;
+          justify-items: center;
+        }
+      }
     }
 
   }
@@ -333,6 +363,7 @@
     .orderBy {
       display: flex;
       align-items: center;
+      gap: 5px;
       font-family: 'SpaceHorse';
       color: #ffffff;
       margin: 0 20px; // spacing between timer and count
@@ -347,6 +378,7 @@
         font-family: 'SpaceHorse';
         padding: 6px 12px;
         font-size: 16px;
+        height: 38px;
         border: 2px solid #7d4d45;
         border-radius: 4px;
         background-color: #be9c7f;
@@ -362,6 +394,32 @@
       }
     }
 
+    .orderRefreshButton {
+      appearance: none;
+      font-family: 'SpaceHorse';
+      padding: 6px 12px;
+      font-size: 16px;
+      height: 38px;
+      border: 2px solid #7d4d45;
+      border-radius: 4px;
+      background-color: #be9c7f;
+      color: #7d4d45;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover,
+      &:focus {
+        background-color: darken(#be9c7f, 5%);
+        outline: none;
+      }
+
+      @media (max-width: 590px) {
+        font-size: 12px;
+        padding: 4px 8px;
+        height: 28px;
+      }
+    }
+
     /* for very small screens you already have the 560px query; if you want to tweak dropdown there you can: */
     @media (max-width: 590px) {
       .orderBy {
@@ -370,8 +428,9 @@
         }
 
         select {
-          font-size: 14px;
+          font-size: 12px;
           padding: 4px 8px;
+          height: 28px;
         }
       }
     }

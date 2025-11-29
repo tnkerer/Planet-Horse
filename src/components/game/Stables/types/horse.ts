@@ -37,6 +37,7 @@ export interface BackendHorse {
   }>;
   horseCareerFactor: number;
   ownerCareerFactor: number;
+  mmr: number;
 }
 
 // Normalized shape used in UI/Phaser
@@ -69,6 +70,7 @@ export interface Horse {
     horseCareerFactor: number;
     ownerCareerFactor: number;
     legacy: boolean;
+    mmr: number;
   };
   items: BackendHorse['equipments'];
 }

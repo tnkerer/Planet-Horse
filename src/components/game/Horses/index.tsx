@@ -10,6 +10,7 @@ import { useUser } from '@/contexts/UserContext';
 import InfoModal from '../Modals/InfoModal';
 import RacesModal from '../Modals/RacesModal';
 import MineModal from '../Modals/MineModal';
+import DerbyModal from '../Modals/DerbyModal';
 import { useHorseList, OrderByType } from '../Stables/hooks/useHorseList';
 import QuestsHubModal from '../Modals/QuestsHubModal';
 import BalanceSwitcher, { BalanceItem } from '@/components/common/BalanceSwitcher';
@@ -27,6 +28,7 @@ interface Props {
 const Horses: React.FC<Props> = ({ changeView }) => {
   const [modalRaces, setModalRaces] = useState(false);
   const [modalMine, setModalMine] = useState(false);
+  const [modalDerby, setModalDerby] = useState(false);
   const [modalItems, setModalItems] = useState(false);
   const [modalQuests, setModalQuests] = useState(false);
   const { phorse, medals, wron, shards } = useUser();
@@ -86,6 +88,8 @@ const Horses: React.FC<Props> = ({ changeView }) => {
         <QuestsHubModal setVisible={setModalQuests} status={modalQuests} />
       )}
 
+      {modalDerby && <DerbyModal setVisible={setModalDerby} status={modalDerby} horses={horseList} />}
+
       <ItemBag status={modalItems} closeModal={toggleItemBag} />
 
       <div className={styles.secondBar}>
@@ -96,13 +100,6 @@ const Horses: React.FC<Props> = ({ changeView }) => {
                 className={`${styles.bagButton} ${modalItems ? styles.bagOpened : ""
                   }`}
                 onClick={toggleItemBag}
-              />
-              <button
-                className={styles.refreshButton}
-                onClick={async () => {
-                  await loadHorses();
-                  setInformational("Stable reloaded!");
-                }}
               />
               <button
                 className={styles.raceAllButton}
@@ -120,6 +117,12 @@ const Horses: React.FC<Props> = ({ changeView }) => {
                 className={styles.questsButton}
                 onClick={() => {
                   setModalQuests(true);
+                }}
+              />
+              <button
+                className={styles.derbyButton}
+                onClick={() => {
+                  setModalDerby(true);
                 }}
               />
             </div>
@@ -191,6 +194,16 @@ const Horses: React.FC<Props> = ({ changeView }) => {
                 </option>
               ))}
             </select>
+            <button
+              type="button"
+              className={styles.orderRefreshButton}
+              onClick={async () => {
+                await loadHorses();
+                setInformational("Stable reloaded!");
+              }}
+            >
+              Refresh
+            </button>
           </div>
         </div>
 

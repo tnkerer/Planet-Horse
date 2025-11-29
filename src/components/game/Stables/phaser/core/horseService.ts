@@ -26,6 +26,7 @@ type BackendHorse = {
   equipments: any[];
   horseCareerFactor: number;
   ownerCareerFactor: number;
+  mmr: number;
 };
 
 type NextEnergyRes = { nextTimestamp: number };
@@ -266,7 +267,8 @@ function mapBackendHorseToGame(h: BackendHorse): Horse {
       stable: String(h.stableid),
       horseCareerFactor: h.horseCareerFactor,
       ownerCareerFactor: h.ownerCareerFactor,
-      legacy: h.legacy
+      legacy: h.legacy,
+      mmr: h.mmr
     },
     items: h.equipments,
   };

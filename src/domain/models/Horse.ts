@@ -40,6 +40,7 @@ export interface Horse {
     horseCareerFactor: number;
     ownerCareerFactor: number;
     legacy: boolean;
+    mmr: number;
   };
   // ← now “items” is literally an array of full Item objects
   items: Item[];
