@@ -511,8 +511,28 @@ const DerbyModal: React.FC<Props> = ({
 
     // -------- Render helpers for UI --------
     const renderDerbyList = () => {
-        // show only the last 10
-        const last10 = derbies.slice(-200);
+        const last10 = [...derbies]
+            .sort((a, b) => {
+                const aOpen = a.status === 'OPEN';
+                const bOpen = b.status === 'OPEN';
+
+                // 1) OPEN first
+                if (aOpen && !bOpen) return -1;
+                if (!aOpen && bOpen) return 1;
+
+                const aStart = new Date(a.startsAt).getTime();
+                const bStart = new Date(b.startsAt).getTime();
+
+                // 2) Among OPEN derbies: earlier start time first (closer to happening)
+                if (aOpen && bOpen) {
+                    return aStart - bStart; // ascending
+                }
+
+                // 3) Among non-open derbies, keep newest first (or swap to aStart - bStart if you prefer oldest first)
+                return bStart - aStart;
+            })
+            .slice(0, 200);
+
 
         return (
             <div className={styles.derbyList}>
