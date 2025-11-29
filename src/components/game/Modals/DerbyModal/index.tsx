@@ -73,6 +73,7 @@ interface DerbyEntry {
     user: {
         id: string;
         wallet: string;
+        discordTag: string;
     };
 }
 
@@ -623,9 +624,9 @@ const DerbyModal: React.FC<Props> = ({
                                         ? horse.nickname
                                         : `#${horse.tokenId}`;
 
-                                const ownerShort = entry.user.wallet
-                                    ? `${entry.user.wallet.slice(0, 6)}...${entry.user.wallet.slice(-4)}`
-                                    : '';
+                                const ownerShort = entry.user.discordTag
+                                    ? `${entry.user.discordTag}`
+                                    : `${entry.user.wallet.slice(0, 6)}...${entry.user.wallet.slice(-4)}`;
 
                                 return (
                                     <tr key={entry.id}>
