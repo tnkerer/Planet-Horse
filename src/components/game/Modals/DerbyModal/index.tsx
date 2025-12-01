@@ -131,6 +131,7 @@ const DerbyModal: React.FC<Props> = ({
 
     const handleBackToList = () => {
         setSelectedDerby(null);
+        setMode('list');
     };
 
     // ----- Typing narrative -----
@@ -535,7 +536,7 @@ const DerbyModal: React.FC<Props> = ({
 
 
         return (
-            <div className={styles.derbyList}>
+            <div className={`${styles.derbyList} ${styles.scrollArea}`}>
                 {last10.map((d) => {
                     const isOpen = d.status === 'OPEN';
                     const starts = new Date(d.startsAt);
@@ -623,7 +624,7 @@ const DerbyModal: React.FC<Props> = ({
         return (
             <div className={styles.participantsSection}>
                 <h3 className={styles.sectionTitle}>Current Participants</h3>
-                <div className={styles.horseTableWrapper}>
+                <div className={`${styles.horseTableWrapper} ${styles.scrollArea}`}>
                     <table className={styles.horseTable}>
                         <thead>
                             <tr>
@@ -702,7 +703,7 @@ const DerbyModal: React.FC<Props> = ({
         const historySorted = (d.history ?? []).slice().sort((a, b) => a.position - b.position);
 
         return (
-            <div className={styles.derbyDetails}>
+            <div className={`${styles.derbyDetails} ${styles.scrollArea}`}>
                 <div className={styles.detailsHeader}>
                     <h2 className={styles.derbyTitle}>{d.name}</h2>
                     <span
@@ -796,7 +797,7 @@ const DerbyModal: React.FC<Props> = ({
                 {!isOpen && historySorted.length > 0 && (
                     <div className={styles.resultsSection}>
                         <h3 className={styles.sectionTitle}>Results</h3>
-                        <div className={styles.resultsTableWrapper}>
+                        <div className={`${styles.resultsTableWrapper} ${styles.scrollArea}`}>
                             <table className={styles.resultsTable}>
                                 <thead>
                                     <tr>
@@ -856,6 +857,17 @@ const DerbyModal: React.FC<Props> = ({
                         </div>
                     </div>
                 )}
+                <div className={styles.modalFooter}>
+                    <button
+                        className={styles.secondaryBtn}
+                        onClick={() => {
+                            setSelectedDerby(null);
+                            setMode('list');
+                        }}
+                    >
+                        ‹ Back to Derbies
+                    </button>
+                </div>
             </div>
         );
     };
@@ -867,7 +879,7 @@ const DerbyModal: React.FC<Props> = ({
             <div className={styles.horseSelect}>
                 <h3 className={styles.sectionTitle}>Choose your horse</h3>
 
-                <div className={styles.horseTableWrapper}>
+                <div className={`${styles.horseTableWrapper} ${styles.scrollArea}`}>
                     <table className={styles.horseTable}>
                         <thead>
                             <tr>
@@ -984,7 +996,7 @@ const DerbyModal: React.FC<Props> = ({
         const notEnoughPhorse = phorse < totalCostPhorse;
 
         return (
-            <div className={styles.confirmBox}>
+            <div className={`${styles.confirmBox} ${styles.scrollArea}`}>
                 <h3 className={styles.sectionTitle}>Confirm entry</h3>
 
                 <p className={styles.confirmText}>

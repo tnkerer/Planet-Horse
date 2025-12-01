@@ -43,20 +43,20 @@
 
             .modalClose {
                 position: absolute;
-                top: 45px;
-                right: 30px;
+                top: 0px;
+                right: -10px;
                 cursor: pointer;
                 z-index: 2;
             }
 
             .contentInner {
                 position: relative;
-                width: 90%;
-                height: 80%;
+                width: 100%;
+                height: 100%;
                 margin-top: 12px;
                 background: rgba(20, 12, 8, 0.75);
                 border-radius: 12px;
-                padding: 12px 16px;
+                padding: 6px 8px;
                 box-sizing: border-box;
                 overflow: hidden;
                 color: #fff;
@@ -189,7 +189,7 @@
 .derbyList {
     width: 100%;
     height: 100%;
-    overflow-y: auto;
+    // overflow-y: auto;
     padding-right: 4px;
 }
 
@@ -305,7 +305,7 @@
 .derbyDetails {
     width: 100%;
     height: 100%;
-    overflow-y: auto;
+    // overflow-y: auto;
     padding-right: 4px;
 }
 
@@ -341,7 +341,7 @@
 
 .resultsTableWrapper {
     max-height: 200px;
-    overflow-y: auto;
+    // overflow-y: auto;
     border-radius: 6px;
     border: 1px solid #4b3221;
 }
@@ -393,7 +393,7 @@
 
 .horseTableWrapper {
     flex: 1;
-    overflow-y: auto;
+    // overflow-y: auto;
     margin-top: 4px;
     border-radius: 6px;
     border: 1px solid #4b3221;
@@ -453,7 +453,7 @@
 .confirmBox {
     width: 100%;
     height: 100%;
-    overflow-y: auto;
+    // overflow-y: auto;
 }
 
 .confirmText {
@@ -492,4 +492,45 @@
     text-align: center;
     font-size: 13px;
     padding: 12px 0;
+}
+
+/* Reusable styled scrollbar for all in-game scroll areas */
+.scrollArea {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #c89b63 #2b1a10; // thumb, track
+
+    /* WebKit (Chrome, Edge, etc.) */
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #2b1a10;
+        border-radius: 8px;
+        border: 1px solid #4b3221;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #c89b63;
+        border-radius: 8px;
+        border: 1px solid #4b3221;
+        box-shadow: 0 0 0 1px #2b1a10 inset;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #e7c07f;
+    }
+}
+
+.modalFooter {
+    width: 100%;
+    padding: 6px 10px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    flex-direction: column;
 }
