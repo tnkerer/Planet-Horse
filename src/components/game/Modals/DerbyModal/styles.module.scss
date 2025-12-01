@@ -58,7 +58,9 @@
                 border-radius: 12px;
                 padding: 6px 8px;
                 box-sizing: border-box;
-                overflow: hidden;
+                /* allow horizontal scroll where needed, keep vertical handled by inner wrappers */
+                overflow-y: hidden;
+                overflow-x: auto;
                 color: #fff;
             }
         }
@@ -190,6 +192,7 @@
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    overflow-x: auto;
     padding-right: 4px;
 }
 
@@ -306,6 +309,7 @@
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    overflow-x: auto;
     padding-right: 4px;
 }
 
@@ -342,6 +346,7 @@
 .resultsTableWrapper {
     max-height: 200px;
     overflow-y: auto;
+    overflow-x: auto;
     border-radius: 6px;
     border: 1px solid #4b3221;
 }
@@ -394,7 +399,9 @@
 .horseTableWrapper {
     flex: 1;
     overflow-y: auto;
+    overflow-x: auto;
     margin-top: 4px;
+
     border-radius: 6px;
     border: 1px solid #4b3221;
 }
