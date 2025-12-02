@@ -504,7 +504,7 @@
 /* Reusable styled scrollbar for all in-game scroll areas */
 .scrollArea {
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
 
     /* Firefox */
     scrollbar-width: thin;
