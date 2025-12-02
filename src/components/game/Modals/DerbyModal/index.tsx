@@ -143,6 +143,9 @@ const DerbyModal: React.FC<Props> = ({
             if (selectedDerby.status === 'OPEN') {
                 return `Derby: ${selectedDerby.name}\nCheck the rules, then select which horse you will send to the track.`;
             }
+            if (selectedDerby.status === 'CANCELLED') {
+                return `Derby: ${selectedDerby.name} was cancelled because it had fewer than 5 participants.\nEntry fees were refunded to all registered players.`;
+            }
             if (selectedDerby.status === 'COMPLETED') {
                 return `Derby: ${selectedDerby.name} is over.\nScroll through the results.`;
             }
@@ -156,6 +159,7 @@ const DerbyModal: React.FC<Props> = ({
         }
         return 'Welcome to the Derby Championship!';
     }, [mode, selectedDerby, selectedHorse]);
+
 
     useEffect(() => {
         if (!status) return;
@@ -583,6 +587,12 @@ const DerbyModal: React.FC<Props> = ({
                                 </div>
                             </div>
 
+                            {d.status === 'CANCELLED' && (
+                                <div className={styles.cancelBadgeSmall}>
+                                    Cancelled – fewer than 5 participants (fees refunded)
+                                </div>
+                            )}
+
                             <div className={styles.derbyActions}>
                                 <button
                                     className={styles.primaryBtn}
@@ -753,6 +763,13 @@ const DerbyModal: React.FC<Props> = ({
                         </span>
                     </div>
                 </div>
+
+                {d.status === 'CANCELLED' && historySorted.length === 0 && (
+                    <div className={styles.cancelNotice}>
+                        This derby was cancelled because it had fewer than 5 participants.
+                        All entry fees were refunded to the registered players.
+                    </div>
+                )}
 
                 {isOpen && renderParticipants()}
 

@@ -541,3 +541,19 @@
     box-sizing: border-box;
     flex-direction: column;
 }
+
+.cancelNotice {
+    margin-top: 8px;
+    padding: 6px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    background: rgba(95, 17, 17, 0.85);
+    border: 1px solid #f06464;
+    color: #ffe0e0;
+}
+
+.cancelBadgeSmall {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #ffd89c;
+}
