@@ -45,7 +45,12 @@ interface DerbySummary {
     allowedRarities: string[];
     totalEntries?: number;
     createdAt?: string;
+
+    // NEW:
+    totalBetWron?: number;
+    bettingPoolWron?: number;
 }
+
 
 interface DerbyEntry {
     id: string;
@@ -733,6 +738,46 @@ const DerbyModal: React.FC<Props> = ({
                                         {d.wronEntryFee} WRON + {d.phorseEntryFee} PHORSE
                                     </span>
                                 </div>
+
+                                {/* --- NEW POTS --- */}
+                                {(() => {
+                                    const entries = d.totalEntries ?? 0;
+
+                                    // IMPORTANT: match your chosen convention:
+                                    // If you stick with 0..1 for wronPayoutPercent,
+                                    // remove "/ 100" in finalize and use this formula:
+                                    const derbyPot =
+                                        entries > 0
+                                            ? d.wronEntryFee * entries * d.wronPayoutPercent
+                                            : 0;
+
+                                    const totalBet = d.totalBetWron ?? 0;
+                                    const betPool =
+                                        d.bettingPoolWron && d.bettingPoolWron > 0
+                                            ? d.bettingPoolWron
+                                            : totalBet * 0.8;
+
+                                    return (
+                                        <>
+                                            <div>
+                                                <span className={styles.metaLabel}>Total Derby Pot:</span>{' '}
+                                                <span
+                                                    className={`${styles.metaValue} ${styles.derbyPotValue}`}
+                                                >
+                                                    {(derbyPot/100).toFixed(2)} WRON
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className={styles.metaLabel}>Total BET Pot:</span>{' '}
+                                                <span
+                                                    className={`${styles.metaValue} ${styles.betPotValue}`}
+                                                >
+                                                    {(totalBet*0.8).toFixed(2)} WRON
+                                                </span>
+                                            </div>
+                                        </>
+                                    );
+                                })()}
                             </div>
 
                             {d.status === 'CANCELLED' && (
@@ -761,6 +806,7 @@ const DerbyModal: React.FC<Props> = ({
                             </div>
                         </div>
                     );
+
                 })}
 
                 {last10.length === 0 && !loading && (

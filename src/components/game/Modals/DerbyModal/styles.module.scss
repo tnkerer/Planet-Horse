@@ -258,6 +258,62 @@
     color: #ffffff;
 }
 
+.derbyPotValue {
+    font-weight: 900;
+    letter-spacing: 0.02em;
+
+    background: linear-gradient(180deg, #ffe97a 0%, #ffb347 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    filter: drop-shadow(0 1px 0 #5b3a11) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.betPotValue {
+    font-weight: 900;
+    letter-spacing: 0.02em;
+
+    background: linear-gradient(180deg, #8effc4 0%, #2ee67d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    filter: drop-shadow(0 1px 0 #124322) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes potPulse {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-1px);
+    }
+}
+
+.derbyPotValue,
+.betPotValue {
+    display: inline-block;
+    transition: transform 120ms ease;
+}
+
+.derbyCard:hover .derbyPotValue,
+.derbyCard:hover .betPotValue {
+    animation: potPulse 700ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .derbyCard:hover .derbyPotValue,
+    .derbyCard:hover .betPotValue {
+        animation: none;
+    }
+}
+
+
 .derbyActions {
     display: flex;
     gap: 8px;
