@@ -1420,8 +1420,8 @@ const DerbyModal: React.FC<Props> = ({
                                 <p className={styles.betHint}>
                                     Current pool odds: x{odds.oddsMultiplier.toFixed(2)}.
                                     <br />
-                                    If this horse wins, this bet would pay around{' '}
-                                    <b>{potential.toFixed(2)} WRON</b>.
+                                    {/* If this horse wins, this bet would pay around{' '}
+                                    <b>{potential.toFixed(2)} WRON</b>. */}
                                 </p>
                             );
                         })()}
