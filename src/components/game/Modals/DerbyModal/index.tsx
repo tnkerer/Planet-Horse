@@ -14,6 +14,9 @@ import InfoModal from '../InfoModal';
 import { itemModifiers } from '@/utils/constants/items';
 import { useUser } from '@/contexts/UserContext';
 import type { Horse } from '@/domain/models/Horse';
+import DerbyAdminPanel from '../DerbyAdminPanel';
+import ReadOnlySingleHorse from '../ReadOnlySingleHorse';
+import type { ReadOnlyHorse } from '@/domain/models/ReadOnlyHorse';
 
 interface Props {
     status: boolean;
@@ -102,6 +105,23 @@ interface DerbyDetails extends DerbySummary {
     history?: DerbyHistoryRow[];
 }
 
+interface HorseOdds {
+    horseId: string;
+    totalStaked: number;
+    oddsMultiplier: number | null;
+    userStake?: number;
+    userPotentialPayout?: number;
+}
+
+interface DerbyOddsResponse {
+    raceId: string;
+    totalStaked: number;
+    poolAmount: number;
+    horses: HorseOdds[];
+}
+
+
+
 type Mode = 'list' | 'details' | 'selectHorse' | 'confirmEntry';
 
 const rarityNormalize = (r: string | undefined | null) =>
@@ -126,13 +146,74 @@ const DerbyModal: React.FC<Props> = ({
 
     const { phorse, wron, updateBalance, userAddress } = useUser() as any;
 
+    const [odds, setOdds] = useState<DerbyOddsResponse | null>(null);
+    const [bettingEntry, setBettingEntry] = useState<DerbyEntry | null>(null);
+    const [betAmount, setBetAmount] = useState<number>(10); // default 10 WRON
+    const [betLoading, setBetLoading] = useState(false);
+
+    const [viewHorse, setViewHorse] = useState<ReadOnlyHorse | null>(null);
+    const [viewHorseLoading, setViewHorseLoading] = useState(false);
+
+    const closeViewHorse = () => setViewHorse(null);
+
+    const openViewHorse = async (horseId: string) => {
+        try {
+            setViewHorseLoading(true);
+            setErrorMessage(null);
+
+            const res = await fetch(
+                `${process.env.API_URL}/horses/public/${horseId}`,
+                {
+                    credentials: 'include',
+                },
+            );
+
+            if (!res.ok) {
+                let msg = `HTTP ${res.status}`;
+                try {
+                    const err = await res.json();
+                    if (err?.message) msg = err.message;
+                } catch { }
+                throw new Error(msg);
+            }
+
+            const data = (await res.json()) as ReadOnlyHorse;
+            setViewHorse(data);
+        } catch (e: any) {
+            console.error(e);
+            setErrorMessage(e.message || 'Failed to load horse data.');
+        } finally {
+            setViewHorseLoading(false);
+        }
+    };
+
     // Normalized wallet for comparisons
     const currentWallet = (userAddress || '').toLowerCase();
 
     const handleBackToList = () => {
         setSelectedDerby(null);
+        setOdds(null);
         setMode('list');
     };
+
+
+    const loadDerbyOdds = useCallback(async (id: string) => {
+        try {
+            const res = await fetch(`${process.env.API_URL}/derby/${id}/odds`, {
+                credentials: 'include',
+            });
+            if (!res.ok) {
+                // optional: swallow silently – odds are “nice to have”
+                console.error('Failed to load derby odds', res.status);
+                return;
+            }
+            const data = (await res.json()) as DerbyOddsResponse;
+            setOdds(data);
+        } catch (e) {
+            console.error(e);
+        }
+    }, []);
+
 
     // ----- Typing narrative -----
     const fullText = useMemo(() => {
@@ -219,6 +300,13 @@ const DerbyModal: React.FC<Props> = ({
         void loadDerbies();
     }, [status, loadDerbies]);
 
+    const getHorseOdds = (horseId: string): HorseOdds | undefined => {
+        return odds?.horses.find((h) => h.horseId === horseId);
+    };
+
+
+
+
     // ----- Fetch single derby details -----
     const loadDerbyDetails = useCallback(async (id: string) => {
         try {
@@ -238,13 +326,16 @@ const DerbyModal: React.FC<Props> = ({
             const data = (await res.json()) as DerbyDetails;
             setSelectedDerby(data);
             setMode('details');
+
+            // load odds (fire and forget or await)
+            void loadDerbyOdds(id);
         } catch (e: any) {
             console.error(e);
             setErrorMessage(e.message || 'Failed to load derby details');
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [loadDerbyOdds]);
 
     // ----- Helpers: horse extras & icon -----
     const calcExtras = useCallback((h: Horse) => {
@@ -345,6 +436,63 @@ const DerbyModal: React.FC<Props> = ({
             setLoading(false);
         }
     };
+
+    const closeBetModal = () => {
+        setBettingEntry(null);
+        setBetAmount(10);
+    };
+
+    const handleConfirmBet = async () => {
+        if (!selectedDerby || !bettingEntry) return;
+
+        if (!betAmount || betAmount <= 0) {
+            setErrorMessage('Bet amount must be greater than zero.');
+            return;
+        }
+
+        if (betAmount > wron) {
+            setErrorMessage(`You don't have enough WRON to place this bet.`);
+            return;
+        }
+
+        try {
+            setBetLoading(true);
+            setErrorMessage(null);
+
+            const res = await fetch(
+                `${process.env.API_URL}/derby/${selectedDerby.id}/bet`,
+                {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        horseId: bettingEntry.horseId,
+                        amount: betAmount,
+                    }),
+                },
+            );
+
+            if (!res.ok) {
+                let msg = `HTTP ${res.status}`;
+                try {
+                    const err = await res.json();
+                    if (err?.message) msg = err.message;
+                } catch { }
+                throw new Error(msg);
+            }
+
+            await updateBalance?.();
+            await loadDerbyOdds(selectedDerby.id); // refresh odds to show your bet/payout
+            setInfoMessage('Bet placed successfully!');
+            closeBetModal();
+        } catch (e: any) {
+            console.error(e);
+            setErrorMessage(e.message || 'Failed to place bet.');
+        } finally {
+            setBetLoading(false);
+        }
+    };
+
 
     // ----- Remove horse (leave derby) -----
     const handleLeaveDerby = async () => {
@@ -491,6 +639,8 @@ const DerbyModal: React.FC<Props> = ({
         setVisible(false);
         setSelectedDerby(null);
         setSelectedHorse(null);
+        setBettingEntry(null);
+        setOdds(null);
         setMode('list');
     };
 
@@ -511,8 +661,6 @@ const DerbyModal: React.FC<Props> = ({
                 e.isActive,
         ) &&
         new Date(selectedDerby.startsAt).getTime() - now > 30 * 60 * 1000;
-
-
 
     // -------- Render helpers for UI --------
     const renderDerbyList = () => {
@@ -639,16 +787,21 @@ const DerbyModal: React.FC<Props> = ({
                         <thead>
                             <tr>
                                 <th>Horse</th>
+                                <th>Bet</th>
                                 <th>Owner</th>
                                 <th>MMR</th>
+                                <th>View Horse</th>
                                 <th></th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {d.entries.map((entry) => {
                                 const isMe =
                                     !!entry.user?.wallet &&
-                                    entry.user.wallet.toLowerCase() === currentWallet;
+                                    entry.user.wallet.toLowerCase() === currentWallet &&
+                                    entry.isActive;
+
                                 const horse = entry.horse;
                                 const displayName =
                                     horse.nickname && horse.nickname.trim().length > 0
@@ -659,11 +812,59 @@ const DerbyModal: React.FC<Props> = ({
                                     ? `${entry.user.discordTag}`
                                     : `${entry.user.wallet.slice(0, 6)}...${entry.user.wallet.slice(-4)}`;
 
+                                const horseOdds = getHorseOdds(entry.horseId);
+                                const userStake = horseOdds?.userStake ?? 0;
+                                const hasUserBet = userStake > 0;
+                                const userPayout =
+                                    horseOdds?.userPotentialPayout ??
+                                    (horseOdds?.oddsMultiplier
+                                        ? userStake * horseOdds.oddsMultiplier
+                                        : 0);
+
                                 return (
                                     <tr key={entry.id}>
                                         <td>{displayName}</td>
+
+                                        {/* BET column (unchanged logic) */}
+                                        <td>
+                                            {hasUserBet ? (
+                                                <div className={styles.betInfoCell}>
+                                                    <div>My bet: {userStake.toFixed(2)} WRON</div>
+                                                    {userPayout > 0 && (
+                                                        <div className={styles.betOddsSmall}>
+                                                            Payout if wins: {userPayout.toFixed(2)} WRON
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    className={styles.secondaryBtn}
+                                                    disabled={loading}
+                                                    onClick={() => {
+                                                        setBettingEntry(entry);
+                                                        setBetAmount(10);
+                                                    }}
+                                                >
+                                                    BET
+                                                </button>
+                                            )}
+                                        </td>
+
                                         <td>{ownerShort}</td>
                                         <td>{horse.mmr ?? entry.mmrAtEntry}</td>
+
+                                        {/* NEW: View Horse column */}
+                                        <td>
+                                            <button
+                                                className={styles.secondaryBtn}
+                                                disabled={viewHorseLoading}
+                                                onClick={async () => openViewHorse(entry.horseId)}
+                                            >
+                                                View
+                                            </button>
+                                        </td>
+
+                                        {/* Quit column */}
                                         <td>
                                             {isMe && (
                                                 <button
@@ -679,6 +880,7 @@ const DerbyModal: React.FC<Props> = ({
                                 );
                             })}
                         </tbody>
+
                     </table>
                 </div>
             </div>
@@ -711,6 +913,14 @@ const DerbyModal: React.FC<Props> = ({
 
         // For completed races, show leaderboard
         const historySorted = (d.history ?? []).slice().sort((a, b) => a.position - b.position);
+
+        const myResults = historySorted.filter(
+            (row) =>
+                row.user?.wallet &&
+                row.user.wallet.toLowerCase() === currentWallet,
+        );
+
+        const totalMyPrize = myResults.reduce((sum, row) => sum + (row.wronPrize || 0), 0);
 
         return (
             <div className={`${styles.derbyDetails} ${styles.scrollArea}`}>
@@ -814,6 +1024,25 @@ const DerbyModal: React.FC<Props> = ({
                 {!isOpen && historySorted.length > 0 && (
                     <div className={styles.resultsSection}>
                         <h3 className={styles.sectionTitle}>Results</h3>
+
+                        {/* NEW: Per-user outcome banner */}
+                        {myResults.length > 0 && (
+                            <div
+                                className={`${styles.resultOutcome} ${totalMyPrize > 0 ? styles.resultOutcomeWin : styles.resultOutcomeLose
+                                    }`}
+                            >
+                                {totalMyPrize > 0 ? (
+                                    <>
+                                        You <strong>won {totalMyPrize} WRON</strong> in this derby. 🎉
+                                    </>
+                                ) : (
+                                    <>
+                                        You <strong>did not win any WRON</strong> in this derby.
+                                    </>
+                                )}
+                            </div>
+                        )}
+
                         <div className={`${styles.resultsTableWrapper} ${styles.scrollArea}`}>
                             <table className={styles.resultsTable}>
                                 <thead>
@@ -870,10 +1099,10 @@ const DerbyModal: React.FC<Props> = ({
                                     })}
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 )}
+
                 <div className={styles.modalFooter}>
                     <button
                         className={styles.secondaryBtn}
@@ -1106,12 +1335,90 @@ const DerbyModal: React.FC<Props> = ({
 
     return (
         <>
+            {bettingEntry && selectedDerby && (
+                <div className={styles.betModalBackdrop}>
+                    <div className={styles.betModal}>
+                        <h3 className={styles.sectionTitle}>Place a bet</h3>
+                        <p className={styles.betText}>
+                            You are betting on{' '}
+                            <b>
+                                {bettingEntry.horse.nickname && bettingEntry.horse.nickname.trim().length > 0
+                                    ? bettingEntry.horse.nickname
+                                    : `#${bettingEntry.horse.tokenId}`}
+                            </b>{' '}
+                            in <b>{selectedDerby.name}</b>.
+                        </p>
+
+                        <p className={styles.betText}>
+                            Your balance: <b>{wron.toFixed(2)} WRON</b>
+                        </p>
+
+                        <label className={styles.betLabel}>
+                            Bet amount (WRON):
+                            <input
+                                type="number"
+                                min={0}
+                                step={1}
+                                value={betAmount}
+                                onChange={(e) => setBetAmount(Number(e.target.value))}
+                                className={styles.betInput}
+                                disabled={betLoading}
+                            />
+                        </label>
+
+                        {(() => {
+                            const odds = getHorseOdds(bettingEntry.horseId);
+                            if (!odds || !odds.oddsMultiplier) return null;
+                            const potential = Number(betAmount || 0) * odds.oddsMultiplier;
+                            return (
+                                <p className={styles.betHint}>
+                                    Current pool odds: x{odds.oddsMultiplier.toFixed(2)}.
+                                    <br />
+                                    If this horse wins, this bet would pay around{' '}
+                                    <b>{potential.toFixed(2)} WRON</b>.
+                                </p>
+                            );
+                        })()}
+
+                        <div className={styles.betActions}>
+                            <button
+                                className={styles.secondaryBtn}
+                                onClick={closeBetModal}
+                                disabled={betLoading}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className={styles.primaryBtn}
+                                onClick={handleConfirmBet}
+                                disabled={betLoading}
+                            >
+                                {betLoading ? 'Placing...' : 'Confirm Bet'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
             {errorMessage && (
                 <ErrorModal text={errorMessage} onClose={() => setErrorMessage(null)} />
             )}
             {infoMessage && (
                 <InfoModal text={infoMessage} onClose={() => setInfoMessage(null)} />
             )}
+            {viewHorse && (
+                <div className={styles.viewHorseBackdrop}>
+                    <div className={styles.viewHorseModal}>
+                        <div className={styles.modalClose} onClick={closeViewHorse}>
+                            ✕
+                        </div>
+                        <ReadOnlySingleHorse horse={viewHorse} />
+                    </div>
+                </div>
+            )}
+
+            <DerbyAdminPanel onDerbyCreated={() => console.log("New Derby Created")} />
 
             <div
                 className={`
