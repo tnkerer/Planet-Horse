@@ -878,7 +878,7 @@ const DerbyModal: React.FC<Props> = ({
                                                     <div>My bet: {userStake.toFixed(2)} WRON</div>
                                                     {userPayout > 0 && (
                                                         <div className={styles.betOddsSmall}>
-                                                            Payout if wins: {userPayout.toFixed(2)} WRON
+                                                            Payout if wins: {(userPayout * 0.8).toFixed(2)} WRON
                                                         </div>
                                                     )}
                                                 </div>
@@ -1414,7 +1414,14 @@ const DerbyModal: React.FC<Props> = ({
 
                         {(() => {
                             const odds = getHorseOdds(bettingEntry.horseId);
-                            if (!odds || !odds.oddsMultiplier) return null;
+                            if (!odds || !odds.oddsMultiplier) return (
+                                <p className={styles.betHint}>
+                                    Current pool odds: No bets on this horse yet.
+                                    <br />
+                                    {/* If this horse wins, this bet would pay around{' '}
+                                    <b>{potential.toFixed(2)} WRON</b>. */}
+                                </p>
+                            );
                             const potential = Number(betAmount || 0) * odds.oddsMultiplier;
                             return (
                                 <p className={styles.betHint}>
