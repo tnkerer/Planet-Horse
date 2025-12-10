@@ -108,6 +108,7 @@ interface DerbyHistoryRow {
 interface DerbyDetails extends DerbySummary {
     entries?: DerbyEntry[];
     history?: DerbyHistoryRow[];
+    myBetPrize?: number;
 }
 
 interface HorseOdds {
@@ -764,7 +765,7 @@ const DerbyModal: React.FC<Props> = ({
                                                 <span
                                                     className={`${styles.metaValue} ${styles.derbyPotValue}`}
                                                 >
-                                                    {(derbyPot/100).toFixed(2)} WRON
+                                                    {(derbyPot / 100).toFixed(2)} WRON
                                                 </span>
                                             </div>
                                             <div>
@@ -772,7 +773,7 @@ const DerbyModal: React.FC<Props> = ({
                                                 <span
                                                     className={`${styles.metaValue} ${styles.betPotValue}`}
                                                 >
-                                                    {(totalBet*0.8).toFixed(2)} WRON
+                                                    {(totalBet * 0.8).toFixed(2)} WRON
                                                 </span>
                                             </div>
                                         </>
@@ -966,7 +967,16 @@ const DerbyModal: React.FC<Props> = ({
                 row.user.wallet.toLowerCase() === currentWallet,
         );
 
-        const totalMyPrize = myResults.reduce((sum, row) => sum + (row.wronPrize || 0), 0);
+        const totalMyRacePrize = myResults.reduce(
+            (sum, row) => sum + (row.wronPrize || 0),
+            0,
+        );
+
+        // NEW: prize from BETS (provided by backend)
+        const myBetPrize = d.myBetPrize ?? 0;
+
+        // NEW: overall WRON gained in this derby (race + bets)
+        const totalMyPrizeOverall = totalMyRacePrize + myBetPrize;
 
         return (
             <div className={`${styles.derbyDetails} ${styles.scrollArea}`}>
@@ -1071,15 +1081,24 @@ const DerbyModal: React.FC<Props> = ({
                     <div className={styles.resultsSection}>
                         <h3 className={styles.sectionTitle}>Results</h3>
 
-                        {/* NEW: Per-user outcome banner */}
-                        {myResults.length > 0 && (
+                        {/* NEW: Per-user outcome banner including BET prizes */}
+                        {(myResults.length > 0 || myBetPrize > 0) && (
                             <div
-                                className={`${styles.resultOutcome} ${totalMyPrize > 0 ? styles.resultOutcomeWin : styles.resultOutcomeLose
+                                className={`${styles.resultOutcome} ${totalMyPrizeOverall > 0
+                                        ? styles.resultOutcomeWin
+                                        : styles.resultOutcomeLose
                                     }`}
                             >
-                                {totalMyPrize > 0 ? (
+                                {totalMyPrizeOverall > 0 ? (
                                     <>
-                                        You <strong>won {totalMyPrize} WRON</strong> in this derby. 🎉
+                                        You <strong>won {totalMyPrizeOverall.toFixed(2)} WRON</strong> in this derby. 🎉
+                                        {myBetPrize > 0 && (
+                                            <span className={styles.resultBreakdown}>
+                                                {' '}
+                                                ({totalMyRacePrize.toFixed(2)} from race prizes,&nbsp;
+                                                {myBetPrize.toFixed(2)} from bets)
+                                            </span>
+                                        )}
                                     </>
                                 ) : (
                                     <>
@@ -1425,7 +1444,7 @@ const DerbyModal: React.FC<Props> = ({
                             const potential = Number(betAmount || 0) * odds.oddsMultiplier;
                             return (
                                 <p className={styles.betHint}>
-                                    Current pool odds: x{odds.oddsMultiplier.toFixed(2)}.
+                                    Current pool odds: {odds.oddsMultiplier.toFixed(2)} to 1.
                                     <br />
                                     {/* If this horse wins, this bet would pay around{' '}
                                     <b>{potential.toFixed(2)} WRON</b>. */}
