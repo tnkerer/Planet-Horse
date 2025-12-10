@@ -878,7 +878,7 @@ const DerbyModal: React.FC<Props> = ({
                                                     <div>My bet: {userStake.toFixed(2)} WRON</div>
                                                     {userPayout > 0 && (
                                                         <div className={styles.betOddsSmall}>
-                                                            Payout if wins: {(userPayout * 0.8).toFixed(2)} WRON
+                                                            Payout if wins: {userPayout.toFixed(2)} WRON
                                                         </div>
                                                     )}
                                                 </div>
