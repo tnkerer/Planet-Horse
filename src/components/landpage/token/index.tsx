@@ -37,10 +37,6 @@ const Token: React.FC = () => {
             <Image layout='fill' src={phorseToken} alt="Token" />
           </div>
         </div>
-
-        <div className={styles.contract_info}>
-          <p>Contract: <span>{contracts.phorse}</span></p>
-        </div>
       </div>
     </section>
   )
